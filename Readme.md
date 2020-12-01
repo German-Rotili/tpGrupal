@@ -6,7 +6,9 @@ Dejo aca las formulas del Ray Casting
 Teniendo para cada rayo:
 
 theta : angulo de la dirección del rayo (Se mide con respecto al eje x de la grilla)
+
 x, y : pos en grilla del actor
+
 dX, dY : delta de pos con respecto a la grilla
 
 Dependiendo de theta:

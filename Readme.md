@@ -38,6 +38,7 @@ Proy = dist cos(theta) cos(alpha) + dist sin(theta) sin(alpha)
 Ademas sabemos que:
 
 distX = d cos(theta)
+
 distY = d sin(theta)
 
 Entonces:

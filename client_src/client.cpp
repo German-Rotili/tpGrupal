@@ -39,6 +39,7 @@ int main(int argc, char* args[]) {
 
     int playerx = SCREEN_WIDTH/2;
     int playery = SCREEN_HEIGHT/2;
+    double dirAngle = 45;
 
     SdlTexture walls("textures/walls.png", renderer);
 
@@ -60,7 +61,7 @@ int main(int argc, char* args[]) {
         } else if (e.type == SDL_KEYDOWN) {
           switch (e.key.keysym.sym) {
             case SDLK_UP:
-            playery -= 10;
+            dirAngle -= 5;
             break;
             case SDLK_LEFT:
             playerx -= 10;
@@ -69,7 +70,7 @@ int main(int argc, char* args[]) {
             playerx += 10;
             break;
             case SDLK_DOWN:
-            playery += 10;
+            dirAngle += 5;
             break;
             default:
             b = rand() % 256;
@@ -88,9 +89,10 @@ int main(int argc, char* args[]) {
       int y = actorY;
       double actorGlobalX = 0.5;
       double actorGlobalY = 0.5;
-      double dirAngle = 45;
-
+      renderer.setRenderDrawColor(255, 255, 255, 255);
+      renderer.renderClear();
       for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
+
         bool sideWall = false;  // Se fija si es una
                                // pared vertical con respecto al map
         double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
@@ -100,7 +102,7 @@ int main(int argc, char* args[]) {
         double yIntercept = actorY + actorGlobalY +
                      actorGlobalX/tan(rayAngle * PI/180.0);
 
-        printf("%i %f \n", rayNumber, rayAngle);
+        printf("rayNumber: %i %f \n", rayNumber, rayAngle);
         printf("%f %f \n", xIntercept, yIntercept);
 
         int tileStepX = 1;
@@ -129,7 +131,6 @@ int main(int argc, char* args[]) {
           y += tileStepY;
           xIntercept += stepX;
         }
-
 
         while (!wallFound) {
           if (yIntercept > y) {
@@ -165,8 +166,6 @@ int main(int argc, char* args[]) {
         }
         printf("%f %f \n", xIntercept, yIntercept);
 
-        renderer.setRenderDrawColor(255, 255, 255, 255);
-        renderer.renderClear();
         renderer.setRenderDrawColor(255, 255, 0, 255);
         for (int i = 0; i < 5; i++) {
           for (int j = 0; j < 5; j++) {
@@ -177,8 +176,8 @@ int main(int argc, char* args[]) {
         }
         renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
         renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, (actorX+actorGlobalX+distX) * 64, (actorY+actorGlobalY+distY) * 64);
-        renderer.renderPresent();
-        SDL_Delay(10);
+        //renderer.renderPresent();
+        //SDL_Delay(1);
 
 
         // Distancia proyectada a la camara
@@ -188,7 +187,7 @@ int main(int argc, char* args[]) {
 
 
       renderer.setRenderDrawColor(r, g, b, 255);
-      //renderer.renderClear();
+
 
       //renderer.renderCopy(player, NULL, playerx, playery);
 

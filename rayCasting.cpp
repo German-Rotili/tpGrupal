@@ -40,7 +40,7 @@ void RayCasting::run() {
   double dAngle = FOV / screenWidth;
 
   for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
-    bool sideWall = false; // Se fija si es una
+    bool sideWall = false;  // Se fija si es una
                            // pared vertical con respecto al map
     double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
 
@@ -59,7 +59,7 @@ void RayCasting::run() {
 
     // Loopea hasta encontrar pared
     bool wallFound = false;
-    
+
     if (hasWall(worldMap[actorX][int(yIntercept)]) && !wallFound) {
       sideWall = false;
       wallFound = true;

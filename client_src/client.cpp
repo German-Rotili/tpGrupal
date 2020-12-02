@@ -95,7 +95,7 @@ int main(int argc, char* args[]) {
 
         bool sideWall = false;  // Se fija si es una
                                // pared vertical con respecto al map
-        double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
+        double rayAngle = dirAngle - (rayNumber * dAngle) + FOV/2;
 
         double xIntercept = actorX + actorGlobalX +
                      (-actorGlobalY)/tan(rayAngle * PI/180.0);
@@ -157,12 +157,13 @@ int main(int argc, char* args[]) {
         }
 
           //Dependiendo de si es vert u hori que distancias agarro
-        if (sideWall) {
-          distX = (xIntercept * cos(dirAngle*PI/180)) - (actorX+actorGlobalX);
-          distY = (xIntercept * sin(dirAngle*PI/180)) - (actorY+actorGlobalY);
+        if (!sideWall) {
+          distX = (xIntercept - (actorX+actorGlobalX)) * cos(rayAngle*PI/180);
+          distY = (xIntercept - (actorY+actorGlobalY)) * sin(rayAngle*PI/180);
         } else {
-          distX = (x) - (actorX+actorGlobalX);
-          distY = (yIntercept) - (actorY+actorGlobalY);
+          printf("esta corriendo esto\n");
+          distX = (yIntercept - (actorY+actorGlobalY)) * cos(rayAngle*PI/180);
+          distY = (yIntercept - (actorY+actorGlobalY)) * sin(rayAngle*PI/180);
         }
         printf("%f %f \n", xIntercept, yIntercept);
 

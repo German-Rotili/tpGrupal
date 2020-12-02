@@ -39,7 +39,8 @@ int main(int argc, char* args[]) {
 
     int playerx = SCREEN_WIDTH/2;
     int playery = SCREEN_HEIGHT/2;
-    double dirAngle = 45;
+    double dirAngle = 360 - 25;
+    double FOV = 15;
 
     SdlTexture walls("textures/walls.png", renderer);
 
@@ -61,7 +62,7 @@ int main(int argc, char* args[]) {
         } else if (e.type == SDL_KEYDOWN) {
           switch (e.key.keysym.sym) {
             case SDLK_UP:
-            dirAngle -= 5;
+            dirAngle += 2;
             break;
             case SDLK_LEFT:
             playerx -= 10;
@@ -70,7 +71,7 @@ int main(int argc, char* args[]) {
             playerx += 10;
             break;
             case SDLK_DOWN:
-            dirAngle += 5;
+            dirAngle -= 2;
             break;
             default:
             b = rand() % 256;
@@ -81,17 +82,16 @@ int main(int argc, char* args[]) {
       // El FOV va a venir por configuración
 
       int screenWidth = SCREEN_WIDTH;
-      double FOV = 30;
       double dAngle = FOV / screenWidth;
       int actorX = 2;
       int actorY = 2;
-      int x = actorX;
-      int y = actorY;
       double actorGlobalX = 0.5;
       double actorGlobalY = 0.5;
       renderer.setRenderDrawColor(255, 255, 255, 255);
       renderer.renderClear();
       for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
+        int x = actorX;
+        int y = actorY;
 
         bool sideWall = false;  // Se fija si es una
                                // pared vertical con respecto al map
@@ -156,13 +156,13 @@ int main(int argc, char* args[]) {
 
         }
 
-        // Dependiendo de si es vert u hori que distancias agarro
+          //Dependiendo de si es vert u hori que distancias agarro
         if (sideWall) {
-          distX = xIntercept - (actorX+actorGlobalX);
-          distY = y - (actorY+actorGlobalY);
+          distX = (xIntercept * cos(dirAngle*PI/180)) - (actorX+actorGlobalX);
+          distY = (xIntercept * sin(dirAngle*PI/180)) - (actorY+actorGlobalY);
         } else {
-          distX = x - (actorX+actorGlobalX);
-          distY = yIntercept- (actorY+actorGlobalY);
+          distX = (x) - (actorX+actorGlobalX);
+          distY = (yIntercept) - (actorY+actorGlobalY);
         }
         printf("%f %f \n", xIntercept, yIntercept);
 
@@ -174,14 +174,21 @@ int main(int argc, char* args[]) {
             }
           }
         }
+      /*renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
+        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, xIntercept * 64, yIntercept * 64);
+        renderer.setRenderDrawColor(0x00, 0xFF, 0x00, 0x00);
+        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, x * 64, y * 64);
+        */
         renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
         renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, (actorX+actorGlobalX+distX) * 64, (actorY+actorGlobalY+distY) * 64);
+        renderer.setRenderDrawColor(0xFF, 0x00, 0x00, 0x00);
+        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, (actorX+actorGlobalX+cos(dirAngle*PI/180)) * 64, (actorY+actorGlobalY+sin(dirAngle*PI/180)) * 64);
         //renderer.renderPresent();
         //SDL_Delay(1);
 
 
         // Distancia proyectada a la camara
-        double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
+        //double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
       }
 
 

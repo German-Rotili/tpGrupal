@@ -10,14 +10,15 @@
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
+#define PI 3.14
 
 #define SIZE_NIVEL 5
-int worldMap[5][5] = {{ 1, 1, 1, 1, 1},
-                {1, 0, 0, 0, 1},
-                {1, 0, 0, 0, 1},
-                {1, 0, 0, 0, 1},
-                {1, 1, 1, 1, 1},
-              };
+int worldMap[5][5] = {{1, 1, 1, 1, 1},
+                      {1, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 1},
+                      {1, 1, 1, 1, 1},
+                    };
 
 bool hasWall(int posicion) {
   return (posicion == 1);
@@ -44,6 +45,9 @@ int main(int argc, char* args[]) {
     int r = 0;
     int g = 255;
     int b = 200;
+
+    renderer.setRenderDrawColor(255, 255, 255, 255);
+    renderer.renderClear();
 
     bool quit = false;
     SDL_Event e;
@@ -76,14 +80,14 @@ int main(int argc, char* args[]) {
       // El FOV va a venir por configuración
 
       int screenWidth = SCREEN_WIDTH;
-      double FOV = 60;
+      double FOV = 30;
       double dAngle = FOV / screenWidth;
-      int actorX = 1;
-      int actorY = 4;
+      int actorX = 2;
+      int actorY = 2;
       int x = actorX;
       int y = actorY;
-      double actorGlobalX = 1.5;
-      double actorGlobalY = 4.5;
+      double actorGlobalX = 0.5;
+      double actorGlobalY = 0.5;
       double dirAngle = 45;
 
       for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
@@ -91,15 +95,18 @@ int main(int argc, char* args[]) {
                                // pared vertical con respecto al map
         double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
 
-        double xIntercept = actorGlobalX + (actorX - actorGlobalX) +
-                     (-(actorY - actorGlobalY))/tan(rayAngle);
-        double yIntercept = actorGlobalY + (actorY - actorGlobalY) +
-                     (actorX - actorGlobalX)/tan(rayAngle);
+        double xIntercept = actorX + actorGlobalX +
+                     (-actorGlobalY)/tan(rayAngle * PI/180.0);
+        double yIntercept = actorY + actorGlobalY +
+                     actorGlobalX/tan(rayAngle * PI/180.0);
+
+        printf("%i %f \n", rayNumber, rayAngle);
+        printf("%f %f \n", xIntercept, yIntercept);
 
         int tileStepX = 1;
-        int tileStepY = 1;
-        double stepX = 1/tan(rayAngle);
-        double stepY = tan(rayAngle);
+        int tileStepY = -1;
+        double stepX = 1/tan(rayAngle * PI/180.0);
+        double stepY = tan(rayAngle * PI/180.0);
 
         // Distancia de la pared
         double distX, distY;
@@ -107,9 +114,7 @@ int main(int argc, char* args[]) {
         // Loopea hasta encontrar pared
         bool wallFound = false;
 
-        printf("%d %d \n", xIntercept, yIntercept);
-
-        if (hasWall(worldMap[actorX][int(yIntercept)]) && !wallFound) {
+        if (hasWall(worldMap[x][int(yIntercept)]) && !wallFound) {
           sideWall = false;
           wallFound = true;
         } else {
@@ -117,7 +122,7 @@ int main(int argc, char* args[]) {
           yIntercept += stepY;
         }
 
-        if (hasWall(worldMap[int(xIntercept)][actorY]) && !wallFound) {
+        if (hasWall(worldMap[int(xIntercept)][y]) && !wallFound) {
           sideWall = true;
           wallFound = true;
         } else {
@@ -125,8 +130,9 @@ int main(int argc, char* args[]) {
           xIntercept += stepX;
         }
 
+
         while (!wallFound) {
-          if (yIntercept < y) {
+          if (yIntercept > y) {
             sideWall = false;
             if (hasWall(worldMap[x][int(yIntercept)])) {
               wallFound = true;
@@ -143,26 +149,40 @@ int main(int argc, char* args[]) {
               xIntercept += stepX;
             }
           }
+          // if (int(yIntercept) > 5 || int(xIntercept) > 5) {
+          //   break;
+          // }
+
         }
 
         // Dependiendo de si es vert u hori que distancias agarro
         if (sideWall) {
-          distX = xIntercept - actorX;
-          distY = y - actorY;
+          distX = xIntercept - (actorX+actorGlobalX);
+          distY = y - (actorY+actorGlobalY);
         } else {
-          distX = x - actorX;
-          distY = yIntercept- actorY;
+          distX = x - (actorX+actorGlobalX);
+          distY = yIntercept- (actorY+actorGlobalY);
         }
+        printf("%f %f \n", xIntercept, yIntercept);
 
-        renderer.setRenderDrawColor(r, g, b, 255);
+        renderer.setRenderDrawColor(255, 255, 255, 255);
         renderer.renderClear();
+        renderer.setRenderDrawColor(255, 255, 0, 255);
+        for (int i = 0; i < 5; i++) {
+          for (int j = 0; j < 5; j++) {
+            if (hasWall(worldMap[i][j])) {
+              renderer.renderFillRect(i*64, j*64, 64, 64);
+            }
+          }
+        }
         renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
-        renderer.renderDrawLine(actorX * 64, actorY * 64, distX * 64, distY * 64);
-        SDL_Delay(1000/10);
+        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, (actorX+actorGlobalX+distX) * 64, (actorY+actorGlobalY+distY) * 64);
+        renderer.renderPresent();
+        SDL_Delay(10);
 
 
         // Distancia proyectada a la camara
-        double proy = (distX * cos(rayAngle)) + (distY * sin(rayAngle));
+        double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
       }
 
 

@@ -18,7 +18,7 @@ bool Map::valid_position(int & pos_x, int & pos_y){
     // }
     return false;
 }
-
+// tenemos que ver si el movimiento realmente va a ser asi. yo creo que el movimiento es un poco mas fluido dentro del casillero. hay que preguntar a los de vision
 void Map::move_player(Player & player, std::string direction){
     int aux_x = player.get_pos_x();
     int aux_y = player.get_pos_y();

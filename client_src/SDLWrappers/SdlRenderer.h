@@ -19,6 +19,7 @@ class SdlRenderer {
     ~SdlRenderer();
     void setRenderDrawColor(int r, int g, int b, int a);
     void renderDrawLine(int x1, int y1, int x2, int y2);
+    void renderDrawRect(int x, int y, int w, int h);
     void renderFillRect(int x, int y, int w, int h);
     void renderClear();
     void renderPresent();

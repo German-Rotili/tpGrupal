@@ -45,6 +45,11 @@ void SdlRenderer::renderFillRect(int x, int y, int w, int h) {
   SDL_RenderFillRect(renderer, &rectangulo);
 }
 
+void SdlRenderer::renderDrawRect(int x, int y, int w, int h) {
+  SDL_Rect rectangulo = {x, y, w, h};
+  SDL_RenderDrawRect(renderer, &rectangulo);
+}
+
 void SdlRenderer::renderClear() {
   SDL_RenderClear(renderer);
 }

@@ -129,12 +129,33 @@ int main(int argc, char* args[]) {
                                // pared vertical con respecto al map
         double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
 
-        double xStep = -1/tan(rayAngle * PI/180.0);
-        double yStep = tan(rayAngle * PI/180.0);
+        double xStep;
+        double yStep;
+        double xIntercept;
+        double yIntercept;
+        int tileStepX;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+        int tileStepY;
 
-        double xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
+        if (0 > rayAngle >= -90) {
+          xStep = -1/tan(rayAngle * PI/180.0);
+          yStep = tan(rayAngle * PI/180.0);
+          xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
+          yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
+          tileStepX = 1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+          tileStepY = -1;
+        } else if (-90 > rayAngle >= -180) {
+          xStep = 1/tan(rayAngle * PI/180.0);
+          yStep = tan(rayAngle * PI/180.0);
+          xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
+          yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
+          tileStepX = -1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+          tileStepY = -1;
+        } else if (-180 > rayAngle >= -270) {
 
-        double yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
+        } else if (-270 > rayAngle >= -360)
+
+
+
 
         printf("rayNumber: %i %f \n", rayNumber, rayAngle);
         printf("%f %f \n", xIntercept, yIntercept);
@@ -168,8 +189,7 @@ int main(int argc, char* args[]) {
         bool wallFoundY = false;
         bool wallFoundX = false;
 
-        int tileStepX = 1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
-        int tileStepY = -1;
+
         printf("xStep: %f, yStep: %f \n", xStep, yStep);
         for (;;) {
           while (!wallFoundY) {
@@ -196,21 +216,17 @@ int main(int argc, char* args[]) {
           }
           if (wallFoundX && wallFoundY) break;
         }
-        if ((xIntercept * cos(rayAngle * PI/180)) < (x * cos(rayAngle * PI/180))) goto hitHoriz;
-        else goto hitVert;
+        if ((xIntercept * cos(rayAngle * PI/180)) < (x * cos(rayAngle * PI/180))) sideWall = true;
 
-    hitVert:
-        printf("Cayo en hitVert\n");
-        renderer.setRenderDrawColor(255, 0, 0, 255);
-        renderer.renderFillRect(x*64, int(yIntercept)*64, 64, 64);
-        goto seguir;
-
-    hitHoriz:
-        printf("Cayo en hitHoriz\n");
-        renderer.setRenderDrawColor(255, 0, 0, 255);
-        renderer.renderFillRect(int(xIntercept)*64, y*64, 64, 64);
-
-    seguir:
+        if (!sideWall) {
+          printf("Cayo en hitVert\n");
+          renderer.setRenderDrawColor(255, 0, 0, 255);
+          renderer.renderFillRect(x*64, int(yIntercept)*64, 64, 64);
+        } else {
+          printf("Cayo en hitHoriz\n");
+          renderer.setRenderDrawColor(255, 0, 0, 255);
+          renderer.renderFillRect(int(xIntercept)*64, y*64, 64, 64);
+        }
           //Dependiendo de si es vert u hori que distancias agarro
         /*if (!sideWall) {
           distX = (xIntercept - (actorX+actorDX)) * cos(rayAngle*PI/180);

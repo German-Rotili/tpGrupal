@@ -165,39 +165,50 @@ int main(int argc, char* args[]) {
         double distX, distY;
 
         // Loopea hasta encontrar pared
-        bool wallFound = false;
+        bool wallFoundY = false;
+        bool wallFoundX = false;
 
         int tileStepX = 1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
         int tileStepY = -1;
         printf("xStep: %f, yStep: %f \n", xStep, yStep);
         for (;;) {
-          while (yIntercept < y) {
+          while (!wallFoundY) {
             printf("x:%f y: %i \nxIntercept: %f yIntercept: %i\n",x,y,xIntercept,yIntercept);
-            if (mapHasWall(x,int(yIntercept))) goto hitVert;
+            if (mapHasWall(x,int(yIntercept))) {
+              wallFoundY = true;
+              break;
+            }
             renderer.setRenderDrawColor(100, 255, 100, 255);
             renderer.renderFillRect(x*64, int(yIntercept)*64, 64, 64);
             x += tileStepX;
             yIntercept += yStep;
           }
-          while (xIntercept > x) {
+          while (!wallFoundX) {
             printf("yIntercept: %f y: %i \nxIntercept: %f x: %i\n",yIntercept,y,xIntercept,x);
-            if (mapHasWall(int(xIntercept),y)) goto hitHoriz;
+            if (mapHasWall(int(xIntercept),y)) {
+              wallFoundX = true;
+              break;
+            }
             renderer.setRenderDrawColor(100, 100, 255, 255);
             renderer.renderFillRect(int(xIntercept)*64, y*64, 64, 64);
             y += tileStepY;
             xIntercept += xStep;
           }
+          if (wallFoundX && wallFoundY) break;
         }
+        if ((xIntercept * cos(rayAngle * PI/180)) < (x * cos(rayAngle * PI/180))) goto hitHoriz;
+        else goto hitVert;
+
     hitVert:
-    printf("Cayo en hitVert\n");
-    renderer.setRenderDrawColor(255, 0, 0, 255);
-    renderer.renderFillRect(x*64, int(yIntercept)*64, 64, 64);
-    goto seguir;
+        printf("Cayo en hitVert\n");
+        renderer.setRenderDrawColor(255, 0, 0, 255);
+        renderer.renderFillRect(x*64, int(yIntercept)*64, 64, 64);
+        goto seguir;
 
     hitHoriz:
-    printf("Cayo en hitHoriz\n");
-    renderer.setRenderDrawColor(255, 0, 0, 255);
-    renderer.renderFillRect(int(xIntercept)*64, y*64, 64, 64);
+        printf("Cayo en hitHoriz\n");
+        renderer.setRenderDrawColor(255, 0, 0, 255);
+        renderer.renderFillRect(int(xIntercept)*64, y*64, 64, 64);
 
     seguir:
           //Dependiendo de si es vert u hori que distancias agarro
@@ -237,7 +248,7 @@ int main(int argc, char* args[]) {
 
 
         // Distancia proyectada a la camara
-        //double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
+        double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
       }
 
       renderer.setRenderDrawColor(0, 0xFF, 0x00, 0x00);

@@ -47,12 +47,14 @@ int main(int argc, char* args[]) {
     int playery = SCREEN_HEIGHT/2;
 
     double dirAngle = -65;
-    int actorX = 0;
-    int actorY = 4;
+    double actorX = 0;
+    double actorY = 4;
     double actorDX = 0.5;
     double actorDY = 0.5;
 
     double FOV = 20;
+
+    double proyPlaneDist = 160/tan(30*PI/180);
 
     SdlTexture walls("textures/walls.png", renderer);
 
@@ -64,6 +66,7 @@ int main(int argc, char* args[]) {
     renderer.renderClear();
 
     bool quit = false;
+    bool threeD = false;
     SDL_Event e;
     // Main (o game) Loop
     while (!quit) {
@@ -101,6 +104,12 @@ int main(int argc, char* args[]) {
             case SDLK_RIGHT:
             actorX += 1;
             break;
+
+            case SDLK_p:
+            if (threeD == true) threeD = false;
+            else threeD = true;
+            break;
+
             default:
             b = rand() % 256;
           }
@@ -109,171 +118,225 @@ int main(int argc, char* args[]) {
 
       // El FOV va a venir por configuración
 
-      renderer.setRenderDrawColor(255, 255, 255, 255);
-      renderer.renderClear();
-      // Dibujar mapa
-      for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 7; j++) {
-          if (mapHasWall(i, j)) {
-            renderer.setRenderDrawColor(255, 100, 100, 255);
-            renderer.renderFillRect(i*64, j*64, 64, 64);
-          }
-          renderer.setRenderDrawColor(0, 0, 0, 255);
-          renderer.renderDrawRect(i*64, j*64, 64, 64);
-        }
-      }
-
       int screenWidth = SCREEN_WIDTH;
       double dAngle = FOV / screenWidth;
 
-      for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
-        int x = actorX;
-        int y = actorY;
-        double dx = actorDX;
-        double dy = actorDY;
+      if (threeD == true) {
+        // Piso
+        renderer.setRenderDrawColor(100, 100, 100, 255);
+        renderer.renderClear();
 
-        bool sideWall = false;  // Se fija si es una
-                               // pared vertical con respecto al map
-        double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
+        // Techo
+        renderer.setRenderDrawColor(150, 150, 150, 255);
+        renderer.renderFillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2);
+        for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
+          int x = actorX;
+          int y = actorY;
+          double dx = actorDX;
+          double dy = actorDY;
 
-        double xStep;
-        double yStep;
-        double xIntercept;
-        double yIntercept;
-        int tileStepX;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
-        int tileStepY;
+          bool sideWall = false;  // Se fija si es una
+                                 // pared vertical con respecto al map
+          double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
 
-        if (0 > rayAngle >= -90) {
-          xStep = -1/tan(rayAngle * PI/180.0);
-          yStep = tan(rayAngle * PI/180.0);
-          xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
-          yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
-          tileStepX = 1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
-          tileStepY = -1;
-        } else if (-90 > rayAngle >= -180) {
-          xStep = 1/tan(rayAngle * PI/180.0);
-          yStep = tan(rayAngle * PI/180.0);
-          xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
-          yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
-          tileStepX = -1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
-          tileStepY = -1;
-        } else if (-180 > rayAngle >= -270) {
+          double xStep;
+          double yStep;
+          double xIntercept;
+          double yIntercept;
+          int tileStepX;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+          int tileStepY;
 
-        } else if (-270 > rayAngle >= -360)
+          if (0 > rayAngle >= -90) {
+            xStep = -1/tan(rayAngle * PI/180.0);
+            yStep = tan(rayAngle * PI/180.0);
+            xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
+            yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
+            tileStepX = 1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+            tileStepY = -1;
+          } else if (-90 > rayAngle >= -180) {
+            xStep = 1/tan(rayAngle * PI/180.0);
+            yStep = tan(rayAngle * PI/180.0);
+            xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
+            yIntercept = y + dy + -dx*tan(rayAngle * PI/180.0);
+            tileStepX = -1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+            tileStepY = -1;
+          } else if (-180 > rayAngle >= -270) {
+
+          } else if (-270 > rayAngle >= -360) {
+
+          }
 
 
-        // Distancia de la pared
-        double distX, distY;
+          // Distancia de la pared
+          double distortedDist;
 
-        // Loopea hasta encontrar pared
-        bool wallFoundX = false;
-        bool wallFoundY = false;
-        for (int i = 0; i <= 8 && !(wallFoundX && wallFoundY) ; i++) {
-          if (!wallFoundX) {
-            if (mapHasWall(int(xIntercept), y + tileStepY)) {
-              wallFoundX = true;
+          // Loopea hasta encontrar pared
+          bool wallFoundX = false;
+          bool wallFoundY = false;
+          for (int i = 0; i <= 8 && !(wallFoundX && wallFoundY) ; i++) {
+            if (!wallFoundX) {
+              if (mapHasWall(int(xIntercept), y+tileStepY)) {
+                wallFoundX = true;
+              }
+              else{
+                y += tileStepY;
+                xIntercept += xStep;
+              }
             }
-            else{
-              //renderer.setRenderDrawColor(100, 255, 100, 255);
+            if (!wallFoundY) {
+              if (mapHasWall(x+tileStepX, int(yIntercept))) {
+                wallFoundY = true;
+              }
+              else{
+                x += tileStepX;
+                yIntercept += yStep;
+              }
+            }
+          }
+
+          double d1 = distance(actorX+actorDX, actorY+actorDY, xIntercept, y);
+          double d2 = distance(actorX+actorDX, actorY+actorDY, x+tileStepX, yIntercept);
+
+          if (wallFoundX || wallFoundY){
+            renderer.setRenderDrawColor(100, 100, 100, 255);
+            if (d1 < d2) {
               //renderer.renderFillRect(int(xIntercept)*64, (y+tileStepY)*64, 64, 64);
-
-              y += tileStepY;
-              xIntercept += xStep;
-            }
-          }
-          if (!wallFoundY) {
-            if (mapHasWall(x+tileStepX, int(yIntercept))) {
-              wallFoundY = true;
-            }
-            else{
-              //renderer.setRenderDrawColor(100, 100, 255, 255);
+              //renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, xIntercept*64 , y*64);
+              distortedDist = d1;
+            } else {
               //renderer.renderFillRect((x+tileStepX)*64, int(yIntercept)*64, 64, 64);
-
-              x += tileStepX;
-              yIntercept += yStep;
+              //renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, (x+tileStepX)*64 , (yIntercept)*64);
+              distortedDist = d2;
             }
           }
+          //Lineas interseccion eje horizontal
+          // renderer.setRenderDrawColor(0, 0, 0, 0xFF);
+          //
+          // renderer.setRenderDrawColor(0xFF, 0x00, 0x00, 0x00);
+          // renderer.renderDrawLine((actorX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY) * 64);
+          // renderer.renderDrawLine((actorX+actorDX) * 64, (actorY) * 64, (actorX+actorDX) * 64, (actorY+actorDY) * 64);
+
+
+          // Distancia proyectada a la camara
+          double proy = distortedDist * cos((dirAngle - rayAngle)*PI/180);
+          int wallHeight = (1/proy) * 255;
+
+          renderer.setRenderDrawColor(wallHeight, wallHeight, wallHeight, 255);
+          renderer.renderFillRect(rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight);
         }
-        //if ((xIntercept * cos(rayAngle * PI/180)) < (x * cos(rayAngle * PI/180))) sideWall = true;
-        double d1 = distance(actorX+actorDX, actorY+actorDY, xIntercept, y);
-        double d2 = distance(actorX+actorDX, actorY+actorDY, x+tileStepX, yIntercept);
-
-        if (wallFoundX || wallFoundY){
-          renderer.setRenderDrawColor(100, 100, 100, 255);
-          if (d1 < d2) {
-
-            //renderer.renderFillRect(int(xIntercept)*64, (y+tileStepY)*64, 64, 64);
-            renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, xIntercept*64 , y*64);
-
-
-          } else {
-            //renderer.renderFillRect((x+tileStepX)*64, int(yIntercept)*64, 64, 64);
-            renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, (x+tileStepX)*64 , (yIntercept)*64);
-
+      } else {
+        renderer.setRenderDrawColor(255, 255, 255, 255);
+        renderer.renderClear();
+        // Dibujar mapa
+        for (int i = 0; i < 10; i++) {
+          for (int j = 0; j < 7; j++) {
+            if (mapHasWall(i, j)) {
+              renderer.setRenderDrawColor(255, 100, 100, 255);
+              renderer.renderFillRect(i*64, j*64, 64, 64);
+            }
+            renderer.setRenderDrawColor(0, 0, 0, 255);
+            renderer.renderDrawRect(i*64, j*64, 64, 64);
           }
         }
-        //Lineas interseccion eje horizontal
-        renderer.setRenderDrawColor(0, 0, 0, 0xFF);
-        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64);
-        //renderer.renderDrawLine((actorX+actorDX - dy/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180)) * 64, (actorY) * 64);
+        for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
+          int x = actorX;
+          int y = actorY;
+          double dx = actorDX;
+          double dy = actorDY;
 
-        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180) - 1/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64);
-        //renderer.renderDrawLine((actorX+actorDX - (dy/tan(rayAngle*PI/180)) - 1/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64, (actorX+actorDX- (dy/tan(rayAngle*PI/180)) - 1/tan(rayAngle*PI/180)) * 64, (actorY - 1) * 64);
+          bool sideWall = false;  // Se fija si es una
+                                 // pared vertical con respecto al map
+          double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
 
-        //Lineas interseccion eje vertical
-        //renderer.setRenderDrawColor(100, 30, 100, 0xFF);
-        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64);
-        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64, (actorX+actorDX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64);
+          double xStep;
+          double yStep;
+          double xIntercept;
+          double yIntercept;
+          int tileStepX;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+          int tileStepY;
 
-        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64);
-        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64, (actorX+actorDX+actorDX + 1) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64);
+          if (0 > rayAngle >= -90) {
+            xStep = -1/tan(rayAngle * PI/180.0);
+            yStep = tan(rayAngle * PI/180.0);
+            xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
+            yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
+            tileStepX = 1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+            tileStepY = -1;
+          } else if (-90 > rayAngle >= -180) {
+            xStep = 1/tan(rayAngle * PI/180.0);
+            yStep = tan(rayAngle * PI/180.0);
+            xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
+            yIntercept = y + dy + -dx*tan(rayAngle * PI/180.0);
+            tileStepX = -1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+            tileStepY = -1;
+          } else if (-180 > rayAngle >= -270) {
 
-          //Dependiendo de si es vert u hori que distancias agarro
-        /*if (!sideWall) {
-          distX = (xIntercept - (actorX+actorDX)) * cos(rayAngle*PI/180);
-          distY = (xIntercept - (actorY+actorDY)) * sin(rayAngle*PI/180);
-        } else {
-          printf("esta corriendo esto\n");
-          distX = (yIntercept - (actorY+actorDY)) * cos(rayAngle*PI/180);
-          distY = (yIntercept - (actorY+actorDY)) * sin(rayAngle*PI/180);
+          } else if (-270 > rayAngle >= -360) {
+
+          }
+
+
+          // Distancia de la pared
+          double distortedDist;
+
+          // Loopea hasta encontrar pared
+          bool wallFoundX = false;
+          bool wallFoundY = false;
+          for (int i = 0; i <= 8 && !(wallFoundX && wallFoundY) ; i++) {
+            if (!wallFoundX) {
+              if (mapHasWall(int(xIntercept), y+tileStepY)) {
+                wallFoundX = true;
+              }
+              else{
+                y += tileStepY;
+                xIntercept += xStep;
+              }
+            }
+            if (!wallFoundY) {
+              if (mapHasWall(x+tileStepX, int(yIntercept))) {
+                wallFoundY = true;
+              }
+              else{
+                x += tileStepX;
+                yIntercept += yStep;
+              }
+            }
+          }
+
+          double d1 = distance(actorX+actorDX, actorY+actorDY, xIntercept, y);
+          double d2 = distance(actorX+actorDX, actorY+actorDY, x+tileStepX, yIntercept);
+
+          if (wallFoundX || wallFoundY){
+            renderer.setRenderDrawColor(100, 100, 100, 255);
+            if (d1 < d2) {
+              //renderer.renderFillRect(int(xIntercept)*64, (y+tileStepY)*64, 64, 64);
+              renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, xIntercept*64 , y*64);
+              distortedDist = d1;
+            } else {
+              //renderer.renderFillRect((x+tileStepX)*64, int(yIntercept)*64, 64, 64);
+              renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, (x+tileStepX)*64 , (yIntercept)*64);
+              distortedDist = d2;
+            }
+          }
+          //Lineas interseccion eje horizontal
+          renderer.setRenderDrawColor(0, 0, 0, 0xFF);
+
+          renderer.setRenderDrawColor(0xFF, 0x00, 0x00, 0x00);
+          renderer.renderDrawLine((actorX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY) * 64);
+          renderer.renderDrawLine((actorX+actorDX) * 64, (actorY) * 64, (actorX+actorDX) * 64, (actorY+actorDY) * 64);
+
+
+          // Distancia proyectada a la camara
+          double proy = distortedDist * cos((dirAngle - rayAngle)*PI/180);
+          int wallHeight = (1/proy) * 255;
+
+          printf("%f %i \n", proy, wallHeight);
+          // renderer.setRenderDrawColor(0, 0, 0, 255);
+          // renderer.renderFillRect(SCREEN_WIDTH-rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight);
         }
-        printf("%f %f \n", xIntercept, yIntercept);*/
-
-      /*renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, xIntercept * 64, yIntercept * 64);
-        renderer.setRenderDrawColor(0x00, 0xFF, 0x00, 0x00);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, x * 64, y * 64);
-        */
-
-        //renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
-        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX+distX) * 64, (actorY+actorDY+distY) * 64);
-
-        renderer.setRenderDrawColor(0xFF, 0x00, 0x00, 0x00);
-        renderer.renderDrawLine((actorX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY) * 64);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY) * 64, (actorX+actorDX) * 64, (actorY+actorDY) * 64);
-
-
-
-        //renderer.setRenderDrawColor(0, 0, 0xFF, 0xFF);
-        //renderer.renderDrawPoint(xIntercept*64, actorY+actorDY);
-        //renderer.renderDrawPoint(actorX+actorDX, yIntercept*64);
-
-
-
-        //renderer.renderPresent();
-        //SDL_Delay(1);
-
-
-        // Distancia proyectada a la camara
-        //double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
       }
 
       renderer.setRenderDrawColor(0, 0xFF, 0x00, 0x00);
-      //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX+cos(dirAngle*PI/180) * 10) * 64, (actorY+actorDY+sin(dirAngle*PI/180) * 10) * 64);
-
-
-
-      //renderer.setRenderDrawColor(r, g, b, 255);
 
 
       //renderer.renderCopy(player, NULL, playerx, playery);

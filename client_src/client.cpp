@@ -223,7 +223,7 @@ int main(int argc, char* args[]) {
           double proy = distortedDist * cos((dirAngle - rayAngle)*PI/180);
           int wallHeight = (1/proy) * 255;
 
-          renderer.setRenderDrawColor(wallHeight, wallHeight, wallHeight, 255);
+          renderer.setRenderDrawColor(255, wallHeight, wallHeight, 255);
           renderer.renderFillRect(rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight);
         }
       } else {
@@ -254,28 +254,29 @@ int main(int argc, char* args[]) {
           double yStep;
           double xIntercept;
           double yIntercept;
-          int tileStepX;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+          int tileStepX;
           int tileStepY;
-
-
-          if (rayAngle >= 0) {
-            rayAngle -= 360;
-          } else if (rayAngle < -360) {
-            rayAngle +=360;
-          }
 
           if (0 > rayAngle >= -90) {
             tileStepX = 1;  // (1, -1) para 0 a 90, (-1, -1) para 90 a 180, (-1, 1) para 180 a 270 y (1, 1) para 270 a 360
             tileStepY = -1;
+            xStep = -tileStepX/tan(rayAngle * PI/180.0);
+            yStep = -tileStepY*tan(rayAngle * PI/180.0);
           } else if (-90 > rayAngle >= -180) {
             tileStepX = -1;  // (1, -1) para 0 a 90, (-1, -1) para 90 a 180, (-1, 1) para 180 a 270 y (1, 1) para 270 a 360
             tileStepY = -1;
+            xStep = tileStepX/tan(rayAngle * PI/180.0);
+            yStep = tileStepY*tan(rayAngle * PI/180.0);
           } else if (-180 > rayAngle >= -270) {
             tileStepX = -1;
             tileStepY = 1;
+            xStep = -tileStepX*tan(rayAngle * PI/180.0);
+            yStep = -tileStepY/tan(rayAngle * PI/180.0);
           } else if (-270 > rayAngle >= -360) {
             tileStepX = 1;
             tileStepY = 1;
+            xStep = tileStepX*tan(rayAngle * PI/180.0);
+            yStep = tileStepY/tan(rayAngle * PI/180.0);
           }
 
           if (rayAngle == -360){
@@ -290,12 +291,9 @@ int main(int argc, char* args[]) {
           } else if (rayAngle == -270){
             xStep = 0;
             yStep = 60;
-          } else {
-            xStep =  -tileStepX/tan(rayAngle * PI/180.0);
-            yStep = -tileStepY*tan(rayAngle * PI/180.0);
           }
-          xIntercept = x + dx + (dy)*xStep * (-tileStepX);
-          yIntercept = y + dy + dx*yStep * (-tileStepY);
+          xIntercept = x + dx + (dy)*xStep;
+          yIntercept = y + dy + dx*yStep;
 
 
           // Distancia de la pared

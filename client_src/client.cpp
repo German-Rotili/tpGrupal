@@ -13,15 +13,21 @@
 #define PI 3.14
 
 #define SIZE_NIVEL 5
-int worldMap[5][5] = {{1, 1, 1, 1, 1},
-                      {0, 0, 0, 0, 1},
-                      {0, 0, 0, 0, 1},
-                      {0, 0, 0, 0, 1},
-                      {0, 0, 0, 0, 1},
+int worldMap[7][10] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {0, 0, 0, 0, 1, 0, 1, 0, 0, 1},
+                      {0, 0, 0, 1, 0, 1, 0, 0, 0, 1},
+                      {0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     };
 
 bool mapHasWall(int x, int y) {
   return (worldMap[y][x] == 1);
+}
+
+double distance(double x1, double y1, double x2, double y2) {
+  return sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
 }
 
 int main(int argc, char* args[]) {
@@ -40,13 +46,13 @@ int main(int argc, char* args[]) {
     int playerx = SCREEN_WIDTH/2;
     int playery = SCREEN_HEIGHT/2;
 
-    double dirAngle = -50;
-    int actorX = 1;
-    int actorY = 3;
+    double dirAngle = -65;
+    int actorX = 0;
+    int actorY = 4;
     double actorDX = 0.5;
     double actorDY = 0.5;
 
-    double FOV = 15;
+    double FOV = 20;
 
     SdlTexture walls("textures/walls.png", renderer);
 
@@ -106,12 +112,13 @@ int main(int argc, char* args[]) {
       renderer.setRenderDrawColor(255, 255, 255, 255);
       renderer.renderClear();
       // Dibujar mapa
-      for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-          renderer.setRenderDrawColor(0, 0, 0, 255);
+      for (int i = 0; i < 10; i++) {
+        for (int j = 0; j < 7; j++) {
           if (mapHasWall(i, j)) {
-            renderer.setRenderDrawColor(255, 0, 0, 255);
+            renderer.setRenderDrawColor(255, 100, 100, 255);
+            renderer.renderFillRect(i*64, j*64, 64, 64);
           }
+          renderer.setRenderDrawColor(0, 0, 0, 255);
           renderer.renderDrawRect(i*64, j*64, 64, 64);
         }
       }
@@ -119,7 +126,7 @@ int main(int argc, char* args[]) {
       int screenWidth = SCREEN_WIDTH;
       double dAngle = FOV / screenWidth;
 
-      for (int rayNumber = screenWidth/2; rayNumber <= screenWidth/2; rayNumber++) {
+      for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
         int x = actorX;
         int y = actorY;
         double dx = actorDX;
@@ -155,78 +162,72 @@ int main(int argc, char* args[]) {
         } else if (-270 > rayAngle >= -360)
 
 
-
-
-        printf("rayNumber: %i %f \n", rayNumber, rayAngle);
-        printf("%f %f \n", xIntercept, yIntercept);
-        printf("xIntercept %f yIntercept %f \n", xIntercept, yIntercept);
-
-        renderer.setRenderDrawColor(0, 0xFF, 0x00, 0x00);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX+cos(rayAngle*PI/180) * 10) * 64, (actorY+actorDY+sin(rayAngle*PI/180) * 10) * 64);
-
-        //Lineas interseccion eje horizontal
-        renderer.setRenderDrawColor(0, 0, 0, 0xFF);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64);
-        renderer.renderDrawLine((actorX+actorDX - dy/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180)) * 64, (actorY) * 64);
-
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180) - 1/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64);
-        renderer.renderDrawLine((actorX+actorDX - (dy/tan(rayAngle*PI/180)) - 1/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64, (actorX+actorDX- (dy/tan(rayAngle*PI/180)) - 1/tan(rayAngle*PI/180)) * 64, (actorY - 1) * 64);
-
-        //Lineas interseccion eje vertical
-        renderer.setRenderDrawColor(100, 30, 100, 0xFF);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64, (actorX+actorDX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64);
-
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64);
-        renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64, (actorX+actorDX+actorDX + 1) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64);
-
-
-
         // Distancia de la pared
         double distX, distY;
 
         // Loopea hasta encontrar pared
-        bool wallFoundY = false;
         bool wallFoundX = false;
-
-
-        printf("xStep: %f, yStep: %f \n", xStep, yStep);
-        for (;;) {
-          while (!wallFoundY) {
-            printf("x:%f y: %i \nxIntercept: %f yIntercept: %i\n",x,y,xIntercept,yIntercept);
-            if (mapHasWall(x,int(yIntercept))) {
-              wallFoundY = true;
-              break;
-            }
-            renderer.setRenderDrawColor(100, 255, 100, 255);
-            renderer.renderFillRect(x*64, int(yIntercept)*64, 64, 64);
-            x += tileStepX;
-            yIntercept += yStep;
-          }
-          while (!wallFoundX) {
-            printf("yIntercept: %f y: %i \nxIntercept: %f x: %i\n",yIntercept,y,xIntercept,x);
-            if (mapHasWall(int(xIntercept),y)) {
+        bool wallFoundY = false;
+        for (int i = 0; i <= 8 && !(wallFoundX && wallFoundY) ; i++) {
+          if (!wallFoundX) {
+            if (mapHasWall(int(xIntercept), y + tileStepY)) {
               wallFoundX = true;
-              break;
             }
-            renderer.setRenderDrawColor(100, 100, 255, 255);
-            renderer.renderFillRect(int(xIntercept)*64, y*64, 64, 64);
-            y += tileStepY;
-            xIntercept += xStep;
-          }
-          if (wallFoundX && wallFoundY) break;
-        }
-        if ((xIntercept * cos(rayAngle * PI/180)) < (x * cos(rayAngle * PI/180))) sideWall = true;
+            else{
+              //renderer.setRenderDrawColor(100, 255, 100, 255);
+              //renderer.renderFillRect(int(xIntercept)*64, (y+tileStepY)*64, 64, 64);
 
-        if (!sideWall) {
-          printf("Cayo en hitVert\n");
-          renderer.setRenderDrawColor(255, 0, 0, 255);
-          renderer.renderFillRect(x*64, int(yIntercept)*64, 64, 64);
-        } else {
-          printf("Cayo en hitHoriz\n");
-          renderer.setRenderDrawColor(255, 0, 0, 255);
-          renderer.renderFillRect(int(xIntercept)*64, y*64, 64, 64);
+              y += tileStepY;
+              xIntercept += xStep;
+            }
+          }
+          if (!wallFoundY) {
+            if (mapHasWall(x+tileStepX, int(yIntercept))) {
+              wallFoundY = true;
+            }
+            else{
+              //renderer.setRenderDrawColor(100, 100, 255, 255);
+              //renderer.renderFillRect((x+tileStepX)*64, int(yIntercept)*64, 64, 64);
+
+              x += tileStepX;
+              yIntercept += yStep;
+            }
+          }
         }
+        //if ((xIntercept * cos(rayAngle * PI/180)) < (x * cos(rayAngle * PI/180))) sideWall = true;
+        double d1 = distance(actorX+actorDX, actorY+actorDY, xIntercept, y);
+        double d2 = distance(actorX+actorDX, actorY+actorDY, x+tileStepX, yIntercept);
+
+        if (wallFoundX || wallFoundY){
+          renderer.setRenderDrawColor(100, 100, 100, 255);
+          if (d1 < d2) {
+
+            //renderer.renderFillRect(int(xIntercept)*64, (y+tileStepY)*64, 64, 64);
+            renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, xIntercept*64 , y*64);
+
+
+          } else {
+            //renderer.renderFillRect((x+tileStepX)*64, int(yIntercept)*64, 64, 64);
+            renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, (x+tileStepX)*64 , (yIntercept)*64);
+
+          }
+        }
+        //Lineas interseccion eje horizontal
+        renderer.setRenderDrawColor(0, 0, 0, 0xFF);
+        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64);
+        //renderer.renderDrawLine((actorX+actorDX - dy/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180)) * 64, (actorY) * 64);
+
+        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX- dy/tan(rayAngle*PI/180) - 1/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64);
+        //renderer.renderDrawLine((actorX+actorDX - (dy/tan(rayAngle*PI/180)) - 1/tan(rayAngle*PI/180)) * 64, (actorY+actorDY) * 64, (actorX+actorDX- (dy/tan(rayAngle*PI/180)) - 1/tan(rayAngle*PI/180)) * 64, (actorY - 1) * 64);
+
+        //Lineas interseccion eje vertical
+        //renderer.setRenderDrawColor(100, 30, 100, 0xFF);
+        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64);
+        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64, (actorX+actorDX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180)) * 64);
+
+        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64);
+        //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64, (actorX+actorDX+actorDX + 1) * 64, (actorY+actorDY + dx*tan(rayAngle*PI/180) + tan(rayAngle*PI/180)) * 64);
+
           //Dependiendo de si es vert u hori que distancias agarro
         /*if (!sideWall) {
           distX = (xIntercept - (actorX+actorDX)) * cos(rayAngle*PI/180);
@@ -264,11 +265,11 @@ int main(int argc, char* args[]) {
 
 
         // Distancia proyectada a la camara
-        double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
+        //double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
       }
 
       renderer.setRenderDrawColor(0, 0xFF, 0x00, 0x00);
-      renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX+cos(dirAngle*PI/180) * 10) * 64, (actorY+actorDY+sin(dirAngle*PI/180) * 10) * 64);
+      //renderer.renderDrawLine((actorX+actorDX) * 64, (actorY+actorDY) * 64, (actorX+actorDX+cos(dirAngle*PI/180) * 10) * 64, (actorY+actorDY+sin(dirAngle*PI/180) * 10) * 64);
 
 
 

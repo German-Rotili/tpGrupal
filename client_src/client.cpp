@@ -14,17 +14,19 @@
 
 #define SIZE_NIVEL 5
 int worldMap[7][10] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {0, 0, 0, 0, 1, 0, 1, 0, 0, 1},
-                      {0, 0, 0, 1, 0, 1, 0, 0, 0, 1},
-                      {0, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 1, 0, 1, 0, 0, 1},
+                      {1, 0, 0, 1, 0, 1, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
                       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     };
 
 bool mapHasWall(int x, int y) {
+  if (x < 0 || x >= 10 || y < 0 || y >= 10) return true;
   return (worldMap[y][x] == 1);
 }
+
 
 double distance(double x1, double y1, double x2, double y2) {
   return sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
@@ -46,8 +48,8 @@ int main(int argc, char* args[]) {
     int playerx = SCREEN_WIDTH/2;
     int playery = SCREEN_HEIGHT/2;
 
-    double dirAngle = -65;
-    double actorX = 0;
+    double dirAngle = -230;
+    double actorX = 1;
     double actorY = 4;
     double actorDX = 0.5;
     double actorDY = 0.5;
@@ -77,11 +79,11 @@ int main(int argc, char* args[]) {
         } else if (e.type == SDL_KEYDOWN) {
           switch (e.key.keysym.sym) {
             case SDLK_w:
-            dirAngle += 2;
+            dirAngle += 0.5;
             break;
 
             case SDLK_s:
-            dirAngle -= 2;
+            dirAngle -= 0.5;
             break;
 
             case SDLK_a:
@@ -238,7 +240,7 @@ int main(int argc, char* args[]) {
             renderer.renderDrawRect(i*64, j*64, 64, 64);
           }
         }
-        for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
+        for (int rayNumber = screenWidth/2; rayNumber <= screenWidth/2; rayNumber++) {
           int x = actorX;
           int y = actorY;
           double dx = actorDX;
@@ -255,25 +257,45 @@ int main(int argc, char* args[]) {
           int tileStepX;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
           int tileStepY;
 
+
+          if (rayAngle >= 0) {
+            rayAngle -= 360;
+          } else if (rayAngle < -360) {
+            rayAngle +=360;
+          }
+
           if (0 > rayAngle >= -90) {
-            xStep = -1/tan(rayAngle * PI/180.0);
-            yStep = tan(rayAngle * PI/180.0);
-            xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
-            yIntercept = y + dy + dx*tan(rayAngle * PI/180.0);
-            tileStepX = 1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+            tileStepX = 1;  // (1, -1) para 0 a 90, (-1, -1) para 90 a 180, (-1, 1) para 180 a 270 y (1, 1) para 270 a 360
             tileStepY = -1;
           } else if (-90 > rayAngle >= -180) {
-            xStep = 1/tan(rayAngle * PI/180.0);
-            yStep = tan(rayAngle * PI/180.0);
-            xIntercept = x + dx + (-dy)/tan(rayAngle * PI/180.0);
-            yIntercept = y + dy + -dx*tan(rayAngle * PI/180.0);
-            tileStepX = -1;  // (1, -1) para 0 a 90, (-1, 1) para 90 a 180, (-1, -1) para 180 a 270 y (1, 1) para 270 a 360
+            tileStepX = -1;  // (1, -1) para 0 a 90, (-1, -1) para 90 a 180, (-1, 1) para 180 a 270 y (1, 1) para 270 a 360
             tileStepY = -1;
           } else if (-180 > rayAngle >= -270) {
-
+            tileStepX = -1;
+            tileStepY = 1;
           } else if (-270 > rayAngle >= -360) {
-
+            tileStepX = 1;
+            tileStepY = 1;
           }
+
+          if (rayAngle == -360){
+            xStep = 60;
+            yStep = 0;
+          } else if (rayAngle == -180){
+            xStep = -60;
+            yStep = 0;
+          } else if (rayAngle == -90){
+            xStep = 0;
+            yStep = -60;
+          } else if (rayAngle == -270){
+            xStep = 0;
+            yStep = 60;
+          } else {
+            xStep =  -tileStepX/tan(rayAngle * PI/180.0);
+            yStep = -tileStepY*tan(rayAngle * PI/180.0);
+          }
+          xIntercept = x + dx + (dy)*xStep * (-tileStepX);
+          yIntercept = y + dy + dx*yStep * (-tileStepY);
 
 
           // Distancia de la pared
@@ -330,7 +352,7 @@ int main(int argc, char* args[]) {
           double proy = distortedDist * cos((dirAngle - rayAngle)*PI/180);
           int wallHeight = (1/proy) * 255;
 
-          printf("%f %i \n", proy, wallHeight);
+          printf("rayAngle %f \n", rayAngle);
           // renderer.setRenderDrawColor(0, 0, 0, 255);
           // renderer.renderFillRect(SCREEN_WIDTH-rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight);
         }

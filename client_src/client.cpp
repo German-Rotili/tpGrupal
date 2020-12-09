@@ -6,24 +6,36 @@
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
+#include "rayCaster.h"
 
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define PI 3.14
 
+<<<<<<< HEAD
+=======
 #define SIZE_NIVEL 5
-int worldMap[5][5] = {{1, 1, 1, 1, 1},
-                      {1, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 1},
-                      {1, 1, 1, 1, 1},
+int worldMap[7][10] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 1, 0, 1, 0, 0, 1},
+                      {1, 0, 0, 1, 0, 1, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     };
 
-bool hasWall(int posicion) {
-  return (posicion == 1);
+bool mapHasWall(int x, int y) {
+  if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
+  return (worldMap[y][x] == 1);
 }
 
+
+double distance(double x1, double y1, double x2, double y2) {
+  return sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
+}
+
+>>>>>>> 3ca1309461ee4816a01d2ec2918b70f2d8f4c262
 int main(int argc, char* args[]) {
   try {
     const int horizontex = SCREEN_WIDTH/2;
@@ -39,8 +51,14 @@ int main(int argc, char* args[]) {
 
     int playerx = SCREEN_WIDTH/2;
     int playery = SCREEN_HEIGHT/2;
-    double dirAngle = 360 - 25;
-    double FOV = 15;
+
+    double dirAngle = -45;
+    double actorX = 1;
+    double actorY = 4;
+    double actorDX = 0.5;
+    double actorDY = 0.5;
+
+    double FOV = 20;
 
     SdlTexture walls("textures/walls.png", renderer);
 
@@ -50,6 +68,8 @@ int main(int argc, char* args[]) {
 
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderClear();
+
+    bool threeD = false;
 
     bool quit = false;
     SDL_Event e;
@@ -61,143 +81,55 @@ int main(int argc, char* args[]) {
           quit = true;
         } else if (e.type == SDL_KEYDOWN) {
           switch (e.key.keysym.sym) {
+            case SDLK_w:
+            dirAngle += 0.5;
+            break;
+
+            case SDLK_s:
+            dirAngle -= 0.5;
+            break;
+
+            case SDLK_a:
+            FOV -= 2;
+            break;
+
+            case SDLK_d:
+            FOV += 2;
+            break;
+
             case SDLK_UP:
-            dirAngle += 2;
-            break;
-            case SDLK_LEFT:
-            playerx -= 10;
-            break;
-            case SDLK_RIGHT:
-            playerx += 10;
+            actorY -= 1;
             break;
             case SDLK_DOWN:
-            dirAngle -= 2;
+            actorY += 1;
             break;
+            case SDLK_LEFT:
+            actorX -= 1;
+            break;
+            case SDLK_RIGHT:
+            actorX += 1;
+            break;
+
+            case SDLK_p:
+            if (threeD == true) threeD = false;
+            else threeD = true;
+            break;
+
             default:
             b = rand() % 256;
           }
         }
       }
 
-      // El FOV va a venir por configuración
+      RayCaster rayCaster;
 
-      int screenWidth = SCREEN_WIDTH;
-      double dAngle = FOV / screenWidth;
-      int actorX = 2;
-      int actorY = 2;
-      double actorGlobalX = 0.5;
-      double actorGlobalY = 0.5;
-      renderer.setRenderDrawColor(255, 255, 255, 255);
-      renderer.renderClear();
-      for (int rayNumber = 0; rayNumber < screenWidth; rayNumber++) {
-        int x = actorX;
-        int y = actorY;
-
-        bool sideWall = false;  // Se fija si es una
-                               // pared vertical con respecto al map
-        double rayAngle = dirAngle - (rayNumber * dAngle) + FOV/2;
-
-        double xIntercept = actorX + actorGlobalX +
-                     (-actorGlobalY)/tan(rayAngle * PI/180.0);
-        double yIntercept = actorY + actorGlobalY +
-                     actorGlobalX/tan(rayAngle * PI/180.0);
-
-        printf("rayNumber: %i %f \n", rayNumber, rayAngle);
-        printf("%f %f \n", xIntercept, yIntercept);
-
-        int tileStepX = 1;
-        int tileStepY = -1;
-        double stepX = 1/tan(rayAngle * PI/180.0);
-        double stepY = tan(rayAngle * PI/180.0);
-
-        // Distancia de la pared
-        double distX, distY;
-
-        // Loopea hasta encontrar pared
-        bool wallFound = false;
-
-        if (hasWall(worldMap[x][int(yIntercept)]) && !wallFound) {
-          sideWall = false;
-          wallFound = true;
-        } else {
-          x += tileStepX;
-          yIntercept += stepY;
-        }
-
-        if (hasWall(worldMap[int(xIntercept)][y]) && !wallFound) {
-          sideWall = true;
-          wallFound = true;
-        } else {
-          y += tileStepY;
-          xIntercept += stepX;
-        }
-
-        while (!wallFound) {
-          if (yIntercept > y) {
-            sideWall = false;
-            if (hasWall(worldMap[x][int(yIntercept)])) {
-              wallFound = true;
-            } else {
-              x += tileStepX;
-              yIntercept += stepY;
-            }
-          } else if (xIntercept < x) {
-            sideWall = true;
-            if (hasWall(worldMap[int(xIntercept)][y])) {
-              wallFound = true;
-            } else {
-              y += tileStepY;
-              xIntercept += stepX;
-            }
-          }
-          // if (int(yIntercept) > 5 || int(xIntercept) > 5) {
-          //   break;
-          // }
-
-        }
-
-          //Dependiendo de si es vert u hori que distancias agarro
-        if (!sideWall) {
-          distX = (xIntercept - (actorX+actorGlobalX)) * cos(rayAngle*PI/180);
-          distY = (xIntercept - (actorY+actorGlobalY)) * sin(rayAngle*PI/180);
-        } else {
-          printf("esta corriendo esto\n");
-          distX = (yIntercept - (actorY+actorGlobalY)) * cos(rayAngle*PI/180);
-          distY = (yIntercept - (actorY+actorGlobalY)) * sin(rayAngle*PI/180);
-        }
-        printf("%f %f \n", xIntercept, yIntercept);
-
-        renderer.setRenderDrawColor(255, 255, 0, 255);
-        for (int i = 0; i < 5; i++) {
-          for (int j = 0; j < 5; j++) {
-            if (hasWall(worldMap[i][j])) {
-              renderer.renderFillRect(i*64, j*64, 64, 64);
-            }
-          }
-        }
-      /*renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
-        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, xIntercept * 64, yIntercept * 64);
-        renderer.setRenderDrawColor(0x00, 0xFF, 0x00, 0x00);
-        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, x * 64, y * 64);
-        */
-        renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
-        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, (actorX+actorGlobalX+distX) * 64, (actorY+actorGlobalY+distY) * 64);
-        renderer.setRenderDrawColor(0xFF, 0x00, 0x00, 0x00);
-        renderer.renderDrawLine((actorX+actorGlobalX) * 64, (actorY+actorGlobalY) * 64, (actorX+actorGlobalX+cos(dirAngle*PI/180)) * 64, (actorY+actorGlobalY+sin(dirAngle*PI/180)) * 64);
-        //renderer.renderPresent();
-        //SDL_Delay(1);
-
-
-        // Distancia proyectada a la camara
-        //double proy = (distX * cos(rayAngle * PI/180)) + (distY * sin(rayAngle * PI/180));
+      if (threeD == true) {
+        rayCaster.cast3D(&renderer, dirAngle, actorX, actorY, actorDX, actorDY, FOV);
+      } else {
+        rayCaster.cast2D(&renderer, dirAngle, actorX, actorY, actorDX, actorDY, FOV);
       }
 
-
-
-      renderer.setRenderDrawColor(r, g, b, 255);
-
-
-      //renderer.renderCopy(player, NULL, playerx, playery);
+      renderer.setRenderDrawColor(0, 0xFF, 0x00, 0x00);
 
       SDL_Rect clip;
       clip.x = 0;
@@ -205,19 +137,10 @@ int main(int argc, char* args[]) {
       clip.w = 64;
       clip.h = 64;
 
-      //renderer.renderCopy(walls, &clip, 0, 0);
-
       clip.x = 0;
       clip.y = 0;
       clip.w = 64;
       clip.h = 64;
-
-      //renderer.renderCopy(walls, &clip, horizontex, horizontey, 1, 3);
-
-      // Dibujar linea negra
-      renderer.setRenderDrawColor(0x00, 0x00, 0x00, 0x00);
-      //renderer.renderDrawLine(0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2);
-      //
 
       renderer.renderPresent();
 
@@ -226,6 +149,9 @@ int main(int argc, char* args[]) {
   }
   catch (SdlException& e) {
     std::cout << e.what();
+  }
+  catch (...) {
+
   }
   return 0;
 }

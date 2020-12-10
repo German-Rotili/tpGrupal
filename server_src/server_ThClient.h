@@ -1,7 +1,7 @@
 #ifndef THCLIENT_H
 #define THCLIENT_H
 #include "../common_src/common_socket.h"
-#include "server_map.h"
+#include "server_Map.h"
 #include "../common_src/common_thread.h"
 #include "server_player.h"
 #include <vector>

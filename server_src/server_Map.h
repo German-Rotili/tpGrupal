@@ -7,6 +7,7 @@
 #define LEFT "l"
 #define RIGHT "r"
 
+//para ver si una posicion es valida el mapa solo sabe si esta ocupada por un objeto. no por jugadores. esto va por logica de hitbox aparte. 
 
 class Map{
 private:
@@ -20,5 +21,6 @@ public:
     bool valid_position(int & pos_x, int & pos_y);
     void add_player(Player & player);
     void move_player(Player & player, std::string direction);
+    void get_players(); // placeholder
 };
 #endif

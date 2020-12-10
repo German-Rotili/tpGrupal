@@ -1,4 +1,4 @@
-#include "server_map.h"
+#include "server_Map.h"
 #include <iostream>
 
 Map::Map(int x, int y):x(x),y(y){}

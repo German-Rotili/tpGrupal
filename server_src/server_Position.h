@@ -1,0 +1,39 @@
+#ifndef __SERVER_POSITION_H__
+#define __SERVER_POSITION_H__
+
+#include "server_Map.h"
+#include "server_Config.h"
+#include "coordinate.h"
+
+
+//es la posicion del jugador. se encarga de guardarla, almacenarla y modificarla. 
+// asumimos hitboxes rectangulares. 
+//para el movimiento, asumimos que en un comando de movimiento que depende de la velocidad, no puede recorrer el grosor de una pared.
+// implementar con hitbox?
+//verifica 
+class Position{
+private:
+    float x;
+    float y;
+    float angle;
+    float hitbox_radius;
+    Map &map;
+    coordinate map_xy;
+    float get_new_x(char);
+    float get_new_y(char);
+    float get_y_offset(char);
+    float get_x_offset(char);
+public:
+    Position(Map &, Config &);
+    ~Position();
+    void update(char);
+    float get_pos_x();
+    float get_pos_y();
+    float get_angle();
+    int colides(Position &);
+    
+};
+
+
+
+#endif // __SERVER_POSITION_H__

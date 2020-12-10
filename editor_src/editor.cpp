@@ -10,12 +10,13 @@
 #define SCREEN_WIDTH 768
 #define SCREEN_HEIGHT 640
 
-int worldMap[10][10] = {
+int worldMap[10][10] =
+                    {
                       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                       {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 1, 0, 1, 0, 0, 1},
-                      {1, 0, 0, 1, 0, 1, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
                       {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
                       {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
                       {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -57,27 +58,13 @@ int main(int argc, char* args[]) {
       while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
           quit = true;
-        } else if (e.type == SDL_KEYDOWN) {
-          switch (e.key.keysym.sym) {
-            case SDLK_UP:
-            actorY -= 1;
-            break;
-            case SDLK_DOWN:
-            actorY += 1;
-            break;
-            case SDLK_LEFT:
-            actorX -= 1;
-            break;
-            case SDLK_RIGHT:
-            actorX += 1;
-            break;
-
-            case SDLK_w:
-            toggleWall(actorX, actorY);
-            break;
-
-            default:
-            break;
+        } else if (e.type == SDL_MOUSEBUTTONDOWN) {
+          if (e.button.button == SDL_BUTTON_LEFT) {
+            if (e.button.x > 128) {
+              int x = int((e.button.x - 128) / 64);
+              int y = int(e.button.y / 64);
+              toggleWall(x, y);
+            }
           }
         }
       }

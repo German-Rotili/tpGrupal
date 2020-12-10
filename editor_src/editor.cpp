@@ -7,7 +7,7 @@
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
 
-#define SCREEN_WIDTH 640
+#define SCREEN_WIDTH 768
 #define SCREEN_HEIGHT 640
 
 int worldMap[10][10] = {
@@ -89,13 +89,13 @@ int main(int argc, char* args[]) {
         for (int j = 0; j < 10; j++) {
           if (mapHasWall(i, j)) {
             renderer.setRenderDrawColor(255, 100, 100, 255);
-            renderer.renderFillRect(i*64, j*64, 64, 64);
+            renderer.renderFillRect((i*64) + 128, j*64, 64, 64);
           }
           renderer.setRenderDrawColor(0, 0, 0, 255);
-          renderer.renderDrawRect(i*64, j*64, 64, 64);
+          renderer.renderDrawRect((i*64) + 128, j*64, 64, 64);
         }
       }
-      renderer.renderFillRect((actorX*64) + 30, (actorY*64) + 30, 4, 4);
+      renderer.renderFillRect((actorX*64) + 158, (actorY*64) + 30, 4, 4);
 
       SDL_Rect clip;
       clip.x = 0;

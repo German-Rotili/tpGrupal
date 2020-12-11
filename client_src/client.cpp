@@ -11,31 +11,7 @@
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
-#define PI 3.14
 
-<<<<<<< HEAD
-=======
-#define SIZE_NIVEL 5
-int worldMap[7][10] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 1, 0, 1, 0, 0, 1},
-                      {1, 0, 0, 1, 0, 1, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 1, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    };
-
-bool mapHasWall(int x, int y) {
-  if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
-  return (worldMap[y][x] == 1);
-}
-
-
-double distance(double x1, double y1, double x2, double y2) {
-  return sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
-}
-
->>>>>>> 3ca1309461ee4816a01d2ec2918b70f2d8f4c262
 int main(int argc, char* args[]) {
   try {
     const int horizontex = SCREEN_WIDTH/2;
@@ -49,14 +25,9 @@ int main(int argc, char* args[]) {
 
     SdlTexture player("flappybird.png", renderer);
 
-    int playerx = SCREEN_WIDTH/2;
-    int playery = SCREEN_HEIGHT/2;
-
     double dirAngle = -45;
-    double actorX = 1;
-    double actorY = 4;
-    double actorDX = 0.5;
-    double actorDY = 0.5;
+    double actorX = 1.5;
+    double actorY = 2.5;
 
     double FOV = 20;
 
@@ -81,14 +52,6 @@ int main(int argc, char* args[]) {
           quit = true;
         } else if (e.type == SDL_KEYDOWN) {
           switch (e.key.keysym.sym) {
-            case SDLK_w:
-            dirAngle += 0.5;
-            break;
-
-            case SDLK_s:
-            dirAngle -= 0.5;
-            break;
-
             case SDLK_a:
             FOV -= 2;
             break;
@@ -98,16 +61,19 @@ int main(int argc, char* args[]) {
             break;
 
             case SDLK_UP:
-            actorY -= 1;
+            actorX += cos(dirAngle*PI/180)/32;
+            actorY += sin(dirAngle*PI/180)/32;
+
             break;
             case SDLK_DOWN:
-            actorY += 1;
+            actorX -= cos(dirAngle*PI/180)/32;
+            actorY -= sin(dirAngle*PI/180)/32;
             break;
             case SDLK_LEFT:
-            actorX -= 1;
+            dirAngle -= 1.5;
             break;
             case SDLK_RIGHT:
-            actorX += 1;
+            dirAngle += 1.5;
             break;
 
             case SDLK_p:
@@ -123,10 +89,16 @@ int main(int argc, char* args[]) {
 
       RayCaster rayCaster;
 
+      if (dirAngle >= 0) {
+        dirAngle -= 360;
+      } else if (dirAngle < -360) {
+        dirAngle +=360;
+      }
+
       if (threeD == true) {
-        rayCaster.cast3D(&renderer, dirAngle, actorX, actorY, actorDX, actorDY, FOV);
+        rayCaster.cast3D(renderer, dirAngle, actorX, actorY, FOV);
       } else {
-        rayCaster.cast2D(&renderer, dirAngle, actorX, actorY, actorDX, actorDY, FOV);
+        rayCaster.cast2D(renderer, dirAngle, actorX, actorY, FOV);
       }
 
       renderer.setRenderDrawColor(0, 0xFF, 0x00, 0x00);

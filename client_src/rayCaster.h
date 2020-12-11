@@ -18,6 +18,6 @@ class RayCaster {
 public:
   void cast2D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV);
 
-  void cast3D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV);
+  void cast3D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV, SdlTexture& walls);
 };
 #endif

@@ -59,12 +59,13 @@ void SdlRenderer::renderDrawPoint(int x, int y) {
 }
 
 void SdlRenderer::renderCopy(const SdlTexture& texture,
-  const SDL_Rect* clip, int x, int y, int xscale, int yscale) {
+  const SDL_Rect* clip, int x, int y, double xscale, double yscale) {
     SDL_Rect renderQuad = {x, y, texture.width, texture.height};
     if (clip) {
       renderQuad.w = clip->w;
       renderQuad.h = clip->h;
     }
+
     renderQuad.w *= xscale;
     renderQuad.h *= yscale;
     SDL_RenderCopy(renderer, texture.texture, clip, &renderQuad);

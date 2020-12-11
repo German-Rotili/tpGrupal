@@ -18,8 +18,8 @@
 
 #define SIZE_NIVEL 5
 int worldMap[7][10] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 1, 0, 1, 1, 1, 0, 1},
+                      {1, 0, 0, 0, 2, 0, 0, 0, 0, 1},
+                      {1, 0, 0, 1, 2, 1, 0, 1, 0, 1},
                       {1, 0, 0, 1, 0, 1, 0, 1, 0, 1},
                       {1, 0, 0, 1, 1, 1, 0, 1, 0, 1},
                       {1, 0, 0, 0, 0, 0, 0, 1, 0, 1},
@@ -28,7 +28,7 @@ int worldMap[7][10] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 
 static bool mapHasWall(int x, int y) {
   if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
-  return (worldMap[y][x] == 1);
+  return (worldMap[y][x] != 0);
 }
 
 
@@ -156,7 +156,7 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x, double 
 
 }
 
-void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV) {
+void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV, SdlTexture& walls) {
   // Piso
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
@@ -247,18 +247,30 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double 
 
     double d1 = distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
     double d2 = distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
-
+    int texture_id;
+    SDL_Rect clip;
     if (d1 < d2) {
         distortedDist = d1;
+        texture_id = worldMap[y+tileStepY][int(xIntercept)];
+        clip.x = (xIntercept-int(xIntercept))*64;
     } else {
         distortedDist = d2;
+        texture_id = worldMap[int(yIntercept)][x+tileStepX];
+        clip.x = (yIntercept-int(yIntercept))*64;
     }
 
     // Distancia proyectada a la camara
     double proy = distortedDist * cos((dirAngle - rayAngle)*PI/180);
-    int wallHeight = (1/proy) * 255;
+    double wallHeight = (1/proy) * 255;
 
-    renderer.setRenderDrawColor(255, log2(wallHeight+1)*255/15, log2(wallHeight+1)*255/15, 255);
-    renderer.renderFillRect(rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight);
+
+    clip.y = 0;
+    clip.w = 1;
+    clip.h = 64;
+
+    renderer.setRenderDrawColor(255, log2(wallHeight+1)*255/15, log2(wallHeight+1)*255/15, 120);
+    //renderer.renderFillRect(rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight);
+
+    renderer.renderCopy(walls, &clip, rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight/64);
   }
 }

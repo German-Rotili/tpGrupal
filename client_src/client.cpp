@@ -29,7 +29,7 @@ int main(int argc, char* args[]) {
     double actorX = 1.5;
     double actorY = 2.5;
 
-    double FOV = 20;
+    double FOV = 54;
 
     SdlTexture walls("textures/walls.png", renderer);
 
@@ -70,10 +70,10 @@ int main(int argc, char* args[]) {
             actorY -= sin(dirAngle*PI/180)/32;
             break;
             case SDLK_LEFT:
-            dirAngle -= 1.5;
+            dirAngle -= 2;
             break;
             case SDLK_RIGHT:
-            dirAngle += 1.5;
+            dirAngle += 2;
             break;
 
             case SDLK_p:
@@ -96,27 +96,14 @@ int main(int argc, char* args[]) {
       }
 
       if (threeD == true) {
-        rayCaster.cast3D(renderer, dirAngle, actorX, actorY, FOV);
+        rayCaster.cast3D(renderer, dirAngle, actorX, actorY, FOV, walls);
       } else {
         rayCaster.cast2D(renderer, dirAngle, actorX, actorY, FOV);
       }
 
-      renderer.setRenderDrawColor(0, 0xFF, 0x00, 0x00);
-
-      SDL_Rect clip;
-      clip.x = 0;
-      clip.y = 0;
-      clip.w = 64;
-      clip.h = 64;
-
-      clip.x = 0;
-      clip.y = 0;
-      clip.w = 64;
-      clip.h = 64;
-
       renderer.renderPresent();
 
-      SDL_Delay(1000/20);  // 20 fps por segundo
+      SDL_Delay(1000/30);  // 30 fps por segundo
     }
   }
   catch (SdlException& e) {

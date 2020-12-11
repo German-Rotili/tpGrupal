@@ -51,6 +51,8 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
+    SdlTexture walls("textures/walls.png", renderer);
+
     int playerx = SCREEN_WIDTH/2;
     int playery = SCREEN_HEIGHT/2;
 
@@ -60,6 +62,8 @@ int main(int argc, char* args[]) {
     int action = 0;
     int scrollY = 0;
     int scrollX = 0;
+    int wallIdX = 0;
+    int wallIdY = 0;
 
     //SdlTexture walls("textures/walls.png", renderer);
 
@@ -123,12 +127,16 @@ int main(int argc, char* args[]) {
       renderer.setRenderDrawColor(255, 255, 255, 255);
       renderer.renderClear();
       int start = 0;
+      SDL_Rect clip;
       // Dibujar mapa
       for (int i = scrollX; i < MAP_X; i++) {
         for (int j = scrollY; j < MAP_Y; j++) {
           if (checkMap(i, j) == 1) {
-            renderer.setRenderDrawColor(255, 100, 100, 255);
-            renderer.renderFillRect(((i-scrollX)*64) + 128, (j-scrollY)*64, 64, 64);
+            clip.x = wallIdX * 64;
+            clip.y = wallIdY * 64;
+            clip.w = 64;
+            clip.h = 64;
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*64) + 128, (j-scrollY)*64, 1, 1);
           }
           renderer.setRenderDrawColor(0, 0, 0, 255);
           renderer.renderDrawRect(((i-scrollX)*64) + 128, (j-scrollY)*64, 64, 64);
@@ -145,14 +153,18 @@ int main(int argc, char* args[]) {
         }
       }
 
+      clip.x = wallIdX * 64;
+      clip.y = wallIdX * 64;
+      clip.w = 64;
+      clip.h = 64;
+
       renderer.setRenderDrawColor(100, 100, 100, 255);
       renderer.renderFillRect(0, 0, 128, SCREEN_HEIGHT);
 
       renderer.setRenderDrawColor(255, 255, 255, 255);
       renderer.renderFillRect(32, SCREEN_HEIGHT/5, 64, 64);
 
-      renderer.setRenderDrawColor(255, 100, 100, 255);
-      renderer.renderFillRect(32, 2 * (SCREEN_HEIGHT/5), 64, 64);
+      renderer.renderCopy(walls, &clip, 32, 2 * (SCREEN_HEIGHT/5), 1, 1);
 
       renderer.setRenderDrawColor(0, 255, 0, 255);
       renderer.renderFillRect(60, (3 * (SCREEN_HEIGHT/5)) + 30, 8, 8);
@@ -162,17 +174,6 @@ int main(int argc, char* args[]) {
 
       renderer.setRenderDrawColor(255, 165, 0, 255);
       renderer.renderDrawRect(32, (action+1) * (SCREEN_HEIGHT/5), 64, 64);
-
-      SDL_Rect clip;
-      clip.x = 0;
-      clip.y = 0;
-      clip.w = 64;
-      clip.h = 64;
-
-      clip.x = 0;
-      clip.y = 0;
-      clip.w = 64;
-      clip.h = 64;
 
       renderer.renderPresent();
 

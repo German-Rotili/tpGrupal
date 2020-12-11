@@ -11,11 +11,13 @@
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
 
+#define PI 3.14
+
 class RayCaster {
 
 public:
-  void cast2D(SdlRenderer *renderer, double dirAngle, int actorX, int actorY, double actorDX, double actorDY, double FOV);
+  void cast2D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV);
 
-  void cast3D(SdlRenderer *renderer, double dirAngle, int actorX, int actorY, double actorDX, double actorDY, double FOV);
+  void cast3D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV);
 };
 #endif

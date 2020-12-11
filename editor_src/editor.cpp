@@ -34,6 +34,12 @@ int checkMap(int x, int y) {
 }
 
 void toggleTile(int x, int y, int action) {
+  if (worldMap[y][x] == 3) {
+    if (action == 3) {
+      worldMap[y][x] = 4;
+      return;
+    }
+  }
   worldMap[y][x] = action;
 }
 
@@ -132,6 +138,9 @@ int main(int argc, char* args[]) {
           } else if (checkMap(i, j) == 3) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
             renderer.renderFillRect(((i-scrollX)*64) + 128, ((j-scrollY)*64) + 30, 64, 4);
+          } else if (checkMap(i, j) == 4) {
+            renderer.setRenderDrawColor(205, 133, 63, 255);
+            renderer.renderFillRect(((i-scrollX)*64) + 158, ((j-scrollY)*64), 4, 64);
           }
         }
       }
@@ -146,12 +155,13 @@ int main(int argc, char* args[]) {
       renderer.renderFillRect(32, 2 * (SCREEN_HEIGHT/5), 64, 64);
 
       renderer.setRenderDrawColor(0, 255, 0, 255);
-      renderer.renderFillRect(62, (3 * (SCREEN_HEIGHT/5)) + 30, 8, 8);
+      renderer.renderFillRect(60, (3 * (SCREEN_HEIGHT/5)) + 30, 8, 8);
 
       renderer.setRenderDrawColor(205, 133, 63, 255);
-      renderer.renderFillRect(32, 4 * (SCREEN_HEIGHT/5), 64, 4);
+      renderer.renderFillRect(32, (4 * (SCREEN_HEIGHT/5)) + 30, 64, 4);
 
-
+      renderer.setRenderDrawColor(255, 165, 0, 255);
+      renderer.renderDrawRect(32, (action+1) * (SCREEN_HEIGHT/5), 64, 64);
 
       SDL_Rect clip;
       clip.x = 0;

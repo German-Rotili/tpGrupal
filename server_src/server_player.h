@@ -1,18 +1,21 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <string>
+#include "server_Position.h"
+#include "server_Map.h"
+
 
 class Player{
 private:
-    int & pos_x;
-    int & pos_y;
-    std::string & orientation;
-
+    Position position;
+    void move(char intention);
+    void attack();
+    Map &map;
 public:
-    void update_position(int & pos_x, int & pos_y, std::string dir);
-    Player(int & pos_x, int &  pos_y, std::string & orientation);
+    Player(Position position);
+    ~Player();
     int get_pos_x();
     int get_pos_y();
-    ~Player();
+    void execute_intention(char intention);
 };
 #endif

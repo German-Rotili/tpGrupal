@@ -3,7 +3,6 @@
 
 #include "server_Map.h"
 #include "server_Config.h"
-#include "coordinate.h"
 
 
 //es la posicion del jugador. se encarga de guardarla, almacenarla y modificarla. 
@@ -17,12 +16,14 @@ private:
     float y;
     float angle;
     float hitbox_radius;
+    float linear_vel;
+    float angular_vel;
     Map &map;
-    coordinate map_xy;
     float get_new_x(char);
     float get_new_y(char);
     float get_y_offset(char);
     float get_x_offset(char);
+    void update_angle(char);
 public:
     Position(Map &, Config &);
     ~Position();

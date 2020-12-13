@@ -10,6 +10,7 @@
 //para el movimiento, asumimos que en un comando de movimiento que depende de la velocidad, no puede recorrer el grosor de una pared.
 // implementar con hitbox?
 //verifica 
+
 class Position{
 private:
     float x;
@@ -30,9 +31,10 @@ public:
     void update(char);
     float get_pos_x();
     float get_pos_y();
+    float get_hitbox_radius();
     float get_angle();
-    int colides(Position &);
-    
+    void get_attacked(int dmg);
+    int colides(Position &);    
 };
 
 

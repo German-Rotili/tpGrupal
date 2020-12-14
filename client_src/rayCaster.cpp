@@ -17,13 +17,13 @@
 #define SCREEN_HEIGHT 480
 
 #define SIZE_NIVEL 5
-int worldMap[7][10] = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                      {1, 0, 0, 0, 2, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 1, 2, 1, 0, 1, 0, 1},
-                      {1, 0, 0, 1, 0, 1, 0, 1, 0, 1},
-                      {1, 0, 0, 1, 1, 1, 0, 1, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 1, 0, 1},
-                      {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+int worldMap[7][10] = {{1, 3, 1, 3, 1, 3, 1, 1, 1, 1},
+                      {2, 0, 0, 0, 2, 0, 0, 0, 0, 2},
+                      {4, 0, 0, 0, 2, 2, 0, 1, 0, 4},
+                      {2, 0, 0, 0, 2, 2, 0, 1, 0, 2},
+                      {4, 0, 0, 5, 6, 2, 0, 1, 0, 4},
+                      {2, 0, 0, 0, 0, 0, 0, 1, 0, 2},
+                      {1, 3, 1, 3, 1, 3, 1, 3, 1, 1},
                     };
 
 static bool mapHasWall(int x, int y) {
@@ -258,6 +258,7 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double 
         texture_id = worldMap[int(yIntercept)][x+tileStepX];
         clip.x = (yIntercept-int(yIntercept))*64;
     }
+    clip.x += 64*(texture_id-1);
 
     // Distancia proyectada a la camara
     double proy = distortedDist * cos((dirAngle - rayAngle)*PI/180);

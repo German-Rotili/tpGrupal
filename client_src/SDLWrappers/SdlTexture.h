@@ -14,11 +14,12 @@ class SdlTexture {
 	int width;
 	int height;
 	public:
-		SdlTexture(std::string path, const class SdlRenderer& renderer);
+		SdlTexture(std::string path, const class SdlRenderer& renderer, int r = -1, int g = -1, int b = -1);
 		~SdlTexture();
 
-		int getWidth();
-		int getHeight();
+		void setColorMod(int r, int g, int b);
+		int getWidth() const;
+		int getHeight() const;
 };
 
 #endif  // SDLTEXTURE_H

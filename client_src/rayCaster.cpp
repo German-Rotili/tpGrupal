@@ -1,5 +1,4 @@
 #include "rayCaster.h"
-#include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -10,30 +9,23 @@
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
+#include "ClientSettings.h"
 
 #define MAX_DEPTH 8
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-
 #define SIZE_NIVEL 5
-int worldMap[7][10] = {{1, 3, 1, 3, 1, 3, 1, 1, 1, 1},
-                      {2, 0, 0, 0, 2, 0, 0, 0, 0, 2},
-                      {4, 0, 0, 0, 2, 2, 0, 1, 0, 4},
-                      {2, 0, 0, 0, 2, 2, 0, 1, 0, 2},
-                      {4, 0, 0, 5, 6, 2, 0, 1, 0, 4},
-                      {2, 0, 0, 0, 0, 0, 0, 1, 0, 2},
-                      {1, 3, 1, 3, 1, 3, 1, 3, 1, 1},
+int worldMap[7][10] = {{3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+                       {3, 0, 0, 0, 0, 5, 5, 0, 0, 1},
+                       {3, 0, 0, 0, 0, 5, 5, 0, 0, 3},
+                       {3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                       {3, 0, 0, 0, 0, 0, 0, 0, 0, 3},
+                       {3, 0, 0, 0, 0, 5, 5, 0, 0, 1},
+                       {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
                     };
 
 static bool mapHasWall(int x, int y) {
   if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
   return (worldMap[y][x] != 0);
-}
-
-
-static double distance(double x1, double y1, double x2, double y2) {
-  return sqrt(pow(x2-x1, 2) + pow(y2-y1, 2));
 }
 
 static std::tuple<int, int> getTileSteps(double dir) {
@@ -48,7 +40,8 @@ static std::tuple<int, int> getTileSteps(double dir) {
   }
 }
 
-void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV) {
+void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x
+  , double y, ClientSettings& settings) {
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderClear();
   // Dibujar mapa
@@ -63,19 +56,19 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x, double 
     }
   }
 
-  double dAngle = FOV / SCREEN_WIDTH;
+  double dAngle = settings.fov / settings.screenWidth;
   int actorX = int(x);
   double actorDX = x - actorX;
   int actorY = int(y);
   double actorDY = y - actorY;
 
-  for (int rayNumber = 0; rayNumber < SCREEN_WIDTH; rayNumber++) {
+  for (int rayNumber = 0; rayNumber < settings.screenWidth; rayNumber++) {
     int x = actorX;
     int y = actorY;
     double dx = actorDX;
     double dy = actorDY;
 
-    double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
+    double rayAngle = dirAngle + (rayNumber * dAngle) - settings.fov/2;
 
     double xStep, yStep, xIntercept, yIntercept;
     int tileStepX, tileStepY;
@@ -101,8 +94,8 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x, double 
       xStep = 0;
       yStep = 60;
     } else {
-      xStep = tileStepY/tan(rayAngle * PI/180.0);
-      yStep = tileStepX*tan(rayAngle * PI/180.0);
+      xStep = tileStepY/tan(rayAngle * settings.pi/180.0);
+      yStep = tileStepX*tan(rayAngle * settings.pi/180.0);
     }
 
     if (rayAngle <= -180) {
@@ -118,7 +111,7 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x, double 
     }
 
     // Distancia de la pared
-    double distortedDist;
+    float distortedDist;
 
     // Loopea hasta encontrar pared
     bool wallFoundX = false;
@@ -142,8 +135,8 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x, double 
       }
     }
 
-    double d1 = distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
-    double d2 = distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
+    float d1 = settings.distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
+    float d2 = settings.distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
     renderer.setRenderDrawColor(100, 100, 100, 255);
     if (d1 < d2) {
       renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, xIntercept*64 , (y+int(tileStepY==1))*64);
@@ -156,29 +149,31 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x, double 
 
 }
 
-void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV, SdlTexture& walls) {
+void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle,
+   double x, double y, SdlTexture& walls, double zBuffer[],
+   ClientSettings& settings) {
   // Piso
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
   // Techo
   renderer.setRenderDrawColor(150, 150, 150, 255);
-  renderer.renderFillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2);
+  renderer.renderFillRect(0, 0, settings.screenWidth, settings.screenHeight/2);
 
-  double dAngle = FOV / SCREEN_WIDTH;
-  double proyPlaneDist = 160/tan(30*PI/180);
+  double dAngle = settings.fov / settings.screenWidth;
+  double proyPlaneDist = 160/tan(30*settings.pi/180);
   int actorX = int(x);
   double actorDX = x - actorX;
   int actorY = int(y);
   double actorDY = y - actorY;
 
-  for (int rayNumber = 0; rayNumber < SCREEN_WIDTH; rayNumber++) {
+  for (int rayNumber = 0; rayNumber < settings.screenWidth; rayNumber++) {
     int x = actorX;
     int y = actorY;
     double dx = actorDX;
     double dy = actorDY;
 
-    double rayAngle = dirAngle + (rayNumber * dAngle) - FOV/2;
+    double rayAngle = dirAngle + (rayNumber * dAngle) - settings.fov/2;
 
     double xStep, yStep, xIntercept, yIntercept;
     int tileStepX, tileStepY;
@@ -204,8 +199,8 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double 
       xStep = 0;
       yStep = 60;
     } else {
-      xStep = tileStepY/tan(rayAngle * PI/180.0);
-      yStep = tileStepX*tan(rayAngle * PI/180.0);
+      xStep = tileStepY/tan(rayAngle * settings.pi/180.0);
+      yStep = tileStepX*tan(rayAngle * settings.pi/180.0);
     }
 
     if (rayAngle <= -180) {
@@ -245,10 +240,10 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double 
       }
     }
 
-    double d1 = distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
-    double d2 = distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
+    float d1 = settings.distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
+    float d2 = settings.distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
     int texture_id;
-    SDL_Rect clip;
+    SDL_Rect clip = {0, 128, 1, 64};
     if (d1 < d2) {
         distortedDist = d1;
         texture_id = worldMap[y+tileStepY][int(xIntercept)];
@@ -261,17 +256,16 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle, double x, double 
     clip.x += 64*(texture_id-1);
 
     // Distancia proyectada a la camara
-    double proy = distortedDist * cos((dirAngle - rayAngle)*PI/180);
-    double wallHeight = (1/proy) * 255;
+    double proy = distortedDist * cos((dirAngle - rayAngle)*settings.pi/180);
+    double scale = (1/proy) * settings.screenHeight / clip.h;
+
+    zBuffer[rayNumber] = distortedDist;
+
+    //int color = (255-distortedDist*10);
+    //walls.setColorMod(color, color, color);
+
+    renderer.renderCopyCentered(walls, &clip, rayNumber, settings.screenHeight/2, 1, scale);
 
 
-    clip.y = 0;
-    clip.w = 1;
-    clip.h = 64;
-
-    renderer.setRenderDrawColor(255, log2(wallHeight+1)*255/15, log2(wallHeight+1)*255/15, 120);
-    //renderer.renderFillRect(rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight);
-
-    renderer.renderCopy(walls, &clip, rayNumber, (SCREEN_HEIGHT/2)-(wallHeight/2), 1, wallHeight/64);
   }
 }

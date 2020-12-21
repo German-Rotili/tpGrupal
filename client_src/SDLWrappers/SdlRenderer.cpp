@@ -70,3 +70,18 @@ void SdlRenderer::renderCopy(const SdlTexture& texture,
     renderQuad.h *= yscale;
     SDL_RenderCopy(renderer, texture.texture, clip, &renderQuad);
   }
+
+void SdlRenderer::renderCopyCentered(const SdlTexture& texture,
+    const SDL_Rect* clip, int x, int y, double xscale, double yscale) {
+      SDL_Rect renderQuad = {x, y, texture.width, texture.height};
+      if (clip) {
+        renderQuad.w = clip->w;
+        renderQuad.h = clip->h;
+      }
+
+      renderQuad.w *= xscale;
+      renderQuad.h *= yscale;
+      renderQuad.x -= renderQuad.w / 2;
+      renderQuad.y -= renderQuad.h / 2;
+      SDL_RenderCopy(renderer, texture.texture, clip, &renderQuad);
+}

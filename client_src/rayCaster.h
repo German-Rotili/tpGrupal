@@ -10,14 +10,17 @@
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
+#include "ClientSettings.h"
 
-#define PI 3.14
+
 
 class RayCaster {
 
 public:
-  void cast2D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV);
+  void cast2D(SdlRenderer& renderer, double dirAngle, double x,
+    double y, ClientSettings& settings);
 
-  void cast3D(SdlRenderer& renderer, double dirAngle, double x, double y, double FOV, SdlTexture& walls);
+  void cast3D(SdlRenderer& renderer, double dirAngle, double x, double y,
+    SdlTexture& walls, double zBuffer[], ClientSettings& settings);
 };
 #endif

@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Object.h"
 #include "ClientSettings.h"
 
@@ -38,8 +39,8 @@ float Object::getDistToPlayer() {
 	return this->distToPlayer;
 }
 
-void Object::actualizarDifAngle(float actorX, float actorY, float actorAngle, ClientSettings& settings) {
-	float angle = (atan2(actorY - y, actorX - x) - settings.pi) * 180 / settings.pi;
+void Object::actualizarDifAngle(float actorX, float actorY, float actorAngle) {
+	float angle = (atan2(actorY - y, actorX - x) - M_PI) * 180 / M_PI;
 	this->difAngle = (angle - actorAngle);
 	if (this->difAngle > 180) {
 		this->difAngle -= 360;
@@ -49,11 +50,11 @@ void Object::actualizarDifAngle(float actorX, float actorY, float actorAngle, Cl
 	}
 }
 
-void Object::renderizar(SdlRenderer& renderer,
-	double zBuffer[], ClientSettings& settings) {
-	float proy = distToPlayer * cos(difAngle*settings.pi/180);
+void Object::renderizar(SdlRenderer& renderer, double zBuffer[],
+	 ClientSettings& settings) {
+	float proy = distToPlayer * cos(difAngle*M_PI/180);
 	float scale = (1/proy) * settings.screenHeight / clip.w;
-	float x0 = settings.screenWidth/2 + tan(difAngle*settings.pi/180) * settings.screenWidth - (clip.w/2)*scale;
+	float x0 = settings.screenWidth/2 + tan(difAngle*M_PI/180) * settings.screenWidth - (clip.w/2)*scale;
 	float y0 = settings.screenHeight/2 - (clip.h/2)*scale;
 	SDL_Rect auxClip = this->clip;
 	auxClip.w = 1;

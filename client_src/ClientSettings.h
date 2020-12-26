@@ -5,10 +5,11 @@ class ClientSettings {
  public:
     int screenWidth;
     int screenHeight;
+    int fps;
     float fov;
-    float pi;
-		ClientSettings(int screenWidth, int screenHeight, int fov, float pi);
+		ClientSettings(int screenWidth, int screenHeight, int fps, int fov);
 		~ClientSettings();
+    // Esto deberia ir en otra clase
     float distance(float x1, float y1, float x2, float y2);
 };
 

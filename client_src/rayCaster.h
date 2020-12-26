@@ -1,7 +1,6 @@
 #ifndef RAYCASTER
 #define RAYCASTER
 
-#include <math.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
@@ -17,10 +16,11 @@
 class RayCaster {
 
 public:
-  void cast2D(SdlRenderer& renderer, double dirAngle, double x,
-    double y, ClientSettings& settings);
+  void cast2D(SdlRenderer& renderer, double x, double y,
+     double dirAngle, ClientSettings& settings);
 
-  void cast3D(SdlRenderer& renderer, double dirAngle, double x, double y,
-    SdlTexture& walls, double zBuffer[], ClientSettings& settings);
+  void cast3D(SdlRenderer& renderer, double x, double y,
+    double dirAngle, SdlTexture& walls, double zBuffer[],
+     ClientSettings& settings);
 };
 #endif

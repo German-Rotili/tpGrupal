@@ -1,7 +1,6 @@
 #include "rayCaster.h"
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include <cmath>
 #include <iostream>
 #include <utility>
 #include <tuple>
@@ -40,8 +39,8 @@ static std::tuple<int, int> getTileSteps(double dir) {
   }
 }
 
-void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x
-  , double y, ClientSettings& settings) {
+void RayCaster::cast2D(SdlRenderer& renderer, double x
+  , double y, double dirAngle, ClientSettings& settings) {
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderClear();
   // Dibujar mapa
@@ -80,7 +79,6 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x
 
     std::tie(tileStepX, tileStepY) = getTileSteps(rayAngle);
 
-
     if (rayAngle == -360) {
       xStep = 60;
       yStep = 0;
@@ -94,8 +92,8 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x
       xStep = 0;
       yStep = 60;
     } else {
-      xStep = tileStepY/tan(rayAngle * settings.pi/180.0);
-      yStep = tileStepX*tan(rayAngle * settings.pi/180.0);
+      xStep = tileStepY/tan(rayAngle * M_PI/180.0);
+      yStep = tileStepX*tan(rayAngle * M_PI/180.0);
     }
 
     if (rayAngle <= -180) {
@@ -146,11 +144,10 @@ void RayCaster::cast2D(SdlRenderer& renderer, double dirAngle, double x
       distortedDist = d2;
     }
   }
-
 }
 
-void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle,
-   double x, double y, SdlTexture& walls, double zBuffer[],
+void RayCaster::cast3D(SdlRenderer& renderer, double x, double y,
+   double dirAngle, SdlTexture& walls, double zBuffer[],
    ClientSettings& settings) {
   // Piso
   renderer.setRenderDrawColor(100, 100, 100, 255);
@@ -161,7 +158,7 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle,
   renderer.renderFillRect(0, 0, settings.screenWidth, settings.screenHeight/2);
 
   double dAngle = settings.fov / settings.screenWidth;
-  double proyPlaneDist = 160/tan(30*settings.pi/180);
+  double proyPlaneDist = 160/tan(30*M_PI/180);
   int actorX = int(x);
   double actorDX = x - actorX;
   int actorY = int(y);
@@ -199,8 +196,8 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle,
       xStep = 0;
       yStep = 60;
     } else {
-      xStep = tileStepY/tan(rayAngle * settings.pi/180.0);
-      yStep = tileStepX*tan(rayAngle * settings.pi/180.0);
+      xStep = tileStepY/tan(rayAngle * M_PI/180.0);
+      yStep = tileStepX*tan(rayAngle * M_PI/180.0);
     }
 
     if (rayAngle <= -180) {
@@ -256,7 +253,7 @@ void RayCaster::cast3D(SdlRenderer& renderer, double dirAngle,
     clip.x += 64*(texture_id-1);
 
     // Distancia proyectada a la camara
-    double proy = distortedDist * cos((dirAngle - rayAngle)*settings.pi/180);
+    double proy = distortedDist * cos((dirAngle - rayAngle)*M_PI/180);
     double scale = (1/proy) * settings.screenHeight / clip.h;
 
     zBuffer[rayNumber] = distortedDist;

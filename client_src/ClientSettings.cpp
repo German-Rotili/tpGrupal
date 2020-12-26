@@ -1,13 +1,12 @@
 #include "ClientSettings.h"
 
+#include <cmath>
 
-#include <math.h>
-
-ClientSettings::ClientSettings(int screenWidth, int screenHeight, int fov, float pi):
+ClientSettings::ClientSettings(int screenWidth, int screenHeight, int fps, int fov):
   screenWidth(screenWidth),
   screenHeight(screenHeight),
-  fov(fov),
-  pi(pi) {}
+  fps(fps),
+  fov(fov) {}
 
 ClientSettings::~ClientSettings() {}
 

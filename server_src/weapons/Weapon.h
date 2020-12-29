@@ -1,6 +1,6 @@
 #ifndef __SERVER_WEAPON_H__
 #define __SERVER_WEAPON_H__
-#include "server_Map.h"
+#include "Map.h"
 
 
 class Weapon

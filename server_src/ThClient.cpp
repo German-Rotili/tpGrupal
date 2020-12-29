@@ -1,4 +1,4 @@
-#include "server_ThClient.h"
+#include "ThClient.h"
 #include <string>
 #include <vector>
 

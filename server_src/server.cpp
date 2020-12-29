@@ -1,6 +1,6 @@
-#include "server_map.h"
-#include "server_player.h"
-#include "server_helper.h"
+#include "Map.h"
+#include "player.h"
+#include "helper.h"
 #include <iostream>
 #include <string>
 #define PORT 1

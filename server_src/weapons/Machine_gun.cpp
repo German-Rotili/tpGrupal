@@ -1,4 +1,4 @@
-#include "../server_Config.h"
+#include "../Config.h"
 #include "Machine_gun.h"
 #include "../Constants.h"
 

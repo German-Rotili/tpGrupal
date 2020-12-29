@@ -1,8 +1,8 @@
 #ifndef __SERVER_POSITION_H__
 #define __SERVER_POSITION_H__
 
-#include "server_Map.h"
-#include "server_Config.h"
+#include "Map.h"
+#include "Config.h"
 
 
 //es la posicion del jugador. se encarga de guardarla, almacenarla y modificarla. 

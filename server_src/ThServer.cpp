@@ -1,4 +1,4 @@
-#include "server_ThServer.h"
+#include "ThServer.h"
 #include "../common_src/common_socket_exception.h"
 #include <string>
 #include <vector>

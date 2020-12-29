@@ -2,9 +2,9 @@
 #define __SERVER_THCLIENT_H__
 
 #include "../common_src/common_socket.h"
-#include "server_Map.h"
+#include "Map.h"
 #include "../common_src/common_thread.h"
-#include "server_player.h"
+#include "player.h"
 #include <vector>
 #include <string>
 #include <utility>

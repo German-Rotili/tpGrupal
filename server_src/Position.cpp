@@ -1,4 +1,4 @@
-#include "server_Position.h"
+#include "Position.h"
 #include <math.h> 
 #define FORWARD 'w'
 #define BACKWARDS 'S'

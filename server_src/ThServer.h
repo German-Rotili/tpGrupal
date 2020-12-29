@@ -7,8 +7,8 @@
 #include <list>
 #include <string>
 #include <utility>
-#include "server_ThClient.h"
-#include "server_Map.h"
+#include "ThClient.h"
+#include "Map.h"
 #include "../common_src/common_thread.h"
 #include "../common_src/common_socket.h"
 #include "../common_src/common_exception.h"

@@ -3,10 +3,10 @@
 
 
 #include <string>
-#include "server_Position.h"
-#include "server_Map.h"
-#include "server_Weapon.h"
-#include "server_Inventory.h"
+#include "Position.h"
+#include "Map.h"
+#include "Weapon.h"
+#include "Inventory.h"
 
 
 //Para el manejo de las acciones. agregar una lista de acciones que ocurren en cada iteracion. para esto cuando el server 

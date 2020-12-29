@@ -1,13 +1,13 @@
-#include "server_helper.h"
+#include "helper.h"
 #include <fstream>
 #include <string>
 #include <vector>
 #include <sstream>
 #include <iostream>
 #include <utility>
-#include "server_helper.h"
+#include "helper.h"
 #include "../common_src/common_socket.h"
-#include "server_ThServer.h"
+#include "ThServer.h"
 #define CMD_END "q"
 
 Server::Server(){}
@@ -15,8 +15,8 @@ Server::Server(){}
 Server::~Server(){}
 
 void Server::run(std::string & port, std::string & root){
-    ThServer server_th(port, root);
-    server_th.start();
+    ThServer th(port, root);
+    th.start();
     std::string command = "";
     while (true){
         std::cin >> command;
@@ -24,6 +24,6 @@ void Server::run(std::string & port, std::string & root){
             break;
         }
     }
-    server_th.stop();
-    server_th.join();
+    th.stop();
+    th.join();
 }

@@ -4,7 +4,7 @@
 
 
 #include <vector>
-#include "server_player.h"
+#include "player.h"
 #define UP "u"
 #define DOWN "d"
 #define LEFT "l"

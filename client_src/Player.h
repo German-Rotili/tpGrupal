@@ -16,7 +16,7 @@ class Player {
 	int idArmaActual;
   SDL_Rect weaponClip;
   float frameActual;
-  int maxFrame;
+  int cantFrames;
 	float drawScale;
 	PlayerWeapon* cuchillo;
 	PlayerWeapon* pistola;

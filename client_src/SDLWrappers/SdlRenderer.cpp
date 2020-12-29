@@ -4,8 +4,8 @@
 SdlRenderer::SdlRenderer(SDL_Renderer* renderer) {
   this->renderer = renderer;
   if (this->renderer == NULL) {
-    char* error;
-    sprintf(error, "Error en Renderer . SDL_Error: %s\n", SDL_GetError());
+    char error[BUF_SIZE];
+    snprintf(error, sizeof(error), "Error en Renderer . SDL_Error: %s\n", SDL_GetError());
     throw SdlException(error);
   }
 }

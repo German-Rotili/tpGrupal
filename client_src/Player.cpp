@@ -11,11 +11,11 @@ Player::Player(const SdlTexture& texture, float xInicial, float yInicial,
 	  y(yInicial),
 	  direction(dirInicial),
 		health(vidaInicial) {
-			SDL_Rect clip = {64+1, 0, 64, 64};
+			SDL_Rect clip = {0, 0, 64, 64};
 			this->idArmaActual = 0;
 			this->weaponClip = clip;
 			this->frameActual = 0;
-			this->maxFrame = 4;
+			this->cantFrames = 5;
 			this->drawScale = 6;
 			this->animarArma = false;
 			this->cuchillo = new PlayerWeapon(999, true);
@@ -70,8 +70,8 @@ void Player::renderizar(SdlRenderer& renderer, ClientSettings& settings) {
 	auxClip.x += int(frameActual)*65;
 	renderer.renderCopyCentered(texture, &auxClip, settings.screenWidth/2, settings.screenHeight-(weaponClip.h/2)*drawScale, drawScale, drawScale);
 	if (animarArma) {
-		frameActual += (float(2) * maxFrame / settings.fps);
-		if (frameActual >= maxFrame) {
+		frameActual += (float(2) * cantFrames / settings.fps);
+		if (frameActual >= cantFrames) {
 			frameActual = 0;
 			animarArma = false;
 		}

@@ -8,6 +8,8 @@
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
+#include "SDLWrappers/SdlTexture.h"
+#include "SDLWrappers/SdlFont.h"
 #include "Player.h"
 #include "Object.h"
 #include "ClientSettings.h"
@@ -31,9 +33,11 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlTexture tx_player("textures/player.png", renderer, 152, 0, 136);
-    SdlTexture tx_objects("textures/objects.png", renderer, 152, 0, 136);
-    SdlTexture tx_walls("textures/walls.png", renderer);
+    SdlFont font("fonts/wolfenstein.ttf", 50);
+
+    SdlTexture tx_player(renderer, "textures/player.png", 152, 0, 136);
+    SdlTexture tx_objects(renderer, "textures/objects.png", 152, 0, 136);
+    SdlTexture tx_walls(renderer, "textures/walls.png");
 
     Player jugador(tx_player, 1.5, 2.5, -45, 100);
 
@@ -62,6 +66,8 @@ int main(int argc, char* args[]) {
     float actorHealth = 100;
     int actorArmaActual = 0;
     //
+
+    SdlTexture tx_health(renderer, font, std::to_string(int(actorHealth)), 100, 255, 100);
 
     double zBuffer[SCREEN_WIDTH];
     bool threeD = false;
@@ -180,6 +186,7 @@ int main(int argc, char* args[]) {
 
       jugador.renderizar(renderer, settings);
 
+      renderer.renderCopy(tx_health, NULL, 50, SCREEN_HEIGHT-75);
       renderer.renderPresent();
 
       std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
@@ -198,6 +205,7 @@ int main(int argc, char* args[]) {
 
   }
   catch (SdlException& e) {
+    printf("Hubo una excepción:\n");
     std::cout << e.what();
   }
   catch (...) {

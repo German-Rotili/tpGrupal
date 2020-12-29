@@ -9,6 +9,7 @@
 
 class SdlRenderer {
   friend class SdlTexture;
+  friend class SdlFont;
   public:
     SDL_Renderer* renderer;
     explicit SdlRenderer(SDL_Renderer* renderer);

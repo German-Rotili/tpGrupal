@@ -1,3 +1,6 @@
+#ifndef __SERVER_INVENTORY_H__
+#define __SERVER_INVENTORY_H__
+
 class Inventory{
 
     // aca hardcodeamos todas las armas. despues tiene una lista de armas que si tiene y una que es la actual. me parece mas simple y
@@ -14,3 +17,5 @@ public:
     
 };
 
+
+#endif // __SERVER_INVENTORY_H__

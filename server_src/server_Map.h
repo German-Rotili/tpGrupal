@@ -1,5 +1,8 @@
-#ifndef MAP_H
-#define MAP_H
+#ifndef __SERVER_MAP_H__
+#define __SERVER_MAP_H__
+
+
+
 #include <vector>
 #include "server_player.h"
 #define UP "u"
@@ -23,4 +26,7 @@ public:
     void move_player(Player & player, std::string direction);
     void get_players(); // placeholder
 };
-#endif
+
+
+
+#endif // __SERVER_MAP_H__

@@ -10,6 +10,7 @@ protected:
     int max_damage;
     int max_spread;
     Map &map;
+    Weapon();
 
 public:
     virtual bool fire() = 0;

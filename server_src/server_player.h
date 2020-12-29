@@ -1,5 +1,7 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef __SERVER_PLAYER_H__
+#define __SERVER_PLAYER_H__
+
+
 #include <string>
 #include "server_Position.h"
 #include "server_Map.h"
@@ -31,4 +33,5 @@ public:
     void get_damaged(int damage);
     
 };
-#endif
+
+#endif // __SERVER_PLAYER_H__

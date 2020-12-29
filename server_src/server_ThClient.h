@@ -1,5 +1,6 @@
-#ifndef THCLIENT_H
-#define THCLIENT_H
+#ifndef __SERVER_THCLIENT_H__
+#define __SERVER_THCLIENT_H__
+
 #include "../common_src/common_socket.h"
 #include "server_Map.h"
 #include "../common_src/common_thread.h"
@@ -28,4 +29,6 @@ public:
     /*Devuelve el estado del thread*/
     bool is_dead();
 };
-#endif
+
+
+#endif // __SERVER_THCLIENT_H__

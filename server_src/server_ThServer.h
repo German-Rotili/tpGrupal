@@ -1,12 +1,14 @@
-#ifndef THSERVER_H
-#define THSERVER_H
+#ifndef __SERVER_THSERVER_H__
+#define __SERVER_THSERVER_H__
+
+
 #include <atomic>
 #include <vector>
 #include <list>
 #include <string>
 #include <utility>
 #include "server_ThClient.h"
-#include "server_map.h"
+#include "server_Map.h"
 #include "../common_src/common_thread.h"
 #include "../common_src/common_socket.h"
 #include "../common_src/common_exception.h"
@@ -35,4 +37,5 @@ public:
     ThServer(const ThServer&) = delete;
     ThServer& operator=(const ThServer&) = delete;
 };
-#endif
+
+#endif // __SERVER_THSERVER_H__

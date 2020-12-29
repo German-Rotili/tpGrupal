@@ -5,7 +5,7 @@
 
 class Weapon
 {
-private:
+protected:
     int & ammo;
     int max_damage;
     int max_spread;

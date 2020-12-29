@@ -7,6 +7,10 @@
 #include "server_Inventory.h"
 
 
+//Para el manejo de las acciones. agregar una lista de acciones que ocurren en cada iteracion. para esto cuando el server 
+//prepare el mensaje al cliente leera desde esta lista las acciones que son relevantes al cliente por ejemplo;
+// dispara, abre puerta, recibe daño, etc. 
+
 class Player{
 private:
     Position position;
@@ -24,5 +28,7 @@ public:
     int get_pos_x();
     int get_pos_y();
     void execute_intention(char intention);
+    void get_damaged(int damage);
+    
 };
 #endif

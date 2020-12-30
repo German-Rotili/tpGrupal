@@ -9,7 +9,7 @@ int PlayerWeapon::getCantBalas() {
   return cantBalas;
 }
 
-void PlayerWeapon::actualizarCantBalas(int balasActuales) {
+void PlayerWeapon::setCantBalas(int balasActuales) {
   cantBalas = balasActuales;
 }
 

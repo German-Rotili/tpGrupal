@@ -8,7 +8,6 @@
 
 class Player {
 	const SdlTexture& texture;
-  float vida;
   float x;
   float y;
   float direction;
@@ -28,15 +27,18 @@ class Player {
 		bool animarArma;
 		Player(const SdlTexture& texture, float xInicial, float yInicial, float dirInicial, float vidaInicial);
 		~Player();
-		float getX();
-		float getY();
-		float getDirection();
+		float getX() const;
+		float getY() const;
+		float getDirection() const;
 
-		void actualizarPosicion(float x, float y);
-		void actualizarDireccion(float direction);
-		void actualizarVida(float health);
+		int getHealth() const;
+		//int getCantBalas();
+
+		void setPosicion(float x, float y);
+		void setDirection(float direction);
+		void setHealth(float health);
 		// Provisorio?
-		void actualizarArmaActual(int idArma);
+		void setArmaActual(int idArma);
     void renderizar(SdlRenderer& renderer, ClientSettings& settings);
 };
 

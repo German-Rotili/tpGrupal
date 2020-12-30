@@ -11,9 +11,8 @@ class PlayerWeapon {
    PlayerWeapon(bool obtenida, int balasIniciales);
    ~PlayerWeapon();
    int getCantBalas();
-   void actualizarCantBalas(int balasActuales);
+   void setCantBalas(int balasActuales);
    bool estaEnInventario();
 };
-
 
 #endif

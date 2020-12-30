@@ -23,8 +23,6 @@ Player::Player(const SdlTexture& texture, float xInicial, float yInicial,
 			this->ametralladora = new PlayerWeapon(0, false);
 			this->canionDeCadena =  new PlayerWeapon(0, false);
 			this->lanzacohetes =  new PlayerWeapon(0, false);
-
-
 }
 
 Player::~Player() {
@@ -35,30 +33,36 @@ Player::~Player() {
 	delete this->lanzacohetes;
 }
 
-float Player::getX() {
+float Player::getX() const {
 	return x;
 }
-float Player::getY() {
+
+float Player::getY() const {
 	return y;
 }
-float Player::getDirection() {
+
+float Player::getDirection() const {
 	return direction;
 }
-void Player::actualizarPosicion(float x, float y) {
+
+int Player::getHealth() const {
+	return int(health);
+}
+
+void Player::setPosicion(float x, float y) {
 	this->x = x;
 	this->y = y;
 }
 
-void Player::actualizarDireccion(float direction) {
+void Player::setDirection(float direction) {
 	this->direction = direction;
 }
 
-void Player::actualizarVida(float health) {
-	// meter logica de curacion / daño
+void Player::setHealth(float health) {
 	this->health = health;
 }
 
-void Player::actualizarArmaActual(int idArma) {
+void Player::setArmaActual(int idArma) {
 	if ((idArma>= 0) && (idArma <= 3)) {
 		idArmaActual = idArma;
 		this->weaponClip.y = (64+1)*idArma;

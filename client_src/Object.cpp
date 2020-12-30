@@ -14,12 +14,12 @@ Object::Object(const SdlTexture& texture, SDL_Rect clip,
 
 Object::~Object() {}
 
-void Object::actualizarPosicion(float x, float y) {
+void Object::setPosicion(float x, float y) {
 	this->x = x;
 	this->y = y;
 }
 
-void Object::actualizarDistToPlayer(float actorX, float actorY, ClientSettings& settings) {
+void Object::setDistToPlayer(float actorX, float actorY, ClientSettings& settings) {
 	distToPlayer = settings.distance(actorX, actorY, x, y);
 }
 
@@ -39,7 +39,7 @@ float Object::getDistToPlayer() {
 	return this->distToPlayer;
 }
 
-void Object::actualizarDifAngle(float actorX, float actorY, float actorAngle) {
+void Object::setDifAngle(float actorX, float actorY, float actorAngle) {
 	float angle = (atan2(actorY - y, actorX - x) - M_PI) * 180 / M_PI;
 	this->difAngle = (angle - actorAngle);
 	if (this->difAngle > 180) {

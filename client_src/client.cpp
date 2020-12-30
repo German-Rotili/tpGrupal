@@ -11,6 +11,7 @@
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlFont.h"
 #include "Player.h"
+#include "Hud.h"
 #include "Object.h"
 #include "ClientSettings.h"
 #include "rayCaster.h"
@@ -36,10 +37,14 @@ int main(int argc, char* args[]) {
     SdlFont font("fonts/wolfenstein.ttf", 50);
 
     SdlTexture tx_player(renderer, "textures/player.png", 152, 0, 136);
-    SdlTexture tx_objects(renderer, "textures/objects.png", 152, 0, 136);
-    SdlTexture tx_walls(renderer, "textures/walls.png");
 
     Player jugador(tx_player, 1.5, 2.5, -45, 100);
+
+    Hud hud_jugador(renderer, font, jugador);
+
+
+    SdlTexture tx_objects(renderer, "textures/objects.png", 152, 0, 136);
+    SdlTexture tx_walls(renderer, "textures/walls.png");
 
     SDL_Rect lamp_clip = {(64+1)*1, (64+1)*3, 64, 64};
     SDL_Rect barrel_clip = {(64+1)*3, (64+1)*0, 64, 64};
@@ -47,13 +52,12 @@ int main(int argc, char* args[]) {
 
     std::vector<Object*> objetos;
 
+    // Parte de Información inicial del server
     objetos.push_back(new Object(tx_objects, barrel_clip, 2.5, 3.5));
-
     objetos.push_back(new Object(tx_objects, statue_clip, 1.5, 1.5));
     objetos.push_back(new Object(tx_objects, statue_clip, 1.5, 5.5));
     objetos.push_back(new Object(tx_objects, statue_clip, 4.5, 1.5));
     objetos.push_back(new Object(tx_objects, statue_clip, 4.5, 5.5));
-
     objetos.push_back(new Object(tx_objects, lamp_clip, 5.5, 4));
     objetos.push_back(new Object(tx_objects, lamp_clip, 7, 4));
 
@@ -66,8 +70,6 @@ int main(int argc, char* args[]) {
     float actorHealth = 100;
     int actorArmaActual = 0;
     //
-
-    SdlTexture tx_health(renderer, font, std::to_string(int(actorHealth)), 100, 255, 100);
 
     double zBuffer[SCREEN_WIDTH];
     bool threeD = false;
@@ -86,19 +88,19 @@ int main(int argc, char* args[]) {
         } else if (e.type == SDL_KEYDOWN) {
           switch (e.key.keysym.sym) {
             case SDLK_1:
-            jugador.actualizarArmaActual(0);
+            jugador.setArmaActual(0);
             break;
 
             case SDLK_2:
-            jugador.actualizarArmaActual(1);
+            jugador.setArmaActual(1);
             break;
 
             case SDLK_3:
-            jugador.actualizarArmaActual(2);
+            jugador.setArmaActual(2);
             break;
 
             case SDLK_4:
-            jugador.actualizarArmaActual(3);
+            jugador.setArmaActual(3);
             break;
 
             case SDLK_z:
@@ -109,6 +111,14 @@ int main(int argc, char* args[]) {
             case SDLK_c:
             actorX += playerMovementSpeed*cos((actorAngle+90)*M_PI/180);
             actorY += playerMovementSpeed*sin((actorAngle+90)*M_PI/180);
+            break;
+
+            case SDLK_r:
+            actorHealth = 50;
+            break;
+
+            case SDLK_t:
+            actorHealth = 80;
             break;
 
             case SDLK_p:
@@ -151,9 +161,9 @@ int main(int argc, char* args[]) {
         actorAngle +=360;
       }
 
-      jugador.actualizarPosicion(actorX, actorY);
-      jugador.actualizarDireccion(actorAngle);
-      jugador.actualizarVida(actorHealth);
+      jugador.setPosicion(actorX, actorY);
+      jugador.setDirection(actorAngle);
+      jugador.setHealth(actorHealth);
       RayCaster rayCaster;
 
       if (threeD == true) {
@@ -163,11 +173,11 @@ int main(int argc, char* args[]) {
         // obtengo objetos visibles
         for (std::vector<Object*>::iterator it = objetos.begin();
          it!= objetos.end(); ++it) {
-          (*it)->actualizarDifAngle(jugador.getX(), jugador.getY(), actorAngle);
+          (*it)->setDifAngle(jugador.getX(), jugador.getY(), actorAngle);
 
          	float absDifAngle = abs((*it)->getDifAngle());
          	if (absDifAngle <= (settings.fov/1)) {
-            (*it)->actualizarDistToPlayer(jugador.getX(), jugador.getY(), settings);
+            (*it)->setDistToPlayer(jugador.getX(), jugador.getY(), settings);
             visibles.push_back((*it));
           }
         }
@@ -185,8 +195,7 @@ int main(int argc, char* args[]) {
       }
 
       jugador.renderizar(renderer, settings);
-
-      renderer.renderCopy(tx_health, NULL, 50, SCREEN_HEIGHT-75);
+      hud_jugador.renderizar(settings);
       renderer.renderPresent();
 
       std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
@@ -195,7 +204,6 @@ int main(int argc, char* args[]) {
       //printf("elapsed microseconds: %i \n", elapsed_microseconds);
       usleep(1000000/settings.fps - elapsed_microseconds);
     }
-
 
     // borrado de todos los objetos
     for (std::vector<Object*>::iterator it = objetos.begin();

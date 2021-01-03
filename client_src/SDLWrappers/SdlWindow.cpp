@@ -17,7 +17,8 @@ SdlWindow::~SdlWindow() {
 }
 
 SdlRenderer SdlWindow::getRenderer() {
-  SdlRenderer resultado(
-    SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED));
+  SDL_Renderer* renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+  SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+  SdlRenderer resultado(renderer);
   return std::move(resultado);
 }

@@ -34,11 +34,11 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlFont font("fonts/wolfenstein.ttf", 50);
+    SdlFont font("fonts/hudFont.ttf", 50);
 
     SdlTexture tx_player(renderer, "textures/player.png", 152, 0, 136);
 
-    Player jugador(tx_player, 1.5, 2.5, -45, 100);
+    Player jugador(tx_player, 1.5, 2.5, -45, 100, 0, 3);
 
     Hud hud_jugador(renderer, font, jugador);
 
@@ -103,22 +103,24 @@ int main(int argc, char* args[]) {
             jugador.setArmaActual(3);
             break;
 
+            case SDLK_5:
+            jugador.setArmaActual(4);
+            break;
+
             case SDLK_z:
-            actorX -= playerMovementSpeed*cos((actorAngle+90)*M_PI/180);
-            actorY -= playerMovementSpeed*sin((actorAngle+90)*M_PI/180);
+            jugador.setScore(500);
             break;
 
             case SDLK_c:
-            actorX += playerMovementSpeed*cos((actorAngle+90)*M_PI/180);
-            actorY += playerMovementSpeed*sin((actorAngle+90)*M_PI/180);
+            jugador.setScore(1000);
             break;
 
             case SDLK_r:
-            actorHealth = 50;
+            actorHealth -= 5;
             break;
 
             case SDLK_t:
-            actorHealth = 80;
+            actorHealth += 5;
             break;
 
             case SDLK_p:
@@ -202,7 +204,12 @@ int main(int argc, char* args[]) {
 
       unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
       //printf("elapsed microseconds: %i \n", elapsed_microseconds);
-      usleep(1000000/settings.fps - elapsed_microseconds);
+      int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+      if (sleep_time > 0) {
+        usleep(1000000/settings.fps - elapsed_microseconds);
+      } else {
+        printf("Bajada de FPS\n");
+      }
     }
 
     // borrado de todos los objetos

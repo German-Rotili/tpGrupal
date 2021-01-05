@@ -4,8 +4,8 @@
 SdlRenderer::SdlRenderer(SDL_Renderer* renderer) {
   this->renderer = renderer;
   if (this->renderer == NULL) {
-    char* error;
-    sprintf(error, "Error en Renderer . SDL_Error: %s\n", SDL_GetError());
+    char error[BUF_SIZE];
+    snprintf(error, sizeof(error), "Error en Renderer . SDL_Error: %s\n", SDL_GetError());
     throw SdlException(error);
   }
 }
@@ -59,13 +59,29 @@ void SdlRenderer::renderDrawPoint(int x, int y) {
 }
 
 void SdlRenderer::renderCopy(const SdlTexture& texture,
-  const SDL_Rect* clip, int x, int y, int xscale, int yscale) {
+  const SDL_Rect* clip, int x, int y, double xscale, double yscale) {
     SDL_Rect renderQuad = {x, y, texture.width, texture.height};
     if (clip) {
       renderQuad.w = clip->w;
       renderQuad.h = clip->h;
     }
+
     renderQuad.w *= xscale;
     renderQuad.h *= yscale;
     SDL_RenderCopy(renderer, texture.texture, clip, &renderQuad);
   }
+
+void SdlRenderer::renderCopyCentered(const SdlTexture& texture,
+    const SDL_Rect* clip, int x, int y, double xscale, double yscale) {
+      SDL_Rect renderQuad = {x, y, texture.width, texture.height};
+      if (clip) {
+        renderQuad.w = clip->w;
+        renderQuad.h = clip->h;
+      }
+
+      renderQuad.w *= xscale;
+      renderQuad.h *= yscale;
+      renderQuad.x -= renderQuad.w / 2;
+      renderQuad.y -= renderQuad.h / 2;
+      SDL_RenderCopy(renderer, texture.texture, clip, &renderQuad);
+}

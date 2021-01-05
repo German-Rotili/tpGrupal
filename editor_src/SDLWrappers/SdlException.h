@@ -1,18 +1,20 @@
 #ifndef SDLEXCEPTION_H
 #define SDLEXCEPTION_H
 
+#define BUF_SIZE 100
 #include <exception>
 class SdlException : public std::exception{
-  const char* _msg;
+  char msg[BUF_SIZE];
   public:
-    explicit SdlException(const char* msg):
-    _msg(msg)
-    {}
-    SdlException() {
-      _msg = "Error en SDL";
+    explicit SdlException(const char* msg)
+    {
+      snprintf(this->msg, sizeof(this->msg), "%s", msg);
     }
-    const char* what() const throw(){
-      return _msg;
+    SdlException() {
+      snprintf(this->msg, sizeof(this->msg), "%s", "Error en SDL");
+    }
+    const char* what() const noexcept{
+      return msg;
     }
 };
 #endif  // SDLEXCEPTION_H

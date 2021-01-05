@@ -2,45 +2,36 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <iostream>
+#include <string>
 #include "SDLWrappers/SdlContexto.h"
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
+#include "SDLWrappers/SdlFont.h"
+#include "ConfigManager/MapHandler.h"
 
 #define SCREEN_WIDTH 768
 #define SCREEN_HEIGHT 640
 #define MAP_Y 12
 #define MAP_X 12
 
-int worldMap[MAP_Y][MAP_X] =
-                    {
-                      {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                      {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    };
-
-int checkMap(int x, int y) {
-  if (x < 0 || x >= MAP_X || y < 0 || y >= MAP_Y) return 0;
-  return worldMap[y][x];
+std::vector<std::vector<int>> createMap(int x, int y) {
+  return std::vector<std::vector<int>>(y, std::vector<int>(x, 0));
 }
 
-void toggleTile(int x, int y, int action) {
-  if (worldMap[y][x] == 3) {
+int checkMap(int x, int y, std::vector<std::vector<int>>& map) {
+  if (x < 0 || x >= map.at(0).size() || y < 0 || y >= map.size()) return 0;
+  return map[y][x];
+}
+
+void toggleTile(int x, int y, int action, std::vector<std::vector<int>>& map) {
+  if (map[y][x] == 3) {
     if (action == 3) {
-      worldMap[y][x] = 4;
+      map[y][x] = 4;
       return;
     }
   }
-  worldMap[y][x] = action;
+  map[y][x] = action;
 }
 
 int main(int argc, char* args[]) {
@@ -51,10 +42,14 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlTexture walls("textures/walls.png", renderer);
+    SdlTexture walls(renderer, "textures/walls.png");
 
     int playerx = SCREEN_WIDTH/2;
     int playery = SCREEN_HEIGHT/2;
+
+    SdlFont font("fonts/wolfenstein.ttf", 30);
+    SdlTexture tx_load_button(renderer, font, "Load", 255, 255, 255);
+    SdlTexture tx_save_button(renderer, font, "Save", 255, 255, 255);
 
     double actorX = 1;
     double actorY = 4;
@@ -64,6 +59,9 @@ int main(int argc, char* args[]) {
     int scrollX = 0;
     int wallIdX = 0;
     int wallIdY = 0;
+
+    std::vector<std::vector<int>> map = createMap(MAP_Y, MAP_X);
+    MapHandler mapHandler;
 
     //SdlTexture walls("textures/walls.png", renderer);
 
@@ -83,7 +81,7 @@ int main(int argc, char* args[]) {
             break;
 
             case SDLK_DOWN:
-            if (scrollY < MAP_Y - (SCREEN_HEIGHT/64))
+            if (scrollY < map.size() - (SCREEN_HEIGHT/64))
               scrollY += 1;
             break;
 
@@ -93,7 +91,7 @@ int main(int argc, char* args[]) {
             break;
 
             case SDLK_RIGHT:
-            if (scrollX < MAP_X - ((SCREEN_WIDTH - 128)/64))
+            if (scrollX < map.at(1).size() - ((SCREEN_WIDTH - 128)/64))
               scrollX += 1;
             break;
           }
@@ -102,7 +100,7 @@ int main(int argc, char* args[]) {
             if (e.button.x > 128) {
               int x = int((e.button.x - 128) / 64);
               int y = int(e.button.y / 64);
-              toggleTile(x+scrollX, y+scrollY, action);
+              toggleTile(x+scrollX, y+scrollY, action, map);
             } else if ((e.button.x >= 32 && e.button.x <= 96) &&
               (e.button.y >= SCREEN_HEIGHT/5 &&
               e.button.y <= (SCREEN_HEIGHT/5) + 64)) {
@@ -119,19 +117,30 @@ int main(int argc, char* args[]) {
               (e.button.y >= 4 * (SCREEN_HEIGHT/5) &&
               e.button.y <= (4 * (SCREEN_HEIGHT/5)) + 64)) {
               action = 3;
+            } else if ((e.button.x >= 5 && e.button.x <= 55) &&
+              (e.button.y >= 5 && e.button.y <= 40)) {
+              std::string path = "test.yaml";
+              mapHandler.emitMap(path, map);
+            } else if ((e.button.x >= 65 && e.button.x <= 115) &&
+              (e.button.y >= 5 && e.button.y <= 40)) {
+              std::string path = "test.yaml";
+              map = mapHandler.readMap(path);
             }
           }
         }
       }
+
+      // std::cout << map.at(0).size() << "\n";
+      // std::cout << map.size() << "\n";
 
       renderer.setRenderDrawColor(255, 255, 255, 255);
       renderer.renderClear();
       int start = 0;
       SDL_Rect clip;
       // Dibujar mapa
-      for (int i = scrollX; i < MAP_X; i++) {
-        for (int j = scrollY; j < MAP_Y; j++) {
-          if (checkMap(i, j) == 1) {
+      for (int i = scrollX; i < map.at(0).size(); i++) {
+        for (int j = scrollY; j < map.size(); j++) {
+          if (checkMap(i, j, map) == 1) {
             clip.x = wallIdX * 64;
             clip.y = wallIdY * 64;
             clip.w = 64;
@@ -140,13 +149,13 @@ int main(int argc, char* args[]) {
           }
           renderer.setRenderDrawColor(0, 0, 0, 255);
           renderer.renderDrawRect(((i-scrollX)*64) + 128, (j-scrollY)*64, 64, 64);
-          if (checkMap(i, j) == 2) {
+          if (checkMap(i, j, map) == 2) {
             renderer.setRenderDrawColor(0, 255, 0, 255);
             renderer.renderFillRect(((i-scrollX)*64) + 156, ((j-scrollY)*64) + 28, 8, 8);
-          } else if (checkMap(i, j) == 3) {
+          } else if (checkMap(i, j, map) == 3) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
             renderer.renderFillRect(((i-scrollX)*64) + 128, ((j-scrollY)*64) + 30, 64, 4);
-          } else if (checkMap(i, j) == 4) {
+          } else if (checkMap(i, j, map) == 4) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
             renderer.renderFillRect(((i-scrollX)*64) + 158, ((j-scrollY)*64), 4, 64);
           }
@@ -174,6 +183,14 @@ int main(int argc, char* args[]) {
 
       renderer.setRenderDrawColor(255, 165, 0, 255);
       renderer.renderDrawRect(32, (action+1) * (SCREEN_HEIGHT/5), 64, 64);
+
+      renderer.renderCopyCentered(tx_save_button, NULL, 30, 20);
+      renderer.setRenderDrawColor(255, 255, 255, 255);
+      renderer.renderDrawRect(5, 5, 50, 35);
+
+      renderer.renderCopyCentered(tx_load_button, NULL, 90, 20);
+      renderer.setRenderDrawColor(255, 255, 255, 255);
+      renderer.renderDrawRect(65, 5, 50, 35);
 
       renderer.renderPresent();
 

@@ -6,8 +6,8 @@ SdlWindow::SdlWindow(std::string nombre, int width, int height) {
   this->window = SDL_CreateWindow(nombre.c_str(), SDL_WINDOWPOS_UNDEFINED,
   SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
   if (window == NULL) {
-    char* error;
-    sprintf(error, "Error en Window . SDL_Error: %s\n", SDL_GetError());
+    char error[BUF_SIZE];
+    snprintf(error, sizeof(error), "Error en Window . SDL_Error: %s\n", SDL_GetError());
     throw SdlException(error);
   }
 }

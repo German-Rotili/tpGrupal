@@ -9,6 +9,7 @@
 
 class SdlRenderer {
   friend class SdlTexture;
+  friend class SdlFont;
   public:
     SDL_Renderer* renderer;
     explicit SdlRenderer(SDL_Renderer* renderer);
@@ -25,7 +26,10 @@ class SdlRenderer {
     void renderPresent();
     void renderDrawPoint(int x, int y);
     void renderCopy(const class SdlTexture& texture,
-      const SDL_Rect* clip, int x, int y, int xscale = 1, int yscale = 1);
+      const SDL_Rect* clip, int x, int y, double xscale = 1, double yscale = 1);
+
+    void renderCopyCentered(const class SdlTexture& texture,
+      const SDL_Rect* clip, int x, int y, double xscale = 1, double yscale = 1);
 };
 
 #endif  // SDLRENDERER_H

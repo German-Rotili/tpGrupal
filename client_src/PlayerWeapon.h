@@ -4,16 +4,15 @@
 #define BALAS_INF 999
 
 class PlayerWeapon {
-  bool obtenida;
+  bool disponible;
   int cantBalas;
 
   public:
    PlayerWeapon(bool obtenida, int balasIniciales);
    ~PlayerWeapon();
-   int getCantBalas();
-   void actualizarCantBalas(int balasActuales);
-   bool estaEnInventario();
+   void setCantBalas(int balasActuales);
+   int getCantBalas() const;
+   bool estaDisponible() const;
 };
-
 
 #endif

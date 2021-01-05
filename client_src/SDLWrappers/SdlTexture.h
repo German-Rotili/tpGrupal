@@ -21,7 +21,7 @@ class SdlTexture {
 
 		// Constructor usando True Type Fonts
 		SdlTexture(const class SdlRenderer& renderer, const class SdlFont& font,
-			std::string texto, int r = 0, int g = 0, int b = 0);
+			std::string texto, Uint8 r = 0, Uint8 g = 0, Uint8 b = 0);
 
 		~SdlTexture();
 

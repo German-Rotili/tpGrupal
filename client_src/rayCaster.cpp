@@ -107,10 +107,7 @@ void RayCaster::cast2D(SdlRenderer& renderer, double x
     } else {
       yIntercept = y + dy + (1-dx)*yStep;
     }
-
-    // Distancia de la pared
-    float distortedDist;
-
+    
     // Loopea hasta encontrar pared
     bool wallFoundX = false;
     bool wallFoundY = false;
@@ -138,10 +135,8 @@ void RayCaster::cast2D(SdlRenderer& renderer, double x
     renderer.setRenderDrawColor(100, 100, 100, 255);
     if (d1 < d2) {
       renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, xIntercept*64 , (y+int(tileStepY==1))*64);
-      distortedDist = d1;
     } else {
       renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, (x+int(tileStepX==1))*64 , (yIntercept)*64);
-      distortedDist = d2;
     }
   }
 }
@@ -158,7 +153,6 @@ void RayCaster::cast3D(SdlRenderer& renderer, double x, double y,
   renderer.renderFillRect(0, 0, settings.screenWidth, settings.screenHeight/2);
 
   double dAngle = settings.fov / settings.screenWidth;
-  double proyPlaneDist = 160/tan(30*M_PI/180);
   int actorX = int(x);
   double actorDX = x - actorX;
   int actorY = int(y);

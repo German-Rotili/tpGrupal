@@ -22,9 +22,9 @@ class Object {
 		float getY();
 		float getDifAngle();
 		float getDistToPlayer();
-		void actualizarDifAngle(float actorX, float actorY, float dirAngle);
-    void actualizarPosicion(float x, float y);
-		void actualizarDistToPlayer(float actorX, float actorY, ClientSettings& settings);
+		void setDifAngle(float actorX, float actorY, float dirAngle);
+    void setPosicion(float x, float y);
+		void setDistToPlayer(float actorX, float actorY, ClientSettings& settings);
     void renderizar(SdlRenderer& renderer,
 		 double zBuffer[], ClientSettings& settings);
 };

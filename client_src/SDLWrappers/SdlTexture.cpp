@@ -29,7 +29,7 @@ SdlTexture::SdlTexture(const SdlRenderer& renderer,
 
 // Crear textura de texto usando font
 SdlTexture::SdlTexture(const SdlRenderer& renderer,
-	const SdlFont& font, std::string texto, int r, int g, int b) {
+	const SdlFont& font, std::string texto, Uint8 r, Uint8 g, Uint8 b) {
 		SDL_Color textColor = { r, g, b };
 		SDL_Surface* textSurface = TTF_RenderText_Solid(font.font, texto.c_str(), textColor);
 	  if (textSurface == NULL) {

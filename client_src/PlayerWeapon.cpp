@@ -1,18 +1,18 @@
 #include "PlayerWeapon.h"
 PlayerWeapon::PlayerWeapon(bool obtenida, int balasIniciales):
-  obtenida(obtenida),
+  disponible(obtenida),
   cantBalas(balasIniciales) {}
 
 PlayerWeapon::~PlayerWeapon() {}
 
-int PlayerWeapon::getCantBalas() {
-  return cantBalas;
-}
-
-void PlayerWeapon::actualizarCantBalas(int balasActuales) {
+void PlayerWeapon::setCantBalas(int balasActuales) {
   cantBalas = balasActuales;
 }
 
-bool PlayerWeapon::estaEnInventario() {
-  return this->obtenida;
+int PlayerWeapon::getCantBalas() const {
+  return this->cantBalas;
+}
+
+bool PlayerWeapon::estaDisponible() const {
+  return this->disponible;
 }

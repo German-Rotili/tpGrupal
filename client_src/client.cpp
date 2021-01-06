@@ -27,21 +27,18 @@ bool compareDistances(Object* o1, Object* o2) {
 
 int main(int argc, char* args[]) {
   try {
+    const char* WINDOW_NAME = "Wolfenstein Client";
+    bool FULLSCREEN = false;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
-    SdlContexto contexto;  // Inicializa SDL y SDL_image
+    SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
-    SdlWindow window("nombre", settings.screenWidth, settings.screenHeight);
+    SdlWindow window(WINDOW_NAME, settings.screenWidth, settings.screenHeight);
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlFont font("fonts/hudFont.ttf", 50);
+    Player jugador(renderer, settings, 1.5, 2.5, -45, 100, 0, 3);
 
-    SdlTexture tx_player(renderer, "textures/player.png", 152, 0, 136);
-
-    Player jugador(tx_player, 1.5, 2.5, -45, 100, 0, 3);
-
-    Hud hud_jugador(renderer, font, jugador);
-
+    Hud hud_jugador(renderer, jugador, settings);
 
     SdlTexture tx_objects(renderer, "textures/objects.png", 152, 0, 136);
     SdlTexture tx_walls(renderer, "textures/walls.png");
@@ -72,7 +69,7 @@ int main(int argc, char* args[]) {
     //
 
     double zBuffer[SCREEN_WIDTH];
-    bool threeD = false;
+    bool threeD = true;
 
     bool quit = false;
     SDL_Event e;
@@ -166,6 +163,10 @@ int main(int argc, char* args[]) {
       jugador.setPosicion(actorX, actorY);
       jugador.setDirection(actorAngle);
       jugador.setHealth(actorHealth);
+      // jugador.setScore();
+      // jugador.setLives();
+      // jugador.setArmaActual();
+      // Faltan implementar: Llaves y actualizacion de balas.
       RayCaster rayCaster;
 
       if (threeD == true) {
@@ -196,7 +197,8 @@ int main(int argc, char* args[]) {
         rayCaster.cast2D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
       }
 
-      jugador.renderizar(renderer, settings);
+      jugador.renderizar(settings);
+      hud_jugador.actualizar();
       hud_jugador.renderizar(settings);
       renderer.renderPresent();
 

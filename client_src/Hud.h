@@ -15,9 +15,16 @@ class Hud {
 	const SDL_Color c_red = {226, 18, 18};
 	SDL_Color c_rectangleScreen;
 	Uint8 rectangleScreen_alpha;
-
+	const int FONT_SIZE;
+	const int COLUMNA1;
+	const int COLUMNA2;
+	const int COLUMNA3;
+	const int COLUMNA4;
+	const int COLUMNA5;
+	const int FILA1;
+	const int FILA2;
 	class SdlRenderer& renderer;
-	class SdlFont& font;
+	class SdlFont font;
 	const class Player& player;
 	class SdlTexture* ammoTexture;
 	class SdlTexture* healthTexture;
@@ -26,6 +33,7 @@ class Hud {
 	std::vector<bool> displayWeapons;
 
 	SDL_Rect faceClip;
+	const double faceScale;
 	float playerFaceAnimation;
 	int playerWaitAnimation;
 	class SdlTexture playerFaces;
@@ -47,11 +55,11 @@ class Hud {
 	void actualizarFaceBlood();
 	void actualizarFaceAnimation();
 	// Llama a las funciones de actualizacion
-	void actualizar();
 	public:
-		Hud(class SdlRenderer& renderer, class SdlFont& font, const class Player& player);
+		Hud(class SdlRenderer& renderer, const class Player& player, const class ClientSettings& settings);
 
 		~Hud();
+		void actualizar();
 		void renderizar(const class ClientSettings& settings);
 };
 

@@ -8,7 +8,8 @@
 #include "PlayerWeapon.h"
 
 class Player {
-	const SdlTexture& texture;
+	SdlRenderer& renderer;
+	const SdlTexture texture;
   float x;
   float y;
   float direction;
@@ -17,10 +18,15 @@ class Player {
 	int lives;
 	int idArmaActual;
 
-  SDL_Rect weaponClip;
+	SDL_Rect weaponClip;
   float frameActual;
   int cantFrames;
-	float drawScale;
+
+	const int DRAW_WEAPON_X;
+	const double DRAW_SCALE;
+	const int DRAW_WEAPON_Y;
+	const double animationSpeed;
+
 	PlayerWeapon* armaActual;
 	PlayerWeapon* cuchillo;
 	PlayerWeapon* pistola;
@@ -30,8 +36,9 @@ class Player {
 
 	public:
 		bool animarArma;
-		Player(const SdlTexture& texture, float xInicial, float yInicial,
-			float dirInicial, float healthInicial, int scoreInicial, int livesInicial);
+		Player(SdlRenderer& renderer, const ClientSettings& settings, float xInicial,
+			float yInicial, float dirInicial, float healthInicial, int scoreInicial,
+			int livesInicial);
 		~Player();
 
 		float getX() const;
@@ -51,7 +58,7 @@ class Player {
 		void setLives(int lives);
 		void setArmaActual(int idArma);
 
-    void renderizar(SdlRenderer& renderer, ClientSettings& settings);
+    void renderizar(ClientSettings& settings);
 };
 
 #endif  // PLAYER_H

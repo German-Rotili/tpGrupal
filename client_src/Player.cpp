@@ -4,20 +4,24 @@
 #include "ClientSettings.h"
 #include "PlayerWeapon.h"
 
-Player::Player(const SdlTexture& texture, float xInicial, float yInicial,
-	float dirInicial, float healthInicial, int scoreInicial, int livesInicial):
-		texture(texture),
+Player::Player(SdlRenderer& renderer, const ClientSettings& settings,
+	float xInicial, float yInicial, float dirInicial, float healthInicial,
+	int scoreInicial, int livesInicial):
+		renderer(renderer),
+		texture(renderer, "textures/player.png", 152, 0, 136),
 	  x(xInicial),
 	  y(yInicial),
 	  direction(dirInicial),
 		health(healthInicial),
 		score(scoreInicial),
-		lives(livesInicial) {
-			SDL_Rect clip_armaInicial = {0, 65, 64, 64};
-			this->weaponClip = clip_armaInicial;
-			this->frameActual = 0;
-			this->cantFrames = 5;
-			this->drawScale = 6;
+		lives(livesInicial),
+		weaponClip({0, 65, 64, 64}),
+		frameActual(0),
+		cantFrames(5),
+		DRAW_WEAPON_X(settings.screenWidth/2),
+		DRAW_SCALE(double(settings.screenWidth) * 0.00586),
+		DRAW_WEAPON_Y(settings.screenHeight-(weaponClip.h/2)*DRAW_SCALE),
+		animationSpeed(float(2) * cantFrames / settings.fps) {
 			this->animarArma = false;
 			this->cuchillo = new PlayerWeapon(true, 999);
 			this->pistola = new PlayerWeapon(true, 10);
@@ -114,12 +118,12 @@ void Player::setArmaActual(int idArma) {
 	idArmaActual = idArma;
 }
 
-void Player::renderizar(SdlRenderer& renderer, ClientSettings& settings) {
+void Player::renderizar(ClientSettings& settings) {
 	SDL_Rect auxClip = weaponClip;
 	auxClip.x += int(frameActual)*65;
-	renderer.renderCopyCentered(texture, &auxClip, settings.screenWidth/2, settings.screenHeight-(weaponClip.h/2)*drawScale, drawScale, drawScale);
+	renderer.renderCopyCentered(texture, &auxClip, DRAW_WEAPON_X, DRAW_WEAPON_Y, DRAW_SCALE, DRAW_SCALE);
 	if (animarArma) {
-		frameActual += (float(2) * cantFrames / settings.fps);
+		frameActual += animationSpeed;
 		if (frameActual >= cantFrames) {
 			frameActual = 0;
 			animarArma = false;

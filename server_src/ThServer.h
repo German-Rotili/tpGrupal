@@ -9,6 +9,8 @@
 #include <utility>
 #include "ThClient.h"
 #include "Map.h"
+#include "ThClient.h"
+#include "GameHandler.h"
 #include "../common_src/common_thread.h"
 #include "../common_src/common_socket.h"
 #include "../common_src/common_exception.h"
@@ -21,6 +23,7 @@ private:
     std::string & root;
     Socket server;
     Map *map;
+    std::vector<Thread*> threads;
     /*Elimina los threads que ya finalizaron su proceso*/
     void clean_clients(std::vector<Thread*> threads);
 

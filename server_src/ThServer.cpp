@@ -24,25 +24,22 @@ static const void remove_dead(std::vector<Thread*> & list){
 }
 
 void ThServer::run(){
-    int a = 500;
-    std::string dir = "u";
-    std::vector<Thread*> threads;
     try {
+        GameHandler game_handler;//tiene todas las partidas creadas
         while (state){
             Socket peer;
-            Player player(a, a, dir);
-            map->add_player(player);
-            peer.socket_accept(server);
-            threads.push_back(new 
-                ThClient(std::move(peer), player, *map));
-            (threads.back())->start();
-            remove_dead(threads);
+            server.socket_accept(peer);
+
+            //acepto un nuevo cliente, tiene que elegir la partida o crear nueva
+
+            this->threads.push_back(new 
+                ThClient(std::move(peer), game_handler));
+                
+            (this->threads.back())->start();
+            remove_dead(this->threads);
         }
-
-
-        
+       
     }catch(CloseSocketException& e){
-        clean_clients(threads);
     }catch(std::exception& e){
         perror(e.what());
     }catch(...){}
@@ -60,4 +57,6 @@ void ThServer::clean_clients(std::vector<Thread*> threads){
     }
 }
 
-ThServer::~ThServer(){}
+ThServer::~ThServer(){
+    clean_clients(threads);
+}

@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = *.cpp ./SDLWrappers/*.cpp ../common_src/*.cpp
+OBJS = *.cpp ../common_src/*.cpp
 
 #CC specifies which compiler we're using
 CC = g++
@@ -8,11 +8,19 @@ CC = g++
 # -w suppresses all warnings
 COMPILER_FLAGS = -Werror
 
+COMPILER_FLAGS += -Wall -Werror -pedantic -pedantic-errors
+
+# Para optimizar el binario resultante lo mejor posible
+COMPILER_FLAGS += -O3
+
+# Para valgrind o debug
+COMPILER_FLAGS += -ggdb -DDEBUG -fno-inline
+
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -pthread
+LINKER_FLAGS = -pthread
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = client
+OBJ_NAME = server
 
 #This is the target that compiles our executable
 all : $(OBJS)

@@ -10,8 +10,9 @@
 #include <netdb.h>
 
 class Socket{
-public:
+private:
   int fd;
+public:
   Socket();
   ~Socket();
   Socket& operator=(const Socket&) = delete;

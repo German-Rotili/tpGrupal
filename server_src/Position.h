@@ -1,9 +1,7 @@
 #ifndef __SERVER_POSITION_H__
 #define __SERVER_POSITION_H__
-
 #include "Map.h"
 #include "Config.h"
-
 
 //es la posicion del jugador. se encarga de guardarla, almacenarla y modificarla. 
 // asumimos hitboxes rectangulares. 
@@ -19,14 +17,15 @@ private:
     float hitbox_radius;
     float linear_vel;
     float angular_vel;
-    Map &map;
+    //Map &map;
+    Map map;
     float get_new_x(char);
     float get_new_y(char);
     float get_y_offset(char);
     float get_x_offset(char);
     void update_angle(char);
 public:
-    Position(Map &, Config &);
+    Position(Map & map, Config &);
     ~Position();
     void update(char);
     float get_pos_x();

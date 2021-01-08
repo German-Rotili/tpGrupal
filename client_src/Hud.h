@@ -34,7 +34,7 @@ class Hud {
 
 	SDL_Rect faceClip;
 	const double faceScale;
-	float playerFaceAnimation;
+	double playerFaceAnimation;
 	int playerWaitAnimation;
 	class SdlTexture playerFaces;
 	class SdlTexture weapon1;

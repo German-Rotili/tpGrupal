@@ -10,7 +10,7 @@
 class SdlWindow {
   SDL_Window* window;
   public:
-    SdlWindow(std::string nombre, int width, int height);
+    SdlWindow(std::string nombre, int width, int height, bool fullscreen);
     ~SdlWindow();
     SdlRenderer getRenderer();
 };

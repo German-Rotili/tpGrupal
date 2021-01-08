@@ -7,24 +7,25 @@
 class Object {
 	const SdlTexture& texture;
   SDL_Rect clip;
-  float x;
-  float y;
-	// difAngle guarda la diferencia entre el angulo que
+  double x;
+  double y;
+	// difAngle guarda la diferencia (de grados) entre el angulo que
 	// mira el jugador y el angulo desde el x,y del jugador hasta el x,y del objeto
-	float difAngle;
+	double difAngle;
 	// distToPlayer guarda la distancia
-	float distToPlayer;
+	double distToPlayer;
+
+	double getDifAngle();
+	void setDifAngle(double actorX, double actorY, double dirAngle);
 	public:
 		Object(const SdlTexture& texture,
-       SDL_Rect clip, float xInicial, float yInicial);
+       SDL_Rect clip, double xInicial, double yInicial);
 		~Object();
-		float getX();
-		float getY();
-		float getDifAngle();
-		float getDistToPlayer();
-		void setDifAngle(float actorX, float actorY, float dirAngle);
-    void setPosicion(float x, float y);
-		void setDistToPlayer(float actorX, float actorY, ClientSettings& settings);
+		double getX();
+		double getY();
+		double getDistToPlayer();
+    void setPosicion(double x, double y);
+		bool esVisibleDesde(double actorX, double actorY, double actorDirection, ClientSettings& settings);
     void renderizar(SdlRenderer& renderer,
 		 double zBuffer[], ClientSettings& settings);
 };

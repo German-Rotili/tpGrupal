@@ -6,8 +6,7 @@
 class SdlException : public std::exception{
   char msg[BUF_SIZE];
   public:
-    explicit SdlException(const char* msg)
-    {
+    explicit SdlException(const char* msg) {
       snprintf(this->msg, sizeof(this->msg), "%s", msg);
     }
     SdlException() {

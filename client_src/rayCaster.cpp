@@ -1,7 +1,6 @@
 #include "rayCaster.h"
 #include <stdio.h>
 #include <cmath>
-#include <iostream>
 #include <utility>
 #include <tuple>
 #include "SDLWrappers/SdlContexto.h"
@@ -10,9 +9,6 @@
 #include "SDLWrappers/SdlException.h"
 #include "ClientSettings.h"
 
-#define MAX_DEPTH 8
-
-#define SIZE_NIVEL 5
 int worldMap[7][10] = {{3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
                        {3, 0, 0, 0, 0, 5, 5, 0, 0, 1},
                        {3, 0, 0, 0, 0, 5, 5, 0, 0, 3},
@@ -107,7 +103,7 @@ void RayCaster::cast2D(SdlRenderer& renderer, double x
     } else {
       yIntercept = y + dy + (1-dx)*yStep;
     }
-    
+
     // Loopea hasta encontrar pared
     bool wallFoundX = false;
     bool wallFoundY = false;
@@ -130,8 +126,8 @@ void RayCaster::cast2D(SdlRenderer& renderer, double x
       }
     }
 
-    float d1 = settings.distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
-    float d2 = settings.distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
+    double d1 = settings.distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
+    double d2 = settings.distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
     renderer.setRenderDrawColor(100, 100, 100, 255);
     if (d1 < d2) {
       renderer.renderDrawLine((actorX+actorDX)*64 , (actorY+actorDY)*64, xIntercept*64 , (y+int(tileStepY==1))*64);
@@ -231,8 +227,8 @@ void RayCaster::cast3D(SdlRenderer& renderer, double x, double y,
       }
     }
 
-    float d1 = settings.distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
-    float d2 = settings.distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
+    double d1 = settings.distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
+    double d2 = settings.distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
     int texture_id;
     SDL_Rect clip = {0, 128, 1, 64};
     if (d1 < d2) {

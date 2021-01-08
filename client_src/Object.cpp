@@ -3,7 +3,7 @@
 #include "ClientSettings.h"
 
 Object::Object(const SdlTexture& texture, SDL_Rect clip,
-	 float xInicial, float yInicial):
+	 double xInicial, double yInicial):
 		texture(texture),
 		clip(clip),
 		x(xInicial),
@@ -14,33 +14,8 @@ Object::Object(const SdlTexture& texture, SDL_Rect clip,
 
 Object::~Object() {}
 
-void Object::setPosicion(float x, float y) {
-	this->x = x;
-	this->y = y;
-}
-
-void Object::setDistToPlayer(float actorX, float actorY, ClientSettings& settings) {
-	distToPlayer = settings.distance(actorX, actorY, x, y);
-}
-
-float Object::getX() {
-	return this->x;
-}
-
-float Object::getY() {
-	return this->y;
-}
-
-float Object::getDifAngle() {
-	return this->difAngle;
-}
-
-float Object::getDistToPlayer() {
-	return this->distToPlayer;
-}
-
-void Object::setDifAngle(float actorX, float actorY, float actorAngle) {
-	float angle = (atan2(actorY - y, actorX - x) - M_PI) * 180 / M_PI;
+void Object::setDifAngle(double actorX, double actorY, double actorAngle) {
+	double angle = (atan2(actorY - y, actorX - x) - M_PI) * 180 / M_PI;
 	this->difAngle = (angle - actorAngle);
 	if (this->difAngle > 180) {
 		this->difAngle -= 360;
@@ -50,12 +25,43 @@ void Object::setDifAngle(float actorX, float actorY, float actorAngle) {
 	}
 }
 
+void Object::setPosicion(double x, double y) {
+	this->x = x;
+	this->y = y;
+}
+
+double Object::getX() {
+	return this->x;
+}
+
+double Object::getY() {
+	return this->y;
+}
+
+double Object::getDifAngle() {
+	return this->difAngle;
+}
+
+double Object::getDistToPlayer() {
+	return this->distToPlayer;
+}
+
+bool Object::esVisibleDesde(double actorX, double actorY, double actorAngle, ClientSettings& settings) {
+	setDifAngle(actorX, actorY, actorAngle);
+	double absDifAngle = abs(getDifAngle());
+	if (absDifAngle <= (settings.fov/1)) {
+		distToPlayer = settings.distance(actorX, actorY, x, y);
+		return true;
+	}
+	return false;
+}
+
 void Object::renderizar(SdlRenderer& renderer, double zBuffer[],
 	 ClientSettings& settings) {
-	float proy = distToPlayer * cos(difAngle*M_PI/180);
-	float scale = (1/proy) * settings.screenHeight / clip.w;
-	float x0 = settings.screenWidth/2 + tan(difAngle*M_PI/180) * settings.screenWidth - (clip.w/2)*scale;
-	float y0 = settings.screenHeight/2 - (clip.h/2)*scale;
+	double proy = distToPlayer * cos(difAngle*M_PI/180);
+	double scale = (1/proy) * settings.screenHeight / clip.w;
+	double x0 = settings.screenWidth/2 + tan(difAngle*M_PI/180) * settings.screenWidth - (clip.w/2)*scale;
+	double y0 = settings.screenHeight/2 - (clip.h/2)*scale;
 	SDL_Rect auxClip = this->clip;
 	auxClip.w = 1;
 	for (int i = 0; i < clip.w; i++) {

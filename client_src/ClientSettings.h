@@ -3,14 +3,14 @@
 
 class ClientSettings {
  public:
-    int screenWidth;
-    int screenHeight;
-    int fps;
-    float fov;
+    const int screenWidth;
+    const int screenHeight;
+    const int fps;
+    const double fov;
 		ClientSettings(int screenWidth, int screenHeight, int fps, int fov);
 		~ClientSettings();
     // Esto deberia ir en otra clase
-    float distance(float x1, float y1, float x2, float y2);
+    double distance(double x1, double y1, double x2, double y2);
 };
 
 #endif  // CLIENTSETTINGS_H

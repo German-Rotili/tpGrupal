@@ -28,11 +28,11 @@ bool compareDistances(Object* o1, Object* o2) {
 int main(int argc, char* args[]) {
   try {
     const char* WINDOW_NAME = "Wolfenstein Client";
-    bool FULLSCREEN = false;
+    const bool FULLSCREEN = false;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
     SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
-    SdlWindow window(WINDOW_NAME, settings.screenWidth, settings.screenHeight);
+    SdlWindow window(WINDOW_NAME, settings.screenWidth, settings.screenHeight, FULLSCREEN);
 
     SdlRenderer renderer = window.getRenderer();
 
@@ -59,12 +59,12 @@ int main(int argc, char* args[]) {
     objetos.push_back(new Object(tx_objects, lamp_clip, 7, 4));
 
     // Provisorio hasta que haya comunicacion con el server
-    float playerMovementSpeed = float(1) /15;
-    float playerRotationSpeed = 3;
-    float actorAngle = jugador.getDirection();
-    float actorX = jugador.getX();
-    float actorY = jugador.getY();
-    float actorHealth = 100;
+    double playerMovementSpeed = double(1) /15;
+    double playerRotationSpeed = 3;
+    double actorAngle = jugador.getDirection();
+    double actorX = jugador.getX();
+    double actorY = jugador.getY();
+    double actorHealth = 100;
     int actorArmaActual = 0;
     //
 
@@ -176,17 +176,12 @@ int main(int argc, char* args[]) {
         // obtengo objetos visibles
         for (std::vector<Object*>::iterator it = objetos.begin();
          it!= objetos.end(); ++it) {
-          (*it)->setDifAngle(jugador.getX(), jugador.getY(), actorAngle);
-
-         	float absDifAngle = abs((*it)->getDifAngle());
-         	if (absDifAngle <= (settings.fov/1)) {
-            (*it)->setDistToPlayer(jugador.getX(), jugador.getY(), settings);
-            visibles.push_back((*it));
+           if ((*it)->esVisibleDesde(jugador.getX(), jugador.getY(), jugador.getDirection(), settings)) {
+             visibles.push_back((*it));
           }
         }
         // ordeno los visibles de acuerdo a sus distancias
         std::sort(visibles.begin(), visibles.end(), compareDistances);
-
         // dibujo ordenadamente todos los visibles
         for (std::vector<Object*>::iterator it = visibles.begin();
          it!= visibles.end(); ++it) {

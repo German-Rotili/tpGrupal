@@ -15,11 +15,15 @@
 #include "Object.h"
 #include "ClientSettings.h"
 #include "rayCaster.h"
+#include "client_helper.h"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define FPS 30
 #define FOV 61
+#define HOSTNAME 1
+#define SERVICE 2
+
 
 bool compareDistances(Object* o1, Object* o2) {
     return (o1->getDistToPlayer() > o2->getDistToPlayer());
@@ -27,6 +31,11 @@ bool compareDistances(Object* o1, Object* o2) {
 
 int main(int argc, char* args[]) {
   try {
+    // std::string hostname = args[HOSTNAME]; 
+    // std::string service = args[SERVICE]; 
+    // Client client(service, hostname);
+    const int horizontex = SCREEN_WIDTH/2;
+    const int horizontey = SCREEN_HEIGHT/2;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
     SdlContexto contexto;  // Inicializa SDL y SDL_image
 
@@ -132,30 +141,37 @@ int main(int argc, char* args[]) {
           }
         }
       }
+      std::string input = "";
 
       if (currentKeyStates[SDL_SCANCODE_W]) {
         // Intencion de moverse adelante
+        input += "w";
         actorX += playerMovementSpeed*cos(actorAngle*M_PI/180);
         actorY += playerMovementSpeed*sin(actorAngle*M_PI/180);
       }
       if (currentKeyStates[SDL_SCANCODE_S]) {
         // Intencion de moverse hacia atras
+        input += "s";
         actorX -= playerMovementSpeed*cos(actorAngle*M_PI/180);
         actorY -= playerMovementSpeed*sin(actorAngle*M_PI/180);
       }
       if (currentKeyStates[SDL_SCANCODE_A ]) {
         // Intencion de rotar a la izquierda
+        input += "a";
         actorAngle -= playerRotationSpeed;
       }
       if (currentKeyStates[SDL_SCANCODE_D ]) {
         // Intencion de rotar a la derecha
+        input += "d";
         actorAngle += playerRotationSpeed;
       }
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
         // intencion de disparo
+        input += "f";
         if (!jugador.animarArma)
           jugador.animarArma = true;
       }
+      // client.client_send(input);
 
       if (actorAngle >= 0) {
         actorAngle -= 360;

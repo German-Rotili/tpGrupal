@@ -3,6 +3,8 @@
 
 #include "../common_src/common_socket.h"
 #include "Map.h"
+#include "GameHandler.h"
+#include "GamePlay.h"
 #include "../common_src/common_thread.h"
 #include "player.h"
 #include <vector>
@@ -14,13 +16,12 @@ class ThClient : public Thread{
 private:
     Socket peer;
     bool state = true;
-    Player & player;
-    Map & map;
+    GameHandler & game_handler;
     ThClient& operator=(const ThClient&) = delete;
     ThClient(const ThClient&) = delete;
 
 public:
-    ThClient(Socket&& socket, Player & player, Map & map);
+    ThClient(Socket&& socket, GameHandler & game_handler);
     ~ThClient();
 
     /*Recibe, chequea y responde las peticiones*/

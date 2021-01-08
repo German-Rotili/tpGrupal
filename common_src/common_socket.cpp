@@ -57,12 +57,12 @@ int Socket::socket_listen(const int length){
   return listen(fd, length);
 }
 
-void Socket::socket_accept(Socket & server){
+void Socket::socket_accept(Socket & peer){
   struct sockaddr client_address;
   socklen_t client_address_length = sizeof(client_address);
-  fd = accept(server.fd, &client_address,
+  peer.fd = accept(fd, &client_address,
     &client_address_length);
-  if (fd < 0){
+  if (peer.fd < 0){
     throw CloseSocketException();
   }
 }

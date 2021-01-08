@@ -51,6 +51,8 @@ int main(int argc, char* args[]) {
     SdlTexture tx_load_button(renderer, font, "Load", 255, 255, 255);
     SdlTexture tx_save_button(renderer, font, "Save", 255, 255, 255);
 
+    SdlFont text_font("fonts/wolfenstein.ttf", 24);
+
     double actorX = 1;
     double actorY = 4;
 
@@ -59,6 +61,10 @@ int main(int argc, char* args[]) {
     int scrollX = 0;
     int wallIdX = 0;
     int wallIdY = 0;
+
+    std::string inputText = " ";
+    bool renderText = false;
+    bool save = false, load = false;
 
     std::vector<std::vector<int>> map = createMap(MAP_Y, MAP_X);
     MapHandler mapHandler;
@@ -73,7 +79,7 @@ int main(int argc, char* args[]) {
       while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
           quit = true;
-        } else if (e.type == SDL_KEYDOWN) {
+        } else if (e.type == SDL_KEYDOWN && save == false && load == false) {
           switch (e.key.keysym.sym) {
             case SDLK_UP:
             if (scrollY > 0)
@@ -94,6 +100,44 @@ int main(int argc, char* args[]) {
             if (scrollX < map.at(1).size() - ((SCREEN_WIDTH - 128)/64))
               scrollX += 1;
             break;
+          }
+        } else if (e.type == SDL_KEYDOWN && (save == true || load == true)) {
+          switch (e.key.keysym.sym) {
+            case SDLK_RETURN:
+            if (save == true) {
+              mapHandler.emitMap(inputText, map);
+            } else if  (load == true) {
+              map = mapHandler.readMap(inputText);
+            }
+            renderText = false;
+            break;
+
+            case SDLK_BACKSPACE:
+            if (inputText.length() > 0) {
+              inputText.pop_back();
+              renderText = true;
+            }
+            break;
+
+            case SDLK_c:
+            if (SDL_GetModState() & KMOD_CTRL) {
+              SDL_SetClipboardText(inputText.c_str());
+            }
+            break;
+
+            case SDLK_v:
+            if (SDL_GetModState() & KMOD_CTRL) {
+              inputText = SDL_GetClipboardText();
+              renderText = true;
+            }
+            break;
+          }
+        } else if (e.type == SDL_TEXTINPUT) {
+          if(!( SDL_GetModState() & KMOD_CTRL && (e.text.text[ 0 ] == 'c' ||
+          e.text.text[ 0 ] == 'C' || e.text.text[ 0 ] == 'v' ||
+          e.text.text[ 0 ] == 'V' ))) {
+            inputText += e.text.text;
+            renderText = true;
           }
         } else if (e.type == SDL_MOUSEBUTTONDOWN) {
           if (e.button.button == SDL_BUTTON_LEFT) {
@@ -119,12 +163,14 @@ int main(int argc, char* args[]) {
               action = 3;
             } else if ((e.button.x >= 5 && e.button.x <= 55) &&
               (e.button.y >= 5 && e.button.y <= 40)) {
-              std::string path = "test.yaml";
-              mapHandler.emitMap(path, map);
+              save = true;
+              load = false;
+              renderText = true;
             } else if ((e.button.x >= 65 && e.button.x <= 115) &&
               (e.button.y >= 5 && e.button.y <= 40)) {
-              std::string path = "test.yaml";
-              map = mapHandler.readMap(path);
+              load = true;
+              save = false;
+              renderText = true;
             }
           }
         }
@@ -191,6 +237,13 @@ int main(int argc, char* args[]) {
       renderer.renderCopyCentered(tx_load_button, NULL, 90, 20);
       renderer.setRenderDrawColor(255, 255, 255, 255);
       renderer.renderDrawRect(65, 5, 50, 35);
+
+      if (renderText) {
+        SdlTexture tx_inputText(renderer, text_font, inputText, 255, 255, 255);
+        renderer.setRenderDrawColor(100, 100, 100, 255);
+        renderer.renderFillRect((SCREEN_WIDTH/2)-128, (SCREEN_HEIGHT/2)-16, 256, 32);
+        renderer.renderCopyCentered(tx_inputText, NULL, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2));
+      }
 
       renderer.renderPresent();
 

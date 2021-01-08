@@ -32,14 +32,8 @@ void Position::update(char mov) {
     } else{
         this->update_angle(mov);
     }
-   
-    
 
 }
-
-
-
-
 
 float Position::get_pos_x() { return this->x; }
 
@@ -49,23 +43,27 @@ float Position::get_hitbox_radius() {return this->hitbox_radius;}
 
 float Position::get_angle() { return this->angle; }
 
-int Position::colides(Position &) {}
+int Position::colides(Position &) { return 1;}
 
 float Position::get_y_offset(char intention){
     if(intention == FORWARD){
         return this->linear_vel * sin(this->angle * PI/180);
     }
-    if(intention == BACKWARDS){
+    else if(intention == BACKWARDS){
         return - this->linear_vel * sin(this->angle * PI/180);
     }
+    else {return 0;}
 }
 
 float Position::get_x_offset(char intention){
     if(intention == FORWARD){
         return this->linear_vel * cos(this->angle * PI/180);
     }
-    if(intention == BACKWARDS){
+    else if(intention == BACKWARDS){
         return - this->linear_vel * cos(this->angle * PI/180);
+    }
+    else {
+        return 0;
     }
 }
 

@@ -1,13 +1,10 @@
 #ifndef __SERVER_PLAYER_H__
 #define __SERVER_PLAYER_H__
-
-
 #include <string>
 #include "Position.h"
 #include "Map.h"
-#include "Weapon.h"
+#include "weapons/Weapon.h"
 #include "Inventory.h"
-
 
 //Para el manejo de las acciones. agregar una lista de acciones que ocurren en cada iteracion. para esto cuando el server 
 //prepare el mensaje al cliente leera desde esta lista las acciones que son relevantes al cliente por ejemplo;

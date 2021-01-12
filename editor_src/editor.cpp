@@ -10,13 +10,17 @@
 #include "SDLWrappers/SdlFont.h"
 #include "ConfigManager/MapHandler.h"
 
-#define SCREEN_WIDTH 768
+#define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 640
 #define MAP_Y 12
 #define MAP_X 12
+/* (64 * 6 == 384) */
+#define MENU_OFFSET 384
+#define TILE_SIZE 64
+
 
 std::vector<std::vector<int>> createMap(int x, int y) {
-  return std::vector<std::vector<int>>(y, std::vector<int>(x, 0));
+  return std::vector<std::vector<int>>(y, std::vector<int>(x, 42));
 }
 
 int checkMap(int x, int y, std::vector<std::vector<int>>& map) {
@@ -25,9 +29,9 @@ int checkMap(int x, int y, std::vector<std::vector<int>>& map) {
 }
 
 void toggleTile(int x, int y, int action, std::vector<std::vector<int>>& map) {
-  if (map[y][x] == 3) {
-    if (action == 3) {
-      map[y][x] = 4;
+  if (map[y][x] == 44) {
+    if (action == 44) {
+      map[y][x] = 45;
       return;
     }
   }
@@ -38,13 +42,15 @@ int main(int argc, char* args[]) {
   try {
     SdlContexto contexto;  // Inicializa SDL y SDL_image
 
-    SdlWindow window("Wolfenstein_Editor", SCREEN_WIDTH, SCREEN_HEIGHT);
+    int realWidth = SCREEN_WIDTH + MENU_OFFSET;
+
+    SdlWindow window("Wolfenstein_Editor", realWidth, SCREEN_HEIGHT);
 
     SdlRenderer renderer = window.getRenderer();
 
     SdlTexture walls(renderer, "textures/walls.png");
 
-    int playerx = SCREEN_WIDTH/2;
+    int playerx = realWidth/2;
     int playery = SCREEN_HEIGHT/2;
 
     SdlFont font("fonts/wolfenstein.ttf", 30);
@@ -97,7 +103,7 @@ int main(int argc, char* args[]) {
             break;
 
             case SDLK_RIGHT:
-            if (scrollX < map.at(1).size() - ((SCREEN_WIDTH - 128)/64))
+            if (scrollX < map.at(1).size() - ((realWidth - MENU_OFFSET)/64))
               scrollX += 1;
             break;
           }
@@ -141,26 +147,14 @@ int main(int argc, char* args[]) {
           }
         } else if (e.type == SDL_MOUSEBUTTONDOWN) {
           if (e.button.button == SDL_BUTTON_LEFT) {
-            if (e.button.x > 128) {
-              int x = int((e.button.x - 128) / 64);
-              int y = int(e.button.y / 64);
+            if (e.button.x > MENU_OFFSET) {
+              int x = int((e.button.x - MENU_OFFSET) / TILE_SIZE);
+              int y = int(e.button.y / TILE_SIZE);
               toggleTile(x+scrollX, y+scrollY, action, map);
-            } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-              (e.button.y >= SCREEN_HEIGHT/5 &&
-              e.button.y <= (SCREEN_HEIGHT/5) + 64)) {
-              action = 0;
-            } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-              (e.button.y >= 2 * (SCREEN_HEIGHT/5) &&
-              e.button.y <= (2 * (SCREEN_HEIGHT/5)) + 64)) {
-              action = 1;
-            } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-              (e.button.y >= 3 * (SCREEN_HEIGHT/5) &&
-              e.button.y <= (3 * (SCREEN_HEIGHT/5)) + 64)) {
-              action = 2;
-            } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-              (e.button.y >= 4 * (SCREEN_HEIGHT/5) &&
-              e.button.y <= (4 * (SCREEN_HEIGHT/5)) + 64)) {
-              action = 3;
+            } else if (e.button.y >= 64 && e.button.y <= 576) {
+              wallIdX = int(e.button.x / 64);
+              wallIdY = int((e.button.y - 64) / 64);
+              action = wallIdX + (wallIdY*6);
             } else if ((e.button.x >= 5 && e.button.x <= 55) &&
               (e.button.y >= 5 && e.button.y <= 40)) {
               save = true;
@@ -172,6 +166,33 @@ int main(int argc, char* args[]) {
               save = false;
               renderText = true;
             }
+            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
+            //   (e.button.y >= SCREEN_HEIGHT/5 &&
+            //   e.button.y <= (SCREEN_HEIGHT/5) + TILE_SIZE)) {
+            //   action = 0;
+            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
+            //   (e.button.y >= 2 * (SCREEN_HEIGHT/5) &&
+            //   e.button.y <= (2 * (SCREEN_HEIGHT/5)) + TILE_SIZE)) {
+            //   action = 1;
+            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
+            //   (e.button.y >= 3 * (SCREEN_HEIGHT/5) &&
+            //   e.button.y <= (3 * (SCREEN_HEIGHT/5)) + TILE_SIZE)) {
+            //   action = 2;
+            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
+            //   (e.button.y >= 4 * (SCREEN_HEIGHT/5) &&
+            //   e.button.y <= (4 * (SCREEN_HEIGHT/5)) + TILE_SIZE)) {
+            //   action = 3;
+            // } else if ((e.button.x >= 5 && e.button.x <= 55) &&
+            //   (e.button.y >= 5 && e.button.y <= 40)) {
+            //   save = true;
+            //   load = false;
+            //   renderText = true;
+            // } else if ((e.button.x >= 65 && e.button.x <= 115) &&
+            //   (e.button.y >= 5 && e.button.y <= 40)) {
+            //   load = true;
+            //   save = false;
+            //   renderText = true;
+            // }
           }
         }
       }
@@ -186,49 +207,55 @@ int main(int argc, char* args[]) {
       // Dibujar mapa
       for (int i = scrollX; i < map.at(0).size(); i++) {
         for (int j = scrollY; j < map.size(); j++) {
-          if (checkMap(i, j, map) == 1) {
-            clip.x = wallIdX * 64;
-            clip.y = wallIdY * 64;
-            clip.w = 64;
-            clip.h = 64;
-            renderer.renderCopy(walls, &clip, ((i-scrollX)*64) + 128, (j-scrollY)*64, 1, 1);
-          }
-          renderer.setRenderDrawColor(0, 0, 0, 255);
-          renderer.renderDrawRect(((i-scrollX)*64) + 128, (j-scrollY)*64, 64, 64);
-          if (checkMap(i, j, map) == 2) {
+          if (checkMap(i, j, map) >= 0 && checkMap(i, j, map) <= 41) {
+            wallIdX = checkMap(i, j, map) % 6;
+            wallIdY = (checkMap(i, j, map) - wallIdX) / 6;
+            clip.x = wallIdX * TILE_SIZE;
+            clip.y = wallIdY * TILE_SIZE;
+            clip.w = TILE_SIZE;
+            clip.h = TILE_SIZE;
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+          } else if (checkMap(i, j, map) == 42) {
+            renderer.setRenderDrawColor(0, 0, 0, 255);
+            renderer.renderDrawRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
+          } else if (checkMap(i, j, map) == 43) {
             renderer.setRenderDrawColor(0, 255, 0, 255);
-            renderer.renderFillRect(((i-scrollX)*64) + 156, ((j-scrollY)*64) + 28, 8, 8);
-          } else if (checkMap(i, j, map) == 3) {
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, ((j-scrollY)*TILE_SIZE) + 28, 8, 8);
+          } else if (checkMap(i, j, map) == 44) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
-            renderer.renderFillRect(((i-scrollX)*64) + 128, ((j-scrollY)*64) + 30, 64, 4);
-          } else if (checkMap(i, j, map) == 4) {
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, ((j-scrollY)*TILE_SIZE) + 30, TILE_SIZE, 4);
+          } else if (checkMap(i, j, map) == 45) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
-            renderer.renderFillRect(((i-scrollX)*64) + 158, ((j-scrollY)*64), 4, 64);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 32, ((j-scrollY)*TILE_SIZE), 4, TILE_SIZE);
           }
         }
       }
 
-      clip.x = wallIdX * 64;
-      clip.y = wallIdX * 64;
-      clip.w = 64;
-      clip.h = 64;
+      SDL_Rect clipMenu;
+      clipMenu.x = 0;
+      clipMenu.y = 0;
+      clipMenu.w = 384;
+      clipMenu.h = 448;
+
+      wallIdX = action % 6;
+      wallIdY = (action - wallIdX) / 6;
 
       renderer.setRenderDrawColor(100, 100, 100, 255);
-      renderer.renderFillRect(0, 0, 128, SCREEN_HEIGHT);
+      renderer.renderFillRect(0, 0, MENU_OFFSET, SCREEN_HEIGHT);
 
       renderer.setRenderDrawColor(255, 255, 255, 255);
-      renderer.renderFillRect(32, SCREEN_HEIGHT/5, 64, 64);
+      renderer.renderFillRect(0, 512, 64, 64);
 
-      renderer.renderCopy(walls, &clip, 32, 2 * (SCREEN_HEIGHT/5), 1, 1);
+      renderer.renderCopy(walls, &clipMenu, 0, 64, 1, 1);
 
       renderer.setRenderDrawColor(0, 255, 0, 255);
-      renderer.renderFillRect(60, (3 * (SCREEN_HEIGHT/5)) + 30, 8, 8);
+      renderer.renderFillRect(64+28, 512+28, 8, 8);
 
       renderer.setRenderDrawColor(205, 133, 63, 255);
-      renderer.renderFillRect(32, (4 * (SCREEN_HEIGHT/5)) + 30, 64, 4);
+      renderer.renderFillRect(128, 512+32, 64, 4);
 
       renderer.setRenderDrawColor(255, 165, 0, 255);
-      renderer.renderDrawRect(32, (action+1) * (SCREEN_HEIGHT/5), 64, 64);
+      renderer.renderDrawRect(wallIdX * 64, (wallIdY * 64) + 64, 64, 64);
 
       renderer.renderCopyCentered(tx_save_button, NULL, 30, 20);
       renderer.setRenderDrawColor(255, 255, 255, 255);
@@ -241,8 +268,8 @@ int main(int argc, char* args[]) {
       if (renderText) {
         SdlTexture tx_inputText(renderer, text_font, inputText, 255, 255, 255);
         renderer.setRenderDrawColor(100, 100, 100, 255);
-        renderer.renderFillRect((SCREEN_WIDTH/2)-128, (SCREEN_HEIGHT/2)-16, 256, 32);
-        renderer.renderCopyCentered(tx_inputText, NULL, (SCREEN_WIDTH/2), (SCREEN_HEIGHT/2));
+        renderer.renderFillRect((realWidth/2)-128, (SCREEN_HEIGHT/2)-16, 256, 32);
+        renderer.renderCopyCentered(tx_inputText, NULL, (realWidth/2), (SCREEN_HEIGHT/2));
       }
 
       renderer.renderPresent();

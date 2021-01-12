@@ -12,76 +12,82 @@
 #include "SDLWrappers/SdlFont.h"
 #include "Player.h"
 #include "Hud.h"
+#include "ZRenderable.h"
 #include "Object.h"
+#include "Enemy.h"
 #include "ClientSettings.h"
 #include "rayCaster.h"
-#include "client_helper.h"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define FPS 30
 #define FOV 61
-#define HOSTNAME 1
-#define SERVICE 2
 
-
-bool compareDistances(Object* o1, Object* o2) {
+bool compareDistances(ZRenderable* o1, ZRenderable* o2) {
     return (o1->getDistToPlayer() > o2->getDistToPlayer());
 }
 
 int main(int argc, char* args[]) {
   try {
-    // std::string hostname = args[HOSTNAME]; 
-    // std::string service = args[SERVICE]; 
-    // Client client(service, hostname);
-    const int horizontex = SCREEN_WIDTH/2;
-    const int horizontey = SCREEN_HEIGHT/2;
+    const char* WINDOW_NAME = "Wolfenstein Client";
+    const bool FULLSCREEN = false;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
-    SdlContexto contexto;  // Inicializa SDL y SDL_image
+    SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
-    SdlWindow window("nombre", settings.screenWidth, settings.screenHeight);
+    SdlWindow window(WINDOW_NAME, settings.screenWidth, settings.screenHeight, FULLSCREEN);
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlFont font("fonts/hudFont.ttf", 50);
+    Player jugador(renderer, settings, 1.5, 2.5, -45, 100, 0, 3);
 
-    SdlTexture tx_player(renderer, "textures/player.png", 152, 0, 136);
-
-    Player jugador(tx_player, 1.5, 2.5, -45, 100, 0, 3);
-
-    Hud hud_jugador(renderer, font, jugador);
-
+    Hud hud_jugador(renderer, jugador, settings);
 
     SdlTexture tx_objects(renderer, "textures/objects.png", 152, 0, 136);
     SdlTexture tx_walls(renderer, "textures/walls.png");
+
+    SdlTexture tx_guardDown(renderer, "textures/enemies/guard/down_strip5.png", 152, 0, 136);
+    SdlTexture tx_guardDownLeft(renderer, "textures/enemies/guard/downleft_strip5.png", 152, 0, 136);
+    SdlTexture tx_guardLeft(renderer, "textures/enemies/guard/left_strip5.png", 152, 0, 136);
+    SdlTexture tx_guardUpLeft(renderer, "textures/enemies/guard/upleft_strip5.png", 152, 0, 136);
+    SdlTexture tx_guardUp(renderer, "textures/enemies/guard/up_strip5.png", 152, 0, 136);
+    SdlTexture tx_guardShooting(renderer, "textures/enemies/guard/shooting_strip3.png", 152, 0, 136);
+    SdlTexture tx_guardDying(renderer, "textures/enemies/guard/dying_strip5.png", 152, 0, 136);
+
+    SDL_Rect enemy_clip = {0, 0, 64, 64};
 
     SDL_Rect lamp_clip = {(64+1)*1, (64+1)*3, 64, 64};
     SDL_Rect barrel_clip = {(64+1)*3, (64+1)*0, 64, 64};
     SDL_Rect statue_clip = {(64+1)*3, (64+1)*3, 64, 64};
 
-    std::vector<Object*> objetos;
+    std::vector<ZRenderable*> objetos;
 
     // Parte de Información inicial del server
-    objetos.push_back(new Object(tx_objects, barrel_clip, 2.5, 3.5));
-    objetos.push_back(new Object(tx_objects, statue_clip, 1.5, 1.5));
-    objetos.push_back(new Object(tx_objects, statue_clip, 1.5, 5.5));
-    objetos.push_back(new Object(tx_objects, statue_clip, 4.5, 1.5));
-    objetos.push_back(new Object(tx_objects, statue_clip, 4.5, 5.5));
-    objetos.push_back(new Object(tx_objects, lamp_clip, 5.5, 4));
-    objetos.push_back(new Object(tx_objects, lamp_clip, 7, 4));
+    //objetos.push_back(new Object(2.5, 3.5, barrel_clip, tx_objects));
+    //objetos.push_back(new Object(1.5, 1.5, statue_clip, tx_objects));
+    //objetos.push_back(new Object(1.5, 5.5, statue_clip, tx_objects));
+    //objetos.push_back(new Object(4.5, 1.5, statue_clip, tx_objects));
+    //objetos.push_back(new Object(4.5, 5.5, statue_clip, tx_objects));
+    //objetos.push_back(new Object(5.5, 4.0, lamp_clip, tx_objects));
+    //objetos.push_back(new Object(7.0, 4.0, lamp_clip, tx_objects));
+    objetos.push_back(new Enemy(2.5, 4.5, enemy_clip, 0, tx_guardDown,
+      tx_guardDownLeft, tx_guardLeft, tx_guardUpLeft, tx_guardUp,
+      tx_guardShooting, tx_guardDying, settings));
+
+
+
 
     // Provisorio hasta que haya comunicacion con el server
-    float playerMovementSpeed = float(1) /15;
-    float playerRotationSpeed = 3;
-    float actorAngle = jugador.getDirection();
-    float actorX = jugador.getX();
-    float actorY = jugador.getY();
-    float actorHealth = 100;
+    double playerMovementSpeed = double(1) /15;
+    double playerRotationSpeed = 3;
+    double actorAngle = jugador.getDirection();
+    double actorX = jugador.getX();
+    double actorY = jugador.getY();
+    double actorHealth = 100;
     int actorArmaActual = 0;
     //
 
     double zBuffer[SCREEN_WIDTH];
-    bool threeD = false;
+    bool threeD = true;
 
     bool quit = false;
     SDL_Event e;
@@ -141,37 +147,30 @@ int main(int argc, char* args[]) {
           }
         }
       }
-      std::string input = "";
 
       if (currentKeyStates[SDL_SCANCODE_W]) {
         // Intencion de moverse adelante
-        input += "w";
         actorX += playerMovementSpeed*cos(actorAngle*M_PI/180);
         actorY += playerMovementSpeed*sin(actorAngle*M_PI/180);
       }
       if (currentKeyStates[SDL_SCANCODE_S]) {
         // Intencion de moverse hacia atras
-        input += "s";
         actorX -= playerMovementSpeed*cos(actorAngle*M_PI/180);
         actorY -= playerMovementSpeed*sin(actorAngle*M_PI/180);
       }
       if (currentKeyStates[SDL_SCANCODE_A ]) {
         // Intencion de rotar a la izquierda
-        input += "a";
         actorAngle -= playerRotationSpeed;
       }
       if (currentKeyStates[SDL_SCANCODE_D ]) {
         // Intencion de rotar a la derecha
-        input += "d";
         actorAngle += playerRotationSpeed;
       }
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
         // intencion de disparo
-        input += "f";
         if (!jugador.animarArma)
           jugador.animarArma = true;
       }
-      // client.client_send(input);
 
       if (actorAngle >= 0) {
         actorAngle -= 360;
@@ -182,28 +181,32 @@ int main(int argc, char* args[]) {
       jugador.setPosicion(actorX, actorY);
       jugador.setDirection(actorAngle);
       jugador.setHealth(actorHealth);
+      // jugador.setScore();
+      // jugador.setLives();
+      // jugador.setArmaActual();
+      // Faltan implementar: Llaves y actualizacion de balas.
       RayCaster rayCaster;
 
       if (threeD == true) {
         rayCaster.cast3D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), tx_walls, zBuffer, settings);
-        std::vector<Object*> visibles;
+        std::vector<ZRenderable*> visibles;
+
+        // Actualizo direccion de enemigos;
+        ((Enemy*) objetos.back())->setDirections(0, jugador.getDirection());
 
         // obtengo objetos visibles
-        for (std::vector<Object*>::iterator it = objetos.begin();
+        for (std::vector<ZRenderable*>::iterator it = objetos.begin();
          it!= objetos.end(); ++it) {
-          (*it)->setDifAngle(jugador.getX(), jugador.getY(), actorAngle);
-
-         	float absDifAngle = abs((*it)->getDifAngle());
-         	if (absDifAngle <= (settings.fov/1)) {
-            (*it)->setDistToPlayer(jugador.getX(), jugador.getY(), settings);
-            visibles.push_back((*it));
+           (*it)->actualizar();
+           if ((*it)->esVisibleDesde(jugador.getX(), jugador.getY(), jugador.getDirection(), settings)) {
+             (*it)->updateDistToPlayer(jugador.getX(), jugador.getY(), settings);
+             visibles.push_back((*it));
           }
         }
         // ordeno los visibles de acuerdo a sus distancias
         std::sort(visibles.begin(), visibles.end(), compareDistances);
-
         // dibujo ordenadamente todos los visibles
-        for (std::vector<Object*>::iterator it = visibles.begin();
+        for (std::vector<ZRenderable*>::iterator it = visibles.begin();
          it!= visibles.end(); ++it) {
           (*it)->renderizar(renderer, zBuffer, settings);
         }
@@ -212,7 +215,8 @@ int main(int argc, char* args[]) {
         rayCaster.cast2D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
       }
 
-      jugador.renderizar(renderer, settings);
+      jugador.renderizar(settings);
+      hud_jugador.actualizar();
       hud_jugador.renderizar(settings);
       renderer.renderPresent();
 
@@ -229,7 +233,7 @@ int main(int argc, char* args[]) {
     }
 
     // borrado de todos los objetos
-    for (std::vector<Object*>::iterator it = objetos.begin();
+    for (std::vector<ZRenderable*>::iterator it = objetos.begin();
      it!= objetos.end(); ++it) {
       delete *it;
     }

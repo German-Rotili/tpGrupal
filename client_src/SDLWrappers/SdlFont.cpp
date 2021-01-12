@@ -12,7 +12,7 @@ SdlFont::SdlFont(std::string path, int size) {
 		throw SdlException(error);
   }
 }
-//  const class SdlRenderer& renderer
+
 SdlFont::~SdlFont() {
 	if (font != NULL) {
 		TTF_CloseFont(font);

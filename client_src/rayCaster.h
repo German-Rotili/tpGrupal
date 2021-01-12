@@ -1,8 +1,6 @@
 #ifndef RAYCASTER
 #define RAYCASTER
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <iostream>
 #include "SDLWrappers/SdlContexto.h"
@@ -11,9 +9,9 @@
 #include "SDLWrappers/SdlException.h"
 #include "ClientSettings.h"
 
-
-
 class RayCaster {
+
+const int MAX_DEPTH = 8;
 
 public:
   void cast2D(SdlRenderer& renderer, double x, double y,

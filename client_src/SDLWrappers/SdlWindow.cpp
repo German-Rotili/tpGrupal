@@ -2,13 +2,16 @@
 #include <string>
 #include <utility>
 
-SdlWindow::SdlWindow(std::string nombre, int width, int height) {
+SdlWindow::SdlWindow(std::string nombre, int width, int height, bool fullscreen) {
   this->window = SDL_CreateWindow(nombre.c_str(), SDL_WINDOWPOS_UNDEFINED,
   SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
   if (window == NULL) {
     char error[BUF_SIZE];
     snprintf(error, sizeof(error), "Error en Window . SDL_Error: %s\n", SDL_GetError());
     throw SdlException(error);
+  }
+  if (fullscreen) {
+    SDL_SetWindowFullscreen(window, SDL_TRUE);
   }
 }
 

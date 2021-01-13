@@ -15,6 +15,7 @@ Player::Player(SdlRenderer& renderer, const ClientSettings& settings,
 		health(healthInicial),
 		score(scoreInicial),
 		lives(livesInicial),
+		isShooting(false),
 		weaponClip({0, 65, 64, 64}),
 		frameActual(0),
 		cantFrames(5),
@@ -91,8 +92,19 @@ void Player::setHealth(double health) {
 	this->health = health;
 }
 
+void Player::setLives(int lives) {
+	this->lives = lives;
+}
+
 void Player::setScore(int score) {
 	this->score = score;
+}
+void Player::setIsShooting(bool isShooting) {
+	if (!this->isShooting && (isShooting)) {
+		this->frameActual = 1;
+		this->animarArma = true;
+	}
+	this->isShooting = isShooting;
 }
 
 void Player::setArmaActual(int idArma) {

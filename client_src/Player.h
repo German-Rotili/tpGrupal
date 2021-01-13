@@ -17,6 +17,7 @@ class Player {
 	int score;
 	int lives;
 	int idArmaActual;
+	bool isShooting;
 
 	SDL_Rect weaponClip;
   double frameActual;
@@ -57,6 +58,7 @@ class Player {
 		void setScore(int score);
 		void setLives(int lives);
 		void setArmaActual(int idArma);
+		void setIsShooting(bool isShooting);
 
     void renderizar(ClientSettings& settings);
 };

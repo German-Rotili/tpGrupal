@@ -66,24 +66,17 @@ void ZRenderable::renderizar(SdlRenderer& renderer, double zBuffer[],
 	double y0 = settings.screenHeight/2 - (clip.h/2)*scale;
 	SDL_Rect auxClip = this->clip;
 	auxClip.w = 1;
+	int sumar = 1;
 	if (flipType == SDL_FLIP_HORIZONTAL) {
+		sumar = -1;
 		auxClip.x += 63;
-		for (int i = 0; i < clip.w; i++) {
-			for (int j = 0; j <= round(scale); j++) {
-				if ((x0 >= 0) && (x0+j < settings.screenWidth) && (zBuffer[int(x0)+j] > distToPlayer))
-					renderer.renderCopy(*currentTexture, &auxClip, x0+j, y0, 1, scale);
-			}
-			x0 += scale;
-			auxClip.x -= 1;
+	}
+	for (int i = 0; i < clip.w; i++) {
+		for (int j = 0; j <= round(scale); j++) {
+			if ((x0 >= 0) && (x0+j < settings.screenWidth) && (zBuffer[int(x0)+j] > distToPlayer))
+				renderer.renderCopy(*currentTexture, &auxClip, x0+j, y0, 1, scale);
 		}
-	} else {
-		for (int i = 0; i < clip.w; i++) {
-			for (int j = 0; j <= round(scale); j++) {
-				if ((x0 >= 0) && (x0+j < settings.screenWidth) && (zBuffer[int(x0)+j] > distToPlayer))
-					renderer.renderCopy(*currentTexture, &auxClip, x0+j, y0, 1, scale);
-			}
-			x0 += scale;
-			auxClip.x += 1;
-		}
+		x0 += scale;
+		auxClip.x += sumar;
 	}
 }

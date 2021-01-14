@@ -23,6 +23,9 @@ SdlTexture::SdlTexture(const SdlRenderer& renderer,
 		 path.c_str(), SDL_GetError());
     throw SdlException(error);
 	}
+	//Get image dimensions
+	this->width = auxSurface->w;
+	this->height = auxSurface->h;
 
 	SDL_FreeSurface(auxSurface);
 }

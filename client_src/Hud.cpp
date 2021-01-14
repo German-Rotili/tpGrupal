@@ -26,7 +26,9 @@ Hud::Hud(class SdlRenderer& renderer, const class Player& player, const ClientSe
 	weapon2(renderer, font, "2", c_yellow.r, c_yellow.g, c_yellow.b),
 	weapon3(renderer, font, "3", c_yellow.r, c_yellow.g, c_yellow.b),
 	weapon4(renderer, font, "4", c_yellow.r, c_yellow.g, c_yellow.b),
-	weapon5(renderer, font, "5", c_yellow.r, c_yellow.g, c_yellow.b) {
+	weapon5(renderer, font, "5", c_yellow.r, c_yellow.g, c_yellow.b),
+	ammoIcon(renderer, "textures/icons/bullet.png"),
+	liveIcon(renderer, "textures/icons/live.png") {
 		playerFaceAnimation = 0;
 		playerWaitAnimation = rand() % 200;
 		rectangleScreen_alpha = 0;
@@ -38,6 +40,8 @@ Hud::Hud(class SdlRenderer& renderer, const class Player& player, const ClientSe
 		healthTexture = NULL;
 		scoreTexture = NULL;
 		livesTexture = NULL;
+		ammoIcon.setColorMod(c_yellow.r, c_yellow.g, c_yellow.b);
+		liveIcon.setColorMod(c_green.r, c_green.g, c_green.b);
 		actualizar();
 		rectangleScreen_alpha = 0;
 }
@@ -171,7 +175,13 @@ void Hud::renderizar(const ClientSettings & settings) {
 
 	renderer.renderCopyCentered(playerFaces, &faceClip, COLUMNA4, FILA2, faceScale, faceScale);
 	renderer.renderCopyCentered(*healthTexture, NULL, COLUMNA1, FILA2);
+
+	renderer.renderCopyCentered(liveIcon, NULL, COLUMNA2-(*livesTexture).getWidth(), FILA2, faceScale, faceScale);
 	renderer.renderCopyCentered(*livesTexture, NULL, COLUMNA2, FILA2);
-	renderer.renderCopyCentered(*ammoTexture, NULL, COLUMNA5, FILA2);
+
+	if (!player.getIdArmaActual() == 0) {
+		renderer.renderCopyCentered(ammoIcon, NULL, COLUMNA5-(weapon1).getWidth()*4, FILA2, faceScale, faceScale);
+		renderer.renderCopyCentered(*ammoTexture, NULL, COLUMNA5, FILA2);
+	}
 	renderer.renderCopyCentered(*scoreTexture, NULL, COLUMNA5, FILA1);
 }

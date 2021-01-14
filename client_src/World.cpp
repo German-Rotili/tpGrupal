@@ -108,6 +108,7 @@ void World::actualizar(double playerX, double playerY, double playerAngle,
 }
 
 void World::renderizar(ClientSettings& settings) {
+  //rayCaster.cast2D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
   rayCaster.cast3D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), tx_walls, zBuffer, settings);
 
   std::vector<ZRenderable*> visibles;

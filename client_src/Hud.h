@@ -42,6 +42,8 @@ class Hud {
 	class SdlTexture weapon3;
 	class SdlTexture weapon4;
 	class SdlTexture weapon5;
+	class SdlTexture ammoIcon;
+	class SdlTexture liveIcon;
 	int displayHealth;
 	int displayAmmo;
 	int displayScore;

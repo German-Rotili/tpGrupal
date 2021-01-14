@@ -81,11 +81,11 @@ void Enemy::actualizar() {
 			}
 		} else {
 			if (isRunning) {
+				if (image_index >= 3.999) {
+					image_index = 0;
+				}
 				clip.x = int(image_index + 1) * 64;
 				image_index += animationSpeed;
-				if (image_index >= 4) {
-					image_index -= 4;
-				}
 			} else {
 				clip.x = 0;
 			}

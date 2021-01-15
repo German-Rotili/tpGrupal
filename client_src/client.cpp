@@ -48,7 +48,7 @@ int main(int argc, char* args[]) {
     bool playerIsShooting = false;
     // Info Enemy
     int enemy_id = 0;
-    double enemyAngle = -90;
+    double enemyAngle = -315;
     double enemyX = 2;
     double enemyY = 2;
     int enemyArmaActual = 0;

@@ -3,25 +3,39 @@
 #include <cmath>
 #include <utility>
 #include <tuple>
+#include <vector>
 #include "SDLWrappers/SdlContexto.h"
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
 #include "ClientSettings.h"
+#include "Map/WorldMap.h"
 
-int worldMap[7][10] = {{3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-                       {3, 0, 0, 0, 0, 5, 5, 0, 0, 1},
-                       {3, 0, 0, 0, 0, 5, 5, 0, 0, 3},
-                       {3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                       {3, 0, 0, 0, 0, 0, 0, 0, 0, 3},
-                       {3, 0, 0, 0, 0, 5, 5, 0, 0, 1},
-                       {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+std::vector<std::vector<int>> worldMap = {
+                       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                       {1, 0, 0, 0, 0, 1, 1, 0, 0, 1},
+                       {1, 0, 0, 0, 0, 0, 3, 0, 0, 1},
+                       {1, 0, 0, 0, 0, 0, 1, 0, 0, 1},
+                       {1, 1, 1, 1, 1, 1, 1, 0, 0, 1},
+                       {1, 0, 0, 0, 0, 0, 3, 0, 0, 1},
+                       {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     };
 
+WorldMap myMap(worldMap);
+
 static bool mapHasWall(int x, int y) {
-  if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
+  if (x < 0 || x >= 10 || y < 0 || y >= 7) return false;
   return (worldMap[y][x] != 0);
 }
+
+static bool mapHasXDoor(int x, int y) {
+  if (x < 0 || x >= 10 || y < 0 || y >= 10) return false;
+  return (worldMap[y][x] == 3);
+}
+
+double door_closedPercentage = 1;
+bool door_open = false;
+
 
 static std::tuple<int, int> getTileSteps(double dir) {
   if ((0 > dir) && (dir >= -90)) {
@@ -58,8 +72,8 @@ void RayCaster::cast2D(SdlRenderer& renderer, double x
   double actorDY = y - actorY;
 
   for (int rayNumber = 0; rayNumber < settings.screenWidth; rayNumber++) {
-    int x = actorX;
-    int y = actorY;
+    double x = actorX;
+    double y = actorY;
     double dx = actorDX;
     double dy = actorDY;
 
@@ -119,6 +133,10 @@ void RayCaster::cast2D(SdlRenderer& renderer, double x
       if (!wallFoundY) {
         if (mapHasWall(x+tileStepX, int(yIntercept))) {
           wallFoundY = true;
+          if (mapHasXDoor(x+tileStepX, int(yIntercept))) {
+            x += tileStepX * 0.5;
+            yIntercept += yStep * 0.5;
+          }
         } else {
           x += tileStepX;
           yIntercept += yStep;
@@ -140,6 +158,7 @@ void RayCaster::cast2D(SdlRenderer& renderer, double x
 void RayCaster::cast3D(SdlRenderer& renderer, double x, double y,
    double dirAngle, SdlTexture& walls, double zBuffer[],
    ClientSettings& settings) {
+
   // Piso
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
@@ -155,8 +174,8 @@ void RayCaster::cast3D(SdlRenderer& renderer, double x, double y,
   double actorDY = y - actorY;
 
   for (int rayNumber = 0; rayNumber < settings.screenWidth; rayNumber++) {
-    int x = actorX;
-    int y = actorY;
+    double x = actorX;
+    double y = actorY;
     double dx = actorDX;
     double dy = actorDY;
 
@@ -206,20 +225,43 @@ void RayCaster::cast3D(SdlRenderer& renderer, double x, double y,
     double distortedDist;
 
     // Loopea hasta encontrar pared
-    bool wallFoundX = false;
-    bool wallFoundY = false;
+    const Tile* wallFoundX = NULL;
+    const Tile* wallFoundY = NULL;
+
+    double door_offsetclip = 0;
     for (int i = 0; i <= MAX_DEPTH && !(wallFoundX && wallFoundY) ; i++) {
       if (!wallFoundX) {
-        if (mapHasWall(int(xIntercept), y+tileStepY)) {
-          wallFoundX = true;
+        const Tile* wallFound = myMap.getTile(int(xIntercept), y+tileStepY);
+        if (wallFound) {
+          wallFoundX = wallFound;
         } else {
           y += tileStepY;
           xIntercept += xStep;
         }
       }
+
       if (!wallFoundY) {
-        if (mapHasWall(x+tileStepX, int(yIntercept))) {
-          wallFoundY = true;
+        const Tile* wallFound = myMap.getTile(x+tileStepX, int(yIntercept));
+        if (wallFound) {
+          // Chequeo si es una puerta en X.
+          if (const XDoorTile* xDoorFound = dynamic_cast<const XDoorTile*> (wallFound)) {
+            double auxyIntercept = yIntercept + yStep * xDoorFound->door_depth;
+            // Chequeo si el rayo choca con la puerta en ese punto
+            if (double(auxyIntercept - int(auxyIntercept)) > xDoorFound->getClosedPercentage()) {
+              wallFoundY = wallFound;
+              door_offsetclip = xDoorFound->getClosedPercentage();
+              x += tileStepX * xDoorFound->door_depth;
+              yIntercept += yStep * xDoorFound->door_depth;
+            }
+            else {
+              x += tileStepX;
+              yIntercept += yStep;
+            }
+          }
+          else {
+            wallFoundY = wallFound;
+          }
+
         } else {
           x += tileStepX;
           yIntercept += yStep;
@@ -229,19 +271,19 @@ void RayCaster::cast3D(SdlRenderer& renderer, double x, double y,
 
     double d1 = settings.distance(actorX+actorDX, actorY+actorDY, xIntercept, y+int(tileStepY==1));
     double d2 = settings.distance(actorX+actorDX, actorY+actorDY, x+int(tileStepX==1), yIntercept);
+
     int texture_id;
-    SDL_Rect clip = {0, 128, 1, 64};
+    SDL_Rect clip;
     if (d1 < d2) {
         distortedDist = d1;
-        texture_id = worldMap[y+tileStepY][int(xIntercept)];
-        clip.x = (xIntercept-int(xIntercept))*64;
+        clip = wallFoundX->getClip();
+        clip.x += (xIntercept-int(xIntercept))*64;
     } else {
         distortedDist = d2;
-        texture_id = worldMap[int(yIntercept)][x+tileStepX];
-        clip.x = (yIntercept-int(yIntercept))*64;
+        clip = wallFoundY->getClip();
+        clip.x += (yIntercept-int(yIntercept) - door_offsetclip)*64;
     }
-    clip.x += 64*(texture_id-1);
-
+    clip.w = 1;
     // Distancia proyectada a la camara
     double proy = distortedDist * cos((dirAngle - rayAngle)*M_PI/180);
     double scale = (1/proy) * settings.screenHeight / clip.h;

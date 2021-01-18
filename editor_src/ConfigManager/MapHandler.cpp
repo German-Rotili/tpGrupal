@@ -4,7 +4,8 @@
 #include <fstream>
 
 void MapHandler::emitMap(std::string path, std::vector<std::vector<int>> map) {
-  std::ofstream outfile (path);
+  std::string actualPath = "config/" + path + ".yaml";
+  std::ofstream outfile (actualPath);
   YAML::Emitter out;
 
   int y = map.size();

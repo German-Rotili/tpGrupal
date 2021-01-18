@@ -1,0 +1,23 @@
+gun:
+  speed: 2
+  ammo: 6
+  damage: 5
+
+machine gun:
+  speed: 6
+  ammo: 10
+  damage: 5
+
+minigun:
+  speed: 15
+  ammo: 40
+  damage: 5
+
+rocket launcher:
+  speed: 1
+  ammo: 2
+  damage: 150
+
+actor:
+  speed: 2
+  health: 100

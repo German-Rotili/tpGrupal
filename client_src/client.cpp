@@ -9,21 +9,35 @@
 #include "SDLWrappers/SdlException.h"
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlFont.h"
-
-
 #include "World.h"
 #include "ClientSettings.h"
-
+#include "client_helper.h"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define FPS 30
 #define FOV 61
+#define HOSTNAME 1
+#define SERVICE 2
 
 int main(int argc, char* args[]) {
   try {
     const char* WINDOW_NAME = "Wolfenstein Client";
     const bool FULLSCREEN = false;
+    std::string hostname = args[HOSTNAME]; 
+    std::string service = args[SERVICE]; 
+    Client client(service, hostname);
+
+
+    client.client_receive();
+
+
+
+
+
+    std::string input;
+    const int horizontex = SCREEN_WIDTH/2;
+    const int horizontey = SCREEN_HEIGHT/2;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
     SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
@@ -134,7 +148,8 @@ int main(int argc, char* args[]) {
         else
           playerIsShooting = false;
       }
-
+      client.client_send(input);
+      std::cout << "Supuestamente enviado" << std::endl;
       if (playerAngle >= 0) {
         playerAngle -= 360;
       } else if (playerAngle < -360) {

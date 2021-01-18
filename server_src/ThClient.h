@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 #include <utility>
-#define CHUNK_SZ 64
+#define CHUNK_SZ 1
 
 class ThClient : public Thread{
 private:

@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-ThServer::ThServer(std::string & port, std::string & root):
-        state(true),root(root){
+ThServer::ThServer(std::string & port):
+        state(true){
     server.socket_reuse();
     server.socket_bind(port.c_str());
     server.socket_listen(THREADS_NUM);
@@ -24,6 +24,7 @@ static const void remove_dead(std::vector<Thread*> & list){
 }
 
 void ThServer::run(){
+
     try {
         GameHandler game_handler;//tiene todas las partidas creadas
         while (state){

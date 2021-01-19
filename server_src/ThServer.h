@@ -20,7 +20,6 @@
 class ThServer : public Thread{
 private:
     std::atomic<bool> state;
-    std::string & root;
     Socket server;
     Map *map;
     std::vector<Thread*> threads;
@@ -28,7 +27,7 @@ private:
     void clean_clients(std::vector<Thread*> threads);
 
 public:
-    ThServer(std::string & port, std::string & root);
+    ThServer(std::string & port);
     ~ThServer();
 
     /*Recepciona un socket cliente, asigna una partida

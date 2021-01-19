@@ -2,10 +2,10 @@
 #define SOCKET_H
 #define BUFF_SIZE 32
 #include <sys/types.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
+#include <string>
+#include <cstring>
 #include <sys/socket.h>
 #include <netdb.h>
 
@@ -23,8 +23,8 @@ public:
   void socket_accept(Socket & peer);
   int socket_connect(const char *service, const char *hostname);
   void socket_shutdown(int flags);
-  int socket_receive(char *buffer, int length);
-  int socket_send(const char *buffer, int length);
+  void socket_receive(std::string & buffer);
+  void socket_send(std::string & message);
   Socket(Socket&& other);
   Socket& operator=(Socket&& other);
 };

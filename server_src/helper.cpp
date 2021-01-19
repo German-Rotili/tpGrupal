@@ -14,8 +14,8 @@ Server::Server(){}
 
 Server::~Server(){}
 
-void Server::run(std::string & port, std::string & root){
-    ThServer th(port, root);
+void Server::run(std::string & port){
+    ThServer th(port);
     th.start();
     std::string command = "";
     while (true){

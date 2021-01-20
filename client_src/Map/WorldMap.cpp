@@ -9,14 +9,25 @@ WorldMap::WorldMap(std::vector<std::vector<int>>& rawMap) {
     std::vector<Tile*> v;
     map.push_back(v);
     for (col = row->begin(); col != row->end(); col++) {
-        if ((*col) == 0) {
+        if ((*col) == 21) {
           map[irow].push_back(NULL);
-        } else if (*col == 1) {
-          map[irow].push_back(new WallTile(&WALL_CLIP));
-        } else if (*col == 3) {
+        } else if (*col == 23) {
+          map[irow].push_back(new YDoorTile(&DOOR_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 24) {
           map[irow].push_back(new XDoorTile(&DOOR_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 25) {
+          map[irow].push_back(new SecretYDoorTile(&WALL_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 26) {
+          map[irow].push_back(new SecretXDoorTile(&WALL_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else {
+          map[irow].push_back(new WallTile(&WALL_CLIP));
+          actualizables.push_back(map[irow].back());
         }
-        icol++;
+      icol++;
     }
     this->xsize = icol;
     irow++;
@@ -38,9 +49,18 @@ const Tile* WorldMap::getTile(int x, int y) {
   return map[y][x];
 }
 
+// Combinar estas 2 funciones para mejor performance?
+void WorldMap::setDoorsClosed(bool doorClosed) {
+  for (auto tile = actualizables.begin(); tile != actualizables.end(); tile++) {
+    if (DoorTile* door = dynamic_cast<DoorTile*> (*tile))
+      (door)->setClosed(doorClosed);
+    else if (SecretDoorTile* door = dynamic_cast<SecretDoorTile*> (*tile))
+      (door)->setClosed(doorClosed);
+  }
+}
+
 void WorldMap::actualizar() {
-  std::vector<Tile*>::iterator tile;
-  for (tile = actualizables.begin(); tile != actualizables.end(); tile++) {
+  for (auto tile = actualizables.begin(); tile != actualizables.end(); tile++) {
     (*tile)->actualizar();
   }
 }

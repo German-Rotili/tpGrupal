@@ -4,7 +4,7 @@
 #include "Tile.h"
 class DoorTile: public Tile {
   const double OPENING_SPEED = 0.05;
-  bool isOpened;
+  bool isClosed;
   double closed_percentage;
 
   public:
@@ -12,7 +12,7 @@ class DoorTile: public Tile {
     explicit DoorTile(const SDL_Rect* clip);
     ~DoorTile();
     double getClosedPercentage() const;
-    void setOpened(bool isOpened);
+    void setClosed(bool isClosed);
     void actualizar() override;
 };
 

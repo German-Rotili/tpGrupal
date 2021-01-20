@@ -6,8 +6,10 @@ static bool compareDistances(ZRenderable* o1, ZRenderable* o2) {
 
 World::World(SdlRenderer& renderer, ClientSettings& settings) :
   renderer(renderer),
+  worldMap(rawMap),
   jugador(renderer, settings, 1.5, 2.5, -45, 100, 0, 3),
   hud_jugador(renderer, jugador, settings),
+  rayCaster(settings),
   tx_objects(renderer, "textures/objects.png", 152, 0, 136),
   tx_walls(renderer, "textures/walls.png"),
   tx_guardDogDown(renderer, "textures/enemies/guardDog/down_strip5.png", 152, 0, 136),
@@ -54,13 +56,13 @@ World::World(SdlRenderer& renderer, ClientSettings& settings) :
   std::vector<const SdlTexture*> sDying = {&tx_guardDogDying, &tx_guardDying, &tx_ssDying, &tx_officerDying, &tx_mutantDying};
 
   // Parte de Información inicial del server
-  objetosConstantes.push_back(new Object(2.5, 3.5, barrel_clip, tx_objects));
-  objetosConstantes.push_back(new Object(1.5, 1.5, statue_clip, tx_objects));
-  objetosConstantes.push_back(new Object(1.5, 5.5, statue_clip, tx_objects));
-  objetosConstantes.push_back(new Object(4.5, 1.5, statue_clip, tx_objects));
-  objetosConstantes.push_back(new Object(4.5, 5.5, statue_clip, tx_objects));
-  objetosConstantes.push_back(new Object(5.5, 4.0, lamp_clip, tx_objects));
-  objetosConstantes.push_back(new Object(7.0, 4.0, lamp_clip, tx_objects));
+  objetosConstantes.push_back(new Object(2.5, 3.5, barril_clip, tx_objects));
+  objetosConstantes.push_back(new Object(1.5, 1.5, estatua_clip, tx_objects));
+  objetosConstantes.push_back(new Object(1.5, 5.5, estatua_clip, tx_objects));
+  objetosConstantes.push_back(new Object(4.5, 1.5, estatua_clip, tx_objects));
+  objetosConstantes.push_back(new Object(4.5, 5.5, estatua_clip, tx_objects));
+  objetosConstantes.push_back(new Object(5.5, 5.5, lamp1_clip, tx_objects));
+  objetosConstantes.push_back(new Object(7.5, 5.5, lamp2_clip, tx_objects));
   enemigos.push_back(new Enemy(2.5, 4.5, enemy_clip, 0, sDown, sDownLeft, sLeft,
     sUpLeft, sUp, sShooting, sDying, settings));
 }
@@ -85,7 +87,8 @@ void World::actualizar(double playerX, double playerY, double playerAngle,
   double playerHealth, int playerLives, int playerArmaActual, bool playerIsShooting,
   int playerScore,
   double enemyAngle, double enemyX, double enemyY, int enemyArmaActual,
-  bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting) {
+  bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting,
+  bool allDoorsClosed) {
   jugador.setPosicion(playerX, playerY);
   jugador.setDirection(playerAngle);
   jugador.setHealth(playerHealth);
@@ -103,13 +106,16 @@ void World::actualizar(double playerX, double playerY, double playerAngle,
   enemigos.back()->setIsRunning(enemyIsWalking);
   enemigos.back()->setIsShooting(enemyIsShooting);
 
+  worldMap.setDoorsClosed(allDoorsClosed);
+
+  worldMap.actualizar();
   hud_jugador.actualizar();
 
 }
 
 void World::renderizar(ClientSettings& settings) {
   //rayCaster.cast2D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
-  rayCaster.cast3D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), tx_walls, zBuffer, settings);
+  rayCaster.cast3D(renderer, worldMap, jugador.getX(), jugador.getY(), jugador.getDirection(), tx_walls, zBuffer, settings);
 
   std::vector<ZRenderable*> visibles;
   // obtengo objetos visibles

@@ -46,6 +46,8 @@ double ZRenderable::getDistToPlayer() {
 }
 
 bool ZRenderable::esVisibleDesde(double actorX, double actorY, double actorAngle, ClientSettings& settings) {
+	if ((actorX == x) && (actorY == y))
+		return false;
 	setDifAngle(actorX, actorY, actorAngle);
 	double absDifAngle = abs(getDifAngle());
 	if (absDifAngle <= (settings.fov/1)) {

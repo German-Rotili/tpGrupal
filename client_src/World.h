@@ -11,9 +11,24 @@
 #include "Player.h"
 #include "Hud.h"
 #include "rayCaster.h"
+#include "Map/WorldMap.h"
 class World {
-  // Map map;
   SdlRenderer& renderer;
+
+  std::vector<std::vector<int>> rawMap = {
+                         {1, 1,   1,  1,  1,  1,  1,   1, 1, 1},
+                         {1, 21, 21, 21, 21, 21, 26, 21, 21, 1},
+                         {1, 21, 21, 21, 21, 21,  1,  21, 21, 1},
+                         {1, 21, 21, 21, 21, 21, 24, 21, 21, 1},
+                         {1, 25,   1, 23, 1,  1,  1,  1, 23, 1},
+                         {1, 21, 21, 21, 21, 21, 24, 21, 21, 1},
+                         {1, 21, 21, 21, 21, 21,  1,  1, 23, 1},
+                         {1, 21, 21, 21, 21, 21, 26, 26, 21, 1},
+                         {1, 1,   1, 1,   1, 1,   1,  1,  1, 1},
+                      };
+
+  WorldMap worldMap;
+
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosModificables;
   std::vector<Enemy*> enemigos;
@@ -21,7 +36,7 @@ class World {
   Hud hud_jugador;
 
   double zBuffer[1024];
-  RayCaster rayCaster;  // Auxiliar hasta que haga un refactor?
+  RayCaster rayCaster;
 
   SdlTexture tx_objects;
   SdlTexture tx_walls;
@@ -69,9 +84,28 @@ class World {
 
 
   SDL_Rect enemy_clip = {0, 0, 64, 64};
-  SDL_Rect lamp_clip = {(64+1)*1, (64+1)*3, 64, 64};
-  SDL_Rect barrel_clip = {(64+1)*3, (64+1)*0, 64, 64};
-  SDL_Rect statue_clip = {(64+1)*3, (64+1)*3, 64, 64};
+
+  SDL_Rect barril_clip = {64*0, 64*0, 64, 64};
+  SDL_Rect pozo_clip = {64*1, 64*0, 64, 64};
+  SDL_Rect columna_clip = {64*2, 64*0, 64, 64};
+  SDL_Rect estatua_clip = {64*0, 64*1, 64, 64};
+  SDL_Rect lamp1_clip = {64*1, 64*1, 64, 64};
+  SDL_Rect lamp2_clip = {64*2, 64*1, 64, 64};
+  SDL_Rect charco_clip = {64*0, 64*2, 64, 64};
+  SDL_Rect huesos_clip = {64*1, 64*2, 64, 64};
+  SDL_Rect llave1_clip = {64*2, 64*2, 64, 64};
+  SDL_Rect llave2_clip = {64*0, 64*3, 64, 64};
+  SDL_Rect sangre_clip = {64*1, 64*3, 64, 64};
+  SDL_Rect comida_clip = {64*2, 64*3, 64, 64};
+  SDL_Rect kit_clip = {64*0, 64*4, 64, 64};
+  SDL_Rect balas_clip = {64*1, 64*4, 64, 64};
+  SDL_Rect ametralladora_clip = {64*2, 64*4, 64, 64};
+  SDL_Rect canionDeCadena_clip = {64*0, 64*5, 64, 64};
+  SDL_Rect lanzacohetes_clip = {64*1, 64*5, 64, 64};
+  SDL_Rect cruz_clip = {64*2, 64*5, 64, 64};
+  SDL_Rect copa_clip = {64*0, 64*6, 64, 64};
+  SDL_Rect cofre_clip = {64*1, 64*6, 64, 64};
+  SDL_Rect corona_clip = {64*2, 64*6, 64, 64};
 
 	public:
 		World(SdlRenderer& renderer, ClientSettings& settings);
@@ -80,7 +114,8 @@ class World {
       double playerHealth, int playerLives, int playerArmaActual,
       bool playerIsShooting, int playerScore,
       double enemyAngle, double enemyX, double enemyY, int enemyArmaActual,
-      bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting);
+      bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting,
+      bool allDoorsClosed);
     void renderizar(ClientSettings& settings);
 };
 

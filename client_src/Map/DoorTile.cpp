@@ -2,21 +2,20 @@
 
 DoorTile::DoorTile(const SDL_Rect* clip):
       Tile::Tile(clip),
-      isOpened(false),
+      isClosed(true),
       closed_percentage(0.5) {}
 
 DoorTile::~DoorTile() {}
 
-void DoorTile::setOpened(bool isOpened) {
+void DoorTile::setClosed(bool isClosed) {
   // Si hubo un cambio puedo reproducir un sonido.
-  this->isOpened = isOpened;
+  this->isClosed = isClosed;
 }
 
 void DoorTile::actualizar() {
-  if (isOpened && (closed_percentage > 0)) {
+  if (isClosed && (closed_percentage > 0)) {
     closed_percentage -= OPENING_SPEED;
-  }
-  else if (!isOpened && (closed_percentage < 1)) {
+  } else if (!isClosed && (closed_percentage < 1)) {
     closed_percentage += OPENING_SPEED;
   }
 }

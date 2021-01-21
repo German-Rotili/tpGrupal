@@ -1,3 +1,6 @@
+#ifndef __STRUCTDEFINITIONS_H__
+#define __STRUCTDEFINITIONS_H__
+
 enum WeaponType {GUN, MACHINE_GUN, MINIGUN, ROCKET_LAUNCHER};
 
 typedef struct
@@ -13,3 +16,5 @@ typedef struct
   int speed;
   int health;
 } actorStats_t;
+
+#endif // __STRUCTDEFINITIONS_H__

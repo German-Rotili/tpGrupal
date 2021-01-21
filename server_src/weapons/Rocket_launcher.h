@@ -7,5 +7,5 @@ private:
 public:
      Rocket_launcher(Map &, Config &);
     ~ Rocket_launcher();
-
+    bool fire();
 };

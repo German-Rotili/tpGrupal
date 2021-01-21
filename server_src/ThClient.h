@@ -2,15 +2,15 @@
 #define __SERVER_THCLIENT_H__
 
 #include "../common_src/common_socket.h"
-#include "Map.h"
+//#include "Map.h"
 #include "GameHandler.h"
 #include "GamePlay.h"
 #include "../common_src/common_thread.h"
-#include "player.h"
+//#include "Player.h"
 #include <vector>
 #include <string>
 #include <utility>
-#define CHUNK_SZ 64
+#define CHUNK_SZ 1
 
 class ThClient : public Thread{
 private:

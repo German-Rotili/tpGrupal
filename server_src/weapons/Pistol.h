@@ -1,11 +1,17 @@
+#ifndef __PISTOL_H__
+#define __PISTOL_H__
+
+#include "../../common_src/Timer.h"
 #include "Weapon.h"
 
-
-class  Pistol : public Weapon{
+class Pistol : public Weapon {
 private:
-    /* data */
-public:
-     Pistol(Map &, Config &);
-    ~ Pistol();
+  float get_shot_angle() override;
 
+public:
+  Pistol(Map &, Config &);
+  ~Pistol();
+  void attack();
 };
+
+#endif // __PISTOL_H__

@@ -9,21 +9,35 @@
 #include "SDLWrappers/SdlException.h"
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlFont.h"
-
-
 #include "World.h"
 #include "ClientSettings.h"
-
+#include "client_helper.h"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
 #define FPS 30
 #define FOV 61
+#define HOSTNAME 1
+#define SERVICE 2
 
 int main(int argc, char* args[]) {
   try {
     const char* WINDOW_NAME = "Wolfenstein Client";
     const bool FULLSCREEN = false;
+    std::string hostname = args[HOSTNAME];
+    std::string service = args[SERVICE];
+    Client client(service, hostname);
+
+
+    client.client_receive();
+
+
+
+
+
+    std::string input;
+    const int horizontex = SCREEN_WIDTH/2;
+    const int horizontey = SCREEN_HEIGHT/2;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
     SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
@@ -48,13 +62,15 @@ int main(int argc, char* args[]) {
     bool playerIsShooting = false;
     // Info Enemy
     int enemy_id = 0;
-    double enemyAngle = -90;
+    double enemyAngle = -315;
     double enemyX = 2;
     double enemyY = 2;
     int enemyArmaActual = 0;
     bool enemyIsAlive = true;
     bool enemyIsWalking = false;
     bool enemyIsShooting = false;
+    // Info env
+    bool allDoorsClosed = true;
     //
 
     bool quit = false;
@@ -88,6 +104,10 @@ int main(int argc, char* args[]) {
 
             case SDLK_5:
             playerArmaActual = 4;
+            break;
+
+            case SDLK_e:
+            allDoorsClosed = !allDoorsClosed;
             break;
 
             case SDLK_z:
@@ -129,12 +149,10 @@ int main(int argc, char* args[]) {
       }
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
         // intencion de disparo
-        if (!playerIsShooting)
-          playerIsShooting = true;
-        else
-          playerIsShooting = false;
+        playerIsShooting = !playerIsShooting;
       }
-
+      //client.client_send(input);
+      std::cout << "Supuestamente enviado" << std::endl;
       if (playerAngle >= 0) {
         playerAngle -= 360;
       } else if (playerAngle < -360) {
@@ -161,17 +179,11 @@ int main(int argc, char* args[]) {
         enemyAngle += playerRotationSpeed;
       }
       if (currentKeyStates[SDL_SCANCODE_RCTRL ]) {
-        if (!enemyIsShooting)
-          enemyIsShooting = true;
-        else
-          enemyIsShooting = false;
+        enemyIsShooting = !enemyIsShooting;
       }
       if (currentKeyStates[SDL_SCANCODE_RSHIFT ]) {
         // intencion de disparo
-        if (!enemyIsAlive)
-          enemyIsAlive = true;
-        else
-          enemyIsAlive = false;
+        enemyIsAlive = !enemyIsAlive;
       }
       if (enemyAngle >= 0) {
         enemyAngle -= 360;
@@ -188,7 +200,8 @@ int main(int argc, char* args[]) {
          enemyArmaActual,
          enemyIsAlive,
          enemyIsWalking,
-         enemyIsShooting);
+         enemyIsShooting,
+         allDoorsClosed);
       world.renderizar(settings);
 
       std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();

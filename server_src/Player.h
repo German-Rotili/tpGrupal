@@ -15,20 +15,24 @@ private:
     Position position;
     bool is_alive;
     Map &map;
-    Inventory weapons;
+    Inventory inventory;
     Weapon *current_weapon;
     void move(char intention);
     void attack();
     void acction();
+    void intersects(float impx, float impy, Player &player);
 
 public:
-    Player(Position position);
+    Player(Map,Position position);
+    Player(Map,float, float, float);
     ~Player();
-    int get_pos_x();
-    int get_pos_y();
+    float get_pos_x();
+    float get_pos_y();
+    float get_direction();
     void execute_intention(char intention);
     void get_damaged(int damage);
-    
+    void game_tick();
+    float get_hitbox_radius();
 };
 
 #endif // __SERVER_PLAYER_H__

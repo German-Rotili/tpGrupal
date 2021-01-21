@@ -8,7 +8,7 @@
 #include <string>
 #include <utility>
 #include "ThClient.h"
-#include "Map.h"
+//#include "Map.h"
 #include "ThClient.h"
 #include "GameHandler.h"
 #include "../common_src/common_thread.h"
@@ -20,15 +20,14 @@
 class ThServer : public Thread{
 private:
     std::atomic<bool> state;
-    std::string & root;
     Socket server;
-    Map *map;
+//    Map *map;
     std::vector<Thread*> threads;
     /*Elimina los threads que ya finalizaron su proceso*/
     void clean_clients(std::vector<Thread*> threads);
 
 public:
-    ThServer(std::string & port, std::string & root);
+    ThServer(std::string & port);
     ~ThServer();
 
     /*Recepciona un socket cliente, asigna una partida

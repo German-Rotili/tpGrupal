@@ -76,7 +76,7 @@ void Position::update_angle(char intention){
     }
 
     //no es necesario esto realmente. pero me gustaria que se mantenga el angulo entre 0 y 360. 
-    //quizas en una hora de juego hacemo un overflow sino. 
+    //quizas en una hora de juego hacemos un overflow sino. 
     this->angle = (this->angle < 0) ? 360 + this->angle : this->angle;
     this->angle = (this->angle > 360) ? this->angle - 360 : this-> angle;
     

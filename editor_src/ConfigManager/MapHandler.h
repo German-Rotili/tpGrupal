@@ -11,5 +11,7 @@ public:
   void emitMap(std::string path, std::vector<std::vector<int>> map);
 
   std::vector<std::vector<int>> readMap(std::string path);
+  std::vector<std::vector<int>> readMapFromString(std::string file);
+
 };
 #endif /* MAPHANDLER */

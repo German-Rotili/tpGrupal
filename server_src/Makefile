@@ -1,6 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = *.cpp ../common_src/*.cpp
-
+OBJS = helper.cpp server.cpp ThClient.cpp ThServer.cpp GameHandler.cpp GamePlay.cpp ../common_src/*.cpp ../editor_src/ConfigManager/*.cpp
 #CC specifies which compiler we're using
 CC = g++
 
@@ -14,7 +13,7 @@ COMPILER_FLAGS += -Wall -Werror -pedantic -pedantic-errors
 COMPILER_FLAGS += -O3
 
 # Para valgrind o debug
-COMPILER_FLAGS += -ggdb -DDEBUG -fno-inline
+COMPILER_FLAGS += -ggdb -DDEBUG -fno-inline -lyaml-cpp
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -pthread

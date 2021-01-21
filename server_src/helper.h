@@ -4,12 +4,10 @@
 #include <string>
 
 class Server{
-private:
-    /* data */
 public:
-    Server(/* args */);
+    Server();
     ~Server();
-    void run(std::string & port, std::string & root);
+    void run(std::string & port);
 };
 
 

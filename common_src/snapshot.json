@@ -1,0 +1,44 @@
+{
+    "players":[
+      {
+        "id":1,
+        "position":{"x":1,"y":1,"o":90},
+        "weapon":"knife",
+        "attack": true
+      },
+      {
+        "id":2,
+        "position":{"x":1,"y":1,"o":90},
+        "weapon":"knife",
+        "attack": true
+      }, {
+        "id":3,
+        "position":{"x":1,"y":1,"o":90},
+        "weapon":"knife",
+        "attack": true
+      }
+    ],
+
+    "objects":[
+        {
+            "id":54,
+            "type":"door",
+            "status":true,
+            "position":{"x":1,"y":1}
+        },
+        {
+            "id":54,
+            "type":"rocket",
+            "status":true,
+            "position":{"x":1,"y":1}
+        }
+    ],
+    "player":[
+        {
+            "position":{"x":1,"y":1,"o":90},
+            "weapons":"pistol",
+            "life":100,
+            "attack":false
+          }
+    ]
+   }

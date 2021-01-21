@@ -1,5 +1,5 @@
-#include "Map.h"
-#include "player.h"
+//#include "Map.h"
+//#include "Player.h"
 #include "helper.h"
 #include <iostream>
 #include <string>
@@ -15,9 +15,8 @@ int main(int argc, char const *argv[]){
     try {
         Server serv;
         std::string port = argv[PORT];
-        std::string rootname = argv[ROOT];
         std::string line = "";
-        serv.run(port, rootname);
+        serv.run(port);
     }
     catch(const std::exception& e){
         perror(e.what());

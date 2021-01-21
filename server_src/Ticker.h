@@ -1,3 +1,5 @@
+#include <string>
+
 class Ticker
 {
 private:
@@ -5,8 +7,6 @@ private:
 public:
     Ticker(/* args */);
     Ticker();
-    void start_Ticker();
-    __event void ticked();
 };
 
 

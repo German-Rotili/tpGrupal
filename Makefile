@@ -94,7 +94,7 @@ endif
 
 
 # Si no especifica archivos, tomo todos.
-# fuentes_client ?= $(wildcard ./client_src/*.$(extension))
+fuentes_client ?= $(wildcard ./client_src/*.$(extension))
 fuentes_server ?= $(wildcard ./server_src/*.$(extension))
 fuentes_common ?= $(wildcard ./common_src/*.$(extension))
 directorios = $(shell find . -type d -regex '.*\w+')
@@ -122,18 +122,18 @@ COMPILERFLAGS-TSAN = $(COMPILERFLAGS) -fsanitize=thread
 all: server
 
 o_common_files = $(patsubst %.$(extension),%.o,$(fuentes_common))
-# o_client_files = $(patsubst %.$(extension),%.o,$(fuentes_client))
+o_client_files = $(patsubst %.$(extension),%.o,$(fuentes_client))
 o_server_files = $(patsubst %.$(extension),%.o,$(fuentes_server))
 o-tsan_files = $(patsubst %.$(extension),%.o-tsan,$(fuentes_server) $(fuentes_common))
 
-# client: $(o_common_files) $(o_client_files)
-# 	@if [ -z "$(o_client_files)" ]; \
-# 	then \
-# 		echo "No hay archivos de entrada en el directorio actual para el cliente. Recuerde que los archivos deben respetar la forma 'client*.$(extension)' y que no se aceptan directorios anidados."; \
-# 		if [ -n "$(directorios)" ]; then echo "Directorios encontrados: $(directorios)"; fi; \
-# 		false; \
-# 	fi >&2
-# 	$(LD) $(o_common_files) $(o_client_files) -o $@ $(LDFLAGS)
+client: $(o_common_files) $(o_client_files)
+	@if [ -z "$(o_client_files)" ]; \
+	then \
+		echo "No hay archivos de entrada en el directorio actual para el cliente. Recuerde que los archivos deben respetar la forma 'client*.$(extension)' y que no se aceptan directorios anidados."; \
+		if [ -n "$(directorios)" ]; then echo "Directorios encontrados: $(directorios)"; fi; \
+		false; \
+	fi >&2
+	$(LD) $(o_common_files) $(o_client_files) -o $@ $(LDFLAGS)
 
 server: $(o_common_files) $(o_server_files)
 	@if [ -z "$(o_server_files)" ]; \
@@ -157,8 +157,8 @@ server-tsan: $(o-tsan_files)
 	fi >&2
 	$(LD) $(o-tsan_files) -o $@ $(LDFLAGS-TSAN)
 
-clean: clean-obj
-	$(RM) -f $(o_common_files) $(o_server_files) $(target-tsan) client server server-tsan
+clean:
+	$(RM) -f ./common_src/*.o ./server_src/*.o ./client_src/*.o client server
 
 clean-obj:
 	$(RM) $(o_files) $(o-tsan_files)

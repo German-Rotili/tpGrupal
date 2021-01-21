@@ -1,6 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = *.cpp ../common_src/*.cpp
-
+OBJS = helper.cpp server.cpp ThClient.cpp ThServer.cpp GameHandler.cpp GamePlay.cpp ../common_src/*.cpp ../editor_src/ConfigManager/*.cpp
 #CC specifies which compiler we're using
 CC = g++
 

@@ -11,7 +11,7 @@
 #include "SDLWrappers/SdlFont.h"
 #include "World.h"
 #include "ClientSettings.h"
-//#include "client_helper.h"
+#include "client_helper.h"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
@@ -24,12 +24,12 @@ int main(int argc, char* args[]) {
   try {
     const char* WINDOW_NAME = "Wolfenstein Client";
     const bool FULLSCREEN = false;
-    //std::string hostname = args[HOSTNAME];
-    //std::string service = args[SERVICE];
-    //Client client(service, hostname);
+    std::string hostname = args[HOSTNAME];
+    std::string service = args[SERVICE];
+    Client client(service, hostname);
 
 
-    //client.client_receive();
+    client.client_receive();
 
 
 

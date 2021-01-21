@@ -5,8 +5,10 @@
 #include <fstream>
 #include <sstream>
 #include <streambuf>
-
 #include "../editor_src/ConfigManager/MapHandler.h"
+#include <string>
+#include <fstream>
+#include <streambuf>
 
 void ThClient::run(){
     try {
@@ -17,14 +19,20 @@ void ThClient::run(){
         std::string id;
         //GamePlay *game_play = game_handler.select_match(id);
 
+        std::ifstream t("../editor_src/config/map1.yaml");
+        std::string str((std::istreambuf_iterator<char>(t)),
+                 std::istreambuf_iterator<char>());
+        peer.socket_send(str);
 
+        // MapHandler maphandler;
+        // std::vector<std::vector<int>> map = maphandler.readMapFromString(str);
+        // for (auto & element : map) {
+        //     for (auto & value : element) {
+        //         std::cout << value << std::endl;
+        //     }
+        // }
+    
 
-    std::string linea;
-    std::ifstream archivo("../editor_src/config/map1.yaml");
-    while (std::getline(archivo, linea)) {
-        std::cout << linea << std::endl;
-    }
-    //peer.socket_send(body);
 
         // while (state){
         //     std::string petition;

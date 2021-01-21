@@ -101,7 +101,6 @@ void Socket::socket_receive(std::string & response){
   char buffer[BUFF_SIZE];
   while (received > 0) {
     received = recv(this->fd, buffer, BUFF_SIZE, 0);
-    std::cout << response << std::endl;
     if (received > 0)
       response.append(buffer, received);
     if (received < 0)

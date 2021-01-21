@@ -17,11 +17,13 @@ void Client::client_send(std::string line){
 }
 
 void Client::client_receive(){
+    std::string s = "";
+    std::cout << "receive" << std::endl;
 
-    std::string s;
     client.socket_receive(s);
     MapHandler maphandler;
     std::vector<std::vector<int>> map = maphandler.readMapFromString(s);
+    std::cout << "receive" << std::endl;
 
     for (auto & element : map) {
         for (auto & value : element) {

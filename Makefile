@@ -157,8 +157,8 @@ server-tsan: $(o-tsan_files)
 	fi >&2
 	$(LD) $(o-tsan_files) -o $@ $(LDFLAGS-TSAN)
 
-clean: clean-obj
-	$(RM) -f $(o_common_files) $(o_server_files) $(target-tsan) client server server-tsan
+clean:
+	$(RM) -f ./common_src/*.o ./server_src/*.o ./client_src/*.o client server
 
 clean-obj:
 	$(RM) $(o_files) $(o-tsan_files)

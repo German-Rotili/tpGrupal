@@ -18,9 +18,13 @@ void ThClient::run(){
         //GamePlay *game_play = game_handler.select_match(id);
 
 
-    std::ifstream ifs("../editor_src/config/map1.yaml");
-    std::string map( (std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
-    peer.socket_send(map);
+
+    std::string linea;
+    std::ifstream archivo("../editor_src/config/map1.yaml");
+    while (std::getline(archivo, linea)) {
+        std::cout << linea << std::endl;
+    }
+    //peer.socket_send(body);
 
         // while (state){
         //     std::string petition;

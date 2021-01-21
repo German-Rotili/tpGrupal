@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include  <iostream>
 #include "common_socket.h"
 #include "common_exception.h"
 #include "common_socket_exception.h"
@@ -100,6 +101,7 @@ void Socket::socket_receive(std::string & response){
   char buffer[BUFF_SIZE];
   while (received > 0) {
     received = recv(this->fd, buffer, BUFF_SIZE, 0);
+    std::cout << response << std::endl;
     if (received > 0)
       response.append(buffer, received);
     if (received < 0)
@@ -109,6 +111,7 @@ void Socket::socket_receive(std::string & response){
 
 void Socket::socket_send(std::string & message){
   int total_sent = 0;
+  std::cout << message << std::endl;
   int lenght = message.length();
   while (total_sent < lenght) {
     int sent = send(this->fd, message.substr(total_sent).c_str(),

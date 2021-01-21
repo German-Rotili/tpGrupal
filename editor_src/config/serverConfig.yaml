@@ -21,3 +21,4 @@ rocket launcher:
 actor:
   speed: 2
   health: 100
+  max ammo: 200

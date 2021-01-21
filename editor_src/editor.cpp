@@ -20,7 +20,7 @@
 
 
 std::vector<std::vector<int>> createMap(int x, int y) {
-  return std::vector<std::vector<int>>(y, std::vector<int>(x, 21));
+  return std::vector<std::vector<int>>(y, std::vector<int>(x, 57));
 }
 
 int checkMap(int x, int y, std::vector<std::vector<int>>& map) {
@@ -43,6 +43,7 @@ int main(int argc, char* args[]) {
     SdlRenderer renderer = window.getRenderer();
 
     SdlTexture walls(renderer, "textures/walls2.png");
+    SdlTexture objects(renderer, "textures/objects2.png", 152, 0 , 136);
 
     int playerx = realWidth/2;
     int playery = SCREEN_HEIGHT/2;
@@ -59,6 +60,8 @@ int main(int argc, char* args[]) {
     int action = 0;
     int scrollY = 0;
     int scrollX = 0;
+    int menuScrollX = 0;
+    int IDScrollOffset = 0;
     int wallIdX = 0;
     int wallIdY = 0;
 
@@ -100,6 +103,16 @@ int main(int argc, char* args[]) {
             if (scrollX < map.at(1).size() - ((realWidth - MENU_OFFSET)/64))
               scrollX += 1;
             break;
+
+            case SDLK_d:
+            if (menuScrollX < 2)
+              menuScrollX += 1;
+            break;
+
+            case SDLK_a:
+            if (menuScrollX > 0)
+              menuScrollX -= 1;
+            break;
           }
         } else if (e.type == SDL_KEYDOWN && (save == true || load == true)) {
           switch (e.key.keysym.sym) {
@@ -132,7 +145,7 @@ int main(int argc, char* args[]) {
             }
             break;
           }
-        } else if (e.type == SDL_TEXTINPUT) {
+        } else if (e.type == SDL_TEXTINPUT && (save == true || load == true)) {
           if(!( SDL_GetModState() & KMOD_CTRL && (e.text.text[ 0 ] == 'c' ||
           e.text.text[ 0 ] == 'C' || e.text.text[ 0 ] == 'v' ||
           e.text.text[ 0 ] == 'V' ))) {
@@ -148,7 +161,13 @@ int main(int argc, char* args[]) {
             } else if (e.button.y >= 64 && e.button.y <= 640) {
               wallIdX = int(e.button.x / 64);
               wallIdY = int((e.button.y - 64) / 64);
+              IDScrollOffset = menuScrollX;
               action = wallIdX + (wallIdY*3);
+              if (IDScrollOffset == 1) {
+                action += 27;
+              } else if (IDScrollOffset == 2) {
+                action += 27 * 2;
+              }
             } else if ((e.button.x >= 5 && e.button.x <= 55) &&
               (e.button.y >= 5 && e.button.y <= 40)) {
               save = true;
@@ -160,72 +179,63 @@ int main(int argc, char* args[]) {
               save = false;
               renderText = true;
             }
-            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-            //   (e.button.y >= SCREEN_HEIGHT/5 &&
-            //   e.button.y <= (SCREEN_HEIGHT/5) + TILE_SIZE)) {
-            //   action = 0;
-            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-            //   (e.button.y >= 2 * (SCREEN_HEIGHT/5) &&
-            //   e.button.y <= (2 * (SCREEN_HEIGHT/5)) + TILE_SIZE)) {
-            //   action = 1;
-            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-            //   (e.button.y >= 3 * (SCREEN_HEIGHT/5) &&
-            //   e.button.y <= (3 * (SCREEN_HEIGHT/5)) + TILE_SIZE)) {
-            //   action = 2;
-            // } else if ((e.button.x >= 32 && e.button.x <= 96) &&
-            //   (e.button.y >= 4 * (SCREEN_HEIGHT/5) &&
-            //   e.button.y <= (4 * (SCREEN_HEIGHT/5)) + TILE_SIZE)) {
-            //   action = 3;
-            // } else if ((e.button.x >= 5 && e.button.x <= 55) &&
-            //   (e.button.y >= 5 && e.button.y <= 40)) {
-            //   save = true;
-            //   load = false;
-            //   renderText = true;
-            // } else if ((e.button.x >= 65 && e.button.x <= 115) &&
-            //   (e.button.y >= 5 && e.button.y <= 40)) {
-            //   load = true;
-            //   save = false;
-            //   renderText = true;
-            // }
           }
         }
       }
-
-      // std::cout << map.at(0).size() << "\n";
-      // std::cout << map.size() << "\n";
 
       renderer.setRenderDrawColor(255, 255, 255, 255);
       renderer.renderClear();
       int start = 0;
       SDL_Rect clip;
+
       // Dibujar mapa
       for (int i = scrollX; i < map.at(0).size(); i++) {
         for (int j = scrollY; j < map.size(); j++) {
-          if (checkMap(i, j, map) >= 0 && checkMap(i, j, map) <= 20) {
+          if (checkMap(i, j, map) >= 0 && checkMap(i, j, map) <= 35) {
             wallIdX = checkMap(i, j, map) % 3;
-            wallIdY = (checkMap(i, j, map) - wallIdX) / 3;
+            wallIdY = (checkMap(i, j, map)) / 3;
             clip.x = wallIdX * TILE_SIZE;
             clip.y = wallIdY * TILE_SIZE;
             clip.w = TILE_SIZE;
             clip.h = TILE_SIZE;
             renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
-          } else if (checkMap(i, j, map) == 21) {
+          } else if (checkMap(i, j, map) >= 36 && checkMap(i, j, map) <= 56) {
+            wallIdX = (checkMap(i, j, map) - 36) % 3;
+            wallIdY = (checkMap(i, j, map) - 36) / 3;
+            clip.x = wallIdX * TILE_SIZE;
+            clip.y = wallIdY * TILE_SIZE;
+            clip.w = TILE_SIZE;
+            clip.h = TILE_SIZE;
+            renderer.renderCopy(objects, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+          } else if (checkMap(i, j, map) == 57) {
             renderer.setRenderDrawColor(0, 0, 0, 255);
             renderer.renderDrawRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
-          } else if (checkMap(i, j, map) == 22) {
+          } else if (checkMap(i, j, map) == 58) {
             renderer.setRenderDrawColor(0, 255, 0, 255);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, ((j-scrollY)*TILE_SIZE) + 28, 8, 8);
-          } else if (checkMap(i, j, map) == 23) {
-            renderer.setRenderDrawColor(205, 133, 63, 255);
-            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, ((j-scrollY)*TILE_SIZE) + 30, TILE_SIZE, 4);
-          } else if (checkMap(i, j, map) == 24) {
-            renderer.setRenderDrawColor(205, 133, 63, 255);
-            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 30, ((j-scrollY)*TILE_SIZE), 4, TILE_SIZE);
-          } else if (checkMap(i, j, map) == 25) {
+          } else if (checkMap(i, j, map) == 59) {
+            clip.x = 128;
+            clip.y = 704;
+            clip.w = 64;
+            clip.h = 64;
+
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+            renderer.setRenderDrawColor(212, 175, 55, 255);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, (j-scrollY)*TILE_SIZE+28, 8, 8);
+          } else if (checkMap(i, j, map) == 60) {
+            clip.x = 128;
+            clip.y = 704;
+            clip.w = 64;
+            clip.h = 64;
+
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+            renderer.setRenderDrawColor(0, 173, 238, 255);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, (j-scrollY)*TILE_SIZE+28, 8, 8);
+          } else if (checkMap(i, j, map) == 61) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, ((j-scrollY)*TILE_SIZE) + 30, TILE_SIZE, 4);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, ((j-scrollY)*TILE_SIZE) + 28, 8, 8);
-          } else if (checkMap(i, j, map) == 26) {
+          } else if (checkMap(i, j, map) == 62) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 30, ((j-scrollY)*TILE_SIZE), 4, TILE_SIZE);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, ((j-scrollY)*TILE_SIZE) + 28, 8, 8);
@@ -233,42 +243,92 @@ int main(int argc, char* args[]) {
         }
       }
 
-      SDL_Rect clipMenu;
-      clipMenu.x = 0;
-      clipMenu.y = 0;
-      clipMenu.w = 192;
-      clipMenu.h = 448;
-
-      wallIdX = action % 3;
-      wallIdY = (action - wallIdX) / 3;
+      SDL_Rect clipMenuWalls;
+      SDL_Rect clipMenuObjects;
 
       renderer.setRenderDrawColor(100, 100, 100, 255);
       renderer.renderFillRect(0, 0, MENU_OFFSET, SCREEN_HEIGHT);
 
-      renderer.setRenderDrawColor(255, 255, 255, 255);
-      renderer.renderFillRect(0, 512, 64, 64);
+      if (menuScrollX == 0) {
+        clipMenuWalls.x = 0;
+        clipMenuWalls.y = 0;
+        clipMenuWalls.w = 192;
+        clipMenuWalls.h = 576;
 
-      renderer.renderCopy(walls, &clipMenu, 0, 64, 1, 1);
+        renderer.renderCopy(walls, &clipMenuWalls, 0, 64, 1, 1);
 
-      renderer.setRenderDrawColor(0, 255, 0, 255);
-      renderer.renderFillRect(64+28, 512+28, 8, 8);
+        if (IDScrollOffset == 0) {
+          wallIdX = (action - (IDScrollOffset * 27)) % 3;
+          wallIdY = (action - wallIdX - (IDScrollOffset * 27)) / 3;
 
-      renderer.setRenderDrawColor(205, 133, 63, 255);
-      renderer.renderFillRect(128, 512+30, 64, 4);
+          renderer.setRenderDrawColor(255, 165, 0, 255);
+          renderer.renderDrawRect(wallIdX * 64, (wallIdY * 64) + 64, 64, 64);
+        }
+      } else if (menuScrollX == 1) {
+        clipMenuWalls.x = 0;
+        clipMenuWalls.y = 576;
+        clipMenuWalls.w = 192;
+        clipMenuWalls.h = 192;
 
-      renderer.setRenderDrawColor(205, 133, 63, 255);
-      renderer.renderFillRect(0+30, 512+64, 4, 64);
+        renderer.renderCopy(walls, &clipMenuWalls, 0, 64, 1, 1);
 
-      renderer.setRenderDrawColor(205, 133, 63, 255);
-      renderer.renderFillRect(64, 512+64+30, 64, 4);
-      renderer.renderFillRect(64+28, 512+64+28, 8, 8);
+        clipMenuObjects.x = 0;
+        clipMenuObjects.y = 0;
+        clipMenuObjects.w = 192;
+        clipMenuObjects.h = 384;
 
-      renderer.setRenderDrawColor(205, 133, 63, 255);
-      renderer.renderFillRect(128+30, 512+64, 4, 64);
-      renderer.renderFillRect(128+28, 512+64+28, 8, 8);
+        renderer.renderCopy(objects, &clipMenuObjects, 0, 256, 1, 1);
 
-      renderer.setRenderDrawColor(255, 165, 0, 255);
-      renderer.renderDrawRect(wallIdX * 64, (wallIdY * 64) + 64, 64, 64);
+        if (IDScrollOffset == 1) {
+          wallIdX = (action - (IDScrollOffset * 27)) % 3;
+          wallIdY = (action - wallIdX - (IDScrollOffset * 27)) / 3;
+
+          renderer.setRenderDrawColor(255, 165, 0, 255);
+          renderer.renderDrawRect(wallIdX * 64, (wallIdY * 64) + 64, 64, 64);
+        }
+      } else if (menuScrollX == 2) {
+        clipMenuObjects.x = 0;
+        clipMenuObjects.y = 384;
+        clipMenuObjects.w = 192;
+        clipMenuObjects.h = 64;
+
+        renderer.renderCopy(objects, &clipMenuObjects, 0, 64, 1, 1);
+
+        renderer.setRenderDrawColor(255, 255, 255, 255);
+        renderer.renderFillRect(0, 128, 64, 64);
+
+        renderer.setRenderDrawColor(0, 255, 0, 255);
+        renderer.renderFillRect(28+64, 128+28, 8, 8);
+
+        clipMenuWalls.x = 128;
+        clipMenuWalls.y = 704;
+        clipMenuWalls.w = 64;
+        clipMenuWalls.h = 64;
+
+        renderer.renderCopy(walls, &clipMenuWalls, 128, 128, 1, 1);
+        renderer.setRenderDrawColor(212, 175, 55, 255);
+        renderer.renderFillRect(28+128, 128+28, 8, 8);
+
+        renderer.renderCopy(walls, &clipMenuWalls, 0, 192, 1, 1);
+        renderer.setRenderDrawColor(0, 173, 238, 255);
+        renderer.renderFillRect(28, 192+28, 8, 8);
+
+        renderer.setRenderDrawColor(205, 133, 63, 255);
+        renderer.renderFillRect(64, 192+30, 64, 4);
+        renderer.renderFillRect(64+28, 192+28, 8, 8);
+
+        renderer.setRenderDrawColor(205, 133, 63, 255);
+        renderer.renderFillRect(128+30, 192, 4, 64);
+        renderer.renderFillRect(128+28, 192+28, 8, 8);
+
+        if (IDScrollOffset == 2) {
+          wallIdX = (action - (IDScrollOffset * 27)) % 3;
+          wallIdY = (action - wallIdX - (IDScrollOffset * 27)) / 3;
+
+          renderer.setRenderDrawColor(255, 165, 0, 255);
+          renderer.renderDrawRect(wallIdX * 64, (wallIdY * 64) + 64, 64, 64);
+        }
+      }
 
       renderer.renderCopyCentered(tx_save_button, NULL, 30, 20);
       renderer.setRenderDrawColor(255, 255, 255, 255);

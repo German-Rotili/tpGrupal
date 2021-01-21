@@ -41,5 +41,6 @@ actorStats_t ServerConfigHandler::getActorStats() {
   actorStats_t actor;
   actor.speed = actorNode["speed"].as<int>();
   actor.health = actorNode["health"].as<int>();
+  actor.max_ammo = actorNode["max ammo"].as<int>();
   return actor;
 }

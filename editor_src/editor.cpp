@@ -193,7 +193,7 @@ int main(int argc, char* args[]) {
       // Dibujar mapa
       for (int i = scrollX; i < map.at(0).size(); i++) {
         for (int j = scrollY; j < map.size(); j++) {
-          if (checkMap(i, j, map) >= 0 && checkMap(i, j, map) <= 35) {
+          if (checkMap(i, j, map) >= 0 && checkMap(i, j, map) <= 33) {
             wallIdX = checkMap(i, j, map) % 3;
             wallIdY = (checkMap(i, j, map)) / 3;
             clip.x = wallIdX * TILE_SIZE;
@@ -209,6 +209,24 @@ int main(int argc, char* args[]) {
             clip.w = TILE_SIZE;
             clip.h = TILE_SIZE;
             renderer.renderCopy(objects, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+          } else if (checkMap(i, j, map) == 34) {
+            clip.x = 64;
+            clip.y = 704;
+            clip.w = 64;
+            clip.h = 64;
+
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+            renderer.setRenderDrawColor(205, 133, 63, 255);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE+30, 64, 4);
+          } else if (checkMap(i, j, map) == 35) {
+            clip.x = 64;
+            clip.y = 704;
+            clip.w = 64;
+            clip.h = 64;
+
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+            renderer.setRenderDrawColor(205, 133, 63, 255);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 30, (j-scrollY)*TILE_SIZE, 4, 64);
           } else if (checkMap(i, j, map) == 57) {
             renderer.setRenderDrawColor(0, 0, 0, 255);
             renderer.renderDrawRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -296,12 +314,25 @@ int main(int argc, char* args[]) {
 
         renderer.renderCopy(walls, &clipMenuWalls, 0, 64, 1, 1);
 
+        clipMenuWalls.x = 64;
+        clipMenuWalls.y = 704;
+        clipMenuWalls.w = 64;
+        clipMenuWalls.h = 64;
+
+        renderer.renderCopy(walls, &clipMenuWalls, 128, 192, 1, 1);
+
         clipMenuObjects.x = 0;
         clipMenuObjects.y = 0;
         clipMenuObjects.w = 192;
         clipMenuObjects.h = 384;
 
         renderer.renderCopy(objects, &clipMenuObjects, 0, 256, 1, 1);
+
+        renderer.setRenderDrawColor(205, 133, 63, 255);
+        renderer.renderFillRect(64, 192+30, 64, 4);
+
+        renderer.setRenderDrawColor(205, 133, 63, 255);
+        renderer.renderFillRect(128+30, 192, 4, 64);
 
         if (IDScrollOffset == 1) {
           wallIdX = (action - (IDScrollOffset * 27)) % 3;

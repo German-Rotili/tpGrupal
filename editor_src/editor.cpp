@@ -123,6 +123,8 @@ int main(int argc, char* args[]) {
               map = mapHandler.readMap(inputText);
             }
             renderText = false;
+            save = false;
+            load = false;
             break;
 
             case SDLK_BACKSPACE:
@@ -222,7 +224,18 @@ int main(int argc, char* args[]) {
             renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
             renderer.setRenderDrawColor(212, 175, 55, 255);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, (j-scrollY)*TILE_SIZE+28, 8, 8);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE+30, 64, 4);
           } else if (checkMap(i, j, map) == 60) {
+            clip.x = 128;
+            clip.y = 704;
+            clip.w = 64;
+            clip.h = 64;
+
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+            renderer.setRenderDrawColor(212, 175, 55, 255);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, (j-scrollY)*TILE_SIZE+28, 8, 8);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 30, (j-scrollY)*TILE_SIZE, 4, 64);
+          } else if (checkMap(i, j, map) == 61) {
             clip.x = 128;
             clip.y = 704;
             clip.w = 64;
@@ -231,11 +244,22 @@ int main(int argc, char* args[]) {
             renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
             renderer.setRenderDrawColor(0, 173, 238, 255);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, (j-scrollY)*TILE_SIZE+28, 8, 8);
-          } else if (checkMap(i, j, map) == 61) {
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE+30, 64, 4);
+          } else if (checkMap(i, j, map) == 62) {
+            clip.x = 128;
+            clip.y = 704;
+            clip.w = 64;
+            clip.h = 64;
+
+            renderer.renderCopy(walls, &clip, ((i-scrollX)*TILE_SIZE) + MENU_OFFSET, (j-scrollY)*TILE_SIZE, 1, 1);
+            renderer.setRenderDrawColor(0, 173, 238, 255);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, (j-scrollY)*TILE_SIZE+28, 8, 8);
+            renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 30, (j-scrollY)*TILE_SIZE, 4, 64);
+          } else if (checkMap(i, j, map) == 63) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET, ((j-scrollY)*TILE_SIZE) + 30, TILE_SIZE, 4);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, ((j-scrollY)*TILE_SIZE) + 28, 8, 8);
-          } else if (checkMap(i, j, map) == 62) {
+          } else if (checkMap(i, j, map) == 64) {
             renderer.setRenderDrawColor(205, 133, 63, 255);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 30, ((j-scrollY)*TILE_SIZE), 4, TILE_SIZE);
             renderer.renderFillRect(((i-scrollX)*TILE_SIZE) + MENU_OFFSET + 28, ((j-scrollY)*TILE_SIZE) + 28, 8, 8);
@@ -308,18 +332,30 @@ int main(int argc, char* args[]) {
         renderer.renderCopy(walls, &clipMenuWalls, 128, 128, 1, 1);
         renderer.setRenderDrawColor(212, 175, 55, 255);
         renderer.renderFillRect(28+128, 128+28, 8, 8);
+        renderer.renderFillRect(128, 128+30, 64, 4);
 
         renderer.renderCopy(walls, &clipMenuWalls, 0, 192, 1, 1);
-        renderer.setRenderDrawColor(0, 173, 238, 255);
+        renderer.setRenderDrawColor(212, 175, 55, 255);
         renderer.renderFillRect(28, 192+28, 8, 8);
+        renderer.renderFillRect(30, 192, 4, 64);
 
-        renderer.setRenderDrawColor(205, 133, 63, 255);
-        renderer.renderFillRect(64, 192+30, 64, 4);
+        renderer.renderCopy(walls, &clipMenuWalls, 64, 192, 1, 1);
+        renderer.setRenderDrawColor(0, 173, 238, 255);
         renderer.renderFillRect(64+28, 192+28, 8, 8);
+        renderer.renderFillRect(64, 192+30, 64, 4);
+
+        renderer.renderCopy(walls, &clipMenuWalls, 128, 192, 1, 1);
+        renderer.setRenderDrawColor(0, 173, 238, 255);
+        renderer.renderFillRect(128+28, 192+28, 8, 8);
+        renderer.renderFillRect(128+30, 192, 4, 64);
 
         renderer.setRenderDrawColor(205, 133, 63, 255);
-        renderer.renderFillRect(128+30, 192, 4, 64);
-        renderer.renderFillRect(128+28, 192+28, 8, 8);
+        renderer.renderFillRect(0, 256+30, 64, 4);
+        renderer.renderFillRect(28, 256+28, 8, 8);
+
+        renderer.setRenderDrawColor(205, 133, 63, 255);
+        renderer.renderFillRect(64+30, 256, 4, 64);
+        renderer.renderFillRect(64+28, 256+28, 8, 8);
 
         if (IDScrollOffset == 2) {
           wallIdX = (action - (IDScrollOffset * 27)) % 3;

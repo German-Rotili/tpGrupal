@@ -23,13 +23,13 @@ Player::Player(SdlRenderer& renderer, const ClientSettings& settings,
 		DRAW_SCALE(double(settings.screenWidth) * 0.00586),
 		DRAW_WEAPON_Y(settings.screenHeight-(weaponClip.h/2)*DRAW_SCALE),
 		animationSpeed(double(2) * cantFrames / settings.fps),
-		cuchillo(true, 999),
-		pistola(true, 8),
-		ametralladora(true, 0),
-		canionDeCadena(true, 0),
-		lanzacohetes(true, 0) {
+		cuchillo(true),
+		pistola(true),
+		ametralladora(true),
+		canionDeCadena(true),
+		lanzacohetes(true),
+		cantBalas(8) {
 			this->animarArma = false;
-			this->armaActual = &pistola;
 			this->idArmaActual = 1;
 }
 
@@ -52,8 +52,8 @@ int Player::getHealth() const {
 	return int(health);
 }
 
-int Player::getCantBalasArmaActual() const {
-	return armaActual->getCantBalas();
+int Player::getCantBalas() const {
+	return cantBalas;
 }
 
 int Player::getScore() const {
@@ -108,21 +108,12 @@ void Player::setIsShooting(bool isShooting) {
 }
 
 void Player::setArmaActual(int idArma) {
-	if (idArma == 0) {
-		armaActual = &cuchillo;
-	} else if (idArma == 1) {
-		armaActual = &pistola;
-	} else if (idArma == 2) {
-		armaActual = &ametralladora;
-	} else if (idArma == 3) {
-		armaActual = &canionDeCadena;
-	} else if (idArma == 4) {
-		armaActual = &lanzacohetes;
-	} else {
-		return;
-	}
 	this->weaponClip.y = (64+1)*idArma;
 	idArmaActual = idArma;
+}
+
+void Player::setCantBalas(int cantBalas) {
+	this->cantBalas = cantBalas;
 }
 
 void Player::renderizar(ClientSettings& settings) {

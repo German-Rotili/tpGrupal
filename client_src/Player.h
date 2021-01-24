@@ -28,12 +28,12 @@ class Player {
 	const int DRAW_WEAPON_Y;
 	const double animationSpeed;
 
-	PlayerWeapon* armaActual;
 	PlayerWeapon cuchillo;
 	PlayerWeapon pistola;
 	PlayerWeapon ametralladora;
 	PlayerWeapon canionDeCadena;
 	PlayerWeapon lanzacohetes;
+	int cantBalas;
 
 	public:
 		bool animarArma;
@@ -47,7 +47,7 @@ class Player {
 		double getDirection() const;
 		int getHealth() const;
 		int getIdArmaActual() const;
-		int getCantBalasArmaActual() const;
+		int getCantBalas() const;
 		int getScore() const;
 		int getLives() const;
 		std::vector<bool> getArmasDisponibles() const;
@@ -59,6 +59,7 @@ class Player {
 		void setLives(int lives);
 		void setArmaActual(int idArma);
 		void setIsShooting(bool isShooting);
+		void setCantBalas(int cantBalas);
 
     void renderizar(ClientSettings& settings);
 };

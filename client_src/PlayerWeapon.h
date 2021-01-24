@@ -1,17 +1,12 @@
 #ifndef PLAYERWEAPON_H
 #define PLAYERWEAPON_H
 
-#define BALAS_INF 999
-
 class PlayerWeapon {
   bool disponible;
-  int cantBalas;
 
   public:
-   PlayerWeapon(bool obtenida, int balasIniciales);
+   PlayerWeapon(bool obtenida);
    ~PlayerWeapon();
-   void setCantBalas(int balasActuales);
-   int getCantBalas() const;
    bool estaDisponible() const;
 };
 

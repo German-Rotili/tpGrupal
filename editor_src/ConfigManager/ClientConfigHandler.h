@@ -17,5 +17,7 @@ public:
   int getWidth();
 
   int getFOV();
+
+  bool getFullscreen();
 };
 #endif /* CLIENTCONFIGHANDLER */

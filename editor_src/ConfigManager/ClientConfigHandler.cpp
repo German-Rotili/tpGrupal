@@ -21,3 +21,8 @@ int ClientConfigHandler::getFOV() {
   int FOV = root["FOV"].as<int>();
   return FOV;
 }
+
+bool ClientConfigHandler::getFullscreen() {
+  bool fullscreen = root["fullscreen"].as<bool>();
+  return fullscreen;
+}

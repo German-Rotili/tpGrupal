@@ -22,7 +22,7 @@ private:
 public:
     Map();
     ~Map();
-    bool valid_position(int & pos_x, int & pos_y);
+    bool valid_position(int  pos_x, int  pos_y);
     // void add_player(Player & player);
     // void move_player(Player & player, std::string direction);
     std::vector <Player&> get_players(); // placeholder

@@ -20,7 +20,7 @@ void Player::execute_intention(char intention) {
 }
 
 void Player::attack(){
-  this->inventory->attack();
+  this->inventory.attack();
 }
 
 void Player::acction() {
@@ -30,6 +30,20 @@ void Player::acction() {
 float Player::get_pos_x() { return this->position.get_pos_x(); }
 float Player::get_pos_y() { return this->position.get_pos_y(); }
 float Player::get_hitbox_radius() { return this->position.get_hitbox_radius(); }
+
+float Player::get_distance(Position position) {
+  return this->position.get_distance(position);
+}
+
+float Player::get_distance(float x, float y) {
+  return this->position.get_distance(x, y);
+}
+
+int Player::get_ammo() 
+{
+  this->inventory.get_ammo();
+}
+
 float Player::get_direction() { return this->position.get_angle(); }
 
 

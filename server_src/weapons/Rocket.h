@@ -1,0 +1,28 @@
+#include "../Map.h"
+#include "../Config.h"
+
+
+
+class Rocket
+{
+private:
+    float velocity;
+    float explotion_radius;
+    float damage;
+    float direction;
+    float x_pos;
+    float y_pos;
+    Map map;
+    Config config;
+
+    void explode();
+    void update_position();
+    float get_y_offset();
+    float get_x_offset();
+
+public:
+    Rocket(Map map, Config config, float dir_x, float dir_y, float direction);
+    ~Rocket();
+    bool tick();
+};
+

@@ -16,7 +16,6 @@ private:
     bool is_alive;
     Map &map;
     Inventory inventory;
-    Weapon *current_weapon;
     void move(char intention);
     void attack();
     void acction();
@@ -29,10 +28,15 @@ public:
     float get_pos_x();
     float get_pos_y();
     float get_direction();
+    int get_id();
     void execute_intention(char intention);
     void get_damaged(int damage);
     void game_tick();
     float get_hitbox_radius();
+    float get_distance(Position position);
+    float get_distance(float x, float y);
+    int get_ammo();
+    char get_current_weapon_id();
 };
 
 #endif // __SERVER_PLAYER_H__

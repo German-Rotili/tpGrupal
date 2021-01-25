@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-bool Map::valid_position(int & pos_x, int & pos_y){
+bool Map::valid_position(int pos_x, int  pos_y){
     return true;
 }
    

@@ -34,6 +34,8 @@ public:
     float get_angle();
     void get_attacked(int dmg);
     int colides(Position &);    
+    float get_distance(float x, float y);
+    float get_distance(Position &position);
 };
 
 

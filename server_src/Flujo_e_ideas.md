@@ -12,3 +12,7 @@ Hablar esquema de partidas y como se comunican entre cliente y servidor
     -implementar cambio de armas
     -implementar logica de puertas
     
+
+
+vector bloqueante de intenciones. 
+

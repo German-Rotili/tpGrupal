@@ -1,5 +1,6 @@
 #include "Position.h"
 #include <math.h> 
+#include <cmath>
 #define FORWARD 'w'
 #define BACKWARDS 'S'
 #define RIGHT 'd'
@@ -44,6 +45,15 @@ float Position::get_hitbox_radius() {return this->hitbox_radius;}
 float Position::get_angle() { return this->angle; }
 
 int Position::colides(Position &) { return 1;}
+
+float Position::get_distance(float x, float y){
+    return sqrt(pow(x-this->x, 2) + pow(y - this->y, 2));
+}
+
+float Position::get_distance(Position &position){
+    this->get_distance(position.get_pos_x(), position.get_pos_y());
+
+}
 
 float Position::get_y_offset(char intention){
     if(intention == FORWARD){

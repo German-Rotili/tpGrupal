@@ -56,12 +56,10 @@ Hud::~Hud() {
 void Hud::actualizarFaceBlood() {
 	if (displayHealth <= 0) {
 		faceClip.y = 33*6;
-	}
-	else if (displayHealth >= 100) {
+	} else if (displayHealth >= 100) {
 		faceClip.y = 0;
-	}
-	else {
-		faceClip.y = 33 * int((100-displayHealth)*7/100);
+	} else {
+		faceClip.y = 33 * static_cast<int>((100-displayHealth)*7/100);
 	}
 }
 void Hud::actualizarFaceAnimation() {
@@ -78,12 +76,12 @@ void Hud::actualizarFaceAnimation() {
 }
 
 void Hud::actualizarAmmo() {
-	int auxAmmo = player.getCantBalasArmaActual();
+	int auxAmmo = player.getCantBalas();
 	if (auxAmmo != displayAmmo) {
-		//if (auxAmmo > displayAmmo) {
-		//	c_rectangleScreen = c_yellow;
-		//	rectangleScreen_alpha = 240;
-		//} Problema: Si cambio de arma y ese arma tiene mas balas se toma como que agarre mas balas
+		if (auxAmmo > displayAmmo) {
+			c_rectangleScreen = c_yellow;
+			rectangleScreen_alpha = 240;
+		}
 		displayAmmo = auxAmmo;
 		delete ammoTexture;
 		ammoTexture = new SdlTexture(renderer, font,

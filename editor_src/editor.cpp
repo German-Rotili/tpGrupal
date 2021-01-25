@@ -9,6 +9,7 @@
 #include "SDLWrappers/SdlException.h"
 #include "SDLWrappers/SdlFont.h"
 #include "ConfigManager/MapHandler.h"
+#include "ConfigManager/EditorConfigHandler.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 640
@@ -69,7 +70,10 @@ int main(int argc, char* args[]) {
     bool renderText = false;
     bool save = false, load = false;
 
-    std::vector<std::vector<int>> map = createMap(MAP_Y, MAP_X);
+    std::string path = "config/editorConfig.yaml";
+    EditorConfigHandler configHandler;
+    configHandler.initConfig(path);
+    std::vector<std::vector<int>> map = createMap(configHandler.getX(), configHandler.getY());
     MapHandler mapHandler;
 
     //SdlTexture walls("textures/walls.png", renderer);

@@ -4,9 +4,10 @@ static bool compareDistances(ZRenderable* o1, ZRenderable* o2) {
     return (o1->getDistToPlayer() > o2->getDistToPlayer());
 }
 
-World::World(SdlRenderer& renderer, ClientSettings& settings) :
+
+World::World(SdlRenderer& renderer, ClientSettings& settings, std::string & map) :
   renderer(renderer),
-  worldMap(rawMap),
+  worldMap(maphandler.readMapFromString(map)),
   jugador(renderer, settings, 1.5, 2.5, -45, 100, 0, 3),
   hud_jugador(renderer, jugador, settings),
   rayCaster(settings),

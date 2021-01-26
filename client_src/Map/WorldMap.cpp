@@ -1,6 +1,15 @@
 #include "WorldMap.h"
+#include <iostream>
 
-WorldMap::WorldMap(std::vector<std::vector<int>>& rawMap) {
+WorldMap::WorldMap(std::vector<std::vector<int>> rawMap) {
+
+ for (auto & element : rawMap) {
+        for (auto & value : element) {
+            std::cout << value << std::endl;
+        }
+    }
+
+
   int irow = 0;
   std::vector<std::vector<int>>::iterator row;
   std::vector<int>::iterator col;

@@ -29,12 +29,6 @@ int main(int argc, char* args[]) {
     Client client(service, hostname);
 
 
-    client.client_receive();
-
-
-
-
-
     std::string input;
     const int horizontex = SCREEN_WIDTH/2;
     const int horizontey = SCREEN_HEIGHT/2;
@@ -45,7 +39,17 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    World world(renderer, settings);
+
+    
+
+    std::string map = client.client_receive_string();
+    World world(renderer, settings, map);
+
+
+    
+    //World world(renderer, settings);
+
+
 
     // Provisorio hasta que haya comunicacion con el server
     // Info del server
@@ -152,7 +156,7 @@ int main(int argc, char* args[]) {
         playerIsShooting = !playerIsShooting;
       }
       //client.client_send(input);
-      std::cout << "Supuestamente enviado" << std::endl;
+      //std::cout << "Supuestamente enviado" << std::endl;
       if (playerAngle >= 0) {
         playerAngle -= 360;
       } else if (playerAngle < -360) {

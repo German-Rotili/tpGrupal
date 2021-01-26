@@ -23,7 +23,7 @@ class WorldMap {
   const SDL_Rect DOOR_CLIP = {64, 11*64, 64, 64};
 
   public:
-    explicit WorldMap(std::vector<std::vector<int>>& rawMap);
+    explicit WorldMap(std::vector<std::vector<int>> rawMap);
     ~WorldMap();
     const class Tile* getTile(int x, int y);
     void setDoorsClosed(bool doorClosed);

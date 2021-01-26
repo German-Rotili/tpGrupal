@@ -12,8 +12,11 @@
 #include "Hud.h"
 #include "rayCaster.h"
 #include "Map/WorldMap.h"
+#include "../editor_src/ConfigManager/MapHandler.h"
+
 class World {
   SdlRenderer& renderer;
+  MapHandler maphandler;
 
   std::vector<std::vector<int>> rawMap = {
                          {1, 1,   1,  1,  1,  1,  1,   1, 1, 1},
@@ -28,7 +31,6 @@ class World {
                       };
 
   WorldMap worldMap;
-
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosModificables;
   std::vector<Enemy*> enemigos;
@@ -108,7 +110,8 @@ class World {
   SDL_Rect corona_clip = {64*2, 64*6, 64, 64};
 
 	public:
-		World(SdlRenderer& renderer, ClientSettings& settings);
+//		World(SdlRenderer& renderer, ClientSettings& settings);
+		World(SdlRenderer& renderer, ClientSettings& settings, std::string & map);
     ~World();
     void actualizar(double playerX, double playerY, double playerAngle,
       double playerHealth, int playerLives, int playerArmaActual,

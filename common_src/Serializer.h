@@ -1,5 +1,6 @@
 #include <vector>
 #include "../server_src/Map.h"
+#include <sstream>
 
 class Serializer
 {
@@ -13,6 +14,9 @@ public:
     Serializer();
     ~Serializer();
     std::vector<char> serialize();
-    
+    void deserialize(std::vector<char> &);
+    int extract_int(std::stringstream &);
+    float extract_float(std::stringstream &);
+
 };
 

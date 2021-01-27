@@ -35,56 +35,20 @@ void ThClient::run(){
 
         //Player main_player; new
 
-        // std::ifstream t("../editor_src/config/map1.yaml");
-        // std::string str((std::istreambuf_iterator<char>(t)),
-        //          std::istreambuf_iterator<char>());
+        std::ifstream t("../editor_src/config/map1.yaml");
+        std::string str((std::istreambuf_iterator<char>(t)),
+                 std::istreambuf_iterator<char>());
 
-        // uint32_t size_1 = htonl(str.length());
-        // peer.socket_send((char*)&size_1, sizeof(uint32_t));
-        // peer.socket_send(str.c_str(), size_1);
+        uint32_t size_1 = htonl(str.length());
+        peer.socket_send((char*)&size_1, sizeof(uint32_t));
+        peer.socket_send(str.c_str(), size_1);
 
-
-
-        Serializer serializer;
-        std::vector <char> msg = serializer.serialize();
-        serializer.deserializer(msg);
-
-        uint32_t size = htonl(msg.size());
-        peer.socket_send((char*)&size, sizeof(uint32_t));
-        peer.socket_send(msg.data(), size);
-
-
-
-        // struct players_t {
-        //     int id;
-        //     int x;
-        //     int y;
-        //     int d;
-        //     int w;
-        //     int life;
-        // };
-
-        // struct players_t {
-        //     int id;
-        //     int x;
-        //     int y;
-        //     int d;
-        //     int w;
-        //     int life;
-        // };
-
-        //rocket
-        //door
-        //items del piso id - pos
-
-
-
-        // players_t player;
-        // player.id = 01;
-
-        // uint32_t size = htonl(sizeof(players_t));
+        // Serializer serializer;
+        // std::vector <char> msg = serializer.serialize();
+        // serializer.deserializer(msg);
+        // uint32_t size = htonl(msg.size());
         // peer.socket_send((char*)&size, sizeof(uint32_t));
-        // peer.socket_send((char*)&player, sizeof(player));
+        // peer.socket_send(msg.data(), size);
 
 
 

@@ -1,6 +1,71 @@
 #include "Serializer.h"
-#include "../server_src/Player.h"
-#include <sstream>
+
+
+Serializer::Serializer(){}
+
+Serializer::~Serializer(){}
+
+void Serializer::append_variable(std::vector<char> &message, char *variable, size_t size){
+    for(int i = 0; i < (int)size; i++){
+        message.push_back(variable[i]);
+        //printf("%02X", (unsigned)(unsigned char)variable[i]);
+    }
+        //printf(" ");
+}
+
+std::vector<char> Serializer::serialize() {
+    std::vector<char> message;
+    this->serialize_players(message);
+    return message;
+}
+
+void Serializer::serialize_players(std::vector<char> &message){
+    for(Player &player : this->map.get_players()){
+        player_t player_info = player.get_info();
+        append_player_info(message, player_info);
+    }
+}
+
+void Serializer::append_player_info(std::vector<char> & message, player_t & player_info){
+    append_variable(message, (char*) &(player_info.player_id), sizeof(int));
+    append_variable(message, (char*) &(player_info.pos_x), sizeof(float));
+    append_variable(message, (char*) &(player_info.pos_y), sizeof(float));
+    append_variable(message, (char*) &(player_info.direction), sizeof(float));
+    append_variable(message, (char*) &(player_info.ammo), sizeof(int));
+    append_variable(message, (char*) &(player_info.current_weapon), sizeof(char));
+}
+
+void Serializer::deserializer(std::vector <char> & msg){
+    //Posibilidad de que haya un deserializer para cada "tipo" de objeto
+    player_t player_info;
+    int offset = 0;
+    int size_int = sizeof(int);
+    int size_float = sizeof(float);
+    memcpy(&player_info.player_id, msg.data(), size_int);
+    offset += size_int;
+    memcpy(&player_info.pos_x, msg.data() + offset, size_float);
+    offset += size_float;
+    memcpy(&player_info.pos_y, msg.data() + offset, size_float);
+    offset += size_float;
+    memcpy(&player_info.direction, msg.data() + offset, size_float);
+    offset += size_float;
+    memcpy(&player_info.ammo, msg.data() + offset,size_int);
+    offset += size_int;
+    memcpy(&player_info.current_weapon, msg.data() + offset, sizeof(char));
+    offset += sizeof(char);
+
+    std::cout << player_info.player_id <<std::endl;
+    std::cout << player_info.pos_x <<std::endl;
+    std::cout << player_info.pos_y <<std::endl;
+    std::cout << player_info.direction <<std::endl;
+    std::cout << player_info.ammo <<std::endl;
+    std::cout << player_info.current_weapon <<std::endl;
+}
+
+
+
+
+
 
 /*
 
@@ -29,76 +94,41 @@
         bool status
 */
 
-std::vector<char> Serializer::serialize() {
-  // iterar sobre los jugadores
-  std::vector<char> message;
-  // this->serialize_players(message);
-  int int1 = 18;
-  float float1 = 5.8;
-  char char1 = 5;
-  this->append_variable(message, (char *)&int1, sizeof(int));
-  this->append_variable(message, (char *)&float1, sizeof(float));
-  message.push_back(char1);
-}
 
-void Serializer::deserialize(std::vector<char> &input) {
-  std::stringstream input_buff(std::string(input.begin(), input.end()));
-  int int1;
-  float float1;
-  char char1;
-  int1 = extract_int(input_buff);
-  float1 = extract_float(input_buff);
-  char1 = input_buff.get();
-  std::cout << int1;
-}
+// void Serializer::deserialize(std::vector<char> &input) {
+   
+//     for(auto i : input){
+//         printf("%02X ", (unsigned)(unsigned char)i);
 
-int Serializer::extract_int(std::stringstream &buff) {
-  int final_int;
-  buff.get((char *)&final_int, sizeof(int));
-  return final_int;
-}
+//     }
+//   std::cout << std::endl;
+//   std::stringstream input_buff(std::string(input.begin(), input.end()));
+//   int int1 = extract_int(input_buff);
+//   float float1 = extract_float(input_buff);
+//   char char1 = input_buff.get();
+//   std::cout << int1 << std::endl;
+//   std::cout << float1 << std::endl;
+//   std::cout << char1 << std::endl;
+// }
 
-float Serializer::extract_float(std::stringstream &buff) {
-  float final_float;
-  buff.get((char *)&final_float, sizeof(float));
-  return final_float;
-}
+// int Serializer::extract_int(std::stringstream &buff) {
+//   int final_int;
+//   buff.get((char *)&final_int, sizeof(int));
+//   return final_int;
+// }
+
+
+// float Serializer::extract_float(std::stringstream &buff) {
+//   float final_float;
+//   buff.get((char *)&final_float, sizeof(float));
+//   return final_float;
+// }
 
 /*
     [id][struct de la clase]
 
 */
 
-void Serializer::serialize_players(std::vector<char> &message) {
 
-  for (Player &player : this->map.get_players()) {
-    int player_id = player.get_id();
-    float pos_x = player.get_pos_x();
-    float pos_y = player.get_pos_y();
-    float direction = player.get_direction();
-    int ammo = player.get_ammo();
-    // bool inventory[] = ; implementar para que inventory devuelva este array.
-    append_variable(message, (char *)&player_id, sizeof(int));
-    append_variable(message, (char *)&pos_x, sizeof(float));
-    append_variable(message, (char *)&pos_y, sizeof(float));
-    append_variable(message, (char *)&direction, sizeof(float));
-    // bool inventory[true true false]
-    append_variable(message, (char *)&ammo, sizeof(int));
-    message.push_back(player.get_current_weapon_id());
-    char hp;
-  }
-}
 
-void Serializer::append_variable(std::vector<char> &message, char *variable,
-                                 size_t size) {
-  for (int i = 0; i < size; i++) {
-    message.push_back(variable[i]);
-  }
-}
 
-void Serializer::append_float(std::vector<char> &message, float number) {
-  char *number_ptr = (char *)&number;
-  for (int i = 0; i < sizeof(float); i++) {
-    message.push_back(number_ptr[i]);
-  }
-}

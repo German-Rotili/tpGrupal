@@ -15,7 +15,7 @@ public:
     void client_send(std::string line);
     void client_receive();
     std::string client_receive_string();
-
+    std::vector<char>  client_receive_vector();
     ~Client();
     /*
     Crea una conexion al socket y envia cada linea del stdin al server.

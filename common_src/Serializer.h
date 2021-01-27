@@ -1,9 +1,15 @@
+#ifndef SERIALIZER_H
+#define SERIALIZER_H
 #include <vector>
 #include "../server_src/Map.h"
+#include <iostream>
 #include <sstream>
+#include <string>
+#include "utils.h"
+#include "../server_src/Player.h"
+#include <cstring>
 
-class Serializer
-{
+class Serializer{
 private:
 
     Map map;
@@ -17,6 +23,8 @@ public:
     void deserialize(std::vector<char> &);
     int extract_int(std::stringstream &);
     float extract_float(std::stringstream &);
+    void deserializer(std::vector <char> & msg);    
+    void append_player_info(std::vector<char> & , player_t & );
 
 };
-
+#endif

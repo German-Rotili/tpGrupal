@@ -12,6 +12,7 @@
 #include "World.h"
 #include "ClientSettings.h"
 #include "client_helper.h"
+#include "../common_src/Serializer.h"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
@@ -39,7 +40,9 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-
+    // std::vector<char> msg =  client.client_receive_vector();
+    // Serializer serializer;
+    // serializer.deserializer(msg);
     
 
     std::string map = client.client_receive_string();
@@ -47,6 +50,8 @@ int main(int argc, char* args[]) {
 
 
     
+
+   
     //World world(renderer, settings);
 
 

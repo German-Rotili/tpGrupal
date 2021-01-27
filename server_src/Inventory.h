@@ -29,7 +29,7 @@ public:
     int get_ammo();
     void spend_ammo(int);
     char get_current_weapon_id();
-
+    bool* get_weapons();
     
 };
 

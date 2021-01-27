@@ -19,6 +19,17 @@ void Client::client_send(std::string line){
 }
 
 
+std::vector<char> Client::client_receive_vector(){
+    uint32_t size = 0;
+    client.socket_receive((char*)&size, sizeof(uint32_t));
+    size = ntohl(size);
+    std::vector<char> buff(size);
+    client.socket_receive(buff.data(), size);
+    return buff;
+
+
+}
+
 std::string Client::client_receive_string(){
     uint32_t size = 0;
     client.socket_receive((char*)&size, sizeof(uint32_t));

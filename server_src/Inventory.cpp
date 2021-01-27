@@ -18,3 +18,5 @@ Inventory::Inventory(Player &player, Map &Map) {
   this->weapons[PISTOL] = std::make_unique<Pistol>(this->map, this->config);
   // this->ammo = Config.initialammo;
 }
+
+

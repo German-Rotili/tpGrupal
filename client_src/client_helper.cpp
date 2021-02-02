@@ -52,6 +52,16 @@ std::string Client::client_receive_string(){
     std::vector <char> msg(size);
     client.socket_receive(msg.data(), size);
     // std::cout << "recibi el vector "<<std::endl;
+
+            printf("****************MAP CLIENT*************\n");
+            for (int i = 0; i < msg.size(); i++) {
+                printf("%02X ", (unsigned)(unsigned char)msg.data()[i]);
+            }
+            printf("*****************************\n");
+
+
+
+    //aca puede haber algo raro
     std::string val(msg.data());
     return val;
 }

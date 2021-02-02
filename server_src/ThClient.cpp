@@ -45,6 +45,14 @@ void ThClient::run(){
                 bytes.push_back(byte);
             }
             input_file.close();
+             
+            printf("****************MAP Server*************\n");
+            for (int i = 0; i < (int)bytes.size(); i++) {
+                printf("%02X ", (unsigned)(unsigned char)bytes.data()[i]);
+            }
+            printf("*****************************\n");
+
+
         /*********************************/
 
 

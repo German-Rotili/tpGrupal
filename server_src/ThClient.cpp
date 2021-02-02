@@ -34,7 +34,7 @@ void ThClient::run(){
 
 
         /*LECTURA DE ARCHIVO A VECTOR DE CHAR*/
-            std::string filename("../editor_src/config/map1.yaml");
+            std::string filename("../editor_src/config/mapa_test.yaml");
             std::vector<char> bytes;
             char byte = 0;
             std::ifstream input_file(filename);
@@ -86,13 +86,13 @@ void ThClient::run(){
             serializer.deserializer(buff, intention);
 
             if (intention.up){
-                player.pos_x += 0.001;    
+                player.pos_x += 0.001;
             }
             if (intention.down){
-                player.pos_y += 0.001;    
+                player.pos_y += 0.001;
             }
             if (intention.angle_right){
-                player.direction += 0.001;    
+                player.direction += 0.001;
             }
 
             msg = serializer.serialize(player);
@@ -101,7 +101,7 @@ void ThClient::run(){
             // std::cout << "Size htnol: " << std::endl;
             // for (int i = 0; i < (int)sizeof(uint32_t); i++) {
             //     printf("%02X ", (unsigned)(unsigned char)((char*)&snap_size)[i]);
-            // }   
+            // }
             // printf("\n");
             peer.socket_send((char*)&snap_size, sizeof(uint32_t));
             peer.socket_send(msg.data(), msg.size());
@@ -142,8 +142,8 @@ void ThClient::run(){
         //     while ((read = peer.socket_receive(cmd.data(), CHUNK_SZ)) > 0){
         //         std::string aux(cmd.begin(), cmd.begin()+read);
         //         petition += aux;
-        //         std::cout << aux << std::endl; 
-        //         std::cout << "Leido" << std::endl; 
+        //         std::cout << aux << std::endl;
+        //         std::cout << "Leido" << std::endl;
         //     }
         //     //creo un hilo para receive y otro para send
         //     //envio snapshot completa al cliente.
@@ -154,7 +154,7 @@ void ThClient::run(){
         peer.socket_shutdown(SHUT_RDWR);
     }catch(const std::exception& e){
         perror(e.what());
-    }catch(...){}  
+    }catch(...){}
 }
 
 ThClient::ThClient(Socket&& socket, GameHandler & game_handler):game_handler(game_handler){

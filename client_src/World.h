@@ -17,19 +17,6 @@
 class World {
   SdlRenderer& renderer;
   MapHandler maphandler;
-
-  std::vector<std::vector<int>> rawMap = {
-                         {1, 1,   1,  1,  1,  1,  1,   1, 1, 1},
-                         {1, 21, 21, 21, 21, 21, 26, 21, 21, 1},
-                         {1, 21, 21, 21, 21, 21,  1,  21, 21, 1},
-                         {1, 21, 21, 21, 21, 21, 24, 21, 21, 1},
-                         {1, 25,   1, 23, 1,  1,  1,  1, 23, 1},
-                         {1, 21, 21, 21, 21, 21, 24, 21, 21, 1},
-                         {1, 21, 21, 21, 21, 21,  1,  1, 23, 1},
-                         {1, 21, 21, 21, 21, 21, 26, 26, 21, 1},
-                         {1, 1,   1, 1,   1, 1,   1,  1,  1, 1},
-                      };
-
   WorldMap worldMap;
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosModificables;
@@ -111,7 +98,7 @@ class World {
 
 	public:
 //		World(SdlRenderer& renderer, ClientSettings& settings);
-		World(SdlRenderer& renderer, ClientSettings& settings, std::string & map);
+		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map);
     ~World();
     void actualizar(double playerX, double playerY, double playerAngle,
       double playerHealth, int playerLives, int playerArmaActual,

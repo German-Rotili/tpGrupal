@@ -1,15 +1,8 @@
 #include "WorldMap.h"
 #include <iostream>
 
-WorldMap::WorldMap(std::vector<std::vector<int>> rawMap) {
-
- for (auto & element : rawMap) {
-        for (auto & value : element) {
-            std::cout << value << std::endl;
-        }
-    }
-
-
+WorldMap::WorldMap(std::vector<std::vector<int>> & rawMap) {
+  
   int irow = 0;
   std::vector<std::vector<int>>::iterator row;
   std::vector<int>::iterator col;
@@ -18,23 +11,37 @@ WorldMap::WorldMap(std::vector<std::vector<int>> rawMap) {
     std::vector<Tile*> v;
     map.push_back(v);
     for (col = row->begin(); col != row->end(); col++) {
-        if ((*col) == 21) {
-          map[irow].push_back(NULL);
-        } else if (*col == 23) {
+        if ((*col) >= 0 && (*col) <= 33) {  // Pared normal: Tener en cuenta distintos tipos de paredes.
+          map[irow].push_back(new WallTile(&WALL_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 34) {  // Puerta comun
           map[irow].push_back(new YDoorTile(&DOOR_CLIP));
           actualizables.push_back(map[irow].back());
-        } else if (*col == 24) {
+        } else if (*col == 35) {
           map[irow].push_back(new XDoorTile(&DOOR_CLIP));
           actualizables.push_back(map[irow].back());
-        } else if (*col == 25) {
+        } else if (*col == 59) {  // Puerta con llave 1
+          map[irow].push_back(new YDoorTile(&DOOR_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 60) {
+          map[irow].push_back(new XDoorTile(&DOOR_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 61) {  // Puerta con llave 2 (puedo unificar con la 1)
+          map[irow].push_back(new YDoorTile(&DOOR_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 62) {
+          map[irow].push_back(new XDoorTile(&DOOR_CLIP));
+          actualizables.push_back(map[irow].back());
+        } else if (*col == 63) {  // Puerta secreta
+          //Obtener direccion de clip del tile en x-1
           map[irow].push_back(new SecretYDoorTile(&WALL_CLIP));
           actualizables.push_back(map[irow].back());
-        } else if (*col == 26) {
+        } else if (*col == 64) {
+          //Obtener direccion de clip del tile en y-1
           map[irow].push_back(new SecretXDoorTile(&WALL_CLIP));
           actualizables.push_back(map[irow].back());
         } else {
-          map[irow].push_back(new WallTile(&WALL_CLIP));
-          actualizables.push_back(map[irow].back());
+          map[irow].push_back(NULL);
         }
       icol++;
     }

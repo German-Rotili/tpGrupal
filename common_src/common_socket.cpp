@@ -96,59 +96,67 @@ void Socket::socket_shutdown(int flags){
   flags == SHUT_RDWR ? close(fd) : 0;
 }
 
-// void Socket::socket_receive(std::string & response){
-//   int received = 1;
-//   char buffer[BUFF_SIZE];
-//   while (received > 0) {
-//     received = recv(this->fd, buffer, BUFF_SIZE, 0);
-//     if (received > 0)
-//       response.append(buffer, received);
-//     if (received < 0)
-//       throw SuperException("Error al recibir bytes en el socket");
-//   }
-// }
+void Socket::socket_receive(std::string & response){
+  int received = 1;
+  char buffer[BUFF_SIZE];
+  while (received > 0) {
+    received = recv(this->fd, buffer, BUFF_SIZE, 0);
+    if (received > 0)
+      response.append(buffer, received);
+    if (received < 0)
+      throw SuperException("Error al recibir bytes en el socket");
+  }
+}
 
 
-// void Socket::socket_receive(std::string & response, int length){
-//   int received = 1;
-//   char buffer[BUFF_SIZE];
-//   while (received > 0) {
-//     received = recv(this->fd, buffer, BUFF_SIZE, 0);
-//     std::cout << response << std::endl;
-//     if (received > 0)
-//       response.append(buffer, received);
-//     if (received < 0)
-//       throw SuperException("Error al recibir bytes en el socket");
-//   }
-// }
+void Socket::socket_receive(std::string & response, int length){
+  int received = 0;
+  char buffer[BUFF_SIZE];
+  while (length > 0) {
+    received = recv(this->fd, buffer, BUFF_SIZE, 0);
+    if (received > 0)
+      response.append(buffer, received);
+    if (received < 0)
+      throw SuperException("Error al recibir bytes en el socket");
+    length-=received;
+    // for (int i = 0; i < received; i++) {
+    //   printf("%02X ", (unsigned)(unsigned char)(buffer)[i]);
+    // }  
+  }
+}
 
-// void Socket::socket_send(std::string & message){
-//   int total_sent = 0;
-//   int lenght = message.length();
-//   while (total_sent < lenght) {
-//     int sent = send(this->fd, message.substr(total_sent).c_str(),
-//                     lenght - total_sent, MSG_CONFIRM);
-//     std::cout << total_sent << std::endl;
-//     if (sent == -1) {
-//       throw SuperException("Error al enviar");
-//     }
-//     total_sent += sent;
-//   }
+void Socket::socket_send(std::string & message){
+  int total_sent = 0;
+  int lenght = message.length();
+  while (total_sent < lenght) {
+    int sent = send(this->fd, message.substr(total_sent).c_str(),
+                    lenght - total_sent, MSG_NOSIGNAL);
+    std::cout << total_sent << std::endl;
+    if (sent == -1) {
+      throw SuperException("Error al enviar");
+    }
+    total_sent += sent;
+    // for (int i = 0; i < sent; i++) {
+    //   printf("%02X ", (unsigned)(unsigned char)(message.substr(total_sent).c_str())[i]);
+    // }  
+  }
   
-// }
+}
 
-// void Socket::socket_send(std::string & message, int length){
-//   int total_sent = 0;
-//   while (total_sent < length) {
-//     int sent = send(this->fd, message.substr(total_sent).c_str(),
-//                     length - total_sent, MSG_CONFIRM);
-//     std::cout << sent << std::endl;
-//     if (sent == -1) {
-//       throw SuperException("Error al enviar");
-//     }
-//     total_sent += sent;
-//   }
-// }
+void Socket::socket_send(std::string & message, int length){
+  int total_sent = 0;
+  while (total_sent < length) {
+    int sent = send(this->fd, message.substr(total_sent).c_str(),
+                    length - total_sent, MSG_CONFIRM);
+    if (sent == -1) {
+      throw SuperException("Error al enviar");
+    }
+    total_sent += sent;
+    // for (int i = 0; i < sent; i++) {
+    //   printf("%02X ", (unsigned)(unsigned char)(message.substr(total_sent-sent).c_str())[i]);
+    // }  
+  }
+}
 
 int Socket::socket_receive(char *buffer, int length){
   int total_bytes = 0;
@@ -161,7 +169,11 @@ int Socket::socket_receive(char *buffer, int length){
     if (bytes_read==0){
       return total_bytes;
     }
-  }
+  } 
+  // for (int i = 0; i < total_bytes; i++) {
+  //     printf("%02X ", (unsigned)(unsigned char)buffer[i]);
+  //   } 
+
   return total_bytes;
 }
 
@@ -173,6 +185,9 @@ int Socket::socket_send(const char *buffer, int length){
     if (result == -1){
       throw SuperException("Error al enviar bytes en el socket");
     }
+    // for (int i = 0; i < result; i++) {
+    //   printf("%02X ", (unsigned)(unsigned char)buffer[bytes_sent+i]);
+    // } 
     bytes_sent += result;
   }
   return bytes_sent;

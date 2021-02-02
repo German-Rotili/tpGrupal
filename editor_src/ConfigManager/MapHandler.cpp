@@ -51,6 +51,9 @@ std::vector<std::vector<int>> MapHandler::readMap(std::string path) {
 }
 
 std::vector<std::vector<int>> MapHandler::readMapFromString(std::string file) {
+
+  try {
+
   YAML::Node root = YAML::Load(file);
   int x = root["x"].as<int>();
   int y = root["y"].as<int>();
@@ -66,4 +69,11 @@ std::vector<std::vector<int>> MapHandler::readMapFromString(std::string file) {
   }
 
   return map;
+
+  } catch(const YAML::ParserException& ex) {
+      std::cout << ex.what() << std::endl;
+  }
+  std::vector<std::vector<int>> aux;
+  return aux;
+
 }

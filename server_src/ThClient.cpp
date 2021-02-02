@@ -72,7 +72,7 @@ void ThClient::run(){
         /*********************************/
 
 
-        snapshot_t intention;
+        intention_t intention;
 
         /*GAME LOOP*/
         while (state){

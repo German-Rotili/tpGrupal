@@ -23,10 +23,10 @@ public:
   void socket_accept(Socket & peer);
   int socket_connect(const char *service, const char *hostname);
   void socket_shutdown(int flags);
-  // void socket_receive(std::string & buffer);
-  // void socket_send(std::string & message);
-  // void socket_send(std::string & message, int length);
-  // void socket_receive(std::string & response, int length);
+  void socket_receive(std::string & buffer);
+  void socket_send(std::string & message);
+  void socket_send(std::string & message, int length);
+  void socket_receive(std::string & response, int length);
   int socket_send(const char *buffer, int length);
   int socket_receive(char *buffer, int length);
 

@@ -30,9 +30,6 @@ void ThServer::run(){
         while (state){
             Socket peer;
             server.socket_accept(peer);
-
-            //acepto un nuevo cliente, tiene que elegir la partida o crear nueva
-
             this->threads.push_back(new 
                 ThClient(std::move(peer), game_handler));
                 

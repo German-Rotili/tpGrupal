@@ -46,20 +46,20 @@ void ThClient::run(){
             }
             input_file.close();
              
-            printf("****************MAP Server*************\n");
-            for (int i = 0; i < (int)bytes.size(); i++) {
-                printf("%02X ", (unsigned)(unsigned char)bytes.data()[i]);
-            }
-            printf("*****************************\n");
+            // printf("****************MAP Server*************\n");
+            // for (int i = 0; i < (int)bytes.size(); i++) {
+            //     printf("%02X ", (unsigned)(unsigned char)bytes.data()[i]);
+            // }
+            // printf("*****************************\n");
 
 
         /*********************************/
 
 
         /*ENVIO DEL MAPA*/
-        uint32_t size_1 = htonl(bytes.size());
+        uint32_t size_1 = htonl(bytes.size()+1);
         peer.socket_send((char*)&size_1, sizeof(uint32_t));
-        peer.socket_send(bytes.data(), bytes.size());
+        peer.socket_send(bytes.data(), bytes.size()+1);
         /*********************************/
 
 

@@ -44,6 +44,9 @@ int main(int argc, char* args[]) {
     std::string map = client.client_receive_string();
     MapHandler maphandler;
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
+
+
+
     World world(renderer, settings, vector_map);
     /*********************************************/
 
@@ -248,6 +251,10 @@ int main(int argc, char* args[]) {
 
   }
   catch (SdlException& e) {
+    printf("Hubo una excepción:\n");
+    std::cout << e.what();
+  }
+  catch (std::exception const& e) {
     printf("Hubo una excepción:\n");
     std::cout << e.what();
   }

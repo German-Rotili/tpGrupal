@@ -12,11 +12,9 @@
 #include "Hud.h"
 #include "rayCaster.h"
 #include "Map/WorldMap.h"
-#include "../editor_src/ConfigManager/MapHandler.h"
 
 class World {
   SdlRenderer& renderer;
-  MapHandler maphandler;
   WorldMap worldMap;
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosModificables;

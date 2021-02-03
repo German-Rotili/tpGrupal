@@ -14,7 +14,7 @@ static std::tuple<int, int> getTileSteps(double dir) {
 }
 
 
-std::tuple<int, int> HitscanRaycast::get_impact(Map &map, Player &player) {
+std::pair<float, float> HitscanRaycast::get_impact_point(Map &map, Player &player) {
     int x = (int) player.get_pos_x();
     int y = (int) player.get_pos_y();
     double dx = x - player.get_pos_x();

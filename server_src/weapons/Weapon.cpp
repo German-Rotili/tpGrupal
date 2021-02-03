@@ -1,6 +1,6 @@
 #include "Weapon.h"
 #include <chrono>
-
+#include "HitscanRaycast.h"
 
 void Weapon::fire(float angle) {
   /*
@@ -38,81 +38,94 @@ void Weapon::fire(float angle) {
 
 
   */
-    float xpos, ypos;
-    xpos = this->inventory.get_player().get_pos_x();
-    ypos = this->inventory.get_player().get_pos_y();
-    int xdir, ydir;
-    if (angle < 180) {
-      ydir = 1;
-    } else {
-      ydir = -1;
-    }
-    if (angle < 90 || angle > 270) {
-      xdir = 1;
-    } else {
-      xdir = -1;
-    }
+  HitscanRaycast raycaster;
+  std::pair<float, float> impact =
+      raycaster.get_impact_point(this->map, this->inventory.get_player());
+      
+  float xpos, ypos;
+  xpos = this->inventory.get_player().get_pos_x();
+  ypos = this->inventory.get_player().get_pos_y();
+  int xdir, ydir;
+  if (angle < 180) {
+    ydir = 1;
+  } else {
+    ydir = -1;
+  }
+  if (angle < 90 || angle > 270) {
+    xdir = 1;
+  } else {
+    xdir = -1;
+  }
 
-    float dist;
-    std::pair<float, float> impact= this->map.get_impact_point(this->inventory.get_player());
-    Player* player_hit;
-    float distance;
-    for (Player &player : this->map.get_players()) {
-      float playerx = player.get_pos_x();
-      float playery = player.get_pos_x();
-      float hitboxRadius = player.get_hitbox_radius();
+  float dist;
+  Player *player_hit;
+  float distance;
+  for (Player &player : this->map.get_players()) {
+    float playerx = player.get_pos_x();
+    float playery = player.get_pos_x();
+    float hitboxRadius = player.get_hitbox_radius();
 
-      if (((impact.first - player.get_pos_x()) * xdir) > 0) {
-        if (((impact.second - player.get_pos_y()) * ydir) > 0) {
-          if (((player.get_pos_x() - xpos) * xdir)) {
-            if (((player.get_pos_y() - ypos) * ydir)) {
-              /*
-                logica de interseccion: por algebra, encuentro la interseccion de
-                la recta jugador, impacto y busco la inter con la recta que
-                contiene a cada lado de la hitbox del jugador, finalmente resto
-                esta interseccion con el centro del lado es decir, la posicion del
-                jugador, y veo que su modulo sea menor a la mitad de la longitud
-                del lado de la hitbox.
-                funciona de esta forma tan simple porque las lineas de los lados de la hitbox es paralela a los ejes. 
-              */
-              float xhitbox = playerx - (hitboxRadius * xdir);
-              float yhitbox = playery - (hitboxRadius * ydir);
-              float lambda = (impact.second - xpos) * (yhitbox - playery);
-              float xintersection = ((impact.second - xpos) * (yhitbox - playery)/(impact.first - ypos)) + xpos;
-              if (abs(xintersection-playerx) < hitboxRadius && (distance == 0 || lambda < distance)){
-                player_hit = &player;
-                distance = lambda;
-              }
-              float yintersection = ((impact.first - ypos) * (xhitbox - playerx)/(impact.second - xpos)) + ypos;
-              if (abs(yintersection-playery) < hitboxRadius && (distance == 0 || lambda < distance)){
-                player_hit = &player;
-                distance = lambda;
-              }
+    if (((impact.first - player.get_pos_x()) * xdir) > 0) {
+      if (((impact.second - player.get_pos_y()) * ydir) > 0) {
+        if (((player.get_pos_x() - xpos) * xdir)) {
+          if (((player.get_pos_y() - ypos) * ydir)) {
+            /*
+              logica de interseccion: por algebra, encuentro la interseccion de
+              la recta jugador, impacto y busco la inter con la recta que
+              contiene a cada lado de la hitbox del jugador, finalmente resto
+              esta interseccion con el centro del lado es decir, la posicion del
+              jugador, y veo que su modulo sea menor a la mitad de la longitud
+              del lado de la hitbox.
+              funciona de esta forma tan simple porque las lineas de los lados
+              de la hitbox es paralela a los ejes.
+            */
+            float xhitbox = playerx - (hitboxRadius * xdir);
+            float yhitbox = playery - (hitboxRadius * ydir);
+            float lambda = (impact.second - xpos) * (yhitbox - playery);
+            float xintersection =
+                ((impact.second - xpos) * (yhitbox - playery) /
+                 (impact.first - ypos)) +
+                xpos;
+            if (abs(xintersection - playerx) < hitboxRadius &&
+                (distance == 0 || lambda < distance)) {
+              player_hit = &player;
+              distance = lambda;
+            }
+            float yintersection = ((impact.first - ypos) * (xhitbox - playerx) /
+                                   (impact.second - xpos)) +
+                                  ypos;
+            if (abs(yintersection - playery) < hitboxRadius &&
+                (distance == 0 || lambda < distance)) {
+              player_hit = &player;
+              distance = lambda;
             }
           }
         }
       }
     }
-    //una vez que termino las colisiones
-    if(distance != 0){
-      player_hit->get_damaged(this->get_damage(distance));
-      //appendear la accion al helper de acciones.
-    }
-  
-
+  }
+  // una vez que termino las colisiones
+  if (distance != 0) {
+    player_hit->get_damaged(this->get_damage(distance));
+    // appendear la accion al helper de acciones.
+  }
 }
 
-bool Weapon::is_in_cooldown(){
-    if(!this->last_shot_timer.is_running()){
-      return false;
-    }
-    return (this->last_shot_timer.elapsed_time() < this->cooldown);  
+bool Weapon::is_in_cooldown() {
+  if (!this->last_shot_timer.is_running()) {
+    return false;
+  }
+  return (this->last_shot_timer.elapsed_time() < this->cooldown);
 }
 
-bool Weapon::has_ammo() { return this->inventory.get_ammo() >= this->ammo_cost; }
+bool Weapon::has_ammo() {
+  return this->inventory.get_ammo() >= this->ammo_cost;
+}
 
-bool Weapon::get_damage(int distance){
-  //disminuye el rango maximo en funcion de la distancia. por ahora, linealmente. (lo que es horrible.) pero puede hacer daño maximo antes del max range.
-  int damage = rand() % (this->max_damage * this->max_acurate_range / std::max(distance, this->max_acurate_range));
-
+bool Weapon::get_damage(int distance) {
+  // disminuye el rango maximo en funcion de la distancia. por ahora,
+  // linealmente. (lo que es horrible.) pero puede hacer daño maximo antes del
+  // max range.
+  int damage = rand() % (this->max_damage * this->max_acurate_range /
+                         std::max(distance, this->max_acurate_range));
 }

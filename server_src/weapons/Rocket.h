@@ -19,6 +19,7 @@ private:
     void update_position();
     float get_y_offset();
     float get_x_offset();
+    bool colides_with_player(); //REVISAR si la velocidad es suficiente para pasar por la hitbox sin explotar. 
 
 public:
     Rocket(Map map, Config config, float dir_x, float dir_y, float direction);

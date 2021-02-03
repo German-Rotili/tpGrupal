@@ -3,7 +3,9 @@
 
 class  Rocket_launcher : public Weapon{
 private:
-    /* data */
+    Map map;
+    Config config;
+
 public:
 
      Rocket_launcher(Map &, Config &);

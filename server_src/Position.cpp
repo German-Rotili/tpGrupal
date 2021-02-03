@@ -55,6 +55,23 @@ float Position::get_distance(Position &position){
 
 }
 
+bool Position::is_in_hitbox(float x, float y) {
+    return (abs(x - this->x) <= this->hitbox_radius || abs(x - this->x) <= this->hitbox_radius);    
+}
+
+float Position::get_angle_difference(Position position) 
+{
+    return this->get_angle_difference(position.get_pos_x(), position.get_pos_y());
+}
+
+
+float Position::get_angle_difference(float x, float y) {
+    float dot = (x * this->x) + (y * this->y);
+    float mod_this = sqrt(pow(this->x, 2) + pow(this->y, 2));
+    float mod_other = sqrt(pow(x, 2) + pow(y, 2));
+    return abs(acos(dot / (mod_other*mod_this)));
+}
+
 float Position::get_y_offset(char intention){
     if(intention == FORWARD){
         return this->linear_vel * sin(this->angle * PI/180);

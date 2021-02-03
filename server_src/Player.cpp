@@ -24,7 +24,10 @@ void Player::attack(){
 }
 
 void Player::acction() {
-  // si esta cerca de una puerta la abre. super idiota.
+  /* for(Door &door : this->map.get_doors()){
+    if in range de distancia y angulo ya programado para cada x e y de puerta.
+  } */
+
 }
 
 float Player::get_pos_x() { return this->position.get_pos_x(); }
@@ -39,9 +42,26 @@ float Player::get_distance(float x, float y) {
   return this->position.get_distance(x, y);
 }
 
+float Player::get_angle_difference(Position position){
+  return this->position.get_angle_difference(position);
+}
+
+float Player::get_angle_difference(float x, float y) {
+    return this->position.get_angle_difference(x,y);
+
+}
+
+bool Player::is_in_hitbox(float x, float y) {
+  return this->position.is_in_hitbox(x,y);  
+}
+
 int Player::get_ammo() 
 {
   this->inventory.get_ammo();
+}
+
+char Player::get_current_weapon_id(){
+  this->inventory.get_current_weapon_id();
 }
 
 float Player::get_direction() { return this->position.get_angle(); }

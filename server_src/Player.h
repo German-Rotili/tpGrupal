@@ -34,19 +34,25 @@ public:
     Player(Map,Position position);
     Player(Map,float, float, float);
     ~Player();
+    
     float get_pos_x();
     float get_pos_y();
     float get_direction();
     int get_id();
+    int get_ammo();
+    char get_current_weapon_id();
+    
+   
     void execute_intention(char intention);
     void get_damaged(int damage);
-    void game_tick();
+    void tick();
     float get_hitbox_radius();
     float get_distance(Position position);
     float get_distance(float x, float y);
-    int get_ammo();
-    char get_current_weapon_id();
-    player_t get_info();
+    float get_angle_difference(Position position);
+    float get_angle_difference(float x, float y); 
+
+    bool is_in_hitbox(float x, float y);
 };
 
 #endif // __SERVER_PLAYER_H__

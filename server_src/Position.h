@@ -32,10 +32,17 @@ public:
     float get_pos_y();
     float get_hitbox_radius();
     float get_angle();
+   
+   
     void get_attacked(int dmg);
     int colides(Position &);    
     float get_distance(float x, float y);
     float get_distance(Position &position);
+    bool is_in_hitbox(float x, float y);
+    float get_angle_difference(Position position);
+    float get_angle_difference(float x, float y);
+
+
 };
 
 

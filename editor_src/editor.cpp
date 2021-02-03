@@ -24,8 +24,8 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlTexture walls(renderer, "textures/walls2.png");
-    SdlTexture objects(renderer, "textures/objects2.png", 152, 0 , 136);
+    SdlTexture walls(renderer, "textures/walls.png");
+    SdlTexture objects(renderer, "textures/objects.png", 152, 0 , 136);
 
     int playerx = realWidth/2;
     int playery = SCREEN_HEIGHT/2;
@@ -59,115 +59,120 @@ int main(int argc, char* args[]) {
     // Main (o game) Loop
     while (!quit) {
       // Event Loop
-      while (SDL_PollEvent(&e) != 0) {
-        if (e.type == SDL_QUIT) {
-          quit = true;
-        } else if (e.type == SDL_KEYDOWN && save == false && load == false) {
-          switch (e.key.keysym.sym) {
-            case SDLK_UP:
-            if (scrollY > 0)
-              scrollY -= 1;
-            break;
+      try {
+        while (SDL_PollEvent(&e) != 0) {
+          if (e.type == SDL_QUIT) {
+            quit = true;
+          } else if (e.type == SDL_KEYDOWN && save == false && load == false) {
+            switch (e.key.keysym.sym) {
+              case SDLK_UP:
+              if (scrollY > 0)
+                scrollY -= 1;
+              break;
 
-            case SDLK_DOWN:
-            if (scrollY < mapY - (SCREEN_HEIGHT/64))
-              scrollY += 1;
-            break;
+              case SDLK_DOWN:
+              if (scrollY < mapY - (SCREEN_HEIGHT/64))
+                scrollY += 1;
+              break;
 
-            case SDLK_LEFT:
-            if (scrollX > 0)
-              scrollX -= 1;
-            break;
+              case SDLK_LEFT:
+              if (scrollX > 0)
+                scrollX -= 1;
+              break;
 
-            case SDLK_RIGHT:
-            if (scrollX < mapX - ((realWidth - MENU_OFFSET)/64))
-              scrollX += 1;
-            break;
+              case SDLK_RIGHT:
+              if (scrollX < mapX - ((realWidth - MENU_OFFSET)/64))
+                scrollX += 1;
+              break;
 
-            case SDLK_d:
-            if (menuScrollX < 2)
-              menuScrollX += 1;
-            break;
+              case SDLK_d:
+              if (menuScrollX < 2)
+                menuScrollX += 1;
+              break;
 
-            case SDLK_a:
-            if (menuScrollX > 0)
-              menuScrollX -= 1;
-            break;
-          }
-        } else if (e.type == SDL_KEYDOWN && (save == true || load == true)) {
-          switch (e.key.keysym.sym) {
-            case SDLK_RETURN:
-            if (save == true) {
-              mapHandler.emitMap(inputText, map_ui.getMap());
-            } else if  (load == true) {
-              map_ui.setMap(mapHandler.readMap(inputText));
+              case SDLK_a:
+              if (menuScrollX > 0)
+                menuScrollX -= 1;
+              break;
             }
-            renderText = false;
-            save = false;
-            load = false;
-            break;
-
-            case SDLK_BACKSPACE:
-            if (inputText.length() > 0) {
-              inputText.pop_back();
-              renderText = true;
-            }
-            break;
-
-            case SDLK_c:
-            if (SDL_GetModState() & KMOD_CTRL) {
-              SDL_SetClipboardText(inputText.c_str());
-            }
-            break;
-
-            case SDLK_v:
-            if (SDL_GetModState() & KMOD_CTRL) {
-              inputText = SDL_GetClipboardText();
-              renderText = true;
-            }
-            break;
-          }
-        } else if (e.type == SDL_TEXTINPUT && (save == true || load == true)) {
-          if(!( SDL_GetModState() & KMOD_CTRL && (e.text.text[ 0 ] == 'c' ||
-          e.text.text[ 0 ] == 'C' || e.text.text[ 0 ] == 'v' ||
-          e.text.text[ 0 ] == 'V' ))) {
-            inputText += e.text.text;
-            renderText = true;
-          }
-        } else if (e.type == SDL_MOUSEBUTTONDOWN) {
-          if (e.button.button == SDL_BUTTON_LEFT) {
-            if (e.button.x > MENU_OFFSET) {
-              int x = int((e.button.x - MENU_OFFSET) / TILE_SIZE);
-              int y = int(e.button.y / TILE_SIZE);
-              map_ui.toggleTile(x+scrollX, y+scrollY, action);
-            } else if (e.button.y >= 64 && e.button.y <= 640) {
-              wallIdX = int(e.button.x / 64);
-              wallIdY = int((e.button.y - 64) / 64);
-              IDScrollOffset = menuScrollX;
-              action = wallIdX + (wallIdY*3);
-              action += IDScrollOffset * 27;
-            } else if ((e.button.x >= 5 && e.button.x <= 55) &&
-              (e.button.y >= 5 && e.button.y <= 40)) {
-              save = true;
-              load = false;
-              renderText = true;
-            } else if ((e.button.x >= 65 && e.button.x <= 115) &&
-              (e.button.y >= 5 && e.button.y <= 40)) {
-              load = true;
+          } else if (e.type == SDL_KEYDOWN && (save == true || load == true)) {
+            switch (e.key.keysym.sym) {
+              case SDLK_RETURN:
+              if (save == true) {
+                mapHandler.emitMap(inputText, map_ui.getMap());
+              } else if  (load == true) {
+                map_ui.setMap(mapHandler.readMap(inputText));
+              }
+              renderText = false;
               save = false;
+              load = false;
+              break;
+
+              case SDLK_BACKSPACE:
+              if (inputText.length() > 0) {
+                inputText.pop_back();
+                renderText = true;
+              }
+              break;
+
+              case SDLK_c:
+              if (SDL_GetModState() & KMOD_CTRL) {
+                SDL_SetClipboardText(inputText.c_str());
+              }
+              break;
+
+              case SDLK_v:
+              if (SDL_GetModState() & KMOD_CTRL) {
+                inputText = SDL_GetClipboardText();
+                renderText = true;
+              }
+              break;
+            }
+          } else if (e.type == SDL_TEXTINPUT && (save == true || load == true)) {
+            if(!( SDL_GetModState() & KMOD_CTRL && (e.text.text[ 0 ] == 'c' ||
+            e.text.text[ 0 ] == 'C' || e.text.text[ 0 ] == 'v' ||
+            e.text.text[ 0 ] == 'V' ))) {
+              inputText += e.text.text;
               renderText = true;
+            }
+          } else if (e.type == SDL_MOUSEBUTTONDOWN) {
+            if (e.button.button == SDL_BUTTON_LEFT) {
+              if (e.button.x > MENU_OFFSET) {
+                int x = int((e.button.x - MENU_OFFSET) / TILE_SIZE);
+                int y = int(e.button.y / TILE_SIZE);
+                map_ui.toggleTile(x+scrollX, y+scrollY, action);
+              } else if (e.button.y >= 64 && e.button.y <= 640) {
+                wallIdX = int(e.button.x / 64);
+                wallIdY = int((e.button.y - 64) / 64);
+                IDScrollOffset = menuScrollX;
+                action = wallIdX + (wallIdY*3);
+                action += IDScrollOffset * 27;
+              } else if ((e.button.x >= 5 && e.button.x <= 55) &&
+                (e.button.y >= 5 && e.button.y <= 40)) {
+                save = true;
+                load = false;
+                renderText = true;
+              } else if ((e.button.x >= 65 && e.button.x <= 115) &&
+                (e.button.y >= 5 && e.button.y <= 40)) {
+                load = true;
+                save = false;
+                renderText = true;
+              }
             }
           }
         }
+
+        map_ui.drawMap(renderer, walls, objects, scrollX, scrollY);
+
+        menu_ui.drawMenu(renderer, walls, objects, renderText, action, menuScrollX, inputText, realWidth, IDScrollOffset);
+
+        renderer.renderPresent();
+
+        SDL_Delay(1000/20);  // 20 fps por segundo
+      } catch (std::exception const& e) {
+        printf("Hubo una excepción:\n");
+        std::cout << e.what();
       }
-
-      map_ui.drawMap(renderer, walls, objects, scrollX, scrollY);
-
-      menu_ui.drawMenu(renderer, walls, objects, renderText, action, menuScrollX, inputText, realWidth, IDScrollOffset);
-
-      renderer.renderPresent();
-
-      SDL_Delay(1000/20);  // 20 fps por segundo
     }
   }
   catch (SdlException& e) {

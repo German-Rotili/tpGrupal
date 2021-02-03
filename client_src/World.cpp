@@ -5,9 +5,9 @@ static bool compareDistances(ZRenderable* o1, ZRenderable* o2) {
 }
 
 
-World::World(SdlRenderer& renderer, ClientSettings& settings, std::string & map) :
+World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map) :
   renderer(renderer),
-  worldMap(maphandler.readMapFromString(map)),
+  worldMap(map),
   jugador(renderer, settings, 1.5, 2.5, -45, 100, 0, 3),
   hud_jugador(renderer, jugador, settings),
   rayCaster(settings),
@@ -56,14 +56,44 @@ World::World(SdlRenderer& renderer, ClientSettings& settings, std::string & map)
   std::vector<const SdlTexture*> sShooting = {&tx_guardDogShooting, &tx_guardShooting, &tx_ssShooting, &tx_officerShooting, &tx_mutantShooting};
   std::vector<const SdlTexture*> sDying = {&tx_guardDogDying, &tx_guardDying, &tx_ssDying, &tx_officerDying, &tx_mutantDying};
 
-  // Parte de Información inicial del server
-  objetosConstantes.push_back(new Object(2.5, 3.5, barril_clip, tx_objects));
-  objetosConstantes.push_back(new Object(1.5, 1.5, estatua_clip, tx_objects));
-  objetosConstantes.push_back(new Object(1.5, 5.5, estatua_clip, tx_objects));
-  objetosConstantes.push_back(new Object(4.5, 1.5, estatua_clip, tx_objects));
-  objetosConstantes.push_back(new Object(4.5, 5.5, estatua_clip, tx_objects));
-  objetosConstantes.push_back(new Object(5.5, 5.5, lamp1_clip, tx_objects));
-  objetosConstantes.push_back(new Object(7.5, 5.5, lamp2_clip, tx_objects));
+  // Carga de objetos del mapa
+  int ymap = 0;
+  std::vector<std::vector<int>>::iterator row;
+  std::vector<int>::iterator col;
+  for (row = map.begin(); row != map.end(); row++) {
+    int xmap = 0;
+    for (col = row->begin(); col != row->end(); col++) {
+        switch (*col) {
+         case 36:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, barril_clip, tx_objects));
+         break;
+         case 37:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, pozo_clip, tx_objects));
+         break;
+         case 38:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, columna_clip, tx_objects));
+         break;
+         case 39:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, estatua_clip, tx_objects));
+         break;
+         case 40:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp1_clip, tx_objects));
+         break;
+         case 41:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp2_clip, tx_objects));
+         break;
+         case 42:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, charco_clip, tx_objects));
+         break;
+         case 43:
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, huesos_clip, tx_objects));
+         break;
+       }
+      xmap++;
+    }
+    ymap++;
+  }
+
   enemigos.push_back(new Enemy(2.5, 4.5, enemy_clip, 0, sDown, sDownLeft, sLeft,
     sUpLeft, sUp, sShooting, sDying, settings));
 }

@@ -13,6 +13,7 @@
 #include "ClientSettings.h"
 #include "client_helper.h"
 #include "../common_src/Serializer.h"
+#include "ThRequester.h"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
@@ -20,7 +21,6 @@
 #define FOV 61
 #define HOSTNAME 1
 #define SERVICE 2
-
 int main(int argc, char* args[]) {
   try {
     const char* WINDOW_NAME = "Wolfenstein Client";
@@ -40,20 +40,15 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    // std::vector<char> msg =  client.client_receive_vector();
-    // Serializer serializer;
-    // serializer.deserializer(msg);
-    
-
+    /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
     std::string map = client.client_receive_string();
-    World world(renderer, settings, map);
+    MapHandler maphandler;
+    std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
 
 
-    
 
-   
-    //World world(renderer, settings);
-
+    World world(renderer, settings, vector_map);
+    /*********************************************/
 
 
     // Provisorio hasta que haya comunicacion con el server
@@ -81,13 +76,29 @@ int main(int argc, char* args[]) {
     // Info env
     bool allDoorsClosed = true;
     //
+    player_t player;
+    player.player_id = 10;
+    player.pos_x = 2;
+    player.pos_y = 2;
+    player.direction = 90;
+    player.ammo = 100;
+    player.current_weapon = '0';
 
     bool quit = false;
     SDL_Event e;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+
+    /*Creamos y corremos el hilo*/
+    intention_t intention = { false, false, false, false, false, false, 0 };;
+    ThRequester requester(client, intention);
+    requester.start();
+    /***************************/
+
+
     // Main (o game) Loop
     while (!quit) {
       std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
+      intention = { false, false, false, false, false, false, 0 };
 
       // Event Loop
       while (SDL_PollEvent(&e) != 0) {
@@ -137,36 +148,46 @@ int main(int argc, char* args[]) {
           }
         }
       }
-
       if (currentKeyStates[SDL_SCANCODE_W]) {
+        intention.up = true;
         // Intencion de moverse adelante
-        playerX += playerMovementSpeed*cos(playerAngle*M_PI/180);
-        playerY += playerMovementSpeed*sin(playerAngle*M_PI/180);
+        // player.pos_x += playerMovementSpeed*cos(player.direction*M_PI/180);
+        // player.pos_y += playerMovementSpeed*sin(player.direction*M_PI/180);
       }
       if (currentKeyStates[SDL_SCANCODE_S]) {
+        intention.down = true;
         // Intencion de moverse hacia atras
-        playerX -= playerMovementSpeed*cos(playerAngle*M_PI/180);
-        playerY -= playerMovementSpeed*sin(playerAngle*M_PI/180);
+        // player.pos_x -= playerMovementSpeed*cos(player.direction*M_PI/180);
+        // player.pos_y -= playerMovementSpeed*sin(player.direction*M_PI/180);
+
       }
       if (currentKeyStates[SDL_SCANCODE_A ]) {
+        intention.angle_left = true;
+
         // Intencion de rotar a la izquierda
-        playerAngle -= playerRotationSpeed;
+        // player.direction -= playerRotationSpeed;
       }
       if (currentKeyStates[SDL_SCANCODE_D ]) {
         // Intencion de rotar a la derecha
-        playerAngle += playerRotationSpeed;
+        // player.direction += playerRotationSpeed;
+        intention.angle_right = true;
+
       }
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
         // intencion de disparo
-        playerIsShooting = !playerIsShooting;
+        // playerIsShooting = !playerIsShooting;
+        intention.attack = true;
       }
-      //client.client_send(input);
-      //std::cout << "Supuestamente enviado" << std::endl;
-      if (playerAngle >= 0) {
-        playerAngle -= 360;
-      } else if (playerAngle < -360) {
-        playerAngle +=360;
-      }
+
+      /*LOGICA DEL SERVER*/
+      // if (player.direction >= 0) {
+      //   player.direction -= 360;
+      // } else if (player.direction < -360) {
+      //   player.direction +=360;
+      // }
+      /******************/
+
+
 
       // Provisorio para testear enemigos
       enemyIsWalking = false;
@@ -199,9 +220,10 @@ int main(int argc, char* args[]) {
       } else if (enemyAngle < -360) {
         enemyAngle +=360;
       }
-      //
 
-      world.actualizar(playerX, playerY, playerAngle, playerHealth, playerLives,
+     requester.get_snapshot(player);
+      
+      world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
         playerArmaActual, playerIsShooting, playerScore,
          enemyAngle,
          enemyX,
@@ -223,10 +245,16 @@ int main(int argc, char* args[]) {
       } else {
         printf("Bajada de FPS\n");
       }
+      
+
     }
 
   }
   catch (SdlException& e) {
+    printf("Hubo una excepción:\n");
+    std::cout << e.what();
+  }
+  catch (std::exception const& e) {
     printf("Hubo una excepción:\n");
     std::cout << e.what();
   }

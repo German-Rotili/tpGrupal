@@ -11,20 +11,20 @@
 #include <stdint.h>
 #include <string>
 
-class Snapshot{
+class intentions{
 private:
     std::string players;
     std::string object;
     std::string player;
     
 public:
-    Snapshot();
-    ~Snapshot();
+    intentions();
+    ~intentions();
     void add_object();
     void add_player();
     void update_player();
-    const char* get_snapshot();
-    Snapshot(std::string buffer);
+    const char* get_intentions();
+    intentions(std::string buffer);
 
 };
 #endif

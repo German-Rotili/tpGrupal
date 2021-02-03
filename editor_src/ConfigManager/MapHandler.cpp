@@ -4,7 +4,7 @@
 #include <fstream>
 
 void MapHandler::emitMap(std::string path, std::vector<std::vector<int>> map) {
-  std::string actualPath = "config/" + path + ".yaml";
+  std::string actualPath = path + ".yaml";
   std::ofstream outfile (actualPath);
   YAML::Emitter out;
 
@@ -34,24 +34,6 @@ void MapHandler::emitMap(std::string path, std::vector<std::vector<int>> map) {
 std::vector<std::vector<int>> MapHandler::readMap(std::string path) {
   YAML::Node root = YAML::LoadFile(path);
 
-  int x = root["x"].as<int>();
-  int y = root["y"].as<int>();
-
-  std::vector<std::vector<int>> map =
-  std::vector<std::vector<int>>(y, std::vector<int>(x, 0));
-
-  for (int i = 0; i < y; i++) {
-    const YAML::Node& current_y = root[std::to_string(i)];
-    for (int j = 0; j < x; j++) {
-      map[i][j] = current_y[j].as<int>();
-    }
-  }
-
-  return map;
-}
-
-std::vector<std::vector<int>> MapHandler::readMapFromString(std::string file) {
-  YAML::Node root = YAML::Load(file);
   int x = root["x"].as<int>();
   int y = root["y"].as<int>();
 

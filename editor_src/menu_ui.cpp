@@ -140,6 +140,7 @@ void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls, SdlTexture& obj
   renderer.renderDrawRect(65, 5, 50, 35);
 
   if (renderText) {
+    if (inputText == "") inputText = " ";
     SdlTexture tx_inputText(renderer, text_font, inputText, 255, 255, 255);
     renderer.setRenderDrawColor(100, 100, 100, 255);
     renderer.renderFillRect((realWidth/2)-128, (SCREEN_HEIGHT/2)-16, 256, 32);

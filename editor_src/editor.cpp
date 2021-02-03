@@ -38,7 +38,7 @@ int main(int argc, char* args[]) {
     int wallIdX = 0;
     int wallIdY = 0;
 
-    std::string inputText = " ";
+    std::string inputText = "";
     bool renderText = false;
     bool save = false, load = false;
 

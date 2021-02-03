@@ -123,9 +123,9 @@ void Map_ui::drawMap(SdlRenderer& renderer, SdlTexture& walls, SdlTexture& objec
 }
 
 void Map_ui::setMap(std::vector<std::vector<int>> map) {
-  map = map;
+  this->map = map;
 }
 
 std::vector<std::vector<int>> Map_ui::getMap() {
-  return map;
+  return this->map;
 }

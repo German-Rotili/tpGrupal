@@ -11,7 +11,7 @@
 
 class RayCaster {
 
-const int MAX_DEPTH = 15;
+const int MAX_DEPTH = 30;
 const int TEXTURES_HEIGHT = 64;
 const double M_PI_180 = M_PI/180;
 const double DIRECTION_PER_RAY;

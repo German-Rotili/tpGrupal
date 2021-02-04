@@ -179,9 +179,6 @@ void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
       }
     }
 
-    if (!wallFoundX && !wallFoundY)
-      break;
-
     double d1 = settings.distance(actorX+dx, actorY+dy, xIntercept, y+int(tileStepY == 1));
     double d2 = settings.distance(actorX+dx, actorY+dy, x+int(tileStepX == 1), yIntercept);
 
@@ -189,10 +186,12 @@ void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
     SDL_Rect clip;
     if (d1 < d2) {
         distortedDist = d1;
+        if (!wallFoundX) continue;
         clip = wallFoundX->getClip();
         clip.x += (xIntercept-int(xIntercept) - yDoor_offsetclip)*clip.h;
     } else {
         distortedDist = d2;
+        if (!wallFoundY) continue;
         clip = wallFoundY->getClip();
         clip.x += (yIntercept-int(yIntercept) - xDoor_offsetclip)*clip.h;
     }

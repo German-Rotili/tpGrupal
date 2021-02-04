@@ -13,7 +13,7 @@ void SecretDoorTile::setClosed(bool isClosed) {
 }
 
 void SecretDoorTile::actualizar() {
-  if (isClosed && (depth_percentage > 0)) {
+  if (isClosed && (depth_percentage > 0.001)) {
     depth_percentage -= OPENING_SPEED;
   } else if (!isClosed && (depth_percentage < 1)) {
     depth_percentage += OPENING_SPEED;

@@ -13,7 +13,7 @@ void DoorTile::setClosed(bool isClosed) {
 }
 
 void DoorTile::actualizar() {
-  if (isClosed && (closed_percentage > 0)) {
+  if (isClosed && (closed_percentage > 0.001)) {
     closed_percentage -= OPENING_SPEED;
   } else if (!isClosed && (closed_percentage < 1)) {
     closed_percentage += OPENING_SPEED;

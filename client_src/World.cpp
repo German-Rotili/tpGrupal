@@ -12,6 +12,8 @@ World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::v
   hud_jugador(renderer, jugador, settings),
   rayCaster(settings),
   tx_objects(renderer, "textures/objects.png", 152, 0, 136),
+  tx_rocket(renderer, "textures/rocket.png"),
+  tx_explosion(renderer, "textures/explosion_strip9.png"),
   tx_walls(renderer, "textures/walls.png"),
   tx_guardDogDown(renderer, "textures/enemies/guardDog/down_strip5.png", 152, 0, 136),
   tx_guardDogDownLeft(renderer, "textures/enemies/guardDog/downleft_strip5.png", 152, 0, 136),
@@ -94,7 +96,9 @@ World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::v
     ymap++;
   }
 
-  enemigos.push_back(new Enemy(2.5, 4.5, enemy_clip, 0, sDown, sDownLeft, sLeft,
+  objetosConstantes.push_back(new Object(2.5, 1.5, basic_clip, tx_rocket));
+
+  enemigos.push_back(new Enemy(2.5, 4.5, basic_clip, 0, sDown, sDownLeft, sLeft,
     sUpLeft, sUp, sShooting, sDying, settings));
 }
 
@@ -104,8 +108,12 @@ World::~World() {
    it!= objetosConstantes.end(); ++it) {
     delete *it;
   }
-  for (std::vector<Object*>::iterator it = objetosModificables.begin();
-   it!= objetosModificables.end(); ++it) {
+  for (std::vector<Object*>::iterator it = objetosDinamicos.begin();
+   it!= objetosDinamicos.end(); ++it) {
+    delete *it;
+  }
+  for (std::vector<Explosion*>::iterator it = explosiones.begin();
+   it!= explosiones.end(); ++it) {
     delete *it;
   }
   for (std::vector<Enemy*>::iterator it = enemigos.begin();
@@ -139,9 +147,26 @@ void World::actualizar(double playerX, double playerY, double playerAngle,
 
   worldMap.setDoorsClosed(allDoorsClosed);
 
+  // Provisorio para explosiones:
+  // elimino explosiones terminadas.
+  for (std::vector<Explosion*>::iterator it = explosiones.begin();
+   it!= explosiones.end(); ++it) {
+     if ((*it)->isFinished()) {
+       delete *it; // Esto podria traer error si el vector se queda con esa instancia liberada.
+       explosiones.erase(it);
+       --it;
+     }
+  }
+  // Agrego explosion si no hay:
+  if ((!allDoorsClosed) & (explosiones.size() == 0)) {
+    explosiones.push_back(new Explosion(3.5, 1.5 , basic_clip, tx_explosion));
+    explosiones.push_back(new Explosion(5.5, 1.5 , basic_clip, tx_explosion));
+    explosiones.push_back(new Explosion(7.5, 2.5 , basic_clip, tx_explosion));
+  }
+  //
+
   worldMap.actualizar();
   hud_jugador.actualizar();
-
 }
 
 void World::renderizar(ClientSettings& settings) {
@@ -153,6 +178,16 @@ void World::renderizar(ClientSettings& settings) {
   for (std::vector<Object*>::iterator it = objetosConstantes.begin();
    it!= objetosConstantes.end(); ++it) {
      // (*it)->actualizar();
+     if ((*it)->esVisibleDesde(jugador.getX(), jugador.getY(), jugador.getDirection(), settings)) {
+       (*it)->updateDistToPlayer(jugador.getX(), jugador.getY(), settings);
+       visibles.push_back((*it));
+    }
+  }
+
+  // obtengo explosiones visibles
+  for (std::vector<Explosion*>::iterator it = explosiones.begin();
+   it!= explosiones.end(); ++it) {
+     (*it)->actualizar();
      if ((*it)->esVisibleDesde(jugador.getX(), jugador.getY(), jugador.getDirection(), settings)) {
        (*it)->updateDistToPlayer(jugador.getX(), jugador.getY(), settings);
        visibles.push_back((*it));

@@ -7,6 +7,7 @@
 #include "ClientSettings.h"
 #include "ZRenderable.h"
 #include "Object.h"
+#include "Explosion.h"
 #include "Enemy.h"
 #include "Player.h"
 #include "Hud.h"
@@ -17,7 +18,8 @@ class World {
   SdlRenderer& renderer;
   WorldMap worldMap;
   std::vector<Object*> objetosConstantes;
-  std::vector<Object*> objetosModificables;
+  std::vector<Object*> objetosDinamicos;
+  std::vector<Explosion*> explosiones;
   std::vector<Enemy*> enemigos;
   Player jugador;
   Hud hud_jugador;
@@ -26,6 +28,8 @@ class World {
   RayCaster rayCaster;
 
   SdlTexture tx_objects;
+  SdlTexture tx_rocket;
+  SdlTexture tx_explosion;
   SdlTexture tx_walls;
 
   SdlTexture tx_guardDogDown;
@@ -70,7 +74,7 @@ class World {
 
 
 
-  SDL_Rect enemy_clip = {0, 0, 64, 64};
+  SDL_Rect basic_clip = {0, 0, 64, 64};
 
   SDL_Rect barril_clip = {64*0, 64*0, 64, 64};
   SDL_Rect pozo_clip = {64*1, 64*0, 64, 64};

@@ -74,7 +74,8 @@ void ZRenderable::renderizar(SdlRenderer& renderer, double zBuffer[],
 		auxClip.x += 63;
 	}
 	for (int i = 0; i < clip.w; i++) {
-		for (int j = 0; j <= round(scale); j++) {
+		int limite = x0 + scale;
+		for (int j = 0; (x0 + j) < limite; j++) {
 			if ((x0 >= 0) && (x0+j < settings.screenWidth) && (zBuffer[int(x0)+j] > distToPlayer))
 				renderer.renderCopy(*currentTexture, &auxClip, x0+j, y0, 1, scale);
 		}

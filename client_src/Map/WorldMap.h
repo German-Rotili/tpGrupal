@@ -51,7 +51,6 @@ class WorldMap {
 
   static const int CANT_WALLS = 34;
   SDL_Rect wallClips[CANT_WALLS];
-  const SDL_Rect WALL_CLIP = {0, 0, 64, 64};
   const SDL_Rect DOOR_CLIP = {64, 11*64, 64, 64};
   const SDL_Rect KEYDOOR_CLIP = {128, 11*64, 64, 64};
 

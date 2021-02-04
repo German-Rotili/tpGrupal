@@ -39,12 +39,22 @@ WorldMap::WorldMap(std::vector<std::vector<int>> & rawMap) {
         map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP));
         actualizables.push_back(map[irow].back());
       } else if (*col == 63) {  // Puerta secreta
-        //Obtener direccion de clip del tile en x-1
-        map[irow].push_back(new SecretYDoorTile(&WALL_CLIP));
+        // Si no estoy al borde del mapa y hay un tile no vacio a mi izquierda, copio su clip
+        // sino, uso clip por defecto
+        if (((icol-1) >= 0) && (map[irow][icol-1] != NULL)) {
+          map[irow].push_back(new SecretYDoorTile(map[irow][icol-1]->getClipPointer()));
+        } else {
+          map[irow].push_back(new SecretYDoorTile(&wallClips[0]));
+        }
         actualizables.push_back(map[irow].back());
       } else if (*col == 64) {
-        //Obtener direccion de clip del tile en y-1
-        map[irow].push_back(new SecretXDoorTile(&WALL_CLIP));
+        // Si no estoy al borde del mapa y hay un tile no vacio arriba mio, copio su clip
+        // sino, uso clip por defecto
+        if (((irow-1) >= 0) && (map[irow-1][icol] != NULL)) {
+          map[irow].push_back(new SecretXDoorTile(map[irow-1][icol]->getClipPointer()));
+        } else {
+          map[irow].push_back(new SecretXDoorTile(&wallClips[0]));
+        }
         actualizables.push_back(map[irow].back());
       } else {
         map[irow].push_back(NULL);

@@ -10,8 +10,13 @@ class Tile {
       clip(clip) {}
     ~Tile() {}
 
-    const SDL_Rect getClip() const{
+    const SDL_Rect getClip() const {
       return *clip;
+    }
+
+    // Usado para camuflar las puertas secretas
+    const SDL_Rect* getClipPointer() const {
+      return clip;
     }
 
     virtual void actualizar() = 0;

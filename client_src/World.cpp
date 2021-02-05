@@ -7,56 +7,20 @@ static bool compareDistances(ZRenderable* o1, ZRenderable* o2) {
 
 World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map) :
   renderer(renderer),
+  rc(renderer),
+  settings(settings),
   worldMap(map),
-  jugador(renderer, settings, 1.5, 2.5, -45, 100, 0, 3),
+  jugador(renderer, rc, settings, 1.5, 2.5, -45, 100, 0, 3),
   hud_jugador(renderer, jugador, settings),
-  rayCaster(settings),
-  tx_objects(renderer, "textures/objects.png", 152, 0, 136),
-  tx_rocket(renderer, "textures/rocket.png"),
-  tx_explosion(renderer, "textures/explosion_strip9.png"),
-  tx_walls(renderer, "textures/walls.png"),
-  tx_guardDogDown(renderer, "textures/enemies/guardDog/down_strip5.png", 152, 0, 136),
-  tx_guardDogDownLeft(renderer, "textures/enemies/guardDog/downleft_strip5.png", 152, 0, 136),
-  tx_guardDogLeft(renderer, "textures/enemies/guardDog/left_strip5.png", 152, 0, 136),
-  tx_guardDogUpLeft(renderer, "textures/enemies/guardDog/upleft_strip5.png", 152, 0, 136),
-  tx_guardDogUp(renderer, "textures/enemies/guardDog/up_strip5.png", 152, 0, 136),
-  tx_guardDogShooting(renderer, "textures/enemies/guardDog/shooting_strip3.png", 152, 0, 136),
-  tx_guardDogDying(renderer, "textures/enemies/guardDog/dying_strip5.png", 152, 0, 136),
-  tx_guardDown(renderer, "textures/enemies/guard/down_strip5.png", 152, 0, 136),
-  tx_guardDownLeft(renderer, "textures/enemies/guard/downleft_strip5.png", 152, 0, 136),
-  tx_guardLeft(renderer, "textures/enemies/guard/left_strip5.png", 152, 0, 136),
-  tx_guardUpLeft(renderer, "textures/enemies/guard/upleft_strip5.png", 152, 0, 136),
-  tx_guardUp(renderer, "textures/enemies/guard/up_strip5.png", 152, 0, 136),
-  tx_guardShooting(renderer, "textures/enemies/guard/shooting_strip3.png", 152, 0, 136),
-  tx_guardDying(renderer, "textures/enemies/guard/dying_strip5.png", 152, 0, 136),
-  tx_ssDown(renderer, "textures/enemies/ss/down_strip5.png"),
-  tx_ssDownLeft(renderer, "textures/enemies/ss/downleft_strip5.png"),
-  tx_ssLeft(renderer, "textures/enemies/ss/left_strip5.png"),
-  tx_ssUpLeft(renderer, "textures/enemies/ss/upleft_strip5.png"),
-  tx_ssUp(renderer, "textures/enemies/ss/up_strip5.png"),
-  tx_ssShooting(renderer, "textures/enemies/ss/shooting_strip3.png"),
-  tx_ssDying(renderer, "textures/enemies/ss/dying_strip5.png"),
-  tx_officerDown(renderer, "textures/enemies/officer/down_strip5.png", 152, 0, 136),
-  tx_officerDownLeft(renderer, "textures/enemies/officer/downleft_strip5.png", 152, 0, 136),
-  tx_officerLeft(renderer, "textures/enemies/officer/left_strip5.png", 152, 0, 136),
-  tx_officerUpLeft(renderer, "textures/enemies/officer/upleft_strip5.png", 152, 0, 136),
-  tx_officerUp(renderer, "textures/enemies/officer/up_strip5.png", 152, 0, 136),
-  tx_officerShooting(renderer, "textures/enemies/officer/shooting_strip3.png", 152, 0, 136),
-  tx_officerDying(renderer, "textures/enemies/officer/dying_strip5.png", 152, 0, 136),
-  tx_mutantDown(renderer, "textures/enemies/mutant/down_strip5.png", 0, 0, 128),
-  tx_mutantDownLeft(renderer, "textures/enemies/mutant/downleft_strip5.png", 0, 0, 128),
-  tx_mutantLeft(renderer, "textures/enemies/mutant/left_strip5.png", 0, 0, 128),
-  tx_mutantUpLeft(renderer, "textures/enemies/mutant/upleft_strip5.png", 0, 0, 128),
-  tx_mutantUp(renderer, "textures/enemies/mutant/up_strip5.png", 0, 0, 128),
-  tx_mutantShooting(renderer, "textures/enemies/mutant/shooting_strip3.png", 0, 0, 128),
-  tx_mutantDying(renderer, "textures/enemies/mutant/dying_strip5.png", 0, 0, 128) {
-  std::vector<const SdlTexture*> sDown = {&tx_guardDogDown, &tx_guardDown, &tx_ssDown, &tx_officerDown, &tx_mutantDown};
-  std::vector<const SdlTexture*> sDownLeft = {&tx_guardDogDownLeft, &tx_guardDownLeft, &tx_ssDownLeft, &tx_officerDownLeft, &tx_mutantDownLeft};
-  std::vector<const SdlTexture*> sLeft = {&tx_guardDogLeft, &tx_guardLeft, &tx_ssLeft, &tx_officerLeft, &tx_mutantLeft};
-  std::vector<const SdlTexture*> sUpLeft = {&tx_guardDogUpLeft, &tx_guardUpLeft, &tx_ssUpLeft, &tx_officerUpLeft, &tx_mutantUpLeft};
-  std::vector<const SdlTexture*> sUp = {&tx_guardDogUp, &tx_guardUp, &tx_ssUp, &tx_officerUp, &tx_mutantUp};
-  std::vector<const SdlTexture*> sShooting = {&tx_guardDogShooting, &tx_guardShooting, &tx_ssShooting, &tx_officerShooting, &tx_mutantShooting};
-  std::vector<const SdlTexture*> sDying = {&tx_guardDogDying, &tx_guardDying, &tx_ssDying, &tx_officerDying, &tx_mutantDying};
+  rayCaster(settings)
+  {
+  std::vector<const SdlTexture*> sDown = {&rc.tx_guardDogDown, &rc.tx_guardDown, &rc.tx_ssDown, &rc.tx_officerDown, &rc.tx_mutantDown};
+  std::vector<const SdlTexture*> sDownLeft = {&rc.tx_guardDogDownLeft, &rc.tx_guardDownLeft, &rc.tx_ssDownLeft, &rc.tx_officerDownLeft, &rc.tx_mutantDownLeft};
+  std::vector<const SdlTexture*> sLeft = {&rc.tx_guardDogLeft, &rc.tx_guardLeft, &rc.tx_ssLeft, &rc.tx_officerLeft, &rc.tx_mutantLeft};
+  std::vector<const SdlTexture*> sUpLeft = {&rc.tx_guardDogUpLeft, &rc.tx_guardUpLeft, &rc.tx_ssUpLeft, &rc.tx_officerUpLeft, &rc.tx_mutantUpLeft};
+  std::vector<const SdlTexture*> sUp = {&rc.tx_guardDogUp, &rc.tx_guardUp, &rc.tx_ssUp, &rc.tx_officerUp, &rc.tx_mutantUp};
+  std::vector<const SdlTexture*> sShooting = {&rc.tx_guardDogShooting, &rc.tx_guardShooting, &rc.tx_ssShooting, &rc.tx_officerShooting, &rc.tx_mutantShooting};
+  std::vector<const SdlTexture*> sDying = {&rc.tx_guardDogDying, &rc.tx_guardDying, &rc.tx_ssDying, &rc.tx_officerDying, &rc.tx_mutantDying};
 
   // Carga de objetos del mapa
   int ymap = 0;
@@ -67,28 +31,28 @@ World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::v
     for (col = row->begin(); col != row->end(); col++) {
         switch (*col) {
          case 36:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, barril_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, barril_clip, rc.tx_objects, settings));
          break;
          case 37:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, pozo_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, pozo_clip, rc.tx_objects, settings));
          break;
          case 38:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, columna_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, columna_clip, rc.tx_objects, settings));
          break;
          case 39:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, estatua_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, estatua_clip, rc.tx_objects, settings));
          break;
          case 40:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp1_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp1_clip, rc.tx_objects, settings));
          break;
          case 41:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp2_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp2_clip, rc.tx_objects, settings));
          break;
          case 42:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, charco_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, charco_clip, rc.tx_objects, settings));
          break;
          case 43:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, huesos_clip, tx_objects));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, huesos_clip, rc.tx_objects, settings));
          break;
        }
       xmap++;
@@ -96,7 +60,7 @@ World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::v
     ymap++;
   }
 
-  objetosConstantes.push_back(new Object(2.5, 1.5, basic_clip, tx_rocket));
+  objetosConstantes.push_back(new Object(2.5, 1.5, basic_clip, rc.tx_rocket, settings));
 
   enemigos.push_back(new Enemy(2.5, 4.5, basic_clip, 0, sDown, sDownLeft, sLeft,
     sUpLeft, sUp, sShooting, sDying, settings));
@@ -159,9 +123,9 @@ void World::actualizar(double playerX, double playerY, double playerAngle,
   }
   // Agrego explosion si no hay:
   if ((!allDoorsClosed) & (explosiones.size() == 0)) {
-    explosiones.push_back(new Explosion(3.5, 1.5 , basic_clip, tx_explosion));
-    explosiones.push_back(new Explosion(5.5, 1.5 , basic_clip, tx_explosion));
-    explosiones.push_back(new Explosion(7.5, 2.5 , basic_clip, tx_explosion));
+    explosiones.push_back(new Explosion(3.5, 1.5 , basic_clip, rc.tx_explosion, settings));
+    explosiones.push_back(new Explosion(5.5, 1.5 , basic_clip, rc.tx_explosion, settings));
+    explosiones.push_back(new Explosion(7.5, 2.5 , basic_clip, rc.tx_explosion, settings));
   }
   //
 
@@ -171,7 +135,7 @@ void World::actualizar(double playerX, double playerY, double playerAngle,
 
 void World::renderizar(ClientSettings& settings) {
   //rayCaster.cast2D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
-  rayCaster.cast3D(renderer, worldMap, jugador.getX(), jugador.getY(), jugador.getDirection(), tx_walls, zBuffer, settings);
+  rayCaster.cast3D(renderer, worldMap, jugador.getX(), jugador.getY(), jugador.getDirection(), rc.tx_walls, zBuffer, settings);
 
   std::vector<ZRenderable*> visibles;
   // obtengo objetos visibles

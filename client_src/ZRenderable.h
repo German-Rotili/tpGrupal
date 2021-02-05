@@ -21,8 +21,16 @@ class ZRenderable {
 
 	SDL_RendererFlip flipType;
 
+	const double M_PI_180 = M_PI/180;
+	const double HALF_SCREENW;
+	const double HALF_SCREENH;
+	const double HALF_CLIPW;
+	const double HALF_CLIPH;
+	const double SCREENHEIGHT_CLIPW;
+
+
 	public:
-		ZRenderable(double xInicial, double yInicial, SDL_Rect clip);
+		ZRenderable(double xInicial, double yInicial, SDL_Rect clip, ClientSettings& settings);
 		~ZRenderable();
 		double getX();
 		double getY();

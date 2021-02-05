@@ -2,11 +2,16 @@
 #include "ZRenderable.h"
 #include "ClientSettings.h"
 
-ZRenderable::ZRenderable(double xInicial, double yInicial, SDL_Rect clip):
+ZRenderable::ZRenderable(double xInicial, double yInicial, SDL_Rect clip, ClientSettings& settings):
 		x(xInicial),
 		y(yInicial),
 		clip(clip),
-		flipType(SDL_FLIP_NONE) {
+		flipType(SDL_FLIP_NONE),
+		HALF_SCREENW(settings.screenWidth/2),
+		HALF_SCREENH(settings.screenHeight/2),
+		HALF_CLIPW(clip.w/2),
+		HALF_CLIPH(clip.h/2),
+		SCREENHEIGHT_CLIPW(settings.screenHeight/clip.w) {
 			this->difAngle = 0;
 			this->distToPlayer = 100;
 		}
@@ -50,7 +55,7 @@ bool ZRenderable::esVisibleDesde(double actorX, double actorY, double actorAngle
 		return false;
 	setDifAngle(actorX, actorY, actorAngle);
 	double absDifAngle = abs(getDifAngle());
-	if (absDifAngle <= (settings.fov/1)) {
+	if (absDifAngle <= (settings.fov)) {
 		return true;
 	}
 	return false;
@@ -62,10 +67,10 @@ void ZRenderable::updateDistToPlayer(double actorX, double actorY, ClientSetting
 
 void ZRenderable::renderizar(SdlRenderer& renderer, double zBuffer[],
 	 ClientSettings& settings) {
-	double proy = distToPlayer * cos(difAngle*M_PI/180);
-	double scale = (1/proy) * settings.screenHeight / clip.w;
-	double x0 = settings.screenWidth/2 + tan(difAngle*M_PI/180) * settings.screenWidth - (clip.w/2)*scale;
-	double y0 = settings.screenHeight/2 - (clip.h/2)*scale;
+	double proy = distToPlayer * cos(difAngle*M_PI_180);
+	double scale = (1/proy) * SCREENHEIGHT_CLIPW;
+	double x0 = HALF_SCREENW + tan(difAngle*M_PI_180) * settings.screenWidth - HALF_CLIPW * scale;
+	double y0 = HALF_SCREENH - (HALF_CLIPH)*scale;
 	SDL_Rect auxClip = this->clip;
 	auxClip.w = 1;
 	int sumar = 1;
@@ -74,10 +79,12 @@ void ZRenderable::renderizar(SdlRenderer& renderer, double zBuffer[],
 		auxClip.x += 63;
 	}
 	for (int i = 0; i < clip.w; i++) {
-		int limite = x0 + scale;
-		for (int j = 0; (x0 + j) < limite; j++) {
-			if ((x0 >= 0) && (x0+j < settings.screenWidth) && (zBuffer[int(x0)+j] > distToPlayer))
-				renderer.renderCopy(*currentTexture, &auxClip, x0+j, y0, 1, scale);
+		if (x0 >= 0) {
+			int limite = x0 + scale;
+			for (int j = 0; (x0 + j) < limite; j++) {
+				if ((x0+j < settings.screenWidth) && (zBuffer[int(x0)+j] > distToPlayer))
+					renderer.renderCopy(*currentTexture, &auxClip, x0+j, y0, 1, scale);
+			}
 		}
 		x0 += scale;
 		auxClip.x += sumar;

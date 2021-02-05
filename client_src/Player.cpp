@@ -4,7 +4,7 @@
 #include "ClientSettings.h"
 #include "PlayerWeapon.h"
 
-Player::Player(SdlRenderer& renderer, const ClientSettings& settings,
+Player::Player(SdlRenderer& renderer, ResourcesLoader& rc, const ClientSettings& settings,
 	double xInicial, double yInicial, double dirInicial, double healthInicial,
 	int scoreInicial, int livesInicial):
 		renderer(renderer),
@@ -23,12 +23,13 @@ Player::Player(SdlRenderer& renderer, const ClientSettings& settings,
 		DRAW_SCALE(double(settings.screenWidth) * 0.00586),
 		DRAW_WEAPON_Y(settings.screenHeight-(weaponClip.h/2)*DRAW_SCALE),
 		animationSpeed(double(2) * cantFrames / settings.fps),
-		cuchillo(true),
-		pistola(true),
-		ametralladora(true),
-		canionDeCadena(true),
-		lanzacohetes(true),
+		cuchillo(true, rc.snd_cuchillo, rc.snd_cuchillo),
+		pistola(true, rc.snd_pistola1, rc.snd_pistola2),
+		ametralladora(true, rc.snd_ametralladora1, rc.snd_ametralladora2),
+		canionDeCadena(true, rc.snd_canionDeCadena, rc.snd_canionDeCadena),
+		lanzacohetes(true, rc.snd_lanzacohetes, rc.snd_lanzacohetes),
 		cantBalas(8) {
+			armaActual = &pistola;
 			this->animarArma = false;
 			this->idArmaActual = 1;
 }
@@ -101,13 +102,25 @@ void Player::setScore(int score) {
 }
 void Player::setIsShooting(bool isShooting) {
 	if (!this->isShooting && (isShooting)) {
-		this->frameActual = 1;
+		this->frameActual = 2;
 		this->animarArma = true;
+		this->armaActual->reproducirSonido();
 	}
 	this->isShooting = isShooting;
 }
 
 void Player::setArmaActual(int idArma) {
+	if (idArma == 0) {
+		armaActual = &cuchillo;
+	} else if (idArma == 1) {
+		armaActual = &pistola;
+	} else if (idArma == 2) {
+		armaActual = &ametralladora;
+	} else if (idArma == 3) {
+		armaActual = &canionDeCadena;
+	} else if (idArma == 4) {
+		armaActual = &lanzacohetes;
+	}
 	this->weaponClip.y = (64+1)*idArma;
 	idArmaActual = idArma;
 }

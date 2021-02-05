@@ -2,8 +2,8 @@
 #include "Explosion.h"
 
 Explosion::Explosion(double xInicial, double yInicial, SDL_Rect clip,
-	 const SdlTexture& texture):
-		ZRenderable(xInicial, yInicial, clip),
+	 const SdlTexture& texture, ClientSettings& settings):
+		ZRenderable(xInicial, yInicial, clip, settings),
 		texture(texture),
 		image_index(0),
 		finished(false) {

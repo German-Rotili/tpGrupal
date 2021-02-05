@@ -8,7 +8,7 @@ Enemy::Enemy(double xInicial, double yInicial, SDL_Rect clip, double dirInicial,
 	std::vector<const SdlTexture*> sUp, std::vector<const SdlTexture*> sShooting,
 	 std::vector<const SdlTexture*> sDying,
 	ClientSettings& settings):
-		ZRenderable(xInicial, yInicial, clip),
+		ZRenderable(xInicial, yInicial, clip, settings),
 		relativeDirection(dirInicial),
 		sDown(sDown),
 		sDownLeft(sDownLeft),

@@ -9,7 +9,7 @@ class Object : public ZRenderable{
 	const SdlTexture& texture;
 
 	public:
-		Object(double xInicial, double yInicial, SDL_Rect clip, const SdlTexture& texture);
+		Object(double xInicial, double yInicial, SDL_Rect clip, const SdlTexture& texture, ClientSettings& settings);
 		~Object();
 		void actualizar() override {};
 };

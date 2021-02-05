@@ -6,6 +6,7 @@
 #include "SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
 #include "PlayerWeapon.h"
+#include "ResourcesLoader.h"
 
 class Player {
 	SdlRenderer& renderer;
@@ -33,11 +34,12 @@ class Player {
 	PlayerWeapon ametralladora;
 	PlayerWeapon canionDeCadena;
 	PlayerWeapon lanzacohetes;
+	PlayerWeapon* armaActual;
 	int cantBalas;
 
 	public:
 		bool animarArma;
-		Player(SdlRenderer& renderer, const ClientSettings& settings, double xInicial,
+		Player(SdlRenderer& renderer, ResourcesLoader& rc, const ClientSettings& settings, double xInicial,
 			double yInicial, double dirInicial, double healthInicial, int scoreInicial,
 			int livesInicial);
 		~Player();

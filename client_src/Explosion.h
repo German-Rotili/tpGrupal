@@ -13,7 +13,7 @@ class Explosion : public ZRenderable{
 	bool finished;
 
 	public:
-		Explosion(double xInicial, double yInicial, SDL_Rect clip, const SdlTexture& texture);
+		Explosion(double xInicial, double yInicial, SDL_Rect clip, const SdlTexture& texture, ClientSettings& settings);
 		~Explosion();
 		void actualizar() override;
 		bool isFinished();

@@ -22,6 +22,14 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
         quit = true;
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
+          if (e.button.y >= (settings.screenHeight/2) - 15 && e.button.y <= (settings.screenHeight/2) + 20) {
+            if (e.button.x >= (settings.screenWidth/2) - 150 && e.button.x <= (settings.screenWidth/2) - 30){
+              // Tengo que agregar el tema de poder pasarle un nombre de archivo de mapa
+              // Boton de Nueva Partida
+            } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
+              // Boton de Unirse a Partida
+            }
+          }
         }
       }
     }

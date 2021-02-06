@@ -23,6 +23,21 @@ std::vector<char> Serializer::serialize(intention_t & intention) {
     append_snapshot(message, intention);
     return message;    
 }
+
+std::vector<char> Serializer::serialize(Action & action) {
+    std::vector<char> message;
+    append_action(message, action);
+    return message;    
+}
+
+void Serializer::append_action(std::vector<char> & message, Action & action){
+    append_variable(message, (char*) &(action.player_id), sizeof(int));
+    append_variable(message, (char*) &(action.impact_x), sizeof(double));
+    append_variable(message, (char*) &(action.impact_y), sizeof(double));
+    append_variable(message, (char*) &(action.weapon_id), sizeof(char));
+}
+
+
 void Serializer::append_snapshot(std::vector<char> & message, intention_t & intention){
     append_variable(message, (char*) &(intention.up), sizeof(bool));
     append_variable(message, (char*) &(intention.down), sizeof(bool));
@@ -135,18 +150,40 @@ void Serializer::deserializer(std::vector <char> & msg, intention_t & intention)
     memcpy(&intention.weapon, msg.data() + offset, size_int);
     offset += size_int;
 
-    // std::cout << "/*******SNAPSHOT*******/"<<std::endl;
-    // std::cout << snapshot.up <<std::endl;
-    // std::cout << snapshot.down <<std::endl;
-    // std::cout << snapshot.angle_right <<std::endl;
-    // std::cout << snapshot.angle_left <<std::endl;
-    // std::cout << snapshot.attack <<std::endl;
-    // std::cout << snapshot.interact <<std::endl;
-    // std::cout << snapshot.weapon <<std::endl;
+    // std::cout << "/*******intention*******/"<<std::endl;
+    // std::cout << intention.up <<std::endl;
+    // std::cout << intention.down <<std::endl;
+    // std::cout << intention.angle_right <<std::endl;
+    // std::cout << intention.angle_left <<std::endl;
+    // std::cout << intention.attack <<std::endl;
+    // std::cout << intention.interact <<std::endl;
+    // std::cout << intention.weapon <<std::endl;
     // std::cout << "/**********************/"<<std::endl;
 
 }
 
+
+void Serializer::deserializer(std::vector <char> & msg, Action & action){
+    //Posibilidad de que haya un deserializer para cada "tipo" de objeto
+    int offset = 0;
+    int size_int = sizeof(int);
+    int size_double = sizeof(double);
+    memcpy(&action.player_id, msg.data(), size_int);
+    offset += size_int;
+    memcpy(&action.impact_x, msg.data() + offset, size_double);
+    offset += size_double;
+    memcpy(&action.impact_y, msg.data() + offset, size_double);
+    offset += size_double;
+    memcpy(&action.weapon_id, msg.data() + offset, sizeof(char));
+    
+    // std::cout << "/*******intention*******/"<<std::endl;
+    std::cout << action.player_id <<std::endl;
+    std::cout << action.impact_x <<std::endl;
+    std::cout << action.impact_y <<std::endl;
+    std::cout << action.weapon_id <<std::endl;
+    // std::cout << "/**********************/"<<std::endl;
+
+}
 
 
 

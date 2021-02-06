@@ -1,5 +1,5 @@
 #include "Inventory.h"
-#include "../weapons/Pistol.h"
+#include "weapons/Pistol.h"
 #include <memory>
 
 Player &Inventory::get_player() { return *this->player; }

@@ -13,7 +13,10 @@ GamePlay & GameHandler::select_match(std::string id){
     
 }
 
-GamePlay & GameHandler::new_match(){
+GamePlay & GameHandler::new_match(std::string & map_id){
+
+
+    
     GamePlay *gp = new GamePlay();//new?
     // games.push_back(gp);//move?
     return *gp;

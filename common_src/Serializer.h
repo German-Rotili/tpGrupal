@@ -8,6 +8,7 @@
 #include "utils.h"
 // #include "../server_src/Player.h"
 #include <cstring>
+#include "Action.h"
 
 struct intention_t{
   bool up;
@@ -19,6 +20,12 @@ struct intention_t{
   int weapon;
 };
 
+struct action_t {
+    int player_id; 
+    double impact_x;
+    double impact_y;
+    char weapon_id;
+};
 
 struct player_t {
     int player_id;
@@ -48,9 +55,12 @@ public:
     void deserializer(std::vector <char> & msg, player_t & player_info);    
     void append_player_info(std::vector<char> & , player_t & );
     std::vector<char> serialize(player_t & player);
+    std::vector<char> serialize(Action & player);
     std::vector<char> serialize(intention_t & snapshot);
     void append_snapshot(std::vector<char> & message, intention_t & snapshot);
+    void append_action(std::vector<char> & message, Action & action);
     void deserializer(std::vector <char> & msg, intention_t & snapshot);
+    void deserializer(std::vector <char> & msg, Action & action);
 
 };
 #endif

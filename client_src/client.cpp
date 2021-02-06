@@ -13,6 +13,8 @@
 #include "ClientSettings.h"
 #include "client_helper.h"
 #include "ThRequester.h"
+#include "Menu.h"
+#include "../common_src/Action.h"
 #include <map>
 
 #define SCREEN_WIDTH 1024
@@ -27,7 +29,7 @@ int main(int argc, char* args[]) {
     const bool FULLSCREEN = false;
     std::string hostname = args[HOSTNAME];
     std::string service = args[SERVICE];
-    Client client(service, hostname);
+
 
 
     std::string input;
@@ -38,7 +40,13 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
+    /*Lanzamiento del menu de inicio*/
+    Menu menu;
+    menu.runStartPage(renderer, settings);
+    /********************************/
+
     /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
+    Client client(service, hostname);
     std::string map = client.client_receive_string();
     MapHandler maphandler;
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
@@ -107,7 +115,6 @@ int main(int argc, char* args[]) {
     ThRequester requester(client, intention, actions);
     requester.start();
     /***************************/
-
 
     // Main (o game) Loop
     while (!quit) {
@@ -247,7 +254,7 @@ int main(int argc, char* args[]) {
             std::cout <<"Accion detectada!"<< std::endl;
           }
       }
-      
+
 
 
      world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
@@ -272,7 +279,7 @@ int main(int argc, char* args[]) {
       } else {
         printf("Bajada de FPS\n");
       }
-      
+
 
     }
 

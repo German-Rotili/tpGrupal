@@ -9,11 +9,12 @@
 #include "constants.h"
 #include "menu_ui.h"
 
-void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls, SdlTexture& objects, bool renderText, int action, int menuScrollX, std::string inputText, int realWidth, int IDScrollOffset) {
+void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls,
+  SdlTexture& objects, SdlFont& font, bool renderText, int action, int menuScrollX,
+  std::string inputText, int realWidth, int IDScrollOffset) {
   SDL_Rect clipMenuWalls;
   SDL_Rect clipMenuObjects;
 
-  SdlFont font("fonts/wolfenstein.ttf", 30);
   SdlTexture tx_load_button(renderer, font, "Load", 255, 255, 255);
   SdlTexture tx_save_button(renderer, font, "Save", 255, 255, 255);
 
@@ -144,6 +145,7 @@ void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls, SdlTexture& obj
     SdlTexture tx_inputText(renderer, text_font, inputText, 255, 255, 255);
     renderer.setRenderDrawColor(100, 100, 100, 255);
     renderer.renderFillRect((realWidth/2)-128, (SCREEN_HEIGHT/2)-16, 256, 32);
-    renderer.renderCopyCentered(tx_inputText, NULL, (realWidth/2), (SCREEN_HEIGHT/2));
+    renderer.renderCopyCentered(tx_inputText, NULL,
+    (realWidth/2), (SCREEN_HEIGHT/2));
   }
 }

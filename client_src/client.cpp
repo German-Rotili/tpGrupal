@@ -12,8 +12,8 @@
 #include "World.h"
 #include "ClientSettings.h"
 #include "client_helper.h"
-#include "../common_src/Serializer.h"
 #include "ThRequester.h"
+#include <map>
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 768
@@ -31,8 +31,6 @@ int main(int argc, char* args[]) {
 
 
     std::string input;
-    const int horizontex = SCREEN_WIDTH/2;
-    const int horizontey = SCREEN_HEIGHT/2;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
     SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
@@ -75,14 +73,30 @@ int main(int argc, char* args[]) {
     bool enemyIsShooting = false;
     // Info env
     bool allDoorsClosed = true;
+
+
+    // Action action(11);
+    // Action action(12);
+    // Action action(13);
+
+
+
+
     //
     player_t player;
-    player.player_id = 10;
+    player.player_id = 0;
     player.pos_x = 2;
     player.pos_y = 2;
     player.direction = 90;
     player.ammo = 100;
     player.current_weapon = '0';
+
+    Action *action_1 = new Action;
+    (*action_1).update_values(0,-1,-1,'0');
+    (*action_1).update_state(false);
+
+    std::vector<Action*> actions;
+    actions.push_back(action_1);
 
     bool quit = false;
     SDL_Event e;
@@ -90,7 +104,7 @@ int main(int argc, char* args[]) {
 
     /*Creamos y corremos el hilo*/
     intention_t intention = { false, false, false, false, false, false, 0 };;
-    ThRequester requester(client, intention);
+    ThRequester requester(client, intention, actions);
     requester.start();
     /***************************/
 
@@ -222,16 +236,29 @@ int main(int argc, char* args[]) {
       }
 
      requester.get_snapshot(player);
+      bool attack_aux = false;
+      int player_id_aux = -1;
+      for (size_t i = 0; i < actions.size(); i++)
+      {
+          if (actions.at(i)->active()){
+            player_id_aux = actions.at(i)->get_id();
+            attack_aux = true;
+            actions.at(i)->update_state(false);
+            std::cout <<"Accion detectada!"<< std::endl;
+          }
+      }
       
-      world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
-        playerArmaActual, playerIsShooting, playerScore,
+
+
+     world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
+        playerArmaActual, attack_aux, playerScore,
          enemyAngle,
          enemyX,
          enemyY,
          enemyArmaActual,
          enemyIsAlive,
          enemyIsWalking,
-         enemyIsShooting,
+          enemyIsShooting,
          allDoorsClosed);
       world.renderizar(settings);
 

@@ -11,6 +11,7 @@
 #include <streambuf>
 //#include "Player.h"
 #include <iterator>
+#include "../common_src/Action.h"
 #include "../common_src/Serializer.h"
 #include <chrono>
 #define FPS 30
@@ -65,20 +66,36 @@ void ThClient::run(){
 
         /*ENVIO SNAPSHOT DEL JUGADOR*/
         player_t player;
-        player.player_id = 10;
+        player.player_id = 0;
         player.pos_x = 2;
         player.pos_y = 2;
         player.direction = 90;
         player.ammo = 100;
         player.current_weapon = '0';
+        //incluir estado de puerta, el cliente se encarga de ver si cambio con una copia del estado anterior.
+
+
+
+
+          /*******ACCIONES**********/
+        Action action;
+        /*************************/
+
+
+
+        // cola de eventos en el cliente cuando parsea una accion.
+
+        char action_id = '1';
+        char snapshot_id = '0';
+
         Serializer serializer;
         std::vector <char> msg = serializer.serialize(player);
         //serializer.deserializer(msg);
+        peer.socket_send(&snapshot_id, sizeof(char));
         uint32_t snap_size = htonl(msg.size());
         peer.socket_send((char*)&snap_size, sizeof(uint32_t));
         peer.socket_send(msg.data(), msg.size());
         /*********************************/
-
 
         intention_t intention;
 
@@ -94,13 +111,29 @@ void ThClient::run(){
             serializer.deserializer(buff, intention);
 
             if (intention.up){
-                player.pos_x += 0.001;
+                player.pos_x += 0.01;
             }
             if (intention.down){
-                player.pos_y += 0.001;
+                player.pos_y -= 0.01;
             }
             if (intention.angle_right){
-                player.direction += 0.001;
+                player.direction += 0.01;
+            }
+            if (intention.angle_left){
+                player.direction -= 0.01;
+            }
+            if (intention.attack){
+                
+                action.update_values(player.player_id, player.pos_x, player.pos_y, player.current_weapon);
+                //resuelve el modelo
+                //action.impact_x; 
+                //action.impact_y;
+
+                msg = serializer.serialize(action);
+                peer.socket_send(&action_id, sizeof(char));
+                uint32_t snap_size = htonl(msg.size());
+                peer.socket_send((char*)&snap_size, sizeof(uint32_t));
+                peer.socket_send(msg.data(), msg.size());
             }
 
             msg = serializer.serialize(player);
@@ -111,6 +144,10 @@ void ThClient::run(){
             //     printf("%02X ", (unsigned)(unsigned char)((char*)&snap_size)[i]);
             // }
             // printf("\n");
+            peer.socket_send(&snapshot_id, sizeof(char));
+
+            
+            // peer.socket_send(msg.data(), msg.size());
             peer.socket_send((char*)&snap_size, sizeof(uint32_t));
             peer.socket_send(msg.data(), msg.size());
 

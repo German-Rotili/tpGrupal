@@ -2,7 +2,7 @@
 #define __SERVER_INVENTORY_H__
 #include "Player.h"
 #include "Constants.h"
-#include "../weapons/Weapon.h"
+#include "weapons/Weapon.h"
 #include <memory>
 #include <map>
 #include "Map.h"

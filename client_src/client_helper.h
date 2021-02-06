@@ -21,7 +21,7 @@ public:
 
     void  client_send_intention(intention_t & intention);
 
-    void update_player(player_t & player);
+    void update_player(player_t & player, std::vector <Action*> & actions);
 
     ~Client();
     /*

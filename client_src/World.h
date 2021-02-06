@@ -18,12 +18,12 @@ class World {
   SdlRenderer& renderer;
   ResourcesLoader rc;
   ClientSettings& settings;
+  Player jugador;
   WorldMap worldMap;
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosDinamicos;
   std::vector<Explosion*> explosiones;
   std::vector<Enemy*> enemigos;
-  Player jugador;
   Hud hud_jugador;
 
   double zBuffer[1024];

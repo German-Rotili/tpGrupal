@@ -59,6 +59,12 @@ public:
   SdlSound snd_canionDeCadena;
   SdlSound snd_lanzacohetes;
 
+  SdlSound snd_dying;
+  SdlSound snd_explosion;
+  SdlSound snd_door_open;
+  SdlSound snd_door_closed;
+
+
   ResourcesLoader(SdlRenderer& renderer);
   ~ResourcesLoader();
 };

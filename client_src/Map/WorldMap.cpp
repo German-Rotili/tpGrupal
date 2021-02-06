@@ -1,7 +1,7 @@
 #include "WorldMap.h"
 #include <iostream>
 
-WorldMap::WorldMap(std::vector<std::vector<int>> & rawMap) {
+WorldMap::WorldMap(std::vector<std::vector<int>> & rawMap, Player& player, ResourcesLoader& rc) {
   // Creacion de clips para las paredes.
   for (int i = 0; i < CANT_WALLS; i++) {
     int row = i / 3;
@@ -21,22 +21,22 @@ WorldMap::WorldMap(std::vector<std::vector<int>> & rawMap) {
         map[irow].push_back(new WallTile(&(wallClips[*col])));
         actualizables.push_back(map[irow].back());
       } else if (*col == 34) {  // Puerta comun
-        map[irow].push_back(new YDoorTile(&DOOR_CLIP));
+        map[irow].push_back(new YDoorTile(&DOOR_CLIP, irow, icol, player, rc));
         actualizables.push_back(map[irow].back());
       } else if (*col == 35) {
-        map[irow].push_back(new XDoorTile(&DOOR_CLIP));
+        map[irow].push_back(new XDoorTile(&DOOR_CLIP, irow, icol, player, rc));
         actualizables.push_back(map[irow].back());
       } else if (*col == 59) {  // Puerta con llave 1
-        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP));
+        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP, irow, icol, player, rc));
         actualizables.push_back(map[irow].back());
       } else if (*col == 60) {
-        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP));
+        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP, irow, icol, player, rc));
         actualizables.push_back(map[irow].back());
       } else if (*col == 61) {  // Puerta con llave 2 (puedo unificar con la 1)
-        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP));
+        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP, irow, icol, player, rc));
         actualizables.push_back(map[irow].back());
       } else if (*col == 62) {
-        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP));
+        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP, irow, icol, player, rc));
         actualizables.push_back(map[irow].back());
       } else if (*col == 63) {  // Puerta secreta
         // Si no estoy al borde del mapa y hay un tile no vacio a mi izquierda, copio su clip

@@ -10,8 +10,8 @@ class SdlSound {
 	public:
 		SdlSound(std::string path);
 		~SdlSound();
-		int play(int channel, int times) const;
-		void setVolume(int volume); // de 0 a 128
+		void play(int channel, int times) const;
+		void playInPosition(int channel, int times, int angle, int distance) const;
 };
 
 #endif  // SDLSOUND_H

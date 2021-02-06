@@ -4,20 +4,25 @@
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
+#include "Player.h"
 class ZRenderable {
 	protected:
 	const SdlTexture* currentTexture;
   SDL_Rect clip;
   double x;
   double y;
+
+	// Tiene una referencia a player para obtener su posicion y direccion, y así
+	// calcular posicion de renderizado o sonidos.
+	const Player& player;
 	// difAngle guarda la diferencia (de grados) entre el angulo que
 	// mira el jugador y el angulo desde el x,y del jugador hasta el x,y del objeto
-	double difAngle;
+	double difAnglePlayer;
 	// distToPlayer guarda la distancia
 	double distToPlayer;
 
-	double getDifAngle();
-	void setDifAngle(double actorX, double actorY, double dirAngle);
+	double getDifAnglePlayer();
+	void setDifAnglePlayer();
 
 	SDL_RendererFlip flipType;
 
@@ -30,17 +35,17 @@ class ZRenderable {
 
 
 	public:
-		ZRenderable(double xInicial, double yInicial, SDL_Rect clip, ClientSettings& settings);
+		ZRenderable(double xInicial, double yInicial, SDL_Rect clip, Player& player, ClientSettings& settings);
 		~ZRenderable();
 		double getX();
 		double getY();
 
-		bool esVisibleDesde(double actorX, double actorY, double actorDirection, ClientSettings& settings);
+		bool esVisiblePorPlayer(ClientSettings& settings);
 		double getDistToPlayer();
 
 		void setPosicion(double x, double y);
 		virtual void actualizar() = 0;
-		void updateDistToPlayer(double actorX, double actorY, ClientSettings& settings);
+		void updateDistToPlayer();
     void renderizar(SdlRenderer& renderer,
 		 double zBuffer[], ClientSettings& settings);
 };

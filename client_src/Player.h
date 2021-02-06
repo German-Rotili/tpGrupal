@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "SDLWrappers/SdlTexture.h"
+#include "SDLWrappers/SdlSound.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
 #include "PlayerWeapon.h"
@@ -34,6 +35,8 @@ class Player {
 	PlayerWeapon ametralladora;
 	PlayerWeapon canionDeCadena;
 	PlayerWeapon lanzacohetes;
+
+	SdlSound& sndDying;
 	PlayerWeapon* armaActual;
 	int cantBalas;
 
@@ -47,6 +50,7 @@ class Player {
 		double getX() const;
 		double getY() const;
 		double getDirection() const;
+		double getDistanceToPoint(double x, double y) const;
 		int getHealth() const;
 		int getIdArmaActual() const;
 		int getCantBalas() const;

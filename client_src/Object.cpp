@@ -2,8 +2,8 @@
 #include "Object.h"
 
 Object::Object(double xInicial, double yInicial, SDL_Rect clip,
-	 const SdlTexture& texture, ClientSettings& settings):
-	ZRenderable(xInicial, yInicial, clip, settings),
+	 const SdlTexture& texture, Player& player, ClientSettings& settings):
+	ZRenderable(xInicial, yInicial, clip, player, settings),
 		texture(texture) {
 			currentTexture = &texture;
 }

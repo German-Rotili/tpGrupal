@@ -1,22 +1,22 @@
+#include <algorithm>
 #include <cmath>
 #include "Enemy.h"
 #include "ClientSettings.h"
 
+
 Enemy::Enemy(double xInicial, double yInicial, SDL_Rect clip, double dirInicial,
-	std::vector<const SdlTexture*> sDown, std::vector<const SdlTexture*> sDownLeft,
-	std::vector<const SdlTexture*> sLeft, std::vector<const SdlTexture*> sUpLeft,
-	std::vector<const SdlTexture*> sUp, std::vector<const SdlTexture*> sShooting,
-	 std::vector<const SdlTexture*> sDying,
-	ClientSettings& settings):
-		ZRenderable(xInicial, yInicial, clip, settings),
+	Player& player, ResourcesLoader& rc, ClientSettings& settings):
+		ZRenderable(xInicial, yInicial, clip, player, settings),
 		relativeDirection(dirInicial),
-		sDown(sDown),
-		sDownLeft(sDownLeft),
-		sLeft(sLeft),
-		sUpLeft(sUpLeft),
-		sUp(sUp),
-		sShooting(sShooting),
-		sDying(sDying),
+		sDown({&rc.tx_guardDogDown, &rc.tx_guardDown, &rc.tx_ssDown, &rc.tx_officerDown, &rc.tx_mutantDown}),
+		sDownLeft({&rc.tx_guardDogDownLeft, &rc.tx_guardDownLeft, &rc.tx_ssDownLeft, &rc.tx_officerDownLeft, &rc.tx_mutantDownLeft}),
+		sLeft({&rc.tx_guardDogLeft, &rc.tx_guardLeft, &rc.tx_ssLeft, &rc.tx_officerLeft, &rc.tx_mutantLeft}),
+		sUpLeft({&rc.tx_guardDogUpLeft, &rc.tx_guardUpLeft, &rc.tx_ssUpLeft, &rc.tx_officerUpLeft, &rc.tx_mutantUpLeft}),
+		sUp({&rc.tx_guardDogUp, &rc.tx_guardUp, &rc.tx_ssUp, &rc.tx_officerUp, &rc.tx_mutantUp}),
+		sShooting({&rc.tx_guardDogShooting, &rc.tx_guardShooting, &rc.tx_ssShooting, &rc.tx_officerShooting, &rc.tx_mutantShooting}),
+		sDying({&rc.tx_guardDogDying, &rc.tx_guardDying, &rc.tx_ssDying, &rc.tx_officerDying, &rc.tx_mutantDying}),
+		sndWeapons({&rc.snd_cuchillo, &rc.snd_pistola1, &rc.snd_ametralladora1, &rc.snd_canionDeCadena, &rc.snd_lanzacohetes}),
+		sndDying(rc.snd_dying),
 		animationSpeed(double(8) / settings.fps) {
 			id_weapon = 4;
 			isRunning = false;
@@ -50,7 +50,15 @@ void Enemy::setIsRunning(bool isRunning) {
 void Enemy::setIsShooting(bool isShooting) {
 	if ((!this->isShooting) && (isShooting)) {
 		animarDisparo = true;
-		image_index = 0;
+		image_index = 1;
+
+		// Sonido de disparo
+		this->setDifAnglePlayer();
+		int angulosonido = this->getDifAnglePlayer();
+		if (angulosonido < 0) {
+			angulosonido += 360;
+		}
+		sndWeapons[id_weapon]->playInPosition(-1, 0, angulosonido, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
 	}
 	this->isShooting = isShooting;
 }
@@ -58,6 +66,14 @@ void Enemy::setIsAlive(bool isAlive) {
 	if (this->isAlive && !isAlive) {
 		animarMuerte = true;
 		image_index = 0;
+		// Sonido de muerte
+		this->setDifAnglePlayer();
+		int angulosonido = this->getDifAnglePlayer();
+		if (angulosonido < 0) {
+			angulosonido += 360;
+		}
+		sndDying.playInPosition(-1, 0, angulosonido, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
+
 	} else if (!this->isAlive && isAlive) {
 		animarMuerte = false;
 	}

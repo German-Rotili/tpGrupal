@@ -67,16 +67,16 @@ char Player::get_current_weapon_id(){
 float Player::get_direction() { return this->position.get_angle(); }
 
 
-player_t Player::get_info(){
-  player_t player_info;
-  player_info.player_id = this->get_id();
-  player_info.pos_x = this->get_pos_x();
-  player_info.pos_y = this->get_pos_y();
-  player_info.direction = this->get_direction();
-  player_info.ammo = this->get_ammo();
-  player_info.current_weapon = this->get_current_weapon_id();
-  return player_info;
-}
+// player_t Player::get_info(){
+//   player_t player_info;
+//   player_info.player_id = this->get_id();
+//   player_info.pos_x = this->get_pos_x();
+//   player_info.pos_y = this->get_pos_y();
+//   player_info.direction = this->get_direction();
+//   player_info.ammo = this->get_ammo();
+//   player_info.current_weapon = this->get_current_weapon_id();
+//   return player_info;
+// }
 
 
 

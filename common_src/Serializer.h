@@ -18,6 +18,7 @@ struct intention_t{
   bool attack;
   bool interact;
   int weapon;
+  bool active;
 };
 
 struct action_t {

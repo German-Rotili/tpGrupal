@@ -12,6 +12,7 @@
 #include "World.h"
 #include "ClientSettings.h"
 #include "client_helper.h"
+#include "ThSender.h"
 #include "ThRequester.h"
 #include <map>
 
@@ -75,14 +76,6 @@ int main(int argc, char* args[]) {
     bool allDoorsClosed = true;
 
 
-    // Action action(11);
-    // Action action(12);
-    // Action action(13);
-
-
-
-
-    //
     player_t player;
     player.player_id = 0;
     player.pos_x = 2;
@@ -91,21 +84,21 @@ int main(int argc, char* args[]) {
     player.ammo = 100;
     player.current_weapon = '0';
 
-    Action *action_1 = new Action;
-    (*action_1).update_values(0,-1,-1,'0');
-    (*action_1).update_state(false);
 
-    std::vector<Action*> actions;
-    actions.push_back(action_1);
 
     bool quit = false;
     SDL_Event e;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
-    /*Creamos y corremos el hilo*/
-    intention_t intention = { false, false, false, false, false, false, 0 };;
-    ThRequester requester(client, intention, actions);
+    /*Creamos y corremos los hilos*/
+    std::vector<Action*> actions;
+    actions.push_back(new Action(player.player_id));
+    intention_t intention = { false, false, false, false, false, false, 0 };
+    ThRequester requester(client, actions);
+    ThSender sender(client, intention);
     requester.start();
+    sender.start();
+    
     /***************************/
 
 
@@ -164,12 +157,15 @@ int main(int argc, char* args[]) {
       }
       if (currentKeyStates[SDL_SCANCODE_W]) {
         intention.up = true;
+        intention.active = true;
         // Intencion de moverse adelante
         // player.pos_x += playerMovementSpeed*cos(player.direction*M_PI/180);
         // player.pos_y += playerMovementSpeed*sin(player.direction*M_PI/180);
       }
       if (currentKeyStates[SDL_SCANCODE_S]) {
         intention.down = true;
+        intention.active = true;
+
         // Intencion de moverse hacia atras
         // player.pos_x -= playerMovementSpeed*cos(player.direction*M_PI/180);
         // player.pos_y -= playerMovementSpeed*sin(player.direction*M_PI/180);
@@ -177,6 +173,7 @@ int main(int argc, char* args[]) {
       }
       if (currentKeyStates[SDL_SCANCODE_A ]) {
         intention.angle_left = true;
+        intention.active = true;
 
         // Intencion de rotar a la izquierda
         // player.direction -= playerRotationSpeed;
@@ -185,12 +182,15 @@ int main(int argc, char* args[]) {
         // Intencion de rotar a la derecha
         // player.direction += playerRotationSpeed;
         intention.angle_right = true;
+        intention.active = true;
 
       }
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
         // intencion de disparo
         // playerIsShooting = !playerIsShooting;
         intention.attack = true;
+        intention.active = true;
+
       }
 
       /*LOGICA DEL SERVER*/
@@ -226,7 +226,7 @@ int main(int argc, char* args[]) {
         enemyIsShooting = !enemyIsShooting;
       }
       if (currentKeyStates[SDL_SCANCODE_RSHIFT ]) {
-        // intencion de disparo
+        //intencion de disparo
         enemyIsAlive = !enemyIsAlive;
       }
       if (enemyAngle >= 0) {
@@ -235,11 +235,12 @@ int main(int argc, char* args[]) {
         enemyAngle +=360;
       }
 
-     requester.get_snapshot(player);
+      requester.get_snapshot(player);
       bool attack_aux = false;
       int player_id_aux = -1;
-      for (size_t i = 0; i < actions.size(); i++)
-      {
+      for (size_t i = 0; i < actions.size(); i++){
+          std::cout <<"Recorriendo acciones: "<< actions.at(i)->active()<< std::endl;
+
           if (actions.at(i)->active()){
             player_id_aux = actions.at(i)->get_id();
             attack_aux = true;
@@ -247,8 +248,6 @@ int main(int argc, char* args[]) {
             std::cout <<"Accion detectada!"<< std::endl;
           }
       }
-      
-
 
      world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
         playerArmaActual, attack_aux, playerScore,
@@ -272,10 +271,7 @@ int main(int argc, char* args[]) {
       } else {
         printf("Bajada de FPS\n");
       }
-      
-
     }
-
   }
   catch (SdlException& e) {
     printf("Hubo una excepción:\n");

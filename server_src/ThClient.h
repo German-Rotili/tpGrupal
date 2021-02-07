@@ -10,11 +10,15 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include "../common_src/Serializer.h"
+#include "ThClientSender.h"
 #define CHUNK_SZ 1
 
 class ThClient : public Thread{
 private:
     Socket peer;
+    Action* action;
+    player_t snapshot;
     bool state = true;
     GameHandler & game_handler;
     ThClient& operator=(const ThClient&) = delete;

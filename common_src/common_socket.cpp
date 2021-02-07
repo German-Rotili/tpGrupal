@@ -119,9 +119,9 @@ void Socket::socket_receive(std::string & response, int length){
     if (received < 0)
       throw SuperException("Error al recibir bytes en el socket");
     length-=received;
-    // for (int i = 0; i < received; i++) {
-    //   printf("%02X ", (unsigned)(unsigned char)(buffer)[i]);
-    // }  
+    for (int i = 0; i < received; i++) {
+      printf("%02X ", (unsigned)(unsigned char)(buffer)[i]);
+    }  
   }
 }
 
@@ -136,9 +136,9 @@ void Socket::socket_send(std::string & message){
       throw SuperException("Error al enviar");
     }
     total_sent += sent;
-    // for (int i = 0; i < sent; i++) {
-    //   printf("%02X ", (unsigned)(unsigned char)(message.substr(total_sent).c_str())[i]);
-    // }  
+    for (int i = 0; i < sent; i++) {
+      printf("%02X ", (unsigned)(unsigned char)(message.substr(total_sent).c_str())[i]);
+    }  
   }
   
 }
@@ -152,9 +152,9 @@ void Socket::socket_send(std::string & message, int length){
       throw SuperException("Error al enviar");
     }
     total_sent += sent;
-    // for (int i = 0; i < sent; i++) {
-    //   printf("%02X ", (unsigned)(unsigned char)(message.substr(total_sent-sent).c_str())[i]);
-    // }  
+    for (int i = 0; i < sent; i++) {
+      printf("%02X ", (unsigned)(unsigned char)(message.substr(total_sent-sent).c_str())[i]);
+    }  
   }
 }
 

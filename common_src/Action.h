@@ -11,11 +11,11 @@ class Action{
         std::atomic <bool> state;
 
     public:
-        Action();
+        explicit Action(int & id);
         ~Action();
         bool active();
         void update_state(bool new_state);
-        void update_values(int player_id, double impact_x, double impact_y, char weapon_id);
+        void update_values(double impact_x, double impact_y, char weapon_id);
         int get_id();
         // Action& operator=(const Action&) = delete;
         // Action(const Action&) = delete;

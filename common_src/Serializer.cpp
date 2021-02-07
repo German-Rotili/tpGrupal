@@ -40,13 +40,14 @@ void Serializer::append_action(std::vector<char> & message, Action & action){
 
 void Serializer::append_snapshot(std::vector<char> & message, intention_t & intention){
     append_variable(message, (char*) &(intention.up), sizeof(bool));
-    append_variable(message, (char*) &(intention.down), sizeof(bool));
-    append_variable(message, (char*) &(intention.attack), sizeof(bool));
     append_variable(message, (char*) &(intention.angle_right), sizeof(bool));
     append_variable(message, (char*) &(intention.angle_left), sizeof(bool));
+    append_variable(message, (char*) &(intention.down), sizeof(bool));
+    append_variable(message, (char*) &(intention.attack), sizeof(bool));
     append_variable(message, (char*) &(intention.interact), sizeof(bool));
     append_variable(message, (char*) &(intention.weapon), sizeof(int));
 }
+
 
 std::vector<char> Serializer::serialize(player_t & player) {
     std::vector<char> message;
@@ -150,15 +151,16 @@ void Serializer::deserializer(std::vector <char> & msg, intention_t & intention)
     memcpy(&intention.weapon, msg.data() + offset, size_int);
     offset += size_int;
 
-    // std::cout << "/*******intention*******/"<<std::endl;
-    // std::cout << intention.up <<std::endl;
-    // std::cout << intention.down <<std::endl;
-    // std::cout << intention.angle_right <<std::endl;
-    // std::cout << intention.angle_left <<std::endl;
-    // std::cout << intention.attack <<std::endl;
-    // std::cout << intention.interact <<std::endl;
-    // std::cout << intention.weapon <<std::endl;
-    // std::cout << "/**********************/"<<std::endl;
+
+    std::cout << "/*******intention*******/"<<std::endl;
+    std::cout << intention.up <<std::endl;
+    std::cout << intention.down <<std::endl;
+    std::cout << intention.angle_right <<std::endl;
+    std::cout << intention.angle_left <<std::endl;
+    std::cout << intention.attack <<std::endl;
+    std::cout << intention.interact <<std::endl;
+    std::cout << intention.weapon <<std::endl;
+    std::cout << "/**********************/"<<std::endl;
 
 }
 
@@ -175,7 +177,7 @@ void Serializer::deserializer(std::vector <char> & msg, Action & action){
     memcpy(&action.impact_y, msg.data() + offset, size_double);
     offset += size_double;
     memcpy(&action.weapon_id, msg.data() + offset, sizeof(char));
-    
+    action.update_state(true);
     // std::cout << "/*******intention*******/"<<std::endl;
     std::cout << action.player_id <<std::endl;
     std::cout << action.impact_x <<std::endl;

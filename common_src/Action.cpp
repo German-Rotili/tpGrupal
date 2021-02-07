@@ -1,17 +1,18 @@
 #include "Action.h"
-
-Action::Action():state(false){}
+#include <iostream>
+Action::Action(int & id):player_id(id),state(false){}
 
 void Action::update_state(bool new_state){
     this->state = new_state;
 }
 
-void Action::update_values(int player_id, double impact_x, double impact_y, char weapon_id){
-    this->player_id = player_id;
+void Action::update_values(double impact_x, double impact_y, char weapon_id){
     this->impact_y = impact_y;
     this->impact_x = impact_x;
     this->weapon_id = weapon_id;
     this->state = true;
+    std::cout << "TRUE" <<std::endl;
+
 }
 
 int Action::get_id(){

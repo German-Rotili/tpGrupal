@@ -20,9 +20,7 @@ public:
     std::vector<char>  client_receive_vector();
 
     void  client_send_intention(intention_t & intention);
-
-    void update_player(player_t & player, std::vector <Action*> & actions);
-
+    void update_model(player_t & player, std::vector <Action*> & actions);
     ~Client();
     /*
     Crea una conexion al socket y envia cada linea del stdin al server.

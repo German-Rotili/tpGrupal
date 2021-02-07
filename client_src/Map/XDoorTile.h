@@ -5,8 +5,8 @@
 
 class XDoorTile: public DoorTile {
   public:
-    explicit XDoorTile(const SDL_Rect* clip, int x, int y, Player& player, ResourcesLoader& rc):
-      DoorTile::DoorTile(clip, x, y, player, rc) {};
+    explicit XDoorTile(const SDL_Rect* clip, int x, int y, Player& player, ResourcesLoader& src):
+      DoorTile::DoorTile(clip, x, y, player, src) {};
     ~XDoorTile() {}
 };
 

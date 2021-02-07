@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 #include "SDLWrappers/SdlContexto.h"
+#include "SDLWrappers/SdlMusic.h"
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
@@ -10,6 +11,10 @@
 #include "ClientSettings.h"
 
 void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
+
+  SdlMusic musicaMenu("../resources/music/menu.mp3");
+  musicaMenu.play();
+
   drawStartPage(renderer, settings);
 
   bool quit = false;

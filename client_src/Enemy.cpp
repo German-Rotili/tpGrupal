@@ -5,18 +5,18 @@
 
 
 Enemy::Enemy(double xInicial, double yInicial, SDL_Rect clip, double dirInicial,
-	Player& player, ResourcesLoader& rc, ClientSettings& settings):
+	Player& player, ResourcesLoader& src, ClientSettings& settings):
 		ZRenderable(xInicial, yInicial, clip, player, settings),
 		relativeDirection(dirInicial),
-		sDown({&rc.tx_guardDogDown, &rc.tx_guardDown, &rc.tx_ssDown, &rc.tx_officerDown, &rc.tx_mutantDown}),
-		sDownLeft({&rc.tx_guardDogDownLeft, &rc.tx_guardDownLeft, &rc.tx_ssDownLeft, &rc.tx_officerDownLeft, &rc.tx_mutantDownLeft}),
-		sLeft({&rc.tx_guardDogLeft, &rc.tx_guardLeft, &rc.tx_ssLeft, &rc.tx_officerLeft, &rc.tx_mutantLeft}),
-		sUpLeft({&rc.tx_guardDogUpLeft, &rc.tx_guardUpLeft, &rc.tx_ssUpLeft, &rc.tx_officerUpLeft, &rc.tx_mutantUpLeft}),
-		sUp({&rc.tx_guardDogUp, &rc.tx_guardUp, &rc.tx_ssUp, &rc.tx_officerUp, &rc.tx_mutantUp}),
-		sShooting({&rc.tx_guardDogShooting, &rc.tx_guardShooting, &rc.tx_ssShooting, &rc.tx_officerShooting, &rc.tx_mutantShooting}),
-		sDying({&rc.tx_guardDogDying, &rc.tx_guardDying, &rc.tx_ssDying, &rc.tx_officerDying, &rc.tx_mutantDying}),
-		sndWeapons({&rc.snd_cuchillo, &rc.snd_pistola1, &rc.snd_ametralladora1, &rc.snd_canionDeCadena, &rc.snd_lanzacohetes}),
-		sndDying(rc.snd_dying),
+		sDown({&src.tx_guardDogDown, &src.tx_guardDown, &src.tx_ssDown, &src.tx_officerDown, &src.tx_mutantDown}),
+		sDownLeft({&src.tx_guardDogDownLeft, &src.tx_guardDownLeft, &src.tx_ssDownLeft, &src.tx_officerDownLeft, &src.tx_mutantDownLeft}),
+		sLeft({&src.tx_guardDogLeft, &src.tx_guardLeft, &src.tx_ssLeft, &src.tx_officerLeft, &src.tx_mutantLeft}),
+		sUpLeft({&src.tx_guardDogUpLeft, &src.tx_guardUpLeft, &src.tx_ssUpLeft, &src.tx_officerUpLeft, &src.tx_mutantUpLeft}),
+		sUp({&src.tx_guardDogUp, &src.tx_guardUp, &src.tx_ssUp, &src.tx_officerUp, &src.tx_mutantUp}),
+		sShooting({&src.tx_guardDogShooting, &src.tx_guardShooting, &src.tx_ssShooting, &src.tx_officerShooting, &src.tx_mutantShooting}),
+		sDying({&src.tx_guardDogDying, &src.tx_guardDying, &src.tx_ssDying, &src.tx_officerDying, &src.tx_mutantDying}),
+		sndWeapons({&src.snd_cuchillo, &src.snd_pistola1, &src.snd_ametralladora1, &src.snd_canionDeCadena, &src.snd_lanzacohetes}),
+		sndDying(src.snd_dying),
 		animationSpeed(double(8) / settings.fps) {
 			id_weapon = 4;
 			isRunning = false;

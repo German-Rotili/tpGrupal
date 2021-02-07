@@ -1,15 +1,15 @@
 #include <cmath>
 #include "DoorTile.h"
 
-DoorTile::DoorTile(const SDL_Rect* clip, int x, int y, Player& player, ResourcesLoader& rc):
+DoorTile::DoorTile(const SDL_Rect* clip, int x, int y, Player& player, ResourcesLoader& src):
       Tile::Tile(clip),
       x(x),
       y(y),
       isClosed(true),
       closed_percentage(0.5),
       player(player),
-      snd_open(rc.snd_door_open),
-      snd_close(rc.snd_door_closed) {}
+      snd_open(src.snd_door_open),
+      snd_close(src.snd_door_closed) {}
 
 DoorTile::~DoorTile() {}
 

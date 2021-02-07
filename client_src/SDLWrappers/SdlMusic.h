@@ -1,19 +1,17 @@
-#ifndef SDLFONT_H
-#define SDLFONT_H
+#ifndef SDLMUSIC_H
+#define SDLMUSIC_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#include "SdlContexto.h"
 #include <string>
-#include "SdlException.h"
-#include "SdlRenderer.h"
 
-class SdlFont {
-	friend class SdlTexture;
-  TTF_Font* font;
+class SdlMusic {
+  Mix_Music* music;
 
 	public:
-		SdlFont(std::string path, int size);
-		~SdlFont();
+		SdlMusic(std::string path);
+		~SdlMusic();
+		void play() const;
+    void stop() const;
 };
 
-#endif  // SDLFONT_H
+#endif  // SDLMUSIC_H

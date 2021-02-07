@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlRenderer.h"
+#include "SDLWrappers/SdlMusic.h"
 #include "ClientSettings.h"
 #include "ZRenderable.h"
 #include "Object.h"
@@ -16,7 +17,7 @@
 
 class World {
   SdlRenderer& renderer;
-  ResourcesLoader rc;
+  ResourcesLoader src;
   ClientSettings& settings;
   Player jugador;
   WorldMap worldMap;
@@ -26,7 +27,9 @@ class World {
   std::vector<Enemy*> enemigos;
   Hud hud_jugador;
 
-  double zBuffer[1024];
+  void cargarObjetosConstantes(std::vector<std::vector<int>> & map);
+
+  SdlMusic music;
   RayCaster rayCaster;
 
   SDL_Rect basic_clip = {0, 0, 64, 64};

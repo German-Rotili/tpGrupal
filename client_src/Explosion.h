@@ -17,7 +17,7 @@ class Explosion : public ZRenderable{
 	bool finished;
 
 	public:
-		Explosion(double xInicial, double yInicial, SDL_Rect clip, Player& player, ResourcesLoader& rc, ClientSettings& settings);
+		Explosion(double xInicial, double yInicial, SDL_Rect clip, Player& player, ResourcesLoader& src, ClientSettings& settings);
 		~Explosion();
 		void actualizar() override;
 		bool isFinished();

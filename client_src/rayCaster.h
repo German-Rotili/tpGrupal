@@ -10,6 +10,7 @@
 #include "Map/WorldMap.h"
 
 class RayCaster {
+SdlTexture& walls;
 
 const int MAX_DEPTH = 30;
 const int TEXTURES_HEIGHT = 64;
@@ -25,15 +26,17 @@ int tileStepX, tileStepY;
 void setTileSteps(double direction);
 void setXYSteps(double direction);
 
+void dibujarPisoYTecho(SdlRenderer& renderer, ClientSettings& settings);
+
 public:
-  explicit RayCaster(ClientSettings& settings);
+  double zBuffer[1024];
+  explicit RayCaster(SdlTexture& walls, ClientSettings& settings);
   ~RayCaster();
 
   void cast2D(SdlRenderer& renderer, WorldMap& myMap, double x, double y,
      double actorAngle, ClientSettings& settings);
 
   void cast3D(SdlRenderer& renderer, WorldMap& myMap, double x, double y,
-    double actorAngle, SdlTexture& walls, double zBuffer[],
-     ClientSettings& settings);
+    double actorAngle, ClientSettings& settings);
 };
 #endif

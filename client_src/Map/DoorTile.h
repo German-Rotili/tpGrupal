@@ -21,7 +21,7 @@ class DoorTile: public Tile {
 
   public:
     const double door_depth = 0.5;
-    DoorTile(const SDL_Rect* clip, int x, int y, Player& player, ResourcesLoader& rc);
+    DoorTile(const SDL_Rect* clip, int x, int y, Player& player, ResourcesLoader& src);
     ~DoorTile();
     double getClosedPercentage() const;
     void setClosed(bool isClosed);

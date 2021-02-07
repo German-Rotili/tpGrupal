@@ -42,7 +42,7 @@ class Player {
 
 	public:
 		bool animarArma;
-		Player(SdlRenderer& renderer, ResourcesLoader& rc, const ClientSettings& settings, double xInicial,
+		Player(SdlRenderer& renderer, ResourcesLoader& src, const ClientSettings& settings, double xInicial,
 			double yInicial, double dirInicial, double healthInicial, int scoreInicial,
 			int livesInicial);
 		~Player();

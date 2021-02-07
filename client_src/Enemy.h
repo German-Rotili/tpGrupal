@@ -32,7 +32,7 @@ class Enemy : public ZRenderable {
 
 	public:
 		Enemy(double xInicial, double yInicial, SDL_Rect clip, double dirInicial,
-			Player& player, ResourcesLoader& rc, ClientSettings& settings);
+			Player& player, ResourcesLoader& src, ClientSettings& settings);
 		~Enemy();
 		void setRelativeDirection(double enemyDirection, double playerDirection);
 		void setWeapon(int id_newWeapon);

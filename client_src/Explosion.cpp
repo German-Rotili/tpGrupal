@@ -3,10 +3,10 @@
 #include "Explosion.h"
 
 Explosion::Explosion(double xInicial, double yInicial, SDL_Rect clip,
-	 Player& player, ResourcesLoader& rc, ClientSettings& settings):
+	 Player& player, ResourcesLoader& src, ClientSettings& settings):
 		ZRenderable(xInicial, yInicial, clip, player, settings),
-		texture(rc.tx_explosion),
-		sound(rc.snd_explosion),
+		texture(src.tx_explosion),
+		sound(src.snd_explosion),
 		image_index(0),
 		finished(false) {
 			currentTexture = &texture;

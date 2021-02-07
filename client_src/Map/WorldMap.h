@@ -57,7 +57,7 @@ class WorldMap {
   const SDL_Rect KEYDOOR_CLIP = {128, 11*64, 64, 64};
 
   public:
-    explicit WorldMap(std::vector<std::vector<int>> & rawMap, Player& player, ResourcesLoader& rc);
+    explicit WorldMap(std::vector<std::vector<int>> & rawMap, Player& player, ResourcesLoader& src);
     ~WorldMap();
     const class Tile* getTile(int x, int y);
     void setDoorsClosed(bool doorClosed);

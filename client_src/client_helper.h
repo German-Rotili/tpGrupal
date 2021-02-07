@@ -2,7 +2,7 @@
 #define CLIENTT
 #include "../common_src/common_socket.h"
 #include "yaml-cpp/yaml.h"
-#include "../editor_src/ConfigManager/MapHandler.h"
+#include "../common_src/MapHandler.h"
 #include "../common_src/Serializer.h"
 #include <vector>
 #include <string>

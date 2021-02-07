@@ -1,8 +1,8 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = *.cpp ./SDLWrappers/*.cpp ./Map/*.cpp ../common_src/*.cpp ../editor_src/ConfigManager/*.cpp
+OBJS = *.cpp ./SDLWrappers/*.cpp ./Map/*.cpp ../common_src/*.cpp
 
 #CC specifies which compiler we're using
-CC = g++ -g 
+CC = g++ -g
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings

@@ -14,6 +14,8 @@
 #include "client_helper.h"
 #include "ThSender.h"
 #include "ThRequester.h"
+#include "Menu.h"
+#include "../common_src/Action.h"
 #include <map>
 
 #define SCREEN_WIDTH 1024
@@ -28,7 +30,7 @@ int main(int argc, char* args[]) {
     const bool FULLSCREEN = false;
     std::string hostname = args[HOSTNAME];
     std::string service = args[SERVICE];
-    Client client(service, hostname);
+
 
 
     std::string input;
@@ -39,7 +41,13 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
+    /*Lanzamiento del menu de inicio*/
+    Menu menu;
+    menu.runStartPage(renderer, settings);
+    /********************************/
+
     /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
+    Client client(service, hostname);
     std::string map = client.client_receive_string();
     MapHandler maphandler;
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
@@ -100,7 +108,6 @@ int main(int argc, char* args[]) {
     sender.start();
     
     /***************************/
-
 
     // Main (o game) Loop
     while (!quit) {
@@ -248,6 +255,11 @@ int main(int argc, char* args[]) {
             std::cout <<"Accion detectada!"<< std::endl;
           }
       }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> dbee38a9154b7ba026502026e161b2c8f6583cb0
 
      world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
         playerArmaActual, attack_aux, playerScore,
@@ -271,6 +283,11 @@ int main(int argc, char* args[]) {
       } else {
         printf("Bajada de FPS\n");
       }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> dbee38a9154b7ba026502026e161b2c8f6583cb0
     }
   }
   catch (SdlException& e) {

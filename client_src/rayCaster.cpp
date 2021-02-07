@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <utility>
 
-RayCaster::RayCaster(ClientSettings& settings):
+RayCaster::RayCaster(SdlTexture& walls, ClientSettings& settings):
+  walls(walls),
   DIRECTION_PER_RAY(settings.fov / settings.screenWidth),
   HALF_SCREEN_HEIGHT(settings.screenHeight/2),
   HALF_FOV(settings.fov/2),
@@ -52,30 +53,31 @@ void RayCaster::cast2D(SdlRenderer& renderer, WorldMap& myMap, double x
   , double y, double actorAngle, ClientSettings& settings) {
 }
 
-void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
-  double y, double actorAngle, SdlTexture& walls , double zBuffer[],
-   ClientSettings& settings) {
+void RayCaster::dibujarPisoYTecho(SdlRenderer& renderer, ClientSettings& settings) {
   // Piso
-  renderer.setRenderDrawColor(100, 100, 100, 255);
+  renderer.setRenderDrawColor(112, 112, 112, 255);
   renderer.renderClear();
 
   // Techo
-  renderer.setRenderDrawColor(150, 150, 150, 255);
+  renderer.setRenderDrawColor(56, 56, 56, 255);
   renderer.renderFillRect(0, 0, settings.screenWidth, HALF_SCREEN_HEIGHT);
+}
 
-  int actorX = int(x);
-  double dx = x - actorX;
-  int actorY = int(y);
-  double dy = y - actorY;
+void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
+  double y, double actorAngle, ClientSettings& settings) {
+  dibujarPisoYTecho(renderer, settings);
+  int tileX = int(x);
+  double dx = x - tileX;
+  int tileY = int(y);
+  double dy = y - tileY;
 
   double rayAngle = actorAngle - HALF_FOV;
 
   for (int rayNumber = 0; rayNumber < settings.screenWidth; rayNumber++) {
-    double x = actorX;
-    double y = actorY;
+    double x = tileX;
+    double y = tileY;
 
     rayAngle += DIRECTION_PER_RAY;
-
 
     if (rayAngle >= 0) {
       rayAngle -= 360;
@@ -179,8 +181,8 @@ void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
       }
     }
 
-    double d1 = settings.distance(actorX+dx, actorY+dy, xIntercept, y+int(tileStepY == 1));
-    double d2 = settings.distance(actorX+dx, actorY+dy, x+int(tileStepX == 1), yIntercept);
+    double d1 = settings.distance(tileX+dx, tileY+dy, xIntercept, y+int(tileStepY == 1));
+    double d2 = settings.distance(tileX+dx, tileY+dy, x+int(tileStepX == 1), yIntercept);
 
     int texture_id;
     SDL_Rect clip;
@@ -202,19 +204,6 @@ void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
 
     zBuffer[rayNumber] = distortedDist;
 
-    // Seteo de color profundidad
-    /*int prof = distortedDist * 10;
-    int color;
-    if (prof > 255){
-      color = 0;
-    }
-    else {
-      color = (255-prof);
-    }
-    walls.setColorMod(color, color, color);*/
-
     renderer.renderCopyCentered(walls, &clip, rayNumber, HALF_SCREEN_HEIGHT, 1, scale);
-
-
   }
 }

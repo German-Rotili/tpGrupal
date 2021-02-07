@@ -48,5 +48,9 @@ ResourcesLoader::ResourcesLoader(SdlRenderer& renderer):
   snd_ametralladora1("../resources/sounds/ametralladora1.mp3"),
   snd_ametralladora2("../resources/sounds/ametralladora2.mp3"),
   snd_canionDeCadena("../resources/sounds/canionDeCadena.mp3"),
-  snd_lanzacohetes("../resources/sounds/rocket.mp3") {}
+  snd_lanzacohetes("../resources/sounds/rocket.mp3"),
+  snd_dying("../resources/sounds/dying.mp3"),
+  snd_explosion("../resources/sounds/explosion.mp3"),
+  snd_door_open("../resources/sounds/door_open.mp3"),
+  snd_door_closed("../resources/sounds/door_closed.mp3") {}
 ResourcesLoader::~ResourcesLoader() {}

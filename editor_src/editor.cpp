@@ -8,8 +8,8 @@
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
 #include "SDLWrappers/SdlFont.h"
-#include "ConfigManager/MapHandler.h"
-#include "ConfigManager/EditorConfigHandler.h"
+#include "../common_src/MapHandler.h"
+#include "EditorConfigHandler.h"
 #include "map_ui.h"
 #include "menu_ui.h"
 #include "constants.h"
@@ -27,8 +27,8 @@ int main(int argc, char* args[]) {
     SdlTexture walls(renderer, "textures/walls.png");
     SdlTexture objects(renderer, "textures/objects.png", 152, 0 , 136);
 
-    int playerx = realWidth/2;
-    int playery = SCREEN_HEIGHT/2;
+    SdlFont font("fonts/wolfenstein.ttf", 30);
+    SdlTexture tx_error(renderer, font, "Hubo un Error", 255, 0, 0);
 
     int action = 0;
     int scrollY = 0;
@@ -128,10 +128,11 @@ int main(int argc, char* args[]) {
               }
               break;
             }
-          } else if (e.type == SDL_TEXTINPUT && (save == true || load == true)) {
-            if(!( SDL_GetModState() & KMOD_CTRL && (e.text.text[ 0 ] == 'c' ||
-            e.text.text[ 0 ] == 'C' || e.text.text[ 0 ] == 'v' ||
-            e.text.text[ 0 ] == 'V' ))) {
+          } else if (e.type == SDL_TEXTINPUT &&
+            (save == true || load == true)) {
+            if(!(SDL_GetModState() & KMOD_CTRL && (e.text.text[0] == 'c' ||
+            e.text.text[0] == 'C' || e.text.text[0] == 'v' ||
+            e.text.text[0] == 'V' ))) {
               inputText += e.text.text;
               renderText = true;
             }
@@ -161,17 +162,21 @@ int main(int argc, char* args[]) {
             }
           }
         }
+        renderer.renderClear();
 
         map_ui.drawMap(renderer, walls, objects, scrollX, scrollY);
 
-        menu_ui.drawMenu(renderer, walls, objects, renderText, action, menuScrollX, inputText, realWidth, IDScrollOffset);
+        menu_ui.drawMenu(renderer, walls, objects, font, renderText, action,
+        menuScrollX, inputText, realWidth, IDScrollOffset);
 
         renderer.renderPresent();
 
         SDL_Delay(1000/20);  // 20 fps por segundo
       } catch (std::exception const& e) {
-        printf("Hubo una excepción:\n");
-        std::cout << e.what();
+        renderer.renderCopyCentered(tx_error, NULL,
+        (realWidth/2), (SCREEN_HEIGHT/2) - 32);
+        printf("Hubo una excepción: ");
+        std::cout << e.what() << "\n";
       }
     }
   }

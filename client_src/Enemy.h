@@ -5,6 +5,8 @@
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
+#include "ResourcesLoader.h"
+#include "SDLWrappers/SdlSound.h"
 
 #include "ZRenderable.h"
 class Enemy : public ZRenderable {
@@ -16,6 +18,8 @@ class Enemy : public ZRenderable {
 	std::vector<const SdlTexture*> sUp;
 	std::vector<const SdlTexture*> sShooting;
 	std::vector<const SdlTexture*> sDying;
+	std::vector<const SdlSound*> sndWeapons;
+	const SdlSound& sndDying;
 	const double animationSpeed;
 	int id_weapon;
 	bool isRunning;
@@ -28,11 +32,7 @@ class Enemy : public ZRenderable {
 
 	public:
 		Enemy(double xInicial, double yInicial, SDL_Rect clip, double dirInicial,
-			std::vector<const SdlTexture*> sDown, std::vector<const SdlTexture*> sDownLeft,
-			std::vector<const SdlTexture*> sLeft, std::vector<const SdlTexture*> sUpLeft,
-			std::vector<const SdlTexture*> sUp, std::vector<const SdlTexture*> sShooting,
-			std::vector<const SdlTexture*> sDying,
-			ClientSettings& settings);
+			Player& player, ResourcesLoader& src, ClientSettings& settings);
 		~Enemy();
 		void setRelativeDirection(double enemyDirection, double playerDirection);
 		void setWeapon(int id_newWeapon);

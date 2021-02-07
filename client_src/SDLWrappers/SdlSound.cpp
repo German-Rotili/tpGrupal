@@ -18,10 +18,16 @@ SdlSound::~SdlSound() {
 	}
 }
 
-int SdlSound::play(int channel, int times) const {
-	return Mix_PlayChannel(channel, sound, times);
+void SdlSound::play(int channel, int times) const {
+	Mix_PlayChannel(channel, sound, times);
 }
 
-void SdlSound::setVolume(int volume) {
-	Mix_VolumeChunk(sound, volume);
+void SdlSound::playInPosition(int channel, int times, int angle, int distance)
+const {
+	// angle 135 sería atras a la izquierda
+	int retChannel = Mix_PlayChannel(channel, sound, times);
+	if(!Mix_SetPosition(retChannel, angle, distance)) {
+    printf("Mix_SetPosition: %s\n", Mix_GetError());
+    // no position effect, is it ok?
+	}
 }

@@ -2,30 +2,31 @@
 #include "ZRenderable.h"
 #include "ClientSettings.h"
 
-ZRenderable::ZRenderable(double xInicial, double yInicial, SDL_Rect clip, ClientSettings& settings):
+ZRenderable::ZRenderable(double xInicial, double yInicial, SDL_Rect clip, Player& player, ClientSettings& settings):
 		x(xInicial),
 		y(yInicial),
 		clip(clip),
+		player(player),
 		flipType(SDL_FLIP_NONE),
 		HALF_SCREENW(settings.screenWidth/2),
 		HALF_SCREENH(settings.screenHeight/2),
 		HALF_CLIPW(clip.w/2),
 		HALF_CLIPH(clip.h/2),
 		SCREENHEIGHT_CLIPW(settings.screenHeight/clip.w) {
-			this->difAngle = 0;
+			this->difAnglePlayer = 0;
 			this->distToPlayer = 100;
 		}
 
 ZRenderable::~ZRenderable() {}
 
-void ZRenderable::setDifAngle(double actorX, double actorY, double actorAngle) {
-	double angle = (atan2(actorY - y, actorX - x) - M_PI) * 180 / M_PI;
-	this->difAngle = (angle - actorAngle);
-	if (this->difAngle > 180) {
-		this->difAngle -= 360;
+void ZRenderable::setDifAnglePlayer() {
+	double angle = (atan2(player.getY() - y, player.getX() - x) - M_PI) * 180 / M_PI;
+	this->difAnglePlayer = (angle - player.getDirection());
+	if (this->difAnglePlayer > 180) {
+		this->difAnglePlayer -= 360;
 	}
-	if (this->difAngle <-180) {
-		this->difAngle += 360;
+	if (this->difAnglePlayer <-180) {
+		this->difAnglePlayer += 360;
 	}
 }
 
@@ -42,34 +43,34 @@ double ZRenderable::getY() {
 	return this->y;
 }
 
-double ZRenderable::getDifAngle() {
-	return this->difAngle;
+double ZRenderable::getDifAnglePlayer() {
+	return this->difAnglePlayer;
 }
 
 double ZRenderable::getDistToPlayer() {
 	return this->distToPlayer;
 }
 
-bool ZRenderable::esVisibleDesde(double actorX, double actorY, double actorAngle, ClientSettings& settings) {
-	if ((actorX == x) && (actorY == y))
+bool ZRenderable::esVisiblePorPlayer(ClientSettings& settings) {
+	if ((player.getX() == x) && (player.getY() == y))
 		return false;
-	setDifAngle(actorX, actorY, actorAngle);
-	double absDifAngle = abs(getDifAngle());
+	setDifAnglePlayer();
+	double absDifAngle = abs(getDifAnglePlayer());
 	if (absDifAngle <= (settings.fov)) {
 		return true;
 	}
 	return false;
 }
 
-void ZRenderable::updateDistToPlayer(double actorX, double actorY, ClientSettings& settings) {
-	distToPlayer = settings.distance(actorX, actorY, x, y);
+void ZRenderable::updateDistToPlayer() {
+	distToPlayer = player.getDistanceToPoint(x, y);
 }
 
 void ZRenderable::renderizar(SdlRenderer& renderer, double zBuffer[],
 	 ClientSettings& settings) {
-	double proy = distToPlayer * cos(difAngle*M_PI_180);
+	double proy = distToPlayer * cos(difAnglePlayer*M_PI_180);
 	double scale = (1/proy) * SCREENHEIGHT_CLIPW;
-	double x0 = HALF_SCREENW + tan(difAngle*M_PI_180) * settings.screenWidth - HALF_CLIPW * scale;
+	double x0 = HALF_SCREENW + tan(difAnglePlayer*M_PI_180) * settings.screenWidth - HALF_CLIPW * scale;
 	double y0 = HALF_SCREENH - (HALF_CLIPH)*scale;
 	SDL_Rect auxClip = this->clip;
 	auxClip.w = 1;

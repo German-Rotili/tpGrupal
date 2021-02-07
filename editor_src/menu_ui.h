@@ -13,6 +13,8 @@
 
 class Menu_ui {
 public:
-  void drawMenu(SdlRenderer& renderer, SdlTexture& walls, SdlTexture& objects, bool renderText, int action, int menuScrollX, std::string inputText, int realWidth, int IDScrollOffset);
+  void drawMenu(SdlRenderer& renderer, SdlTexture& walls, SdlTexture& objects, SdlFont& font,
+  bool renderText, int action, int menuScrollX,
+  std::string inputText, int realWidth, int IDScrollOffset);
 };
 #endif /* MENU_UI */

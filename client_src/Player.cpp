@@ -4,7 +4,7 @@
 #include "ClientSettings.h"
 #include "PlayerWeapon.h"
 
-Player::Player(SdlRenderer& renderer, ResourcesLoader& rc, const ClientSettings& settings,
+Player::Player(SdlRenderer& renderer, ResourcesLoader& src, const ClientSettings& settings,
 	double xInicial, double yInicial, double dirInicial, double healthInicial,
 	int scoreInicial, int livesInicial):
 		renderer(renderer),
@@ -23,11 +23,12 @@ Player::Player(SdlRenderer& renderer, ResourcesLoader& rc, const ClientSettings&
 		DRAW_SCALE(double(settings.screenWidth) * 0.00586),
 		DRAW_WEAPON_Y(settings.screenHeight-(weaponClip.h/2)*DRAW_SCALE),
 		animationSpeed(double(2) * cantFrames / settings.fps),
-		cuchillo(true, rc.snd_cuchillo, rc.snd_cuchillo),
-		pistola(true, rc.snd_pistola1, rc.snd_pistola2),
-		ametralladora(true, rc.snd_ametralladora1, rc.snd_ametralladora2),
-		canionDeCadena(true, rc.snd_canionDeCadena, rc.snd_canionDeCadena),
-		lanzacohetes(true, rc.snd_lanzacohetes, rc.snd_lanzacohetes),
+		cuchillo(true, src.snd_cuchillo, src.snd_cuchillo),
+		pistola(true, src.snd_pistola1, src.snd_pistola2),
+		ametralladora(true, src.snd_ametralladora1, src.snd_ametralladora2),
+		canionDeCadena(true, src.snd_canionDeCadena, src.snd_canionDeCadena),
+		lanzacohetes(true, src.snd_lanzacohetes, src.snd_lanzacohetes),
+		sndDying(src.snd_dying),
 		cantBalas(8) {
 			armaActual = &pistola;
 			this->animarArma = false;
@@ -69,6 +70,10 @@ int Player::getIdArmaActual() const {
 	return idArmaActual;
 }
 
+double Player::getDistanceToPoint(double x, double y) const {
+	return sqrt(pow(x-this->x, 2) + pow(y-this->y, 2));
+}
+
 std::vector<bool> Player::getArmasDisponibles() const {
 	std::vector<bool> resultado = {
 		cuchillo.estaDisponible(),
@@ -90,6 +95,9 @@ void Player::setDirection(double direction) {
 }
 
 void Player::setHealth(double health) {
+	if ((health <= 0) & (this->health > 0)) {
+		sndDying.play(-1, 0);
+	}
 	this->health = health;
 }
 
@@ -139,5 +147,7 @@ void Player::renderizar(ClientSettings& settings) {
 			animarArma = false;
 		}
 	}
-	renderer.renderCopyCentered(texture, &auxClip, DRAW_WEAPON_X, DRAW_WEAPON_Y, DRAW_SCALE, DRAW_SCALE);
+	if (this->health > 0) {
+		renderer.renderCopyCentered(texture, &auxClip, DRAW_WEAPON_X, DRAW_WEAPON_Y, DRAW_SCALE, DRAW_SCALE);
+	}
 }

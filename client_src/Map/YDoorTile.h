@@ -4,8 +4,8 @@
 #include "DoorTile.h"
 class YDoorTile: public DoorTile {
   public:
-    explicit YDoorTile(const SDL_Rect* clip):
-      DoorTile::DoorTile(clip) {}
+    explicit YDoorTile(const SDL_Rect* clip, int x, int y, Player& player, ResourcesLoader& src):
+      DoorTile::DoorTile(clip, x, y, player, src) {}
     ~YDoorTile() {}
 };
 

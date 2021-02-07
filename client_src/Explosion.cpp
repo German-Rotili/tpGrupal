@@ -1,13 +1,23 @@
 #include <cmath>
+#include <algorithm>
 #include "Explosion.h"
 
 Explosion::Explosion(double xInicial, double yInicial, SDL_Rect clip,
-	 const SdlTexture& texture, ClientSettings& settings):
-		ZRenderable(xInicial, yInicial, clip, settings),
-		texture(texture),
+	 Player& player, ResourcesLoader& src, ClientSettings& settings):
+		ZRenderable(xInicial, yInicial, clip, player, settings),
+		texture(src.tx_explosion),
+		sound(src.snd_explosion),
 		image_index(0),
 		finished(false) {
 			currentTexture = &texture;
+
+			// Reproducir sonido de explosion
+			this->setDifAnglePlayer();
+			int angulosonido = this->getDifAnglePlayer();
+			if (angulosonido < 0) {
+				angulosonido += 360;
+			}
+			sound.playInPosition(-1, 0, angulosonido, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
 }
 
 Explosion::~Explosion() {}

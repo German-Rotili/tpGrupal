@@ -255,11 +255,6 @@ int main(int argc, char* args[]) {
             std::cout <<"Accion detectada!"<< std::endl;
           }
       }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> dbee38a9154b7ba026502026e161b2c8f6583cb0
 
      world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
         playerArmaActual, attack_aux, playerScore,
@@ -283,11 +278,6 @@ int main(int argc, char* args[]) {
       } else {
         printf("Bajada de FPS\n");
       }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> dbee38a9154b7ba026502026e161b2c8f6583cb0
     }
   }
   catch (SdlException& e) {

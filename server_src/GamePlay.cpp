@@ -14,9 +14,57 @@ void GamePlay::add_client(ThClient & client){
 
 Snapshot GamePlay::get_snapshot(){
     Snapshot snapshot;
-    // snapshot.add_players(map.players);
-    // snapshot.add_objects(map.);
-    // snapshot.add_actions();
+    for(Player &player : this->map.players){
+        player_t *player_aux = new player_t;
+        player_aux->player_id;
+        player_aux->pos_x;
+        player_aux->pos_y;
+        player_aux->direction;
+        player_aux->current_weapon;
+        player_aux->ammo;
+        player_aux->health;
+        player_aux->lives;
+        player_aux->score;
+        snapshot.add_player(player_aux);
+    }
+
+   for(auto &x : this->map.items){
+       object_t *object_aux = new object_t;
+     for(auto &y : x.second){
+         object_aux->id = y.second;
+         object_aux->pos_x = x.first;
+         object_aux->pos_y = y.first;
+         object_aux->state = false;
+        snapshot.add_object(object_aux);
+       }
+     }
+  
+     for(auto &x : this->map.doors){
+       object_t *object_aux = new object_t;
+        for(auto &y : x.second){
+         object_aux->id = 34;
+         object_aux->pos_x = x.first;
+         object_aux->pos_y = y.first;
+         object_aux->state = y.second.is_open();
+         snapshot.add_object(object_aux);
+       }
+     }
+  
+    for(Rocket &rocket : this->map.rockets){
+         object_t *object_aux = new object_t;
+         object_aux->id = 35;
+         object_aux->pos_x = rocket.get_pos_x();
+         object_aux->pos_y = rocket.get_pos_y();
+         object_aux->state = false;
+         snapshot.add_object(object_aux);
+    }
+    
+
+    for(Action &action : this->map.actions){
+       Action *action_aux = new Action(action.player_id);
+       action_aux->update_values(action.impact_x, action.impact_y, action.weapon_id);
+       snapshot.add_action(action_aux);
+    }
     return snapshot;
 
 }

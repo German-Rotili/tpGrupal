@@ -6,14 +6,14 @@
 #include "weapons/Weapon.h"
 #include "Inventory.h"
 
-struct player_t {
-    int player_id;
-    float pos_x;
-    float pos_y;
-    float direction;
-    int ammo;
-    char current_weapon;
-};
+// struct player_t {
+//     int player_id;
+//     float pos_x;
+//     float pos_y;
+//     float direction;
+//     int ammo;
+//     char current_weapon;
+// };
 
 //Para el manejo de las acciones. agregar una lista de acciones que ocurren en cada iteracion. para esto cuando el server 
 //prepare el mensaje al cliente leera desde esta lista las acciones que son relevantes al cliente por ejemplo;

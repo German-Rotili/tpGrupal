@@ -43,6 +43,15 @@ int main(int argc, char* args[]) {
     menu.runInsertUsername(renderer, settings);
     /********************************/
 
+    //cliente manda username
+        //Server guarda username-id. Chequear si existe
+        //Server devuelve nuevo id + id de partidas.
+    
+    
+    //
+
+
+
     /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
     Client client(service, hostname);
     std::string map = client.client_receive_string();
@@ -50,8 +59,8 @@ int main(int argc, char* args[]) {
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
 
 
-
-    World world(renderer, settings, vector_map);
+    int id = 0;//lo debo recibir del server
+    World world(renderer, settings, vector_map, id);
     bool quit = false;
     SDL_Event e;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);

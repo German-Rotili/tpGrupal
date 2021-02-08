@@ -30,9 +30,11 @@ void ZRenderable::setDifAnglePlayer() {
 	}
 }
 
-void ZRenderable::setPosicion(double x, double y) {
+bool ZRenderable::setPosicion(double x, double y) {
+	bool huboMovimiento = (x != this->x) || (y != this->y);
 	this->x = x;
 	this->y = y;
+	return huboMovimiento;
 }
 
 double ZRenderable::getX() {

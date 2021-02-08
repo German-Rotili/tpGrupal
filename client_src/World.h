@@ -1,6 +1,8 @@
 #ifndef WORLD_H
 #define WORLD_H
 #include <vector>
+#include <map>
+#include <utility>
 #include <algorithm>
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlRenderer.h"
@@ -15,7 +17,6 @@
 #include "rayCaster.h"
 #include "Map/WorldMap.h"
 #include "../common_src/Snapshot.h"
-
 class World {
   SdlRenderer& renderer;
   ResourcesLoader src;
@@ -26,10 +27,12 @@ class World {
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosDinamicos;
   std::vector<Explosion*> explosiones;
-  std::vector<Enemy*> enemigos;
+  std::map<int, Enemy*> enemigos;
   Hud hud_jugador;
 
   void cargarObjetosConstantes(std::vector<std::vector<int>> & map);
+  void limpiarObjetosDinamicos();
+  void agregarObjetoDinamico(object_t* object);
 
   SdlMusic music;
   RayCaster rayCaster;
@@ -60,15 +63,9 @@ class World {
 
 	public:
 //		World(SdlRenderer& renderer, ClientSettings& settings);
-		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map);
+		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map, int player_id);
     ~World();
     void actualizar(Snapshot & snapshot);
-      // double playerX, double playerY, double playerAngle,
-      // double playerHealth, int playerLives, int playerArmaActual,
-      // bool playerIsShooting, int playerScore,
-      // double enemyAngle, double enemyX, double enemyY, int enemyArmaActual,
-      // bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting,
-      // bool allDoorsClosed);
     void renderizar(ClientSettings& settings);
 };
 

@@ -43,7 +43,9 @@ class ZRenderable {
 		bool esVisiblePorPlayer(ClientSettings& settings);
 		double getDistToPlayer();
 
-		void setPosicion(double x, double y);
+		// Retorna true si la posicion es distinta a la que tenia antes
+		bool setPosicion(double x, double y);
+		
 		virtual void actualizar() = 0;
 		void updateDistToPlayer();
     void renderizar(SdlRenderer& renderer,

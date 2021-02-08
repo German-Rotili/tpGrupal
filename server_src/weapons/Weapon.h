@@ -28,7 +28,7 @@ protected:
 public:
     virtual bool get_damage(int distance);
     void tick();
-    void attack();
+    virtual void attack();
 
 };
 

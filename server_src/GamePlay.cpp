@@ -1,14 +1,25 @@
 #include "GamePlay.h"
 
-GamePlay::GamePlay(){}
+GamePlay::GamePlay(ThClient & player, Map&& map):map(map){
+    this->add_client(player);
+}
 
 GamePlay::~GamePlay(){}
 
 
-void GamePlay::add_client(ThClient* client){
+void GamePlay::add_client(ThClient & client){
     this->clients.push_back(client);
 }
 
+
+Snapshot GamePlay::get_snapshot(){
+    Snapshot snapshot;
+    // snapshot.add_players(map.players);
+    // snapshot.add_objects(map.);
+    // snapshot.add_actions();
+    return snapshot;
+
+}
 
 void GamePlay::run(){
 
@@ -16,10 +27,10 @@ void GamePlay::run(){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
             
             for(auto &client : this->clients){
-                this->map.execute_intentions(client->intention_queue);
+                this->map.execute_intentions(client->intention_queue, client->client_id);
             }
 
-            Snapshot snapshot = this->map.get_snapshot();
+            Snapshot snapshot = this->get_snapshot();
             
             for(auto &client : this->clients){
                 client->send_snapshot(snapshot);
@@ -42,3 +53,7 @@ int GamePlay::get_id(){
     return this->id;
 }
 
+void GamePlay::start(){
+    this->state = true;
+    this->run();
+}

@@ -29,7 +29,8 @@ private:
     bool placed;
     int spawn_x;
     int spawn_y;
-    void move(char intention);
+    char hitpoints;
+
     void attack();
     void acction();
     void intersects(float impx, float impy, Player &player);
@@ -61,6 +62,8 @@ public:
     float get_angle_difference(Position position);
     float get_angle_difference(float x, float y); 
     void check_if_item();
+    void heal(char id);
+    void collect_treasure(char id);
 
     bool is_in_hitbox(float x, float y);
 };

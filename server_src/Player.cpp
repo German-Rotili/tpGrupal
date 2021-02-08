@@ -49,6 +49,18 @@ float Player::get_angle_difference(Position position) {
 float Player::get_angle_difference(float x, float y) {
   return this->position.get_angle_difference(x, y);
 }
+
+void Player::heal(char id) 
+{
+  this->hitpoints += 30;
+  
+}
+
+void Player::collect_treasure(char id) 
+{
+  
+}
+
 void Player::attack() { this->inventory.attack(); }
 
 void Player::acction() {
@@ -86,6 +98,14 @@ void Player::process_near_item(){
     if(this->inventory.handle_item(current_id)){
       this->map.remove_item(this->get_pos_x(), this->get_pos_y());
     }
+  }
+  if(id <= 46 && id >= 48){
+    this->heal(id);
+    this->map.remove_item(this->get_pos_x(), this->get_pos_y());
+  }
+  if(id <= 53 && id >= 56){
+    this->collect_treasure(id);
+    this->map.remove_item(this->get_pos_x(), this->get_pos_y());
   }
 }
 

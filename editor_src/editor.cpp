@@ -175,6 +175,7 @@ int main(int argc, char* args[]) {
       } catch (std::exception const& e) {
         renderer.renderCopyCentered(tx_error, NULL,
         (realWidth/2), (SCREEN_HEIGHT/2) - 32);
+        renderer.renderPresent();
         printf("Hubo una excepción: ");
         std::cout << e.what() << "\n";
       }

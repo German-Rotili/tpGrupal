@@ -12,16 +12,26 @@
 
 class Menu {
 public:
+  void runInsertUsername(SdlRenderer& renderer, ClientSettings& settings);
+
   void runStartPage(SdlRenderer& renderer, ClientSettings& settings);
+
+  void runGameList(SdlRenderer& renderer, ClientSettings& settings);
 
   void runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator);
 
   void runEndScreen(SdlRenderer& renderer, ClientSettings& settings);
 
-  void drawStartPage(SdlRenderer& renderer, ClientSettings& settings);
+  void drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
+
+  void drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
+
+  void drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, int numJuegos);
 
   void drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, int numjugadores);
 
   void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings);
+
+  void textPrompt(SdlRenderer& renderer, ClientSettings& settings, std::string inputText);
 };
 #endif /* MENU */

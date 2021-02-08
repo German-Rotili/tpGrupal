@@ -39,11 +39,11 @@ void ThClient::run(){
                 //peer.socket_recieve(output.c_str(), output.length());
                 //Parseo la partida que eligio y la asigno al cliente.
 
-        //std::string id;
-        //GamePlay game_play = game_handler.select_match(id);
+        GamePlay game_play = game_handler.select_match(id);
         //or
         //GamePlay game_play = game_handler.new_match();
-
+        //ID maker
+        //isOpen para las puertas y enviar al cliente.
         
                     //la idea es que el mapa lea las intenciones pero se bloquea.
                     //el mapa le pide las intenciones a cada jugador, vector de chars, quizas limitado.
@@ -51,7 +51,8 @@ void ThClient::run(){
                     //El cliente solo recibe intenciones y manda snapshots.
                     //El cliente recibe del gameplay cuando termina.
                     //
-
+        
+        //
 
 
 

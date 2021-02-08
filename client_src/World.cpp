@@ -157,13 +157,14 @@ void World::actualizar(Snapshot & snapshot){
     }
 
     for (auto &action : snapshot.actions){
-      if (action->get_id() == this->player_id){
+      if (action->get_id() == this->player_id && action->active()){
         jugador.setIsShooting(true);
       } else {
         if (enemigos.find(action->get_id()) != enemigos.end()) {
           enemigos.at(action->get_id())->setIsShooting(true);
         }
       }
+      action->update_state(false);
     }
 
   // Actualizar objetos/ puertas

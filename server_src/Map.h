@@ -15,7 +15,7 @@ private:
   std::vector<Rocket> rockets;
   std::vector<std::vector<int>> map;
   std::map<int, std::map<int, Door>> doors;
-  std::map<int, std::map<int, Door>> items;
+  std::map<int, std::map<int, char>> items;
 
   Config config;
 
@@ -35,7 +35,7 @@ public:
   ~Map();
 
   char get_id(int x, int y);
-  void add_player(char id);     // ver quien hace los players
+  void add_player(char id);   // ver quien hace los players
   std::vector<Player &> get_players(); // placeholder
   std::map<int, std::map<int, Door>>& get_doors();
 

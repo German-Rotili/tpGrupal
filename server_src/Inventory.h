@@ -20,7 +20,7 @@ private:
     Map *map;
     Config config;
 public:
-    Inventory(Player&, Map&);
+    Inventory(Player&, Map&, Config &);
     ~Inventory();
     bool pick_up_weapon();
     bool change_weapon(char);

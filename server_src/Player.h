@@ -21,26 +21,32 @@ struct player_t {
 
 class Player{
 private:
+    char id;
     Position position;
     bool is_alive;
     Map &map;
     Inventory inventory;
+    bool placed;
     void move(char intention);
     void attack();
     void acction();
     void intersects(float impx, float impy, Player &player);
+
     //life
 public:
-    Player(Map,Position position);
-    Player(Map,float, float, float);
+    Player(Map &, Config &,Position position);
+    Player(Map &,Config &, float, float, float);
+    Player(Map &, Config &, char id);
     ~Player();
-    
+
+    bool is_placed();
     float get_pos_x();
     float get_pos_y();
     float get_direction();
     int get_id();
     int get_ammo();
     char get_current_weapon_id();
+    void set_spawn(int x, int y);
     
    
     void execute_intention(char intention);

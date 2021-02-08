@@ -12,7 +12,7 @@ private:
   std::vector<Player> players;
   std::vector<Rocket> rockets;
   std::vector<std::vector<int>> map;
-  std::map<int, std::map<Door>> doors;
+  std::map<int, std::map<int, Door>> doors;
   Config config;
 
 
@@ -32,6 +32,8 @@ public:
 
   void add_player(char id);     // ver quien hace los players
   std::vector<Player &> get_players(); // placeholder
+  std::map<int, std::map<int, Door>>& get_doors();
+
   void add_rocket(Rocket Rocket);
   int has_item();
 
@@ -40,6 +42,8 @@ public:
 
   void tick();
   void execute_intentions();
+
+  
 };
 
 #endif // __SERVER_MAP_H__

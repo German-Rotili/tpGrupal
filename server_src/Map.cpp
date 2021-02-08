@@ -9,6 +9,11 @@ void Map::add_player(char id) {
   this->players.push_back(Player(*this, this->config, id));
 }
 
+std::map<int, std::map<int, Door>> &Map::get_doors() 
+{
+  return this->doors;
+}
+
 void Map::add_rocket(Rocket rocket) { this->rockets.push_back(rocket); }
 
 void Map::tick() {
@@ -58,6 +63,10 @@ bool Map::is_solid(char id) {
 
 bool Map::is_door(char id) {
   return (id == 34 || id == 35 || (id >= 59 && id <= 62));
+}
+
+Map::Map(std::vector<std::vector<int>> map) : map{map}{
+  
 }
 
 void Map::populate_variables() {

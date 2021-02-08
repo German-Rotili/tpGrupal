@@ -5,7 +5,6 @@
 #include <fstream>
 #include <sstream>
 #include <streambuf>
-#include "../editor_src/ConfigManager/MapHandler.h"
 #include <string>
 #include <fstream>
 #include <streambuf>
@@ -19,14 +18,20 @@
 #define FPS 30
 
 void ThClient::run(){
+    
     try {
         //acepto un nuevo cliente, tiene que elegir la partida o crear nueva
         //Le mando los id de las partidas que tengo y el id de los mapas para que cree una nueva partida?
         //recibo cantidad de players que va a tener la partida?
 
+        //envio las partidas disponibles.
+
         //new game(recibe el mapa del cliente)- join game - refresh
 
-        //new game
+
+        //le mando una referencia de this a la partida.
+
+
 
                 //std::vector<char> cmd(CHUNK_SZ,0);
                 //std::string output = game_handler.show_matches();
@@ -51,39 +56,8 @@ void ThClient::run(){
 
 
 
-        ThClientSender ThSender(this->peer, *(this->action), this->snapshot);
+        ThClientSender ThSender(this->peer, this->snapshot);
         ThSender.start();
-
-
-     
-
-        /*ENVIO SNAPSHOT DEL JUGADOR*/
-
-        //incluir estado de puerta, el cliente se encarga de ver si cambio con una copia del estado anterior.
-
-
-
-
-          /*******ACCIONES**********/
-        /*************************/
-
-
-
-        // cola de eventos en el cliente cuando parsea una accion.
-
-        // char action_id = '1';
-        // char snapshot_id = '0';
-
-        // Serializer serializer;
-        // std::vector <char> msg = serializer.serialize(player);
-        // peer.socket_send(&snapshot_id, sizeof(char));
-        // uint32_t snap_size = htonl(msg.size());
-        // peer.socket_send((char*)&snap_size, sizeof(uint32_t));
-        // peer.socket_send(msg.data(), msg.size());
-        /*********************************/
-
-        intention_t intention;
-        intention.active = false;
         Serializer serializer;
 
         /*GAME LOOP tiene que ir a GAMEPLAY!*/
@@ -93,53 +67,12 @@ void ThClient::run(){
             uint32_t size = 0;
             peer.socket_receive((char*)&size, sizeof(uint32_t));
             size = ntohl(size);
-            std::vector<char> buff(size);
-            peer.socket_receive(buff.data(), size);
-            serializer.deserializer(buff, intention);
+            std::vector<char> intention(size);
+            peer.socket_receive(intention.data(), size);
 
-            if (intention.up){
-                this->snapshot.pos_x += 0.01;
-            }
-            if (intention.down){
-                this->snapshot.pos_y -= 0.01;
-            }
-            if (intention.angle_right){
-                this->snapshot.direction += 0.01;
-            }
-            if (intention.angle_left){
-                this->snapshot.direction -= 0.01;
-            }
-            if (intention.attack){
-                std::cout << "Intencion de ataque" <<std::endl;
-
-                this->action->update_values(this->snapshot.pos_x, this->snapshot.pos_y, this->snapshot.current_weapon);
-                //resuelve el modelo
-                //action.impact_x; 
-                //action.impact_y;
-
-                // msg = serializer.serialize(action);
-                // peer.socket_send(&action_id, sizeof(char));
-                // uint32_t snap_size = htonl(msg.size());
-                // peer.socket_send((char*)&snap_size, sizeof(uint32_t));
-                // peer.socket_send(msg.data(), msg.size());
-
-            }
-
-            // msg = serializer.serialize(this->snapshot);
-            // // uint32_t aux = msg.size();
-            // uint32_t snap_size = htonl(msg.size());
-            // // std::cout << "Size htnol: " << std::endl;
-            // // for (int i = 0; i < (int)sizeof(uint32_t); i++) {
-            // //     printf("%02X ", (unsigned)(unsigned char)((char*)&snap_size)[i]);
-            // // }
-            // // printf("\n");
-
-            // //MANDO TIPO DE MENSAJE ID
-            // peer.socket_send(&snapshot_id, sizeof(char));
-            // //MANDO TAMANIO DEL MENSAJE A LEER
-            // peer.socket_send((char*)&snap_size, sizeof(uint32_t));
-            // //MANDO CADENA BINARIA DEL MENSAJE COMPLETO
-            // peer.socket_send(msg.data(), msg.size());
+            for(char value : intention){
+                this->intention_queue.push_back(value);
+            }//revisar copiado de value...      
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
@@ -194,16 +127,14 @@ void ThClient::run(){
 
 ThClient::ThClient(Socket&& socket, GameHandler & game_handler):game_handler(game_handler){
     this->peer = std::move(socket);
-        this->snapshot.player_id = 0;
-        this->snapshot.pos_x = 2;
-        this->snapshot.pos_y = 2;
-        this->snapshot.direction = 90;
-        this->snapshot.ammo = 100;
-        this->snapshot.current_weapon = '0';
-        this->action = new Action(this->snapshot.player_id);
 }
 
 ThClient::~ThClient(){
     peer.socket_shutdown(SHUT_RDWR);
     delete this->action;
+}
+
+void ThClient::send_snapshot(Snapshot snapshot){
+    this->snapshot = snapshot;
+    //NOTIFY ALL, podria hacerlo en gameplay?
 }

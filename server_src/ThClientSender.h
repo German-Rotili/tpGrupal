@@ -12,6 +12,7 @@
 #include <streambuf>
 #include <iterator>
 #include "../common_src/Action.h"
+#include "../common_src/Snapshot.h"
 #include "../common_src/Serializer.h"
 #include <atomic>
 #include <chrono>
@@ -19,14 +20,15 @@
 
 class ThClientSender : public Thread{
     Socket & peer;
-    Action & action;
-    player_t & snapshot;
     std::atomic<bool> state;
+    Snapshot & snapshot;
     ThClientSender& operator=(const ThClientSender&) = delete;
     ThClientSender(const ThClientSender&) = delete;
 
 public:
-    ThClientSender(Socket& socket, Action & action, player_t & snapshot);
+    ThClientSender(Socket& socket, Snapshot & snapshot);
+
+
 
     ~ThClientSender();
 

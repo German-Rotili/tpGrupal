@@ -14,6 +14,7 @@
 #include "Hud.h"
 #include "rayCaster.h"
 #include "Map/WorldMap.h"
+#include "../common_src/Snapshot.h"
 
 class World {
   SdlRenderer& renderer;
@@ -21,6 +22,7 @@ class World {
   ClientSettings& settings;
   Player jugador;
   WorldMap worldMap;
+  int player_id;
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosDinamicos;
   std::vector<Explosion*> explosiones;
@@ -60,12 +62,13 @@ class World {
 //		World(SdlRenderer& renderer, ClientSettings& settings);
 		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map);
     ~World();
-    void actualizar(double playerX, double playerY, double playerAngle,
-      double playerHealth, int playerLives, int playerArmaActual,
-      bool playerIsShooting, int playerScore,
-      double enemyAngle, double enemyX, double enemyY, int enemyArmaActual,
-      bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting,
-      bool allDoorsClosed);
+    void actualizar(Snapshot & snapshot);
+      // double playerX, double playerY, double playerAngle,
+      // double playerHealth, int playerLives, int playerArmaActual,
+      // bool playerIsShooting, int playerScore,
+      // double enemyAngle, double enemyX, double enemyY, int enemyArmaActual,
+      // bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting,
+      // bool allDoorsClosed);
     void renderizar(ClientSettings& settings);
 };
 

@@ -1,7 +1,6 @@
 #include "ThClientSender.h"
 
 
-
 void ThClientSender::run(){
     try {
 
@@ -38,35 +37,43 @@ void ThClientSender::run(){
 
 
         char action_id = '1';
-        char snapshot_id = '0';
+        char snapshot_id = '0';//DEFINIR EN CONSTANTES
         Serializer serializer;
         std::vector <char> msg;
+        Snapshot snapshot;
 
         /*Constant Sender, hay race condition con el snapshot y hasta con el Action*/
         while (state){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-            //NOTIFY ALL
-            if(this->action.active()){
-                std::cout << "Accion activa se manda" <<std::endl;
+            //NOTIFY ALLLLLLLLLLLLLLLLLLLLL
 
-                // action.update_values(this->snapshot.pos_x,this->snapshot.pos_y,this->snapshot.current_weapon);
-                std::vector <char> msg = serializer.serialize(action);
-                peer.socket_send(&action_id, sizeof(char));
-                uint32_t snap_size = htonl(msg.size());
-                peer.socket_send((char*)&snap_size, sizeof(uint32_t));
-                peer.socket_send(msg.data(), msg.size());
-                this->action.update_state(false);
-            }
 
-            msg = serializer.serialize(this->snapshot);
-            uint32_t snap_size = htonl(msg.size());
-
+            /*****SEND ACTIONS****/
+            msg = serializer.serialize_action(snapshot);
             //MANDO TIPO DE MENSAJE ID
-            peer.socket_send(&snapshot_id, sizeof(char));
+            peer.socket_send(&action_id, sizeof(char));
             //MANDO TAMANIO DEL MENSAJE A LEER
+            uint32_t snap_size = htonl(msg.size());
             peer.socket_send((char*)&snap_size, sizeof(uint32_t));
             //MANDO CADENA BINARIA DEL MENSAJE COMPLETO
             peer.socket_send(msg.data(), msg.size());
+            /********************/
+
+
+
+
+            /*****SEND SNAPSHOT****/
+            msg = serializer.serialize_snapshot(snapshot);
+            //MANDO TIPO DE MENSAJE ID
+            peer.socket_send(&snapshot_id, sizeof(char));
+            //MANDO TAMANIO DEL MENSAJE A LEER
+            snap_size = htonl(msg.size());
+            peer.socket_send((char*)&snap_size, sizeof(uint32_t));
+            //MANDO CADENA BINARIA DEL MENSAJE COMPLETO
+            peer.socket_send(msg.data(), msg.size());
+            /********************/
+
+
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
@@ -85,8 +92,8 @@ void ThClientSender::run(){
     }catch(...){}
 }
 
-ThClientSender::ThClientSender(Socket& socket, Action & action, player_t & snapshot):
-    peer(socket),action(action),snapshot(snapshot),state(true){}
+ThClientSender::ThClientSender(Socket& socket, Snapshot & snapshot):
+    peer(socket),snapshot(snapshot),state(true){}
 
 ThClientSender::~ThClientSender(){
     this->state = false;

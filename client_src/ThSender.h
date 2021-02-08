@@ -12,11 +12,11 @@ class ThSender: public Thread{
     /* data */
     std::atomic<bool> state;
     Client & client;
-    intention_t & intention;
+    std::vector<char> & intention;
 
 public:
-    void send_intention(intention_t & intention);
-    ThSender(Client & client, intention_t & intention);
+    void send_intention(std::vector<char> & intention);
+    ThSender(Client & client, std::vector<char> & intention);
     void run() override;
     void stop();
     ThSender(const ThSender&) = delete;

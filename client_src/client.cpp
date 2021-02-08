@@ -31,9 +31,6 @@ int main(int argc, char* args[]) {
     std::string hostname = args[HOSTNAME];
     std::string service = args[SERVICE];
 
-
-
-    std::string input;
     ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
     SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
@@ -55,58 +52,19 @@ int main(int argc, char* args[]) {
 
 
     World world(renderer, settings, vector_map);
-    /*********************************************/
-
-
-    // Provisorio hasta que haya comunicacion con el server
-    // Info del server
-    double playerMovementSpeed = double(1) /15;
-    double playerRotationSpeed = 3;
-    // Info Player
-    double playerAngle = -45;//90;
-    double playerX = 2;
-    double playerY = 2;
-    double playerHealth = 100;
-    int playerLives = 3;
-    int playerArmaActual = 0;
-    int playerScore = 400;
-    bool playerIsShooting = false;
-    // Info Enemy
-    int enemy_id = 0;
-    double enemyAngle = -315;
-    double enemyX = 2;
-    double enemyY = 2;
-    int enemyArmaActual = 0;
-    bool enemyIsAlive = true;
-    bool enemyIsWalking = false;
-    bool enemyIsShooting = false;
-    // Info env
-    bool allDoorsClosed = true;
-
-
-    player_t player;
-    player.player_id = 0;
-    player.pos_x = 2;
-    player.pos_y = 2;
-    player.direction = 90;
-    player.ammo = 100;
-    player.current_weapon = '0';
-
-
-
     bool quit = false;
     SDL_Event e;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
+
+
     /*Creamos y corremos los hilos*/
-    std::vector<Action*> actions;
-    actions.push_back(new Action(player.player_id));
-    intention_t intention = { false, false, false, false, false, false, 0 };
-    ThRequester requester(client, actions);
+    std::vector<char> intention;
+    Snapshot update_snapshot;
+    ThRequester requester(client);
     ThSender sender(client, intention);
     requester.start();
     sender.start();
-    
     /***************************/
 
     // Main (o game) Loop
@@ -121,157 +79,57 @@ int main(int argc, char* args[]) {
         } else if (e.type == SDL_KEYDOWN) {
           switch (e.key.keysym.sym) {
             case SDLK_1:
-            playerArmaActual = 0;
+            intention.push_back(SDLK_1);
             break;
 
             case SDLK_2:
-            playerArmaActual = 1;
+            intention.push_back(SDLK_2);
             break;
 
             case SDLK_3:
-            playerArmaActual = 2;
+            intention.push_back(SDLK_3);
             break;
 
             case SDLK_4:
-            playerArmaActual = 3;
+            intention.push_back(SDLK_4);
             break;
 
             case SDLK_5:
-            playerArmaActual = 4;
+            intention.push_back(SDLK_5);
             break;
 
             case SDLK_e:
-            allDoorsClosed = !allDoorsClosed;
-            break;
-
-            case SDLK_z:
-            playerScore = 500;
-            break;
-
-            case SDLK_c:
-            playerScore = 1000;
-            break;
-
-            case SDLK_r:
-            playerHealth -= 5;
-            break;
-
-            case SDLK_t:
-            playerHealth += 5;
+            intention.push_back(SDLK_e);
             break;
           }
         }
       }
       if (currentKeyStates[SDL_SCANCODE_W]) {
-        intention.up = true;
-        intention.active = true;
-        // Intencion de moverse adelante
-        // player.pos_x += playerMovementSpeed*cos(player.direction*M_PI/180);
-        // player.pos_y += playerMovementSpeed*sin(player.direction*M_PI/180);
+            intention.push_back(SDL_SCANCODE_W);
       }
       if (currentKeyStates[SDL_SCANCODE_S]) {
-        intention.down = true;
-        intention.active = true;
-
-        // Intencion de moverse hacia atras
-        // player.pos_x -= playerMovementSpeed*cos(player.direction*M_PI/180);
-        // player.pos_y -= playerMovementSpeed*sin(player.direction*M_PI/180);
-
+            intention.push_back(SDL_SCANCODE_S);
       }
       if (currentKeyStates[SDL_SCANCODE_A ]) {
-        intention.angle_left = true;
-        intention.active = true;
-
-        // Intencion de rotar a la izquierda
-        // player.direction -= playerRotationSpeed;
+            intention.push_back(SDL_SCANCODE_A);
       }
       if (currentKeyStates[SDL_SCANCODE_D ]) {
-        // Intencion de rotar a la derecha
-        // player.direction += playerRotationSpeed;
-        intention.angle_right = true;
-        intention.active = true;
+            intention.push_back(SDL_SCANCODE_D);
 
       }
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
-        // intencion de disparo
-        // playerIsShooting = !playerIsShooting;
-        intention.attack = true;
-        intention.active = true;
-
+            intention.push_back(SDL_SCANCODE_SPACE);
       }
 
-      /*LOGICA DEL SERVER*/
-      // if (player.direction >= 0) {
-      //   player.direction -= 360;
-      // } else if (player.direction < -360) {
-      //   player.direction +=360;
-      // }
-      /******************/
+     update_snapshot = requester.get_snapshot();
 
+     world.actualizar(update_snapshot);
 
-
-      // Provisorio para testear enemigos
-      enemyIsWalking = false;
-      enemyArmaActual = playerArmaActual;
-      if (currentKeyStates[SDL_SCANCODE_UP]) {
-        enemyIsWalking = true;
-        enemyX += playerMovementSpeed*cos(enemyAngle*M_PI/180);
-        enemyY += playerMovementSpeed*sin(enemyAngle*M_PI/180);
-      }
-      if (currentKeyStates[SDL_SCANCODE_DOWN]) {
-        enemyIsWalking = true;
-        enemyX -= playerMovementSpeed*cos(enemyAngle*M_PI/180);
-        enemyY -= playerMovementSpeed*sin(enemyAngle*M_PI/180);
-      }
-      if (currentKeyStates[SDL_SCANCODE_LEFT ]) {
-        enemyAngle -= playerRotationSpeed;
-      }
-      if (currentKeyStates[SDL_SCANCODE_RIGHT ]) {
-        enemyAngle += playerRotationSpeed;
-      }
-      if (currentKeyStates[SDL_SCANCODE_RCTRL ]) {
-        enemyIsShooting = !enemyIsShooting;
-      }
-      if (currentKeyStates[SDL_SCANCODE_RSHIFT ]) {
-        //intencion de disparo
-        enemyIsAlive = !enemyIsAlive;
-      }
-      if (enemyAngle >= 0) {
-        enemyAngle -= 360;
-      } else if (enemyAngle < -360) {
-        enemyAngle +=360;
-      }
-
-      requester.get_snapshot(player);
-      bool attack_aux = false;
-      int player_id_aux = -1;
-      for (size_t i = 0; i < actions.size(); i++){
-          std::cout <<"Recorriendo acciones: "<< actions.at(i)->active()<< std::endl;
-
-          if (actions.at(i)->active()){
-            player_id_aux = actions.at(i)->get_id();
-            attack_aux = true;
-            actions.at(i)->update_state(false);
-            std::cout <<"Accion detectada!"<< std::endl;
-          }
-      }
-
-     world.actualizar(player.pos_x, player.pos_y, player.direction, playerHealth, playerLives,
-        playerArmaActual, attack_aux, playerScore,
-         enemyAngle,
-         enemyX,
-         enemyY,
-         enemyArmaActual,
-         enemyIsAlive,
-         enemyIsWalking,
-          enemyIsShooting,
-         allDoorsClosed);
-      world.renderizar(settings);
+     world.renderizar(settings);
 
       std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
 
       unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-      //printf("elapsed microseconds: %i \n", elapsed_microseconds);
       int sleep_time = 1000000/settings.fps - elapsed_microseconds;
       if (sleep_time > 0) {
         usleep(1000000/settings.fps - elapsed_microseconds);

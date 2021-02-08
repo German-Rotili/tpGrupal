@@ -12,13 +12,16 @@
 #include <utility>
 #include "../common_src/Serializer.h"
 #include "ThClientSender.h"
+#include "GamePlay.h"
+class Gameplay;
 #define CHUNK_SZ 1
 
 class ThClient : public Thread{
 private:
     Socket peer;
     Action* action;
-    player_t snapshot;
+    std::vector<char> intention_queue;
+    Snapshot snapshot;
     bool state = true;
     GameHandler & game_handler;
     ThClient& operator=(const ThClient&) = delete;
@@ -27,12 +30,12 @@ private:
 public:
     ThClient(Socket&& socket, GameHandler & game_handler);
     ~ThClient();
-
-    /*Recibe, chequea y responde las peticiones*/
     void run() override;
+    void send_snapshot(Snapshot snapshot);//aca el notify all?
 
     /*Devuelve el estado del thread*/
     bool is_dead();
+friend class GamePlay;
 };
 
 

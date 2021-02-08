@@ -14,48 +14,35 @@ void Client::client_send(std::string line){
 }
 
 
-void Client::update_model(player_t & player, std::vector <Action*> & actions){
+void Client::recieve_snapshot(Snapshot & snapshot){
     
+    /*Recibo ID*/
     char input_id;
     std::vector<char> buff(1);
-    client.socket_receive(buff.data(), 1);
-    memcpy(&input_id, buff.data(), 1);
-
-         // std::cout << "Size htnol: " << std::endl;
-            // for (int i = 0; i < (int)sizeof(uint32_t); i++) {
-            //     printf("%02X ", (unsigned)(unsigned char)((char*)&snap_size)[i]);
-            // }
-            // printf("\n");
+    client.socket_receive(buff.data(), sizeof(char));
+    memcpy(&input_id, buff.data(), sizeof(char));
+    /**********/
 
 
-    std::vector<char> msg = this->client_receive_vector();
+    /*Recibimos vector de chars*/
+    std::vector<char> msg = this->client_receive_vector(); //aca adentro primero recibe largo y despues lee todo.
+    /**********/
+    
+
+    /********/
     Serializer serializer;
-    Action *aux_action = new Action(player.player_id);
+    /**********/
 
     switch (input_id){
 
         case SNAPSHOT_ID:
-            serializer.deserializer(msg, player);
+            serializer.deserializer(msg, snapshot);
             break;
         
         case ACTION_ID:
-        {
-
-            serializer.deserializer(msg, *aux_action);
-            std::vector<Action*>::iterator it = actions.begin();
-            delete actions[0];
-            actions[0] = aux_action;
-            std::cout << "LA NUEVA ACCION ESTA EN ESTADO: "<< aux_action->active() <<std::endl;
-
-            // //Action* aux = actions.at(aux_action->get_id());
-            // actions.erase( it + aux_action->get_id());
-            // //delete aux;
-
-            // actions.insert( it +  aux_action->get_id(), aux_action );
-            // //actions[aux_action.get_id()]() = aux_action;
-
+            serializer.deserialize_action(msg, snapshot);
             break;
-        }
+
         default:
             std::cout << "Error id detection" <<std::endl;
     } 
@@ -65,12 +52,11 @@ void Client::update_model(player_t & player, std::vector <Action*> & actions){
 
 
 
-void Client::client_send_intention(intention_t & intention){
+void Client::client_send_intention(std::vector<char> & intention){
         Serializer serializer;
-        std::vector <char> msg = serializer.serialize(intention);
-        uint32_t snap_size = htonl(msg.size());
+        uint32_t snap_size = htonl(intention.size());
         client.socket_send((char*)&snap_size, sizeof(uint32_t));
-        client.socket_send(msg.data(), msg.size());
+        client.socket_send(intention.data(), intention.size());
 }
 
 

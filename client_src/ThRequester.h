@@ -4,23 +4,23 @@
 #include "../common_src/common_socket.h"
 #include "../common_src/common_exception.h"
 #include "../common_src/Action.h"
+#include "../common_src/Snapshot.h"
 #include <atomic>
 #include "client_helper.h"
+
 #define FPS 30
 
 
 class ThRequester : public Thread{
 private:
+    Snapshot snapshot;
     std::atomic<bool> state;
     Client & client;
-    player_t player_thread;
-    std::vector <Action*> & actions;
-    player_t  player_client;
 
 public:
-    ThRequester(Client & client, std::vector <Action*> & actions);
+    ThRequester(Client & client);
     ~ThRequester();
-    void get_snapshot(player_t & player);
+    Snapshot get_snapshot();
     void run() override;
     void stop();
     ThRequester(const ThRequester&) = delete;

@@ -8,25 +8,28 @@
 #include "utils.h"
 // #include "../server_src/Player.h"
 #include <cstring>
+#include "Snapshot.h"
 #include "Action.h"
 
-struct intention_t{
-  bool up;
-  bool angle_right;
-  bool angle_left;
-  bool down;
-  bool attack;
-  bool interact;
-  int weapon;
-  bool active;
+struct object_t{
+    int id;
+    double pos_x;
+    double pos_y;
+    bool state;
 };
 
-struct action_t {
-    int player_id; 
-    double impact_x;
-    double impact_y;
-    char weapon_id;
+
+struct intention_t{
+  char up;
+  char angle_right;
+  char angle_left;
+  char down;
+  char attack;
+  char interact;
+  char weapon;
 };
+
+class Snapshot;
 
 struct player_t {
     int player_id;
@@ -35,33 +38,30 @@ struct player_t {
     float direction;
     int ammo;
     char current_weapon;
+    double health;
+    int lives;
+    int score;
 };
 
 
 class Serializer{
 private:
-
-   // Map map;
-    void serialize_players(std::vector<char> &message);
     void append_variable(std::vector<char> &message, char *variable, size_t size);
-    void append_float(std::vector<char> &message, float number);
+
 public:
     Serializer();
     ~Serializer();
-    std::vector<char> serialize();
-    //void deserialize(std::vector<char> &);
-    int extract_int(std::stringstream &);
-    float extract_float(std::stringstream &);
-    void deserializer(std::vector <char> & msg);    
-    void deserializer(std::vector <char> & msg, player_t & player_info);    
-    void append_player_info(std::vector<char> & , player_t & );
-    std::vector<char> serialize(player_t & player);
-    std::vector<char> serialize(Action & player);
-    std::vector<char> serialize(intention_t & snapshot);
-    void append_snapshot(std::vector<char> & message, intention_t & snapshot);
-    void append_action(std::vector<char> & message, Action & action);
-    void deserializer(std::vector <char> & msg, intention_t & snapshot);
-    void deserializer(std::vector <char> & msg, Action & action);
+
+    std::vector<char> serialize_snapshot(Snapshot & snapshot);
+    void append_player_info(std::vector<char> & message, std::vector<player_t*> & players);
+    void append_object_info(std::vector<char> & message, std::vector<object_t*> & objects);
+    void append_actions(std::vector<char> & message, std::vector<Action*> & actions);
+    std::vector<char> serialize_action(Snapshot & snapshot);
+    void deserializer(std::vector <char> & msg, Snapshot & snapshot); 
+    void deserialize_action(std::vector <char> & msg, Snapshot & snapshot);
+    void deserialize_players(std::vector <char> & msg, Snapshot & snapshot, int & offset);
+    void deserialize_objects(std::vector <char> & msg,  Snapshot & snapshot, int & offset);
+
 
 };
 #endif

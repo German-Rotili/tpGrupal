@@ -26,7 +26,7 @@ static const void remove_dead(std::vector<Thread*> & list){
 void ThServer::run(){
 
     try {
-        GameHandler game_handler;//tiene todas las partidas creadas
+        GameHandler game_handler;
         while (state){
             Socket peer;
             server.socket_accept(peer);

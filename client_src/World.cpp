@@ -83,30 +83,56 @@ World::~World() {
   }
 }
 
-void World::actualizar(double playerX, double playerY, double playerAngle,
-  double playerHealth, int playerLives, int playerArmaActual, bool playerIsShooting,
-  int playerScore,
-  double enemyAngle, double enemyX, double enemyY, int enemyArmaActual,
-  bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting,
-  bool allDoorsClosed) {
-  jugador.setPosicion(playerX, playerY);
-  jugador.setDirection(playerAngle);
-  jugador.setHealth(playerHealth);
-  jugador.setLives(playerLives);
-  jugador.setArmaActual(playerArmaActual);
-  jugador.setIsShooting(playerIsShooting);
-  jugador.setScore(playerScore);
+void World::actualizar(Snapshot & snapshot)
+// (double playerX, double playerY, double playerAngle,
+//   double playerHealth, int playerLives, int playerArmaActual, bool playerIsShooting,
+//   int playerScore,
+//   double enemyAngle, double enemyX, double enemyY, int enemyArmaActual,
+//   bool enemyIsAlive, bool enemyIsWalking, bool enemyIsShooting,
+//   bool allDoorsClosed)
+   {
+
+    for (auto &player : snapshot.players){  
+      if (player->player_id == this->player_id){
+        jugador.setPosicion(player->pos_x , player->pos_y);
+        jugador.setDirection(player->direction);
+//        jugador.setHealth(playerHealth);
+  //      jugador.setLives(playerLives);
+        jugador.setArmaActual(player->current_weapon);
+//        jugador.setIsShooting(playerIsShooting);
+//        jugador.setScore(playerScore);
+      }else{
+        enemigos.back()->setRelativeDirection(player->direction, jugador.getDirection()); // Hacerlo para cada enemigo
+        enemigos.back()->setPosicion(player->pos_x, player->pos_y);
+        enemigos.back()->setWeapon(player->current_weapon);
+        // enemigos.back()->setIsAlive(enemyIsAlive);
+        // enemigos.back()->setIsRunning(enemyIsWalking);
+        // enemigos.back()->setIsShooting(enemyIsShooting);
+      }
+    }
+
+    for (auto &action : snapshot.actions){
+      //identificar cada jugador por el id, incluyendo el principal  
+      if (action->get_id() == this->player_id){
+        jugador.setIsShooting(true);
+      }else{
+      // enemigos.back()->setIsShooting(true, id);
+        enemigos.back()->setIsShooting(true);
+      }
+
+    }
+
+
+    //ACTUALIZAR OBJECTOS DINAMICOS Y PUERTAS RECORRIENDO LISTA DE OBJECTOS DEL SNAPSHOT
+
+
+  
   // Faltan implementar: Llaves y actualizacion de balas.
 
   // Actualizo direccion de enemigos;
-  enemigos.back()->setRelativeDirection(enemyAngle, jugador.getDirection()); // Hacerlo para cada enemigo
-  enemigos.back()->setPosicion(enemyX, enemyY);
-  enemigos.back()->setWeapon(enemyArmaActual);
-  enemigos.back()->setIsAlive(enemyIsAlive);
-  enemigos.back()->setIsRunning(enemyIsWalking);
-  enemigos.back()->setIsShooting(enemyIsShooting);
 
-  worldMap.setDoorsClosed(allDoorsClosed);
+
+  // worldMap.setDoorsClosed(allDoorsClosed);
 
   // Provisorio para explosiones:
   // elimino explosiones terminadas.
@@ -119,9 +145,9 @@ void World::actualizar(double playerX, double playerY, double playerAngle,
      }
   }
   // Agrego explosion si no hay:
-  if ((!allDoorsClosed) & (explosiones.size() == 0)) {
-    //explosiones.push_back(new Explosion(7.5, 2.5 , basic_clip, jugador, src, settings));
-  }
+  // if ((!allDoorsClosed) & (explosiones.size() == 0)) {
+  //   //explosiones.push_back(new Explosion(7.5, 2.5 , basic_clip, jugador, src, settings));
+  // }
   //
 
   worldMap.actualizar();

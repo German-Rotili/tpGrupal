@@ -1,18 +1,30 @@
 #ifndef GAMEPLAY
 #define GAMEPLAY
 #include <vector>
-// #include "Map.h"
+#include "../common_src/common_thread.h"
+#include <iostream>
+#include <utility>
+#include <chrono>
+#include "ThClient.h"
+#include "Map.h"
 
-class GamePlay{
+
+#define FPS 30
+
+class GamePlay : public Thread{
 private:
     int id;
-    // Map & map;
+    bool state;
+    std::vector <ThClient*> clients;
+    Map map;
 public:
     GamePlay();
-    // GamePlay(Map & map);
     ~GamePlay();
+    void add_client(ThClient* client);
     int get_id();
-    std::vector <char> get_snapshot();
+    void run() override;
+    GamePlay& operator=(const GamePlay&) = delete;
+    GamePlay(const GamePlay&) = delete;
 
     //tiene una cola bloqueante de eventos, un mapa, una lista de jugadores y el game loop.
 };

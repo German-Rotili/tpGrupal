@@ -82,13 +82,13 @@ const Tile* WorldMap::getTile(int x, int y) {
 }
 
 // Combinar estas 2 funciones para mejor performance?
-void WorldMap::setDoorsClosed(bool doorClosed) {
-  for (auto tile = actualizables.begin(); tile != actualizables.end(); tile++) {
-    if (DoorTile* door = dynamic_cast<DoorTile*> (*tile))
-      (door)->setClosed(doorClosed);
-    else if (SecretDoorTile* door = dynamic_cast<SecretDoorTile*> (*tile))
-      (door)->setClosed(doorClosed);
-  }
+void WorldMap::setEstadoPuerta(int x, int y, bool isClosed) {
+  if (x < 0 || x >= xsize || y < 0 || y >= ysize) return;
+  Tile* tile = map[y][x];
+    if (DoorTile* door = dynamic_cast<DoorTile*> (tile))
+      (door)->setClosed(isClosed);
+    else if (SecretDoorTile* door = dynamic_cast<SecretDoorTile*> (tile))
+      (door)->setClosed(isClosed);
 }
 
 void WorldMap::actualizar() {

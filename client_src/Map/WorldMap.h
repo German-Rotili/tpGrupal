@@ -60,7 +60,7 @@ class WorldMap {
     explicit WorldMap(std::vector<std::vector<int>> & rawMap, Player& player, ResourcesLoader& src);
     ~WorldMap();
     const class Tile* getTile(int x, int y);
-    void setDoorsClosed(bool doorClosed);
+    void setEstadoPuerta(int x, int y, bool isClosed);
     void actualizar();
 };
 

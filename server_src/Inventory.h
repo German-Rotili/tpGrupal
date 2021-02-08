@@ -17,8 +17,10 @@ private:
     int ammo;
     char current_weapon;
     std::map<char, std::unique_ptr<Weapon>> weapons;
+    bool owned_weapons[NUMBER_OF_WEAPONS];
     Map *map;
     Config config;
+
 public:
     Inventory(Player&, Map&, Config &);
     ~Inventory();
@@ -28,8 +30,11 @@ public:
     void attack();
     int get_ammo();
     void spend_ammo(int);
+    void add_ammo();
     char get_current_weapon_id();
     bool* get_weapons();
+    bool handle_item(char id);
+
     
 };
 

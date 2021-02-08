@@ -17,6 +17,7 @@ void Player::execute_intention(char intention) {
       this->attack();
     }
   }
+  this->check_if_item();
 }
 
 void Player::set_spawn(int x, int y) { 
@@ -51,9 +52,13 @@ float Player::get_angle_difference(float x, float y) {
 void Player::attack() { this->inventory.attack(); }
 
 void Player::acction() {
-  /* for(Door &door : this->map.get_doors()){
-    if in range de distancia y angulo ya programado para cada x e y de puerta.
-  } */
+   for(auto &x : this->map.get_doors()){
+     for(auto &y : x.second){
+       if(this->get_distance(x.first,y.first)){
+         y.second.toggle();
+       }
+     }
+  }
 }
 
 Player::Player(Map &map, Config &config, char id)
@@ -74,6 +79,15 @@ char Player::get_current_weapon_id() {
 
 float Player::get_direction() { return this->position.get_angle(); }
 
+
+void Player::process_near_item(){
+  char current_id = map.get_id(this->get_pos_x(), this->get_pos_y());
+  if(current_id >= 49 && current_id <= 52){
+    if(this->inventory.handle_item(current_id)){
+      this->map.remove_item(this->get_pos_x(), this->get_pos_y());
+    }
+  }
+}
 
 // player_t Player::get_info(){
 //   player_t player_info;

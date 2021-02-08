@@ -33,6 +33,7 @@ private:
     void attack();
     void acction();
     void intersects(float impx, float impy, Player &player);
+    void process_near_item();
 
     //life
 public:
@@ -59,6 +60,7 @@ public:
     float get_distance(float x, float y);
     float get_angle_difference(Position position);
     float get_angle_difference(float x, float y); 
+    void check_if_item();
 
     bool is_in_hitbox(float x, float y);
 };

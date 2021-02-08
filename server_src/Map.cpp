@@ -32,6 +32,16 @@ void Map::tick() {
   }
 }
 
+void Map::remove_item(int x, int y) {
+  this->map[x][y] = EMPTY;
+  this->items[x].erase(y);
+}
+
+bool Map::is_item(char id) 
+{
+  return(id <= 56 && id >= 46);
+}
+
 bool Map::valid_position(int x, int y) {
   char squareId = this->get_id(x, y);
   if (this->is_solid(squareId)) {
@@ -66,22 +76,27 @@ bool Map::is_door(char id) {
 }
 
 Map::Map(std::vector<std::vector<int>> map) : map{map}{
-  
+
 }
 
 void Map::populate_variables() {
+
   for (int x = 0; x < this->map.size(); x++) {
     for (int y = 0; y < this->map[y].size(); y++) {
+      char id = this->get_id(x,y);
 
-      if (this->is_door(this->get_id(x, y))) {
-        this->doors[x][y] = Door(this->get_id(x, y));
+      if (this->is_door(id)) {
+        this->doors[x][y] = Door(id);
       }
-      if (this->is_spawn(this->get_id(x, y))) {
+      if (this->is_spawn(id)) {
         for (Player &player : this->players) {
           if (!player.is_placed()) {
             player.set_spawn(x, y);
           }
         }
+      }
+      if(this->is_item(id)){
+        this->items[x][y] = id;
       }
     }
   }

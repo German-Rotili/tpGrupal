@@ -40,7 +40,7 @@ int main(int argc, char* args[]) {
 
     /*Lanzamiento del menu de inicio*/
     Menu menu;
-    menu.runStartPage(renderer, settings);
+    menu.runInsertUsername(renderer, settings);
     /********************************/
 
     /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
@@ -121,11 +121,11 @@ int main(int argc, char* args[]) {
             intention.push_back(SDL_SCANCODE_SPACE);
       }
 
-     update_snapshot = requester.get_snapshot();
+      update_snapshot = requester.get_snapshot();
 
-     world.actualizar(update_snapshot);
+      world.actualizar(update_snapshot);
 
-     world.renderizar(settings);
+      world.renderizar(settings);
 
       std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
 

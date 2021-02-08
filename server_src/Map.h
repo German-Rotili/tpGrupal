@@ -2,10 +2,12 @@
 #define __SERVER_MAP_H__
 #include "./weapons/Rocket.h"
 #include "Constants.h"
+#include "GamePlay.h"
 #include "Player.h"
 #include <vector>
 #include <Door.h>
 #include "Config.h"
+class GamePlay;
 
 class Map {
 private:
@@ -41,8 +43,10 @@ public:
   bool is_impactable(int x, int y);
 
   void tick();
-  void execute_intentions();
 
+  void execute_intentions(std::vector<char> & intentions, int & client_id);
+
+  friend class GamePlay;
   
 };
 

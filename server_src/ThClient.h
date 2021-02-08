@@ -14,14 +14,15 @@
 #include "ThClientSender.h"
 #include "GamePlay.h"
 class Gameplay;
+
 #define CHUNK_SZ 1
 
 class ThClient : public Thread{
 private:
+    int client_id;
     Socket peer;
-    Action* action;
+    ThClientSender *sender;
     std::vector<char> intention_queue;
-    Snapshot snapshot;
     bool state = true;
     GameHandler & game_handler;
     ThClient& operator=(const ThClient&) = delete;

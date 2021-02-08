@@ -2,6 +2,7 @@
 #define GAMEPLAY
 #include <vector>
 #include "../common_src/common_thread.h"
+#include "../common_src/Snapshot.h"
 #include <iostream>
 #include <utility>
 #include <chrono>
@@ -15,17 +16,19 @@ class GamePlay : public Thread{
 private:
     int id;
     bool state;
-    std::vector <ThClient*> clients;
+    std::vector <ThClient&> clients;
     Map map;
 public:
-    GamePlay();
+    GamePlay(ThClient & player, Map&& map);
     ~GamePlay();
-    void add_client(ThClient* client);
+    void add_client(ThClient & client);
+    void start();
     int get_id();
     void run() override;
     GamePlay& operator=(const GamePlay&) = delete;
     GamePlay(const GamePlay&) = delete;
+    Snapshot get_snapshot();
 
-    //tiene una cola bloqueante de eventos, un mapa, una lista de jugadores y el game loop.
+
 };
 #endif

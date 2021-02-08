@@ -21,14 +21,13 @@
 class ThClientSender : public Thread{
     Socket & peer;
     std::atomic<bool> state;
-    Snapshot & snapshot;
     ThClientSender& operator=(const ThClientSender&) = delete;
     ThClientSender(const ThClientSender&) = delete;
 
 public:
-    ThClientSender(Socket& socket, Snapshot & snapshot);
+    ThClientSender(Socket& socket);
 
-
+    void send_snapshot(Snapshot & snapshot);
 
     ~ThClientSender();
 

@@ -27,7 +27,7 @@ private:
   
 
 public:
-  Map();
+  Map(std::vector<std::vector<int>> map);
   ~Map();
 
   void add_player(char id);     // ver quien hace los players

@@ -19,7 +19,11 @@ void Player::execute_intention(char intention) {
   }
 }
 
-void Player::set_spawn(int x, int y) { this->position.set_position(x, y); }
+void Player::set_spawn(int x, int y) { 
+  this->position.set_position(x, y); 
+  this->spawn_x = x;
+  this->spawn_y = y;
+}
 
 float Player::get_direction() { return this->position.get_angle(); }
 

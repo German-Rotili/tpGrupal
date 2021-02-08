@@ -9,9 +9,7 @@ public:
     bool is_walkable();
 };
 
-Door::Door(/* args */)
-{
-}
+
 
 Door::~Door()
 {

@@ -27,6 +27,8 @@ private:
     Map &map;
     Inventory inventory;
     bool placed;
+    int spawn_x;
+    int spawn_y;
     void move(char intention);
     void attack();
     void acction();

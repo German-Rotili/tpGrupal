@@ -1,6 +1,7 @@
 #ifndef __SERVER_MAP_H__
 #define __SERVER_MAP_H__
 #include "./weapons/Rocket.h"
+#include "../common_src/Action.h"
 #include "Constants.h"
 #include "GamePlay.h"
 #include "Player.h"
@@ -13,6 +14,7 @@ class Map {
 private:
   std::vector<Player> players;
   std::vector<Rocket> rockets;
+  std::vector<Actions> actions;
   std::vector<std::vector<int>> map;
   std::map<int, std::map<int, Door>> doors;
   std::map<int, std::map<int, char>> items;

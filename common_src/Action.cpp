@@ -1,6 +1,6 @@
 #include "Action.h"
 #include <iostream>
-Action::Action(int & id):player_id(id),state(false){}
+Action::Action(int id):player_id(id),state(false){}
 
 void Action::update_state(bool new_state){
     this->state = new_state;

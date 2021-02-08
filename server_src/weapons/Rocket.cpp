@@ -9,7 +9,7 @@ Rocket::Rocket(Map map, Config config, float pos_x, float pos_y,
   this->x_pos = pos_x;
   this->direction = direction;
 }
-
+ //fix self explode.
 void Rocket::update_position() {
   this->x_pos += get_x_offset();
   this->y_pos += get_y_offset();
@@ -21,7 +21,7 @@ bool Rocket::tick() {
     this->explode();
   }
   if(this->colides_with_player()){
-
+    return true;
   }
 }
 

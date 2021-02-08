@@ -19,16 +19,11 @@ void Player::execute_intention(char intention) {
   }
 }
 
-void Player::attack(){
-  this->inventory.attack();
-}
+void Player::set_spawn(int x, int y) { this->position.set_position(x, y); }
 
-void Player::acction() {
-  /* for(Door &door : this->map.get_doors()){
-    if in range de distancia y angulo ya programado para cada x e y de puerta.
-  } */
+float Player::get_direction() { return this->position.get_angle(); }
 
-}
+bool Player::is_placed() { return this->placed; }
 
 float Player::get_pos_x() { return this->position.get_pos_x(); }
 float Player::get_pos_y() { return this->position.get_pos_y(); }
@@ -42,25 +37,34 @@ float Player::get_distance(float x, float y) {
   return this->position.get_distance(x, y);
 }
 
-float Player::get_angle_difference(Position position){
+float Player::get_angle_difference(Position position) {
   return this->position.get_angle_difference(position);
 }
 
 float Player::get_angle_difference(float x, float y) {
-    return this->position.get_angle_difference(x,y);
+  return this->position.get_angle_difference(x, y);
+}
+void Player::attack() { this->inventory.attack(); }
 
+void Player::acction() {
+  /* for(Door &door : this->map.get_doors()){
+    if in range de distancia y angulo ya programado para cada x e y de puerta.
+  } */
+}
+
+Player::Player(Map &map, Config &config, char id)
+    : position{Position(map, config)}, inventory{Inventory(*this, map, config)},
+      map{map} {
+  this->id = id;
 }
 
 bool Player::is_in_hitbox(float x, float y) {
-  return this->position.is_in_hitbox(x,y);  
+  return this->position.is_in_hitbox(x, y);
 }
 
-int Player::get_ammo() 
-{
-  this->inventory.get_ammo();
-}
+int Player::get_ammo() { this->inventory.get_ammo(); }
 
-char Player::get_current_weapon_id(){
+char Player::get_current_weapon_id() {
   this->inventory.get_current_weapon_id();
 }
 
@@ -77,8 +81,6 @@ float Player::get_direction() { return this->position.get_angle(); }
 //   player_info.current_weapon = this->get_current_weapon_id();
 //   return player_info;
 // }
-
-
 
 /* void Player::attack() {
   /*
@@ -115,7 +117,7 @@ float Player::get_direction() { return this->position.get_angle(); }
   tendria que pegar.
 
 
-  
+
   if(this->current_weapon->can_fire()){
     float angle = this->position.get_angle();
     float xpos, ypos;
@@ -147,25 +149,24 @@ float Player::get_direction() { return this->position.get_angle(); }
           if (((player.get_pos_x() - xpos) * xdir)) {
             if (((player.get_pos_y() - ypos) * ydir)) {
               /*
-                logica de interseccion: por algebra, encuentro la interseccion de
-                la recta jugador, impacto y busco la inter con la recta que
-                contiene a cada lado de la hitbox del jugador, finalmente resto
-                esta interseccion con el centro del lado es decir, la posicion del
-                jugador, y veo que su modulo sea menor a la mitad de la longitud
-                del lado de la hitbox.
-                funciona de esta forma tan simple porque las lineas de los lados de la hitbox es paralela a los ejes. 
-              
+                logica de interseccion: por algebra, encuentro la interseccion
+de la recta jugador, impacto y busco la inter con la recta que contiene a cada
+lado de la hitbox del jugador, finalmente resto esta interseccion con el centro
+del lado es decir, la posicion del jugador, y veo que su modulo sea menor a la
+mitad de la longitud del lado de la hitbox. funciona de esta forma tan simple
+porque las lineas de los lados de la hitbox es paralela a los ejes.
+
               float xhitbox = playerx - (hitboxRadius * xdir);
               float yhitbox = playery - (hitboxRadius * ydir);
               float lambda = (impact.second - xpos) * (yhitbox - playery);
-              float xintersection = ((impact.second - xpos) * (yhitbox - playery)/(impact.first - ypos)) + xpos;
-              if (abs(xintersection-playerx) < hitboxRadius && (distance == 0 || lambda < distance)){
-                player_hit = &player;
+              float xintersection = ((impact.second - xpos) * (yhitbox -
+playery)/(impact.first - ypos)) + xpos; if (abs(xintersection-playerx) <
+hitboxRadius && (distance == 0 || lambda < distance)){ player_hit = &player;
                 distance = lambda;
               }
-              float yintersection = ((impact.first - ypos) * (xhitbox - playerx)/(impact.second - xpos)) + ypos;
-              if (abs(yintersection-playery) < hitboxRadius && (distance == 0 || lambda < distance)){
-                player_hit = &player;
+              float yintersection = ((impact.first - ypos) * (xhitbox -
+playerx)/(impact.second - xpos)) + ypos; if (abs(yintersection-playery) <
+hitboxRadius && (distance == 0 || lambda < distance)){ player_hit = &player;
                 distance = lambda;
               }
             }

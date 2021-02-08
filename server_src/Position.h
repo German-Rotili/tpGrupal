@@ -25,6 +25,7 @@ private:
     float get_x_offset(char);
     void update_angle(char);
 public:
+
     Position(Map & map, Config &);
     ~Position();
     void update(char);
@@ -32,6 +33,7 @@ public:
     float get_pos_y();
     float get_hitbox_radius();
     float get_angle();
+    void set_position(int x, int y);
    
    
     void get_attacked(int dmg);

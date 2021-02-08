@@ -4,25 +4,38 @@
 #include "Constants.h"
 #include "Player.h"
 #include <vector>
-
-// para ver si una posicion es valida el mapa solo sabe si esta ocupada por un
-// objeto. no por jugadores. esto va por logica de hitbox aparte.
+#include <Door.h>
+#include "Config.h"
 
 class Map {
 private:
-  std::vector<Player &> players;
-  std::vector<std::vector<int>> map;
+  std::vector<Player> players;
   std::vector<Rocket> rockets;
+  std::vector<std::vector<int>> map;
+  std::map<int, std::map<Door>> doors;
+  Config config;
+
+
+  /*
+  esto pone los jugadores en sus lugares y carga las puertas y paredes especiales. 
+  */
+  void populate_variables();
+  char get_id(int x, int y);
+  bool is_solid(char id);
+  bool is_door(char id);
+  bool is_spawn(char id);
+  
 
 public:
   Map();
   ~Map();
 
-  void add_player(Player &player);     // ver quien hace los players
+  void add_player(char id);     // ver quien hace los players
   std::vector<Player &> get_players(); // placeholder
   void add_rocket(Rocket Rocket);
+  int has_item();
 
-  bool valid_position(int pos_x, int pos_y);
+  bool valid_position(int x, int y);
   bool is_impactable(int x, int y);
 
   void tick();

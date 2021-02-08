@@ -9,7 +9,7 @@ Rocket_launcher::Rocket_launcher(Map &map, Config &config) {
 }
 
 bool Rocket_launcher::fire() {
-  if (this->inventory.get_ammo() >= this->ammo_cost && !this->is_in_cooldown()) {
+  if (this->inventory.get_ammo() >= this->ammo_cost && !this->is_in_cooldown()) { //remplazar por has ammo.
     this->map.add_rocket(Rocket(this->map, this->config,
                                 this->inventory.get_player().get_pos_x(),
                                 this->inventory.get_player().get_pos_y(),

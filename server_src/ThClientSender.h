@@ -15,8 +15,7 @@
 #include "../common_src/Serializer.h"
 #include <atomic>
 #include <chrono>
-
-#define FPS_SENDER 30
+#include "Constants.h"
 
 class ThClientSender : public Thread{
     Socket & peer;

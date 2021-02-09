@@ -2,8 +2,8 @@
 
 void ThClientSender::send_snapshot(Snapshot & snapshot){
 
-        char action_id = '1';
-        char snapshot_id = '0';//DEFINIR EN CONSTANTES
+        char action_id = ACTION_ID;
+        char snapshot_id = SNAP_ID;
         Serializer serializer;
         std::vector <char> msg;
 

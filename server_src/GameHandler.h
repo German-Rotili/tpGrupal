@@ -5,7 +5,7 @@
 #include "ThClient.h"
 class GamePlay;
 class ThClient;
-//incluir locks
+
 class GameHandler{
 private:
     MapHandler map_handler;

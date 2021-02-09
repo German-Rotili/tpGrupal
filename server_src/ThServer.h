@@ -3,26 +3,22 @@
 
 #include <atomic>
 #include <vector>
-#include <list>
 #include <string>
 #include <utility>
-#include "ThClient.h"
 #include "ThClient.h"
 #include "GameHandler.h"
 #include "../common_src/common_thread.h"
 #include "../common_src/common_socket.h"
 #include "../common_src/common_exception.h"
 #include "../common_src/common_socket_exception.h"
+#include "Constants.h"
 
-
-#define THREADS_NUM 10
 
 
 class ThServer : public Thread{
 private:
     std::atomic<bool> state;
     Socket server;
-//    Map *map;
     std::vector<Thread*> threads;
     /*Elimina los threads que ya finalizaron su proceso*/
     void clean_clients(std::vector<Thread*> threads);

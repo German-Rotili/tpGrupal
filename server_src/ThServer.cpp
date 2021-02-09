@@ -1,11 +1,8 @@
 #include "ThServer.h"
-
 #include <atomic>
 #include <vector>
-#include <list>
 #include <string>
 #include <utility>
-#include "ThClient.h"
 #include "ThClient.h"
 #include "GameHandler.h"
 #include "../common_src/common_thread.h"

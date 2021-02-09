@@ -23,7 +23,6 @@ class Enemy : public ZRenderable {
 	const double animationSpeed;
 	int id_weapon;
 	bool isRunning;
-	bool isShooting;
 	bool isAlive;
 
 	bool animarDisparo;
@@ -37,7 +36,7 @@ class Enemy : public ZRenderable {
 		void setRelativeDirection(double enemyDirection, double playerDirection);
 		void setWeapon(int id_newWeapon);
 		void setIsRunning(bool isRunning);
-		void setIsShooting(bool isShooting);
+		void setShootingAction();
 		void setIsAlive(bool isAlive);
 		void actualizar() override;
 };

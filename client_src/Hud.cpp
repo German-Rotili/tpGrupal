@@ -28,7 +28,11 @@ Hud::Hud(class SdlRenderer& renderer, const class Player& player, const ClientSe
 	weapon4(renderer, font, "4", c_yellow.r, c_yellow.g, c_yellow.b),
 	weapon5(renderer, font, "5", c_yellow.r, c_yellow.g, c_yellow.b),
 	ammoIcon(renderer, "textures/icons/bullet.png"),
-	liveIcon(renderer, "textures/icons/live.png") {
+	liveIcon(renderer, "textures/icons/live.png"),
+	sndHurt("../resources/sounds/hurt.mp3"),
+	sndHealing("../resources/sounds/healing.mp3"),
+	sndScoreup("../resources/sounds/scoreup.mp3"),
+	sndPickAmmo("../resources/sounds/pick_weaponammo.mp3") {
 		playerFaceAnimation = 0;
 		playerWaitAnimation = rand() % 200;
 		rectangleScreen_alpha = 0;
@@ -81,6 +85,7 @@ void Hud::actualizarAmmo() {
 		if (auxAmmo > displayAmmo) {
 			c_rectangleScreen = c_yellow;
 			rectangleScreen_alpha = 240;
+			sndPickAmmo.play(-1, 0);
 		}
 		displayAmmo = auxAmmo;
 		delete ammoTexture;
@@ -93,8 +98,10 @@ void Hud::actualizarHealth() {
 	int auxHealth = player.getHealth();
 	if (auxHealth < displayHealth) {
 		c_rectangleScreen = c_red;
+		sndHurt.play(-1, 0);
 	} else if (auxHealth > displayHealth) {
 		c_rectangleScreen = c_green;
+		sndHealing.play(-1, 0);
 	} else {
 		return;
 	}
@@ -112,6 +119,7 @@ void Hud::actualizarScore() {
 		if (auxScore > displayScore) {
 			c_rectangleScreen = c_yellow;
 			rectangleScreen_alpha = 240;
+			sndScoreup.play(-1, 0);
 		}
 		displayScore = auxScore;
 		delete scoreTexture;

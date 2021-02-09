@@ -33,9 +33,9 @@ public:
 
   void drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
 
-  void drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, int numJuegos);
+  void drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id);
 
-  void drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, int numjugadores);
+  void drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames);
 
   void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings);
 

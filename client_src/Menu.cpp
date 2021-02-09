@@ -186,12 +186,11 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   std::vector<std::string> matches_id;
 
   bool advance = false;
-  int numJuegos = 3;
   bool quit = false;
   SDL_Event e;
   //No es el game loop
   while (!quit) {
-    drawGameList(renderer, settings, inputText, renderText, numJuegos);
+    drawGameList(renderer, settings, inputText, renderText, matches_id);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
@@ -255,26 +254,26 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
 }
 
 void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator) {
-  int numjugadores = 3;
   bool advance = false;
   bool quit = false;
   std::vector<std::string> usernames;
   SDL_Event e;
   //No es el game loop
   while (!quit) {
-    drawGameLobby(renderer, settings, creator, numjugadores);
+    drawGameLobby(renderer, settings, creator, usernames);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
-        if (e.button.button == SDL_BUTTON_LEFT && numjugadores == 4) {
+        if (e.button.button == SDL_BUTTON_LEFT && usernames.size() == 4) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
             if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Inicia el juego
               this->client.start_match();
               quit = true;
               advance = true;
+              quit = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
               usernames = this->client.get_players_username();
             }
@@ -282,14 +281,9 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
         }
       }
     }
-
-    //Recibir del server lista de numjugadores
-
-    //Recibir del server si el creador inicio la partida
   }
 
   if (advance) {
-    //Faltaria chequear que el servidor devuelva un OK
     //Arranca el juego
   }
 }
@@ -363,20 +357,20 @@ void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::s
   renderer.renderPresent();
 }
 
-void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, int numJuegos) {
+void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id) {
   SdlFont font("fonts/wolfenstein.ttf", 30);
 
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  for (int i = 1; i <= numJuegos; i++) {
-    SdlTexture tx_username(renderer, font, "Game Code", 255, 255, 255);
+  for (int i = 1; i <= matches_id.size(); i++) {
+    SdlTexture tx_username(renderer, font, matches_id.at(i), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
   }
 
-  for (int i = 5; i > numJuegos; i--) {
+  for (int i = 5; i > matches_id.size(); i--) {
     renderer.setRenderDrawColor(150, 150, 150, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
   }
@@ -403,27 +397,27 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
   renderer.renderPresent();
 }
 
-void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, int numjugadores) {
+void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames) {
   SdlFont font("fonts/wolfenstein.ttf", 30);
 
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  for (int i = 1; i <= numjugadores; i++) {
-    SdlTexture tx_username(renderer, font, "username", 255, 255, 255);
+  for (int i = 1; i <= usernames.size(); i++) {
+    SdlTexture tx_username(renderer, font, usernames.at(i), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
   }
 
-  for (int i = 4; i > numjugadores; i--) {
+  for (int i = 4; i > usernames.size(); i--) {
     renderer.setRenderDrawColor(150, 150, 150, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
   }
 
   if (creator) {
-    //Si la partida no esta llena el bootn de inicio esta oscuro
-    if (numjugadores == 4) {
+    //Si la partida no esta llena el boton de inicio esta oscuro
+    if (usernames.size() == 4) {
       renderer.setRenderDrawColor(255, 255, 255, 255);
       SdlTexture tx_startGame(renderer, font, "Start Game", 255, 255, 255);
       renderer.renderCopyCentered(tx_startGame, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
@@ -454,9 +448,6 @@ void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i, (settings.screenWidth/2), (settings.screenHeight/8));
   }
-
-  //Ordenar por puntuación y visualizar (nombre y puntuacion) la lista de jugadores
-  //Dejo "username" y "puntuacion" como placeholders para ver que quede bien la posicion
 
   for (int i = 1; i<= 4; i++) {
     SdlTexture tx_username(renderer, font, "username", 255, 255, 255);

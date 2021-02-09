@@ -6,14 +6,14 @@
 #include "weapons/Weapon.h"
 #include "Inventory.h"
 
-struct player_t {
-    int player_id;
-    float pos_x;
-    float pos_y;
-    float direction;
-    int ammo;
-    char current_weapon;
-};
+// struct player_t {
+//     int player_id;
+//     float pos_x;
+//     float pos_y;
+//     float direction;
+//     int ammo;
+//     char current_weapon;
+// };
 
 //Para el manejo de las acciones. agregar una lista de acciones que ocurren en cada iteracion. para esto cuando el server 
 //prepare el mensaje al cliente leera desde esta lista las acciones que son relevantes al cliente por ejemplo;
@@ -33,6 +33,7 @@ private:
     void attack();
     void acction();
     void intersects(float impx, float impy, Player &player);
+    void process_near_item();
 
     //life
 public:
@@ -59,6 +60,7 @@ public:
     float get_distance(float x, float y);
     float get_angle_difference(Position position);
     float get_angle_difference(float x, float y); 
+    void check_if_item();
 
     bool is_in_hitbox(float x, float y);
 };

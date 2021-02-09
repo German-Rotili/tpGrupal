@@ -2,6 +2,7 @@
 #define GAMEPLAY
 #include <vector>
 #include "../common_src/common_thread.h"
+#include "../common_src/Serializer.h"
 #include "../common_src/Snapshot.h"
 #include <iostream>
 #include <utility>

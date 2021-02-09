@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "yaml-cpp/yaml.h"
+#include "../common_src/structDefinitions.h"
 
 class ServerConfigHandler {
 private:

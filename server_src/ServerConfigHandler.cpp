@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include "ServerConfigHandler.h"
-#include "../common_src/structDefinitions.h"
 
 
 void ServerConfigHandler::initConfig(std::string path) {
@@ -16,7 +15,7 @@ weaponStats_t ServerConfigHandler::getWeaponStats(WeaponType type) {
     weaponName = "gun";
     break;
 
-    case MACHINE_GUN:
+    case MACHINEGUN:
     weaponName = "machine gun";
     break;
 
@@ -24,7 +23,7 @@ weaponStats_t ServerConfigHandler::getWeaponStats(WeaponType type) {
     weaponName = "minigun";
     break;
 
-    case ROCKET_LAUNCHER:
+    case ROCKETLAUNCHER:
     weaponName = "rocket launcher";
     break;
   }

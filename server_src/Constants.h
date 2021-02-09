@@ -1,7 +1,6 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
-
 #define FORWARD 'w'
 #define BACKWARDS 's'
 #define RIGHT 'd'

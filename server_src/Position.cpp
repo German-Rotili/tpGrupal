@@ -3,11 +3,7 @@
 #include <math.h>
 #include "Map.h"
 #include "Config.h"
-#define FORWARD 'w'
-#define BACKWARDS 'S'
-#define RIGHT 'd'
-#define LEFT 'a'
-#define PI 3.14159265
+#include "Constants.h"
 
 void Position::update(char mov) {
   if (mov == FORWARD || mov == BACKWARDS) {

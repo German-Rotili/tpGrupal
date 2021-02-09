@@ -20,7 +20,7 @@ int main(int argc, char* args[]) {
 
     int realWidth = SCREEN_WIDTH + MENU_OFFSET;
 
-    SdlWindow window("Wolfenstein_Editor", realWidth, SCREEN_HEIGHT);
+    SdlWindow window("Wolfenstein_Editor", realWidth, SCREEN_HEIGHT, false);
 
     SdlRenderer renderer = window.getRenderer();
 

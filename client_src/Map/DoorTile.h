@@ -2,7 +2,7 @@
 #define DOORTILE_H
 
 #include "../ResourcesLoader.h"
-#include "../SDLWrappers/SdlSound.h"
+#include "../../common_src/SDLWrappers/SdlSound.h"
 #include "../Player.h"
 #include "Tile.h"
 class DoorTile: public Tile {

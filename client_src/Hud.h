@@ -5,10 +5,10 @@
 #include <vector>
 #include "Player.h"
 #include "ClientSettings.h"
-#include "SDLWrappers/SdlTexture.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlFont.h"
-#include "SDLWrappers/SdlSound.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlFont.h"
+#include "../common_src/SDLWrappers/SdlSound.h"
 
 class Hud {
 	const SDL_Color c_green = {34, 214, 15};

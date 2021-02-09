@@ -3,11 +3,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
-#include "SDLWrappers/SdlContexto.h"
-#include "SDLWrappers/SdlWindow.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlException.h"
-#include "SDLWrappers/SdlFont.h"
+#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlWindow.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlException.h"
+#include "../common_src/SDLWrappers/SdlFont.h"
 #include "ClientSettings.h"
 #include "client_helper.h"
 class Menu {

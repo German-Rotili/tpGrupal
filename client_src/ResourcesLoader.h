@@ -2,9 +2,9 @@
 #define RESOURCES_H
 
 #include <string>
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlTexture.h"
-#include "SDLWrappers/SdlSound.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
+#include "../common_src/SDLWrappers/SdlSound.h"
 
 
 class ResourcesLoader {

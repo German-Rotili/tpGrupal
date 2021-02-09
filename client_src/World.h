@@ -4,9 +4,9 @@
 #include <map>
 #include <utility>
 #include <algorithm>
-#include "SDLWrappers/SdlTexture.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlMusic.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlMusic.h"
 #include "ClientSettings.h"
 #include "ZRenderable.h"
 #include "Object.h"

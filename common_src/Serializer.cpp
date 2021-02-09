@@ -35,6 +35,7 @@ void Serializer::append_actions(std::vector<char> & message, std::vector<Action*
         append_variable(message, (char*) &(action->player_id), sizeof(int));
         append_variable(message, (char*) &(action->impact_x), sizeof(double));
         append_variable(message, (char*) &(action->impact_y), sizeof(double));
+        append_variable(message, (char*) &(action->weapon_id), sizeof(char));
         append_variable(message, (char*) &(action->state), sizeof(bool));
     }
 }
@@ -183,7 +184,10 @@ void Serializer::deserialize_action(std::vector <char> & msg, Snapshot & snapsho
         memcpy(&action->impact_y, msg.data() + offset, size_double);
         offset += size_double;
         memcpy(&action->weapon_id, msg.data() + offset, sizeof(char));
-        action->update_state(true);
+        offset += sizeof(char);
+        memcpy(&action->state, msg.data() + offset, sizeof(bool));
+        offset += sizeof(bool);
+
         snapshot.add_action(action);
     }
     

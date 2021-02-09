@@ -156,11 +156,13 @@ void World::actualizar(Snapshot & snapshot) {
 
     for (auto &action : snapshot.actions){
       if ((action->get_id() == -1) && (action->active())){ // Caso explosion
-        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src, settings));
+        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src.tx_explosion,src.snd_explosion, settings));
       } else if ((action->get_id() == this->player_id) && (action->active())) {  // caso disparo jugador
         jugador.setShootingAction();
+        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
       } else if ((enemigos.find(action->get_id()) != enemigos.end()) && (action->active())) {  // caso disparo enemigo
-          enemigos.at(action->get_id())->setShootingAction();
+        enemigos.at(action->get_id())->setShootingAction();
+        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
       } else {
         continue;
       }
@@ -193,7 +195,6 @@ void World::actualizar(Snapshot & snapshot) {
 }
 
 void World::renderizar(ClientSettings& settings) {
-  //rayCaster.cast2D(renderer, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
   rayCaster.cast3D(renderer, worldMap, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
 
   std::vector<ZRenderable*> visibles;

@@ -32,10 +32,7 @@ public:
   double zBuffer[1024];
   explicit RayCaster(SdlTexture& walls, ClientSettings& settings);
   ~RayCaster();
-
-  void cast2D(SdlRenderer& renderer, WorldMap& myMap, double x, double y,
-     double actorAngle, ClientSettings& settings);
-
+  
   void cast3D(SdlRenderer& renderer, WorldMap& myMap, double x, double y,
     double actorAngle, ClientSettings& settings);
 };

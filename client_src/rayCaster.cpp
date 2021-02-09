@@ -49,10 +49,6 @@ void RayCaster::setXYSteps(double direction) {
   }
 }
 
-void RayCaster::cast2D(SdlRenderer& renderer, WorldMap& myMap, double x
-  , double y, double actorAngle, ClientSettings& settings) {
-}
-
 void RayCaster::dibujarPisoYTecho(SdlRenderer& renderer, ClientSettings& settings) {
   // Piso
   renderer.setRenderDrawColor(112, 112, 112, 255);

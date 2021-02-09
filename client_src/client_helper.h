@@ -22,7 +22,7 @@ public:
     void join_game(std::string & game_id);
     void start_match();
     void new_game(std::vector<char> & map);
-    void await_game_start();
+    int await_game_start();
     void  client_send_intention(std::vector<char> & intention);
     std::vector<std::string> get_players_username();
     void recieve_snapshot(Snapshot & snapshot);
@@ -30,6 +30,7 @@ public:
 
     ~Client();
     void send_username(std::string & username);
+    void join_game();
 
     /*
     Crea una conexion al socket y envia cada linea del stdin al server.

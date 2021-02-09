@@ -11,7 +11,7 @@
 #include "ClientSettings.h"
 #include "client_helper.h"
 class Menu {
- private:
+private:
   Client & client;
 
 public:

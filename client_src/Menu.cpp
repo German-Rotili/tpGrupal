@@ -13,6 +13,9 @@
 #include "Menu.h"
 #include "ClientSettings.h"
 
+Menu::Menu(Client & client):client(client){}
+Menu::~Menu(){}
+
 void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
 
   std::string inputText = "";
@@ -102,7 +105,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               //Despues pide un nombre de archivo .yaml y despues de un SDLK_RETURN va al GameLobby
             } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
               // Boton de Unirse a Partida
-              this->client.join_game(inputText);
+              this->client.join_game();
               advance = true;
               quit = true;
             }
@@ -212,6 +215,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
           //Ejecutar GameLobby y comunicacion con el server
+          this->client.join_game(inputText);
           advance = true;
           quit = true;
           break;

@@ -98,16 +98,17 @@ std::vector<std::string> Client::get_players_username(){
 }
 
 
-void Client::await_game_start(){
+int Client::await_game_start(){
     char start = 'x';
     while (start != 's'){
         client.socket_receive((char*)&start, sizeof(char));   
     }
+    int client_id= -1;
+    client.socket_receive((char*)&client_id, sizeof(int));   
+    return (int)ntohl(client_id);
 }
 
-    // int client_id= -1;
-    // client.socket_receive((char*)&client_id, sizeof(int));   
-    // return (int)ntohl(client_id);
+
 
 void Client::new_game(std::vector<char> & map){
     char new_game = 'n';
@@ -136,12 +137,16 @@ void Client::send_username(std::string & username){
     client.socket_send(username.c_str(), username.length());
 }
 
-void Client::join_game(std::string & game_id){
+
+void Client::join_game(){
     char join_flag = 'j';
     client.socket_send((char*)&join_flag, sizeof(char));
-    uint32_t snap_size = htonl(game_id.length());
-    client.socket_send((char*)&snap_size, sizeof(uint32_t));
-    client.socket_send(game_id.c_str(), game_id.length());
+}
+
+
+void Client::join_game(std::string & game_id){
+    uint32_t g_id = htonl(std::stoi(game_id));
+    client.socket_send((char*)&g_id, sizeof(uint32_t));
 }
 
 std::vector<char> Client::client_receive_vector(){

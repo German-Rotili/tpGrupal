@@ -46,10 +46,7 @@ int main(int argc, char* args[]) {
     menu.runInsertUsername(renderer, settings);
     /********************************/
 
-
-        //Server guarda username-id. Chequear si existe
-        //Server devuelve nuevo id + id de partidas.
-    //
+    int client_id = client.await_game_start();
 
 
 
@@ -58,7 +55,6 @@ int main(int argc, char* args[]) {
     MapHandler maphandler;
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
 
-    int client_id = 0;
     World world(renderer, settings, vector_map, client_id);
     bool quit = false;
     SDL_Event e;

@@ -7,8 +7,8 @@
 #include "../Config.h"
 #include "../Player.h"
 
-Rocket::Rocket(Map & map, Config config, float pos_x, float pos_y,
-               float direction):map(map) {
+Rocket::Rocket(Map & map, Config &config, float pos_x, float pos_y,
+               float direction):map(map), config{config}{
   this->y_pos = pos_y;
   this->x_pos = pos_x;
   this->direction = direction;

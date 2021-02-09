@@ -10,7 +10,10 @@ class Door;
 class Player;
 
 class GamePlay;
-
+#include "./weapons/Rocket.h"
+#include "../common_src/Action.h"
+#include "Player.h"
+#include "Door.h"
 class Map {
 private:
   std::vector<Player> players;

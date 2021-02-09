@@ -71,7 +71,7 @@ bool Map::valid_position(int x, int y) {
     return true;
   }
   if (this->is_door(squareId)) {
-    return this->doors[x][y].is_walkable();
+    this->doors.find(x)->second.find(y)->second.is_walkable();
   }
   return false;
 }
@@ -115,7 +115,7 @@ void Map::populate_variables() {
       char id = this->get_id(x,y);
 
       if (this->is_door(id)) {
-        this->doors[x][y] = Door(id);
+        this->doors[x].insert(std::pair<int,Door>(y,Door(id)));
       }
       if (this->is_spawn(id)) {
         for (Player &player : this->players) {

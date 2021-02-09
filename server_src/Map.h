@@ -1,20 +1,21 @@
-#ifndef __SERVER_MAP_H__
-#define __SERVER_MAP_H__
-#include "./weapons/Rocket.h"
-#include "../common_src/Action.h"
-#include "Constants.h"
-#include "GamePlay.h"
-#include "Player.h"
+#ifndef __MAP_H__
+#define __MAP_H__
+
 #include <vector>
-#include <Door.h>
+#include <map>
 #include "Config.h"
+class Rocket;
+class Action;
+class Door;
+class Player;
+
 class GamePlay;
 
 class Map {
 private:
   std::vector<Player> players;
   std::vector<Rocket> rockets;
-  std::vector<Actions> actions;
+  std::vector<Action> actions;
   std::vector<std::vector<int>> map;
   std::map<int, std::map<int, Door>> doors;
   std::map<int, std::map<int, char>> items;
@@ -38,8 +39,8 @@ public:
 
   char get_id(int x, int y);
   void add_player(char id);   // ver quien hace los players
-  std::vector<Player &> get_players(); // placeholder
-  std::map<int, std::map<int, Door>>& get_doors();
+  std::vector<Player> &get_players(); // placeholder
+  std::map<int, std::map<int, Door>> get_doors();
 
   void add_rocket(Rocket Rocket);
   bool is_item(char id);
@@ -55,4 +56,5 @@ public:
   
 };
 
-#endif // __SERVER_MAP_H__
+
+#endif // __MAP_H__

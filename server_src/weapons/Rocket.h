@@ -1,5 +1,6 @@
-#include "../Map.h"
-#include "../Config.h"
+#ifndef __ROCKET_H__
+#define __ROCKET_H__
+
 
 
 
@@ -30,3 +31,5 @@ public:
 
 };
 
+
+#endif // __ROCKET_H__

@@ -4,6 +4,13 @@
 #include "weapons/Machine_gun.h"
 #include "weapons/Chain_gun.h"
 #include "weapons/Rocket_launcher.h"
+#include "Player.h"
+#include "Constants.h"
+#include "weapons/Weapon.h"
+#include <memory>
+#include <map>
+#include "Map.h"
+#include "Config.h"
 
 #include <memory>
 
@@ -44,6 +51,7 @@ bool Inventory::handle_item(char id)
     }
     return false;
   }
+  return false;
 }
 
 
@@ -51,11 +59,11 @@ bool Inventory::handle_item(char id)
 Inventory::Inventory(Player &player, Map &Map, Config &config) {
   this->player = &player;
   this->map = map;
-  this->weapons[KNIFE] = std::make_unique<Knife>(this->map, this->config);
-  this->weapons[PISTOL] = std::make_unique<Pistol>(this->map, this->config);
-  this->weapons[MACHINE_GUN] = std::make_unique<Machine_gun>(this->map, this->config);
-  this->weapons[CHAIN_GUN] = std::make_unique<Chain_gun>(this->map, this->config);
-  this->weapons[ROCKET_LAUNCHER] = std::make_unique<Rocket_launcher>(this->map, this->config);
+  this->weapons[KNIFE] = new Knife(this->map, this->config);
+  this->weapons[PISTOL] = new Pistol(this->map, this->config);
+  this->weapons[MACHINE_GUN] = new Machine_gun(this->map, this->config);
+  this->weapons[CHAIN_GUN] = new Chain_gun(this->map, this->config);
+  this->weapons[ROCKET_LAUNCHER] = new Rocket_launcher(this->map, this->config);
 
   this->owned_weapons[KNIFE] = true;
   this->owned_weapons[PISTOL] = true;

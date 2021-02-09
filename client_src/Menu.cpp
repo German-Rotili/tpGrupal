@@ -31,7 +31,7 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
       } else if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
-            //Mandar al server y avanzar con el startPage
+            this->client.send_username(inputText);
             advance = true;
             quit = true;
           break;
@@ -68,7 +68,6 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
   }
 
   if (advance) {
-    //Faltaria chequear que el servidor devuelva un OK
     runStartPage(renderer, settings);
   }
 }
@@ -103,6 +102,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               //Despues pide un nombre de archivo .yaml y despues de un SDLK_RETURN va al GameLobby
             } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
               // Boton de Unirse a Partida
+              this->client.join_game(inputText);
               advance = true;
               quit = true;
             }
@@ -113,7 +113,21 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
           case SDLK_RETURN:
           //Ejecutar GameLobby y comunicacion con el server
           try {
+              std::string filename(inputText);
+              std::vector<char> bytes;
+              char byte = 0;
+              std::ifstream input_file(filename);
+              if (!input_file.is_open()) {
+                std::cerr << "Error al abrir mapa" << std::endl;
+              }
+              while (input_file.get(byte)) {
+                bytes.push_back(byte);
+              }
+              input_file.close();
+              this->client.new_game(bytes);
+
             vector_map = mapHandler.readMap(inputText);
+
           } catch (std::exception const& e) {
             printf("Hubo una excepción: ");
             std::cout << e.what() << "\n";
@@ -157,7 +171,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
 
   if (advance) {
     if (renderText) {
-      //Faltaria chequear que el servidor devuelva un OK
+      //CHEQUEO MAPA EN EL SERVIDOR
       runGameLobby(renderer, settings, true);
     } else {
       runGameList(renderer, settings);
@@ -169,6 +183,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   std::string inputText = "";
   bool renderText = false;
   bool insertGameCode = false;
+  std::vector<std::string> matches_id;
 
   bool advance = false;
   int numJuegos = 3;
@@ -190,6 +205,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
               renderText = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
               //Refresh
+              matches_id = this->client.get_matches_id();
             }
           }
         }
@@ -242,6 +258,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
   int numjugadores = 3;
   bool advance = false;
   bool quit = false;
+  std::vector<std::string> usernames;
   SDL_Event e;
   //No es el game loop
   while (!quit) {
@@ -255,15 +272,24 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
             if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Inicia el juego
+              this->client.start_match();
+              quit = true;
               advance = true;
               quit = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
-              //Refresh
+              usernames = this->client.get_players_username();
             }
           }
         }
       }
     }
+<<<<<<< HEAD
+=======
+
+    //Recibir del server lista de numjugadores
+
+    //Recibir del server si el creador inicio la partida
+>>>>>>> 8e18cffd59970e83eea25f06ffd158d19ef2fe86
   }
 
   if (advance) {

@@ -1,5 +1,9 @@
-#include "Weapon.h"
+#ifndef __KNIFE_H__
+#define __KNIFE_H__
 
+#include "Weapon.h"
+class Map;
+class Config;
 
 class  Knife : public Weapon{
 private:
@@ -18,3 +22,4 @@ public:
     logica muy similar a las puertas. 
 
 */
+#endif // __KNIFE_H__

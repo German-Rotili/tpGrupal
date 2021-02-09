@@ -1,6 +1,11 @@
 #include "Machine_gun.h"
 #include "../Config.h"
 #include "../Constants.h"
+#include "Weapon.h"
+#include "../Map.h"
+#include "../../common_src/Timer.h"
+#include <random>
+
 
 Machine_gun::Machine_gun(Map &map, Config &config) {
   this->max_damage = config.get_max_damage(MACHINE_GUN);
@@ -33,7 +38,7 @@ float Machine_gun::get_shot_angle() {
   // cuando mas tiempo paso desde el ultimo disparo menos afecta el spred. hasta
   // el tiempo de reset. REVISAR PARA QUE AUMENTE CON EL NUMERO DE DISPAROS.
   float angle_variation =
-      rand() %
+      std::rand() %
       (this->max_spread *
        std::min(this->last_shot_timer.elapsed_time(), this->stability_reset) /
        this->stability_reset);

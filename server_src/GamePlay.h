@@ -9,7 +9,11 @@
 #include <chrono>
 #include "ThClient.h"
 #include "Map.h"
+#include "Door.h"
+#include "ThClient.h"
 
+class ThClient;
+class GameHandler;
 
 #define FPS 30
 
@@ -17,19 +21,20 @@ class GamePlay : public Thread{
 private:
     int id;
     bool state;
-    std::vector <ThClient&> clients;
+    std::vector <ThClient*> clients;
     Map map;
 public:
-    GamePlay(ThClient & player, Map&& map);
+    GamePlay(ThClient *player, Map&& map);
     ~GamePlay();
-    void add_client(ThClient & client);
+    void add_client(ThClient* client);
     void start();
     int get_id();
     void run() override;
     GamePlay& operator=(const GamePlay&) = delete;
     GamePlay(const GamePlay&) = delete;
     Snapshot get_snapshot();
-
+    void notify_players();
+    
 
 };
 #endif

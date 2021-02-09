@@ -4,6 +4,7 @@
 #include "ServerConfigHandler.h"
 #include "../../common_src/structDefinitions.h"
 
+
 void ServerConfigHandler::initConfig(std::string path) {
   root = YAML::LoadFile(path);
 }

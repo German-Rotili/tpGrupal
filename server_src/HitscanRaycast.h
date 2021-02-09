@@ -2,7 +2,8 @@
 #define __HITSCANRAYCAST_H__
 
 #include <tuple>
-#include "Map.h"
+class Player;
+class Map;
 
 class HitscanRaycast
 {

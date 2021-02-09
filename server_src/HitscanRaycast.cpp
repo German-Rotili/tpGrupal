@@ -1,5 +1,8 @@
 #include "HitscanRaycast.h"
 #include <math.h> 
+#include "Map.h"
+#include "Player.h"
+
 
 static std::tuple<int, int> getTileSteps(double dir) {
   if ((0 > dir) && (dir >= -90)) {
@@ -86,4 +89,5 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map &map, Player &playe
         }
       }
     }
+  return std::make_pair(x,y);
 }

@@ -2,7 +2,9 @@
 #include "Pistol.h"
 #include "../Constants.h"
 #include <random>
-
+#include "../../common_src/Timer.h"
+#include "Weapon.h"
+#include "../Map.h"
 /*
     imlementar con el tick la idea de no poder mantener apretado. 
 */

@@ -14,7 +14,7 @@ private:
   Timer burst_timer;
 
 public:
-     Machine_gun(Map &, Config &);
+     Machine_gun(Map *, Config *);
     ~ Machine_gun();
     void tick();
     void attack();

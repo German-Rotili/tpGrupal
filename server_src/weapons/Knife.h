@@ -11,7 +11,7 @@ private:
     float range;
     int damage;
 public:
-     Knife(Map &, Config &);
+     Knife(Map *, Config *);
     ~ Knife();
     void attack();
 };

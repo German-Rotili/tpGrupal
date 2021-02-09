@@ -1,7 +1,7 @@
+#include "../Map.h"
 #include "Weapon.h"
 #include <chrono>
 #include "../HitscanRaycast.h"
-#include "../Map.h"
 #include "../Inventory.h"
 #include "../../common_src/Timer.h"
 #include "../Player.h"
@@ -43,7 +43,7 @@ void Weapon::fire(float angle) {
   */
   HitscanRaycast raycaster;
   std::pair<float, float> impact =
-      raycaster.get_impact_point(this->map, this->inventory.get_player());
+      raycaster.get_impact_point(this->map-> this->inventory.get_player());
       
   float xpos, ypos;
   xpos = this->inventory.get_player().get_pos_x();
@@ -63,7 +63,8 @@ void Weapon::fire(float angle) {
   float dist;
   Player *player_hit;
   float distance;
-  for (Player &player : this->map.get_players()) {
+  
+  for (Player &player : this->map->get_players()) {
     float playerx = player.get_pos_x();
     float playery = player.get_pos_x();
     float hitboxRadius = player.get_hitbox_radius();

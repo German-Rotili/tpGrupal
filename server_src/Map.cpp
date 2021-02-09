@@ -15,7 +15,7 @@
 
 
 void Map::add_player(char id) {
-  this->players.push_back(Player(*this, this->config, id));
+  this->players.push_back(Player(this, &(this->config), id));
 }
 
 std::vector<Player>& Map::get_players() 
@@ -73,6 +73,7 @@ bool Map::valid_position(int x, int y) {
   if (this->is_door(squareId)) {
     return this->doors[x][y].is_walkable();
   }
+  return false;
 }
 
 bool Map::is_impactable(int x, int y) {
@@ -82,7 +83,9 @@ bool Map::is_impactable(int x, int y) {
 
 Map::~Map() {}
 
-char Map::get_id(int x, int y) {}
+char Map::get_id(int x, int y) {
+  return this->map[x][y];
+}
 
 bool Map::is_solid(char id) {
   if (id >= 0 && id <= 33) {

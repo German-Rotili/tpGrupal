@@ -11,7 +11,7 @@
 
 
 
-Pistol::Pistol(Map &map, Config &config) {
+Pistol::Pistol(Map *map, Config *config) {
     this->max_damage = config.get_max_damage(PISTOL);
     this->max_spread = config.get_max_spread(PISTOL);
     this->map = map;

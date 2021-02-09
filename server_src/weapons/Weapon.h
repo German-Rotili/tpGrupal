@@ -15,7 +15,7 @@ protected:
     int cooldown;
     int stability_reset;
     int max_acurate_range;
-    Map &map;
+    Map *map;
     Inventory &inventory;
     
     void fire(float angle);

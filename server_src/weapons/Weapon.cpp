@@ -43,7 +43,7 @@ void Weapon::fire(float angle) {
   */
   HitscanRaycast raycaster;
   std::pair<float, float> impact =
-      raycaster.get_impact_point(this->map-> this->inventory.get_player());
+      raycaster.get_impact_point(this->map, this->inventory.get_player());
       
   float xpos, ypos;
   xpos = this->inventory.get_player().get_pos_x();

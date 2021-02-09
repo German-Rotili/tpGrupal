@@ -91,7 +91,7 @@ bool Player::is_in_hitbox(float x, float y) {
 int Player::get_ammo() { return this->inventory.get_ammo(); }
 
 char Player::get_current_weapon_id() {
-  this->inventory.get_current_weapon_id();
+  return this->inventory.get_current_weapon_id();
 }
 
 float Player::get_direction() { return this->position.get_angle(); }

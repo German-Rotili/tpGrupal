@@ -7,7 +7,7 @@
 #include "../Config.h"
 #include "../Player.h"
 
-Rocket::Rocket(Map & map, Config *config, float pos_x, float pos_y,
+Rocket::Rocket(Map * map, Config *config, float pos_x, float pos_y,
                float direction):map(map), config{config}
                {
   this->y_pos = pos_y;
@@ -21,18 +21,17 @@ void Rocket::update_position() {
 }
 
 
-Rocket& Rocket::operator=(Rocket other) {
-    
-}
-
 bool Rocket::tick() {
   this->update_position();
   if (!this->map->valid_position(this->x_pos, this->y_pos)) {
     this->explode();
+    return true;
   }
   if(this->colides_with_player()){
     return true;
   }
+  return false;
+  
 }
 
 

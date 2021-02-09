@@ -7,8 +7,8 @@
 #include <random>
 
 Chain_gun::Chain_gun(Map *map, Config *config) {
-  this->max_damage = config.get_max_damage(CHAIN_GUN);
-  this->max_spread = config.get_max_spread(CHAIN_GUN);
+  this->max_damage = config->get_max_damage(CHAIN_GUN);
+  this->max_spread = config->get_max_spread(CHAIN_GUN);
   this->map = map;
 }
 
@@ -29,4 +29,5 @@ float Chain_gun::get_shot_angle() {
       (this->max_spread *
        std::min(this->last_shot_timer.elapsed_time(), this->stability_reset) /
        this->stability_reset);
+  return angle + angle_variation;
 }

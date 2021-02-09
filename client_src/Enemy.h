@@ -2,11 +2,11 @@
 #define ENEMY_H
 
 #include <vector>
-#include "SDLWrappers/SdlTexture.h"
-#include "SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
 #include "ResourcesLoader.h"
-#include "SDLWrappers/SdlSound.h"
+#include "../common_src/SDLWrappers/SdlSound.h"
 
 #include "ZRenderable.h"
 class Enemy : public ZRenderable {

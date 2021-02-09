@@ -3,12 +3,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "SDLWrappers/SdlContexto.h"
-#include "SDLWrappers/SdlMusic.h"
-#include "SDLWrappers/SdlWindow.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlException.h"
-#include "SDLWrappers/SdlFont.h"
+#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlMusic.h"
+#include "../common_src/SDLWrappers/SdlWindow.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlException.h"
+#include "../common_src/SDLWrappers/SdlFont.h"
 #include "../common_src/MapHandler.h"
 #include "Menu.h"
 #include "ClientSettings.h"
@@ -80,7 +80,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   SdlMusic musicaMenu("../resources/music/menu.mp3");
   musicaMenu.play();
 
- 
+
   MapHandler mapHandler;
   std::string inputText = "";
   bool renderText = false;

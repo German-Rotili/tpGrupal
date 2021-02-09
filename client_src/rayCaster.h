@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <cmath>
 #include <iostream>
-#include "SDLWrappers/SdlContexto.h"
-#include "SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
 #include "Map/WorldMap.h"
 
@@ -32,7 +32,7 @@ public:
   double zBuffer[1024];
   explicit RayCaster(SdlTexture& walls, ClientSettings& settings);
   ~RayCaster();
-  
+
   void cast3D(SdlRenderer& renderer, WorldMap& myMap, double x, double y,
     double actorAngle, ClientSettings& settings);
 };

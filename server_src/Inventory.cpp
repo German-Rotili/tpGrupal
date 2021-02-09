@@ -55,9 +55,10 @@ bool Inventory::handle_item(char id)
 }
 
 
-
-Inventory::Inventory(Player &player, Map &map, Config &config) : map{map}, config{config}{
-  this->player = &player;
+Inventory::Inventory(Player *player, Map *map, Config *config) {
+  this->map = map;
+  this->config = config;
+  this->player = player;
   this->weapons[KNIFE] = new Knife(this->map, this->config);
   this->weapons[PISTOL] = new Pistol(this->map, this->config);
   this->weapons[MACHINE_GUN] = new Machine_gun(this->map, this->config);

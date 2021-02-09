@@ -2,8 +2,8 @@
 #define WORLDMAP_H
 
 #include <vector>
-#include "../SDLWrappers/SdlTexture.h"
-#include "../SDLWrappers/SdlRenderer.h"
+#include "../../common_src/SDLWrappers/SdlTexture.h"
+#include "../../common_src/SDLWrappers/SdlRenderer.h"
 #include "../ClientSettings.h"
 #include "../Player.h"
 #include "../ResourcesLoader.h"

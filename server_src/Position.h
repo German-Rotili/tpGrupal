@@ -7,6 +7,8 @@
 //para el movimiento, asumimos que en un comando de movimiento que depende de la velocidad, no puede recorrer el grosor de una pared.
 // implementar con hitbox?
 //verifica 
+class Map;
+class Config;
 
 class Position{
 private:
@@ -16,8 +18,7 @@ private:
     float hitbox_radius;
     float linear_vel;
     float angular_vel;
-    //Map &map;
-    Map &map;
+    Map *map;
     float get_new_x(char);
     float get_new_y(char);
     float get_y_offset(char);
@@ -25,7 +26,7 @@ private:
     void update_angle(char);
 public:
 
-    Position(Map & map, Config &);
+    Position(Map *, Config *);
     ~Position();
     void update(char);
     float get_pos_x();

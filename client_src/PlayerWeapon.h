@@ -2,7 +2,7 @@
 #define PLAYERWEAPON_H
 
 #include <string>
-#include "SDLWrappers/SdlSound.h"
+#include "../common_src/SDLWrappers/SdlSound.h"
 
 class PlayerWeapon {
   bool disponible;

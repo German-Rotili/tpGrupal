@@ -1,8 +1,8 @@
 #ifndef ZRENDERABLE_H
 #define ZRENDERABLE_H
 
-#include "SDLWrappers/SdlTexture.h"
-#include "SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
 #include "Player.h"
 class ZRenderable {
@@ -45,7 +45,7 @@ class ZRenderable {
 
 		// Retorna true si la posicion es distinta a la que tenia antes
 		bool setPosicion(double x, double y);
-		
+
 		virtual void actualizar() = 0;
 		void updateDistToPlayer();
     void renderizar(SdlRenderer& renderer,

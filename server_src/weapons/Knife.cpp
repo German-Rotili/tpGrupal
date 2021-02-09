@@ -5,7 +5,7 @@
 #include "../Map.h"
 #include "../Player.h"
 
-Knife::Knife(Map &map, Config &config) {
+Knife::Knife(Map *map, Config *config) {
   this->map = map;
 }
 
@@ -15,7 +15,7 @@ void Knife::attack() {
   if (!this->is_in_cooldown()) {
     Player *closest_player = nullptr;
     float min_distance = 0;
-    for (Player &player : this->map.get_players()) {
+    for (Player &player : this->map->get_players()) {
       float pos_x = player.get_pos_x();
       float pos_y = player.get_pos_y();
 

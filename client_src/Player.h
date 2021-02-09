@@ -2,9 +2,9 @@
 #define PLAYER_H
 
 #include <vector>
-#include "SDLWrappers/SdlTexture.h"
-#include "SDLWrappers/SdlSound.h"
-#include "SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
+#include "../common_src/SDLWrappers/SdlSound.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
 #include "PlayerWeapon.h"
 #include "ResourcesLoader.h"

@@ -131,7 +131,6 @@ void Map::populate_variables() {
   }
 }
 
-
 void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
   for (Player &player : this->players) {
     if(player.get_id() == client_id){

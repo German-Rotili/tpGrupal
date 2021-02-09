@@ -121,14 +121,6 @@ void ThClient::run(){
                 break;
             case REFRESH:
                 {
-                //Cliente nueva partida -> lobby
-                //Cliente join -> recien ahi mando los id
-                //Cliente join-> Lobby
-                //server envia lista de jugadores(username)
-                //Cliente manda nueva partida/join/refresh - join a un lobby
-                //ID maker
-                //isOpen para las puertas y enviar al cliente.
-
                 std::vector<int> matches_id = this->game_handler.get_matches_id();
                 //Mando la cantidad de ids
                 uint32_t value = htonl(matches_id.size());
@@ -144,8 +136,8 @@ void ThClient::run(){
         /***********Creo ID, Username y mando ID******/
             IdMaker id_maker;
             int new_player_id = id_maker.generate_id();
-            char player_id_flag = 'i';
-            peer.socket_send(&player_id_flag, sizeof(char));
+            // char player_id_flag = 'i';
+            // peer.socket_send(&player_id_flag, sizeof(char));
             uint32_t player_id = htonl(new_player_id);
             peer.socket_send((char*)&player_id, sizeof(uint32_t));
         /*********************************************/

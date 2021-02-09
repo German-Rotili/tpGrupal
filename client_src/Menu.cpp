@@ -28,7 +28,7 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
       } else if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
-          //Mandar al server y avanzar con el startPage
+            //Mandar al server y avanzar con el startPage
             advance = true;
             quit = true;
           break;
@@ -66,7 +66,7 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
 
   if (advance) {
     //Faltaria chequear que el servidor devuelva un OK
-    runStartPage(renderer, settings, inputText);
+    runStartPage(renderer, settings);
   }
 }
 
@@ -75,6 +75,8 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings, std::st
   SdlMusic musicaMenu("../resources/music/menu.mp3");
   musicaMenu.play();
 
+  std::vector<std::vector<int>> vector_map;
+  MapHandler mapHandler;
   std::string inputText = "";
   bool renderText = false;
   bool insertMapName = false;
@@ -107,6 +109,13 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings, std::st
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
           //Ejecutar GameLobby y comunicacion con el server
+          try {
+            vector_map = mapHandler.readMap(inputText);
+          } catch (std::exception const& e) {
+            printf("Hubo una excepción: ");
+            std::cout << e.what() << "\n";
+          }
+
           advance = true;
           quit = true;
           break;

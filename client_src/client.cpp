@@ -58,7 +58,7 @@ int main(int argc, char* args[]) {
     MapHandler maphandler;
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
 
-
+    int client_id = 0;
     World world(renderer, settings, vector_map, client_id);
     bool quit = false;
     SDL_Event e;

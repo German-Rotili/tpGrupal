@@ -1,5 +1,8 @@
+#ifndef __MACHINE_GUN_H__
+#define __MACHINE_GUN_H__
 #include "Weapon.h"
-
+class Map;
+class Config;
 
 class  Machine_gun : public Weapon{
 private:
@@ -17,3 +20,5 @@ public:
     void attack();
     bool can_fire_next_burst_shot();
 };
+
+#endif // __MACHINE_GUN_H__

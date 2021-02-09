@@ -2,7 +2,13 @@
 #include "../Config.h"
 #include "../Constants.h"
 #include "Rocket.h"
-Rocket_launcher::Rocket_launcher(Map &map, Config &config) {
+#include "Weapon.h"
+#include "../Position.h"
+#include "../Map.h"
+#include "../Inventory.h"
+#include "../Player.h"
+
+Rocket_launcher::Rocket_launcher(Map &map, Config &config) : map{map}{
   this->max_damage = config.get_max_damage(ROCKET_LAUNCHER);
   this->max_spread = config.get_max_spread(ROCKET_LAUNCHER);
   this->map = map;
@@ -16,5 +22,7 @@ bool Rocket_launcher::fire() {
                                 this->inventory.get_player().get_direction()));
     this->inventory.spend_ammo(this->ammo_cost);
     this->last_shot_timer.start();
+    return true;
   }
+  return false;
 }

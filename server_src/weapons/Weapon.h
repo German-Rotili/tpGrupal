@@ -1,8 +1,8 @@
 #ifndef __SERVER_WEAPON_H__
 #define __SERVER_WEAPON_H__
-#include "../Map.h"
-#include "../Inventory.h"
+
 #include "../../common_src/Timer.h"
+class Inventory;
 class Map;
 
 class Weapon
@@ -26,7 +26,7 @@ protected:
     Weapon();
 
 public:
-    virtual bool get_damage(int distance);
+    virtual int get_damage(int distance);
     void tick();
     virtual void attack();
 

@@ -1,12 +1,13 @@
 #ifndef __SERVER_INVENTORY_H__
 #define __SERVER_INVENTORY_H__
-#include "Player.h"
 #include "Constants.h"
-#include "weapons/Weapon.h"
 #include <memory>
 #include <map>
-#include "Map.h"
-#include "Config.h"
+class Weapon;
+class Config;
+class Player;
+class Map;
+
 class Inventory{
 
     // aca hardcodeamos todas las armas. despues tiene una lista de armas que si tiene y una que es la actual. me parece mas simple y
@@ -16,10 +17,10 @@ private:
     Player *player;
     int ammo;
     char current_weapon;
-    std::map<char, std::unique_ptr<Weapon>> weapons;
+    std::map<char, Weapon*> weapons;
     bool owned_weapons[NUMBER_OF_WEAPONS];
-    Map *map;
-    Config config;
+    Map &map;
+    Config &config;
 
 public:
     Inventory(Player&, Map&, Config &);

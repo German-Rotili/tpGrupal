@@ -1,5 +1,8 @@
 #include "Door.h"
 
+#include "../common_src/Timer.h"
+
+
 Door::Door(char id) 
 {
     this->last_open_timer.start();

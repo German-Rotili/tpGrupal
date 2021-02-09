@@ -1,14 +1,14 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = *.cpp ../common_src/*.cpp 
+OBJS = *.cpp ../common_src/*.cpp weapons/*.cpp
 #OBJS = *.cpp ../common_src/*.cpp ../editor_src/ConfigManager/*.cpp
 #CC specifies which compiler we're using
 CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
-COMPILER_FLAGS = -Werror
+#COMPILER_FLAGS = -Werror
 
-COMPILER_FLAGS += -Wall -Werror -pedantic -pedantic-errors
+#COMPILER_FLAGS += -Wall -Werror -pedantic -pedantic-errors
 
 # Para optimizar el binario resultante lo mejor posible
 COMPILER_FLAGS += -O3

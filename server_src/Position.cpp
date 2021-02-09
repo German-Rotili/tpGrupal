@@ -1,6 +1,8 @@
 #include "Position.h"
 #include <cmath>
 #include <math.h>
+#include "Map.h"
+#include "Config.h"
 #define FORWARD 'w'
 #define BACKWARDS 'S'
 #define RIGHT 'd'

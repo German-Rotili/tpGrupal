@@ -1,7 +1,10 @@
 #include "Weapon.h"
 #include <chrono>
-#include "HitscanRaycast.h"
-
+#include "../HitscanRaycast.h"
+#include "../Map.h"
+#include "../Inventory.h"
+#include "../../common_src/Timer.h"
+#include "../Player.h"
 void Weapon::fire(float angle) {
   /*
   tira un raycast. se obtiene la posicion maxima.
@@ -67,8 +70,8 @@ void Weapon::fire(float angle) {
 
     if (((impact.first - player.get_pos_x()) * xdir) > 0) {
       if (((impact.second - player.get_pos_y()) * ydir) > 0) {
-        if (((player.get_pos_x() - xpos) * xdir)) {
-          if (((player.get_pos_y() - ypos) * ydir)) {
+        if (((player.get_pos_x() - xpos) * xdir) > 0) {
+          if (((player.get_pos_y() - ypos) * ydir) > 0) {
             /*
               logica de interseccion: por algebra, encuentro la interseccion de
               la recta jugador, impacto y busco la inter con la recta que
@@ -122,10 +125,11 @@ bool Weapon::has_ammo() {
   return this->inventory.get_ammo() >= this->ammo_cost;
 }
 
-bool Weapon::get_damage(int distance) {
+int Weapon::get_damage(int distance) {
   // disminuye el rango maximo en funcion de la distancia. por ahora,
   // linealmente. (lo que es horrible.) pero puede hacer daño maximo antes del
   // max range.
   int damage = rand() % (this->max_damage * this->max_acurate_range /
                          std::max(distance, this->max_acurate_range));
+  return damage;
 }

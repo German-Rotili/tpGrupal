@@ -12,6 +12,7 @@
 #include "Door.h"
 
 
+
 #define FPS 30
 
 class GamePlay : public Thread{

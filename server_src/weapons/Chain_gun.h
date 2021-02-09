@@ -1,5 +1,9 @@
-#include "Weapon.h"
+#ifndef __CHAIN_GUN_H__
+#define __CHAIN_GUN_H__
 
+#include "Weapon.h"
+class Map;
+class Config;
 
 class  Chain_gun : public Weapon{
 private:
@@ -10,3 +14,5 @@ public:
     void attack();
 
 };
+
+#endif // __CHAIN_GUN_H__

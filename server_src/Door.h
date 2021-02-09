@@ -1,5 +1,9 @@
+#ifndef __DOOR_H__
+#define __DOOR_H__
+
 #include "../common_src/Timer.h"
 
+class Timer;
 
 class Door
 {
@@ -24,3 +28,5 @@ public:
 Door::~Door()
 {
 }
+
+#endif // __DOOR_H__

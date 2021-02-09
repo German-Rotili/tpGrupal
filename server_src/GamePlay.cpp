@@ -1,5 +1,14 @@
 #include "GamePlay.h"
 
+#include <vector>
+#include "../common_src/common_thread.h"
+#include "../common_src/Serializer.h"
+#include "../common_src/Snapshot.h"
+#include <iostream>
+#include <utility>
+#include <chrono>
+#include "ThClient.h"
+#include "Map.h"
 GamePlay::GamePlay(ThClient & player, Map&& map):map(map){
     this->add_client(player);
 }

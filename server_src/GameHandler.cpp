@@ -1,5 +1,10 @@
 #include "GameHandler.h"
 
+#include "GamePlay.h"
+#include <string>
+#include <vector>
+#include "ThClient.h"
+#include "../common_src/MapHandler.h"
 GameHandler::GameHandler(){}
 
 GameHandler::~GameHandler(){

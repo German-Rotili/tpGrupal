@@ -3,6 +3,12 @@
 #include <iostream>
 #include <tuple>
 #include <utility>
+#include <string>
+#include "Position.h"
+#include "Map.h"
+#include "weapons/Weapon.h"
+#include "Inventory.h"
+#include "Config.h"
 
 void Player::execute_intention(char intention) {
   if (this->is_alive) {

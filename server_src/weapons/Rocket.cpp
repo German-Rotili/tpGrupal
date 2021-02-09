@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <math.h>
 
+#include "../Map.h"
+#include "../Config.h"
+#include "../Player.h"
+
 Rocket::Rocket(Map & map, Config config, float pos_x, float pos_y,
                float direction):map(map) {
   this->y_pos = pos_y;

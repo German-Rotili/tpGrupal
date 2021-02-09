@@ -1,18 +1,36 @@
 #include "Map.h"
+#include "Door.h"
+#include "./weapons/Rocket.h"
 #include <algorithm>
 #include <iostream>
 #include <iterator>
 
-bool Map::valid_position(int x, int y) { return true; }
+#include "../common_src/Action.h"
+#include "Constants.h"
+#include "GamePlay.h"
+#include "Player.h"
+#include "Config.h"
+#include <map>
+
+
 
 void Map::add_player(char id) {
   this->players.push_back(Player(*this, this->config, id));
 }
 
-std::map<int, std::map<int, Door>> &Map::get_doors() 
+std::vector<Player>& Map::get_players() 
 {
-  return this->doors;
+  return this->players;
 }
+
+std::map<int, std::map<int, Door>> Map::get_doors() 
+{
+  
+  return this->doors;
+
+}
+
+
 
 void Map::add_rocket(Rocket rocket) { this->rockets.push_back(rocket); }
 

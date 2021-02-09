@@ -1,5 +1,6 @@
 #ifndef CLIENTSETTINGS_H
 #define CLIENTSETTINGS_H
+#include <string>
 
 class ClientSettings {
  public:
@@ -7,6 +8,7 @@ class ClientSettings {
     const int screenHeight;
     const int fps;
     const double fov;
+    std::string username;
 		ClientSettings(int screenWidth, int screenHeight, int fps, int fov);
 		~ClientSettings();
     // Esto deberia ir en otra clase

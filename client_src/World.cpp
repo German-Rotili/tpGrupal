@@ -60,7 +60,7 @@ void World::cargarObjetosConstantes(std::vector<std::vector<int>> & map) {
 }
 
 World::~World() {
-  // Borrar los elementos de todos los vectores
+  // Borrar los elementos de todos los vectores y el map de enemigos
   for (std::vector<Object*>::iterator it = objetosConstantes.begin();
    it!= objetosConstantes.end(); ++it) {
     delete *it;
@@ -74,7 +74,6 @@ World::~World() {
   for (std::map<int, Enemy*>::iterator it = enemigos.begin();
    it!= enemigos.end(); ++it) {
     delete (*it).second;
-    // faltaria hacer delete del value de cada pair?
   }
 }
 
@@ -134,8 +133,7 @@ void World::agregarObjetoDinamico(object_t* object) {
   }
 }
 
-void World::actualizar(Snapshot & snapshot){
-
+void World::actualizar(Snapshot & snapshot) {
     for (auto &player : snapshot.players) {
       if (player->player_id == this->player_id){
         jugador.setPosicion(player->pos_x , player->pos_y);
@@ -157,17 +155,19 @@ void World::actualizar(Snapshot & snapshot){
     }
 
     for (auto &action : snapshot.actions){
-      if (action->get_id() == this->player_id && action->active()){
-        jugador.setIsShooting(true);
+      if ((action->get_id() == -1) && (action->active())){ // Caso explosion
+        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src, settings));
+      } else if ((action->get_id() == this->player_id) && (action->active())) {  // caso disparo jugador
+        jugador.setShootingAction();
+      } else if ((enemigos.find(action->get_id()) != enemigos.end()) && (action->active())) {  // caso disparo enemigo
+          enemigos.at(action->get_id())->setShootingAction();
       } else {
-        if (enemigos.find(action->get_id()) != enemigos.end()) {
-          enemigos.at(action->get_id())->setIsShooting(true);
-        }
+        continue;
       }
       action->update_state(false);
     }
 
-  // Actualizar objetos/ puertas
+  // Actualizar objetos / puertas
   limpiarObjetosDinamicos();
   objetosDinamicos.resize(0);
   for (auto &object : snapshot.objects){
@@ -187,11 +187,6 @@ void World::actualizar(Snapshot & snapshot){
        --it;
      }
   }
-  // Agrego explosion si no hay:
-  // if ((!allDoorsClosed) & (explosiones.size() == 0)) {
-  //   //explosiones.push_back(new Explosion(7.5, 2.5 , basic_clip, jugador, src, settings));
-  // }
-  //
 
   worldMap.actualizar();
   hud_jugador.actualizar();

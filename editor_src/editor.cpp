@@ -173,9 +173,6 @@ int main(int argc, char* args[]) {
 
         SDL_Delay(1000/20);  // 20 fps por segundo
       } catch (std::exception const& e) {
-        renderer.renderCopyCentered(tx_error, NULL,
-        (realWidth/2), (SCREEN_HEIGHT/2) - 32);
-        renderer.renderPresent();
         printf("Hubo una excepción: ");
         std::cout << e.what() << "\n";
       }

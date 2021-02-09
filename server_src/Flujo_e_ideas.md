@@ -15,7 +15,6 @@ Hablar esquema de partidas y como se comunican entre cliente y servidor
 
 vector bloqueante de intenciones. 
 
-<<<<<<< Updated upstream
 **Juego**
 
     Thread Server(main) -> Thread para cada cliente -> Thread para enviar y otro para recibir por cada cliente.
@@ -67,10 +66,15 @@ Servidor a Cliente
     Informacion Final:
 
         Al finalizar la partida se deberá mostrar un top 5 de los jugadores con más enemigos matadas, más puntos por tesoros y más balas disparadas.
-=======
-Agregar sistema de respawn. 
-implementar tab en el client. 
 
 
 
->>>>>>> Stashed changes
+
+
+
+
+
+Game loop. 
+    server-> crear_partido. 
+    
+    partido->game_loop.

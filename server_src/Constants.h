@@ -10,6 +10,8 @@
 #define ATTACK 'f'
 #define PI 3.14159265
 
+#define EMPTY 57;
+
 #define NUMBER_OF_WEAPONS 5
 #define KNIFE 0
 #define PISTOL 1

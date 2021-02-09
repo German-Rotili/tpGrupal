@@ -9,6 +9,11 @@ void Map::add_player(char id) {
   this->players.push_back(Player(*this, this->config, id));
 }
 
+std::map<int, std::map<int, Door>> &Map::get_doors() 
+{
+  return this->doors;
+}
+
 void Map::add_rocket(Rocket rocket) { this->rockets.push_back(rocket); }
 
 void Map::tick() {
@@ -25,6 +30,16 @@ void Map::tick() {
       }
     }
   }
+}
+
+void Map::remove_item(int x, int y) {
+  this->map[x][y] = EMPTY;
+  this->items[x].erase(y);
+}
+
+bool Map::is_item(char id) 
+{
+  return(id <= 56 && id >= 46);
 }
 
 bool Map::valid_position(int x, int y) {
@@ -60,20 +75,41 @@ bool Map::is_door(char id) {
   return (id == 34 || id == 35 || (id >= 59 && id <= 62));
 }
 
+Map::Map(std::vector<std::vector<int>> map) : map{map}{
+
+}
+
 void Map::populate_variables() {
+
   for (int x = 0; x < this->map.size(); x++) {
     for (int y = 0; y < this->map[y].size(); y++) {
+      char id = this->get_id(x,y);
 
-      if (this->is_door(this->get_id(x, y))) {
-        this->doors[x][y] = Door(this->get_id(x, y));
+      if (this->is_door(id)) {
+        this->doors[x][y] = Door(id);
       }
-      if (this->is_spawn(this->get_id(x, y))) {
+      if (this->is_spawn(id)) {
         for (Player &player : this->players) {
           if (!player.is_placed()) {
             player.set_spawn(x, y);
           }
         }
       }
+      if(this->is_item(id)){
+        this->items[x][y] = id;
+      }
+    }
+  }
+}
+
+
+void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
+  for (Player &player : this->players) {
+    if(player.get_id() == client_id){
+      for (char &i : intentions){
+        player.execute_intention(i);
+      }
+      break;
     }
   }
 }

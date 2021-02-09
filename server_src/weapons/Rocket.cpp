@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <math.h>
 
-Rocket::Rocket(Map map, Config config, float pos_x, float pos_y,
-               float direction) {
+Rocket::Rocket(Map & map, Config config, float pos_x, float pos_y,
+               float direction):map(map) {
   this->y_pos = pos_y;
   this->x_pos = pos_x;
   this->direction = direction;
@@ -36,8 +36,12 @@ void Rocket::explode() {
     // avisar al action helper que exploto y donde.
   }
 }
-
-
+float Rocket::get_pos_y() {
+  return this->y_pos;
+}
+float Rocket::get_pos_x() {
+  return this->x_pos;
+}
 
 float Rocket::get_y_offset() {
   return this->velocity * sin(this->direction * PI / 180);

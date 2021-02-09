@@ -160,7 +160,6 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
       //Faltaria chequear que el servidor devuelva un OK
       runGameLobby(renderer, settings, true);
     } else {
-      //Faltaria chequear que el servidor devuelva un OK
       runGameList(renderer, settings);
     }
   }
@@ -232,11 +231,9 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
         }
       }
     }
-    //Recibir del server la lista actualizada??
   }
 
   if (advance) {
-    //Faltaria chequear que el servidor devuelva un OK
     runGameLobby(renderer, settings, false);
   }
 }
@@ -259,6 +256,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
             if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Inicia el juego
               advance = true;
+              quit = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
               //Refresh
             }
@@ -266,13 +264,9 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
         }
       }
     }
-    //Recibir del server lista de numjugadores
-
-    //Recibir del server si el creador inicio la partida
   }
 
   if (advance) {
-    //Faltaria chequear que el servidor devuelva un OK
     //Arranca el juego
   }
 }
@@ -405,7 +399,7 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   }
 
   if (creator) {
-    //Si la partida no esta llena el bootn de inicio esta oscuro
+    //Si la partida no esta llena el boton de inicio esta oscuro
     if (numjugadores == 4) {
       renderer.setRenderDrawColor(255, 255, 255, 255);
       SdlTexture tx_startGame(renderer, font, "Start Game", 255, 255, 255);
@@ -437,9 +431,6 @@ void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i, (settings.screenWidth/2), (settings.screenHeight/8));
   }
-
-  //Ordenar por puntuación y visualizar (nombre y puntuacion) la lista de jugadores
-  //Dejo "username" y "puntuacion" como placeholders para ver que quede bien la posicion
 
   for (int i = 1; i<= 4; i++) {
     SdlTexture tx_username(renderer, font, "username", 255, 255, 255);

@@ -1,48 +1,18 @@
 #ifndef SERIALIZER_H
 #define SERIALIZER_H
 #include <vector>
-// #include "../server_src/Map.h"
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "utils.h"
-// #include "../server_src/Player.h"
 #include <cstring>
 #include "Snapshot.h"
 #include "Action.h"
-
-struct object_t{
-    int id;
-    double pos_x;
-    double pos_y;
-    bool state;
-};
-
-
-struct intention_t{
-  char up;
-  char angle_right;
-  char angle_left;
-  char down;
-  char attack;
-  char interact;
-  char weapon;
-};
+#include <arpa/inet.h>
+#include <inttypes.h>
+#include <byteswap.h>
+#include "structDefinitions.h"
 
 class Snapshot;
-
-struct player_t {
-    int player_id;
-    float pos_x;
-    float pos_y;
-    float direction;
-    int ammo;
-    char current_weapon;
-    double health;
-    int lives;
-    int score;
-};
-
 
 class Serializer{
 private:

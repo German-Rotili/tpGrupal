@@ -9,9 +9,12 @@
 #include "ThClient.h"
 #include "Map.h"
 #include "weapons/Rocket.h"
+#include "IdMaker.h"
 
 GamePlay::GamePlay(ThClient *player, Map&& map):map(map){
     this->add_client(player);
+    IdMaker IdMaker;
+    this->id = IdMaker.generate_id()+100;
 }
 
 GamePlay::~GamePlay(){}

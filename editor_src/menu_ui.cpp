@@ -1,11 +1,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
-#include "SDLWrappers/SdlContexto.h"
-#include "SDLWrappers/SdlWindow.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlException.h"
-#include "SDLWrappers/SdlFont.h"
+#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlWindow.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlException.h"
+#include "../common_src/SDLWrappers/SdlFont.h"
 #include "constants.h"
 #include "menu_ui.h"
 
@@ -18,7 +18,7 @@ void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls,
   SdlTexture tx_load_button(renderer, font, "Load", 255, 255, 255);
   SdlTexture tx_save_button(renderer, font, "Save", 255, 255, 255);
 
-  SdlFont text_font("fonts/wolfenstein.ttf", 24);
+  SdlFont text_font("../resources/fonts/wolfenstein.ttf", 24);
 
   int wallIdX;
   int wallIdY;

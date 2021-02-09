@@ -1,10 +1,10 @@
+#include "Position.h"
 #include "Player.h"
 #include "Constants.h"
 #include <iostream>
 #include <tuple>
 #include <utility>
 #include <string>
-#include "Position.h"
 #include "Map.h"
 #include "weapons/Weapon.h"
 #include "Inventory.h"
@@ -32,7 +32,6 @@ void Player::set_spawn(int x, int y) {
   this->spawn_y = y;
 }
 
-float Player::get_direction() { return this->position.get_angle(); }
 
 bool Player::is_placed() { return this->placed; }
 
@@ -70,7 +69,7 @@ void Player::collect_treasure(char id)
 void Player::attack() { this->inventory.attack(); }
 
 void Player::acction() {
-   for(auto &x : this->map.get_doors()){
+   for(auto &x : this->map->get_doors()){
      for(auto &y : x.second){
        if(this->get_distance(x.first,y.first)){
          y.second.toggle();
@@ -79,9 +78,9 @@ void Player::acction() {
   }
 }
 
-Player::Player(Map &map, Config &config, char id)
-    : position{Position(map, config)}, inventory{Inventory(*this, map, config)},
-      map{map} {
+Player::Player(Map *map, Config *config, char id)
+    : position{Position(map, config)}, inventory{Inventory(this, map, config)}
+     {
   this->id = id;
 }
 
@@ -89,7 +88,7 @@ bool Player::is_in_hitbox(float x, float y) {
   return this->position.is_in_hitbox(x, y);
 }
 
-int Player::get_ammo() { this->inventory.get_ammo(); }
+int Player::get_ammo() { return this->inventory.get_ammo(); }
 
 char Player::get_current_weapon_id() {
   this->inventory.get_current_weapon_id();
@@ -99,19 +98,19 @@ float Player::get_direction() { return this->position.get_angle(); }
 
 
 void Player::process_near_item(){
-  char current_id = map.get_id(this->get_pos_x(), this->get_pos_y());
+  char current_id = map->get_id(this->get_pos_x(), this->get_pos_y());
   if(current_id >= 49 && current_id <= 52){
     if(this->inventory.handle_item(current_id)){
-      this->map.remove_item(this->get_pos_x(), this->get_pos_y());
+      this->map->remove_item(this->get_pos_x(), this->get_pos_y());
     }
   }
   if(id <= 46 && id >= 48){
     this->heal(id);
-    this->map.remove_item(this->get_pos_x(), this->get_pos_y());
+    this->map->remove_item(this->get_pos_x(), this->get_pos_y());
   }
   if(id <= 53 && id >= 56){
     this->collect_treasure(id);
-    this->map.remove_item(this->get_pos_x(), this->get_pos_y());
+    this->map->remove_item(this->get_pos_x(), this->get_pos_y());
   }
 }
 

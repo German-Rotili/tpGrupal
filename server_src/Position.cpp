@@ -19,7 +19,7 @@ void Position::update(char mov) {
     int hitbox_limit_x = (offset_x > 0) ? new_x + this->hitbox_radius
                                         : new_x - this->hitbox_radius;
 
-    if (this->map.valid_position(hitbox_limit_x, new_y)) {
+    if (this->map->valid_position(hitbox_limit_x, new_y)) {
       this->x = new_x;
     } else { // si se choca contra una pared muevo el personaje para que la
              // hitbox este justo al limite.
@@ -31,7 +31,7 @@ void Position::update(char mov) {
 
     int hitbox_limit_y = (offset_y > 0) ? new_y + this->hitbox_radius
                                         : new_y - this->hitbox_radius;
-    if (this->map.valid_position(new_x, hitbox_limit_y)) {
+    if (this->map->valid_position(new_x, hitbox_limit_y)) {
       this->x = new_x;
     } else { // si se choca contra una pared muevo el personaje para que la
              // hitbox este justo al limite.
@@ -63,7 +63,7 @@ float Position::get_distance(float x, float y) {
 }
 
 float Position::get_distance(Position &position) {
-  this->get_distance(position.get_pos_x(), position.get_pos_y());
+  return this->get_distance(position.get_pos_x(), position.get_pos_y());
 }
 
 bool Position::is_in_hitbox(float x, float y) {

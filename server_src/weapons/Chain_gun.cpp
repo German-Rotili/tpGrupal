@@ -1,12 +1,12 @@
+#include "../Config.h"
 #include "Chain_gun.h"
 #include "Weapon.h"
-#include "../Config.h"
 #include "../Constants.h"
 #include "../Map.h"
 #include "../../common_src/Timer.h"
 #include <random>
 
-Chain_gun::Chain_gun(Map &map, Config &config) {
+Chain_gun::Chain_gun(Map *map, Config *config) {
   this->max_damage = config.get_max_damage(CHAIN_GUN);
   this->max_spread = config.get_max_spread(CHAIN_GUN);
   this->map = map;

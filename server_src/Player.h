@@ -23,7 +23,7 @@ private:
     char id;
     Position position;
     bool is_alive;
-    Map &map;
+    Map *map;
     Inventory inventory;
     bool placed;
     int spawn_x;
@@ -37,9 +37,9 @@ private:
 
     //life
 public:
-    Player(Map &, Config &,Position position);
+    Player(Map *, Config *,Position position);
     Player(Map &,Config &, float, float, float);
-    Player(Map &, Config &, char id);
+    Player(Map *, Config *, char id); 
     ~Player();
 
     bool is_placed();

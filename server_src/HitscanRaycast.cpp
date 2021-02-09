@@ -17,7 +17,7 @@ static std::tuple<int, int> getTileSteps(double dir) {
 }
 
 
-std::pair<float, float> HitscanRaycast::get_impact_point(Map &map, Player &player) {
+std::pair<float, float> HitscanRaycast::get_impact_point(Map *map, Player &player) {
     int x = (int) player.get_pos_x();
     int y = (int) player.get_pos_y();
     double dx = x - player.get_pos_x();
@@ -73,7 +73,7 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map &map, Player &playe
     bool wallFoundY = false;
     for (int i = 0; !(wallFoundX && wallFoundY) ; i++) {
       if (!wallFoundX) {
-        if (map.is_impactable(int(xIntercept), y+tileStepY)) {
+        if (map->is_impactable(int(xIntercept), y+tileStepY)) {
           wallFoundX = true;
         } else {
           y += tileStepY;
@@ -81,7 +81,7 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map &map, Player &playe
         }
       }
       if (!wallFoundY) {
-        if (map.is_impactable(x+tileStepX, int(yIntercept))) {
+        if (map->is_impactable(x+tileStepX, int(yIntercept))) {
           wallFoundY = true;
         } else {
           x += tileStepX;

@@ -19,11 +19,11 @@ private:
     char current_weapon;
     std::map<char, Weapon*> weapons;
     bool owned_weapons[NUMBER_OF_WEAPONS];
-    Map &map;
-    Config &config;
+    Map *map;
+    Config *config;
 
 public:
-    Inventory(Player&, Map&, Config &);
+    Inventory(Player*, Map*, Config *);
     ~Inventory();
     bool pick_up_weapon();
     bool change_weapon(char);

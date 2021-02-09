@@ -12,7 +12,7 @@ private:
 public:
     HitscanRaycast(/* args */);
     ~HitscanRaycast();
-    std::pair<float, float> get_impact_point(Map &map, Player &player);
+    std::pair<float, float> get_impact_point(Map *map, Player &player);
 };
 
 

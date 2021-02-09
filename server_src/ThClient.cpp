@@ -23,12 +23,12 @@
 #define JOIN_GAME 'j'
 #define START 's'
 
-void Client::start_game(){
+void ThClient::start_game(){
     char start_game = 's';
     peer.socket_send(&start_game, sizeof(char));
 }
 
-void Client::notify_players(std::vector<std::string>> &usernames){
+void ThClient::notify_players(std::vector<std::string> &usernames){
 
     /*cantidad de usernames*/
     uint32_t value = htonl(usernames.size());

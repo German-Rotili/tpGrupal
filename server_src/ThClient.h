@@ -12,7 +12,7 @@
 #include "ThClientSender.h"
 class GameHandler;
 class GamePlay;
-
+class ThClientSender;
 
 #define CHUNK_SZ 1
 

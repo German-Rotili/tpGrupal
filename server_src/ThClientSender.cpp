@@ -1,20 +1,5 @@
 #include "ThClientSender.h"
 
-#include "../common_src/common_socket.h"
-#include "../common_src/common_thread.h"
-#include "ThClient.h"
-#include <string>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <streambuf>
-#include <iterator>
-#include "../common_src/Action.h"
-#include "../common_src/Snapshot.h"
-#include "../common_src/Serializer.h"
-#include <atomic>
-#include <chrono>
 void ThClientSender::send_snapshot(Snapshot & snapshot){
 
         char action_id = '1';

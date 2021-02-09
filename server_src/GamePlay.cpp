@@ -24,8 +24,8 @@ std::vector<char> GamePlay::get_raw_map(){
     return this->map.get_raw_map();
 }
 
-Snapshot GamePlay::get_snapshot(){
-    Snapshot snapshot;
+
+void GamePlay::append_players(Snapshot & snapshot){
     for(Player &player : this->map.players){
         player_t *player_aux = new player_t;
         player_aux->player_id;
@@ -39,7 +39,9 @@ Snapshot GamePlay::get_snapshot(){
         player_aux->score;
         snapshot.add_player(player_aux);
     }
+}
 
+void GamePlay::append_objects(Snapshot &snapshot){
    for(auto &x : this->map.items){
        object_t *object_aux = new object_t;
      for(auto &y : x.second){
@@ -50,8 +52,9 @@ Snapshot GamePlay::get_snapshot(){
         snapshot.add_object(object_aux);
        }
      }
-  
-     for(auto &x : this->map.doors){
+}
+void GamePlay::append_doors(Snapshot &snapshot){
+    for(auto &x : this->map.doors){
        object_t *object_aux = new object_t;
         for(auto &y : x.second){
          object_aux->id = 34;
@@ -60,8 +63,17 @@ Snapshot GamePlay::get_snapshot(){
          object_aux->state = y.second.is_open();
          snapshot.add_object(object_aux);
        }
-     }
-  
+    }
+}
+void GamePlay::append_actions(Snapshot &snapshot){
+    for(Action *action : this->map.actions){
+       Action *action_aux = new Action(action->player_id);
+       action_aux->update_values(action->impact_x, action->impact_y, action->weapon_id);
+       snapshot.add_action(action_aux);
+       //deberia borrar la lista de acciones.
+    }
+}
+void GamePlay::append_rockets(Snapshot &snapshot){
     for(Rocket &rocket : this->map.rockets){
          object_t *object_aux = new object_t;
          object_aux->id = 35;
@@ -70,43 +82,40 @@ Snapshot GamePlay::get_snapshot(){
          object_aux->state = false;
          snapshot.add_object(object_aux);
     }
-    
-
-    for(Action *action : this->map.actions){
-       Action *action_aux = new Action(action->player_id);
-       action_aux->update_values(action->impact_x, action->impact_y, action->weapon_id);
-       snapshot.add_action(action_aux);
-       //deberia borrar la lista de acciones.
-    }
-    return snapshot;
-
 }
 
-void GamePlay::run(){
 
+Snapshot GamePlay::get_snapshot(){
+    Snapshot snapshot;
+    this->append_players(snapshot);
+    this->append_objects(snapshot);
+    this->append_doors(snapshot);
+    this->append_actions(snapshot);
+    this->append_rockets(snapshot);
+    return snapshot;
+}
+
+
+/*GAME LOOP*/
+void GamePlay::run(){
         while (this->state){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-            
             for(auto &client : this->clients){
                 this->map.execute_intentions(client->intention_queue, client->client_id);
             }
-
             Snapshot snapshot = this->get_snapshot();
-            
             for(auto &client : this->clients){
                 client->send_snapshot(snapshot);
             }
-
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
             int sleep_time = 1000000/FPS - elapsed_microseconds;
             if (sleep_time > 0) {
                 usleep(1000000/FPS - elapsed_microseconds);
             }else{
-            std::cout << "Bajada FPS" << std::endl;
+                std::cout << "Bajada FPS" << std::endl;
             }
         }
-
 }
 
 

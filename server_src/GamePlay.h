@@ -24,6 +24,12 @@ private:
     bool state;
     std::vector <ThClient*> clients;
     Map map;
+    void append_players(Snapshot &snapshot);
+    void append_objects(Snapshot &snapshot);
+    void append_doors(Snapshot &snapshot);
+    void append_actions(Snapshot &snapshot);
+    void append_rockets(Snapshot &snapshot);
+
 public:
     GamePlay(ThClient *player, Map&& map);
     ~GamePlay();
@@ -36,7 +42,5 @@ public:
     Snapshot get_snapshot();
     void notify_players();
     std::vector<char> get_raw_map();
-    
-
 };
 #endif

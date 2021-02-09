@@ -1,12 +1,15 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
+#include <vector>
+#include <iostream>
 #include "SDLWrappers/SdlContexto.h"
 #include "SDLWrappers/SdlMusic.h"
 #include "SDLWrappers/SdlWindow.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlException.h"
 #include "SDLWrappers/SdlFont.h"
+#include "../common_src/MapHandler.h"
 #include "Menu.h"
 #include "ClientSettings.h"
 
@@ -28,7 +31,7 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
       } else if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
-          //Mandar al server y avanzar con el startPage
+            //Mandar al server y avanzar con el startPage
             advance = true;
             quit = true;
           break;
@@ -66,15 +69,17 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
 
   if (advance) {
     //Faltaria chequear que el servidor devuelva un OK
-    runStartPage(renderer, settings, inputText);
+    runStartPage(renderer, settings);
   }
 }
 
-void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string username) {
+void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
 
   SdlMusic musicaMenu("../resources/music/menu.mp3");
   musicaMenu.play();
 
+  std::vector<std::vector<int>> vector_map;
+  MapHandler mapHandler;
   std::string inputText = "";
   bool renderText = false;
   bool insertMapName = false;
@@ -107,6 +112,13 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings, std::st
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
           //Ejecutar GameLobby y comunicacion con el server
+          try {
+            vector_map = mapHandler.readMap(inputText);
+          } catch (std::exception const& e) {
+            printf("Hubo una excepción: ");
+            std::cout << e.what() << "\n";
+          }
+
           advance = true;
           quit = true;
           break;
@@ -152,7 +164,6 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings, std::st
       runGameList(renderer, settings);
     }
   }
-
 }
 
 void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
@@ -178,6 +189,8 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
               //Le pide al usuario que introduzca un codigo de partida
               insertGameCode = true;
               renderText = true;
+            } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
+              //Refresh
             }
           }
         }
@@ -243,9 +256,11 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT && numjugadores == 4) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
-            if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2) + (settings.screenWidth/4)) {
+            if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Inicia el juego
               advance = true;
+            } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
+              //Refresh
             }
           }
         }
@@ -355,6 +370,11 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
 
   renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
 
+  renderer.setRenderDrawColor(255, 255, 255, 255);
+  SdlTexture tx_refresh(renderer, font, "Refresh", 255, 255, 255);
+  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+  renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
+
   if (renderText) {
     renderer.setRenderDrawColor(100, 100, 100, 255);
     SdlTexture tx_desc(renderer, font, "Insert Game Code", 255, 255, 255);
@@ -398,6 +418,11 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
 
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
   }
+
+  renderer.setRenderDrawColor(255, 255, 255, 255);
+  SdlTexture tx_refresh(renderer, font, "Refresh", 255, 255, 255);
+  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+  renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
 
   renderer.renderPresent();
 }

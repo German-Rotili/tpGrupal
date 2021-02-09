@@ -12,16 +12,14 @@
 #include "World.h"
 #include "ClientSettings.h"
 #include "client_helper.h"
+#include "ClientConfigHandler.h"
 #include "ThSender.h"
 #include "ThRequester.h"
 #include "Menu.h"
 #include "../common_src/Action.h"
 #include <map>
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
 #define FPS 30
-#define FOV 61
 #define HOSTNAME 1
 #define SERVICE 2
 int main(int argc, char* args[]) {
@@ -31,10 +29,13 @@ int main(int argc, char* args[]) {
     std::string hostname = args[HOSTNAME];
     std::string service = args[SERVICE];
 
-    ClientSettings settings(SCREEN_WIDTH, SCREEN_HEIGHT, FPS, FOV);
+
+    ClientConfigHandler config;
+    config.initConfig("../resources/config/clientConfig.yaml");
+    ClientSettings settings(config.getWidth(), config.getHeight(), FPS, config.getFOV());
     SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
 
-    SdlWindow window(WINDOW_NAME, settings.screenWidth, settings.screenHeight, FULLSCREEN);
+    SdlWindow window(WINDOW_NAME, settings.screenWidth, settings.screenHeight, config.getFullscreen());
 
     SdlRenderer renderer = window.getRenderer();
 
@@ -46,8 +47,8 @@ int main(int argc, char* args[]) {
     //cliente manda username
         //Server guarda username-id. Chequear si existe
         //Server devuelve nuevo id + id de partidas.
-    
-    
+
+
     //
 
 

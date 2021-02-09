@@ -8,6 +8,7 @@
 #include "SDLWrappers/SdlTexture.h"
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlFont.h"
+#include "SDLWrappers/SdlSound.h"
 
 class Hud {
 	const SDL_Color c_green = {34, 214, 15};
@@ -44,6 +45,10 @@ class Hud {
 	class SdlTexture weapon5;
 	class SdlTexture ammoIcon;
 	class SdlTexture liveIcon;
+	class SdlSound sndHurt;
+	class SdlSound sndHealing;
+	class SdlSound sndScoreup;
+	class SdlSound sndPickAmmo;
 	int displayHealth;
 	int displayAmmo;
 	int displayScore;

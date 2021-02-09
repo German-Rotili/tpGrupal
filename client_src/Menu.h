@@ -14,7 +14,7 @@ class Menu {
 public:
   void runInsertUsername(SdlRenderer& renderer, ClientSettings& settings);
 
-  void runStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string username);
+  void runStartPage(SdlRenderer& renderer, ClientSettings& settings);
 
   void runGameList(SdlRenderer& renderer, ClientSettings& settings);
 

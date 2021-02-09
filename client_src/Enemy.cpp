@@ -20,7 +20,6 @@ Enemy::Enemy(double xInicial, double yInicial, SDL_Rect clip, double dirInicial,
 		animationSpeed(double(8) / settings.fps) {
 			id_weapon = 4;
 			isRunning = false;
-			isShooting = false;
 			isAlive = true;
 			animarDisparo = false;
 			animarMuerte = false;
@@ -47,20 +46,17 @@ void Enemy::setWeapon(int id_newWeapon) {
 void Enemy::setIsRunning(bool isRunning) {
 	this->isRunning = isRunning;
 }
-void Enemy::setIsShooting(bool isShooting) {
-	if ((!this->isShooting) && (isShooting)) {
-		animarDisparo = true;
-		image_index = 1;
-
-		// Sonido de disparo
-		this->setDifAnglePlayer();
-		int angulosonido = this->getDifAnglePlayer();
-		if (angulosonido < 0) {
-			angulosonido += 360;
-		}
-		sndWeapons[id_weapon]->playInPosition(-1, 0, angulosonido, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
+void Enemy::setShootingAction() {
+	animarDisparo = true;
+	image_index = 1;
+	// Sonido de disparo
+	this->setDifAnglePlayer();
+	int angulosonido = this->getDifAnglePlayer();
+	if (angulosonido < 0) {
+		angulosonido += 360;
 	}
-	this->isShooting = isShooting;
+	sndWeapons[id_weapon]->playInPosition(-1, 0, angulosonido, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
+	//
 }
 void Enemy::setIsAlive(bool isAlive) {
 	if (this->isAlive && !isAlive) {

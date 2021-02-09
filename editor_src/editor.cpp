@@ -3,11 +3,11 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
-#include "SDLWrappers/SdlContexto.h"
-#include "SDLWrappers/SdlWindow.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlException.h"
-#include "SDLWrappers/SdlFont.h"
+#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlWindow.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlException.h"
+#include "../common_src/SDLWrappers/SdlFont.h"
 #include "../common_src/MapHandler.h"
 #include "EditorConfigHandler.h"
 #include "map_ui.h"
@@ -24,10 +24,10 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlTexture walls(renderer, "textures/walls.png");
-    SdlTexture objects(renderer, "textures/objects.png", 152, 0 , 136);
+    SdlTexture walls(renderer, "../resources/textures/walls.png");
+    SdlTexture objects(renderer, "../resources/textures/objects.png", 152, 0 , 136);
 
-    SdlFont font("fonts/wolfenstein.ttf", 30);
+    SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
     SdlTexture tx_error(renderer, font, "Hubo un Error", 255, 0, 0);
 
     int action = 0;
@@ -42,7 +42,7 @@ int main(int argc, char* args[]) {
     bool renderText = false;
     bool save = false, load = false;
 
-    std::string path = "config/editorConfig.yaml";
+    std::string path = "../resources/config/editorConfig.yaml";
     EditorConfigHandler configHandler;
     configHandler.initConfig(path);
     int mapX = configHandler.getX();

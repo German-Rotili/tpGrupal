@@ -4,10 +4,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <vector>
-#include "SDLWrappers/SdlContexto.h"
-#include "SDLWrappers/SdlWindow.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlException.h"
+#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlWindow.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlException.h"
 #include "constants.h"
 
 class Map_ui {

@@ -3,12 +3,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include "SDLWrappers/SdlContexto.h"
-#include "SDLWrappers/SdlMusic.h"
-#include "SDLWrappers/SdlWindow.h"
-#include "SDLWrappers/SdlRenderer.h"
-#include "SDLWrappers/SdlException.h"
-#include "SDLWrappers/SdlFont.h"
+#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlMusic.h"
+#include "../common_src/SDLWrappers/SdlWindow.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlException.h"
+#include "../common_src/SDLWrappers/SdlFont.h"
 #include "../common_src/MapHandler.h"
 #include "Menu.h"
 #include "ClientSettings.h"
@@ -80,7 +80,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   SdlMusic musicaMenu("../resources/music/menu.mp3");
   musicaMenu.play();
 
- 
+
   MapHandler mapHandler;
   std::string inputText = "";
   bool renderText = false;
@@ -320,7 +320,7 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
 }
 
 void Menu::drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText) {
-  SdlFont font("fonts/wolfenstein.ttf", 30);
+  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
   SdlTexture tx_desc(renderer, font, "Insert Username", 255, 255, 255);
 
   renderer.setRenderDrawColor(100, 100, 100, 255);
@@ -336,7 +336,7 @@ void Menu::drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, s
 }
 
 void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText) {
-  SdlFont font("fonts/wolfenstein.ttf", 30);
+  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
   SdlTexture tx_newGame(renderer, font, "New Game", 255, 255, 255);
   SdlTexture tx_joinGame(renderer, font, "Join Game", 255, 255, 255);
 
@@ -361,7 +361,7 @@ void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::s
 }
 
 void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id) {
-  SdlFont font("fonts/wolfenstein.ttf", 30);
+  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
 
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
@@ -401,7 +401,7 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
 }
 
 void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames) {
-  SdlFont font("fonts/wolfenstein.ttf", 30);
+  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
 
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
@@ -442,7 +442,7 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
 }
 
 void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
-  SdlFont font("fonts/wolfenstein.ttf", 30);
+  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
 
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
@@ -463,7 +463,7 @@ void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
 }
 
 void Menu::textPrompt(SdlRenderer& renderer, ClientSettings& settings, std::string inputText) {
-  SdlFont text_font("fonts/wolfenstein.ttf", 24);
+  SdlFont text_font("../resources/fonts/wolfenstein.ttf", 24);
   if (inputText == "") inputText = " ";
   SdlTexture tx_inputText(renderer, text_font, inputText, 255, 255, 255);
   renderer.setRenderDrawColor(100, 100, 100, 255);

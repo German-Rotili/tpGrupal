@@ -113,9 +113,9 @@ int Client::await_game_start(){
 void Client::new_game(std::vector<char> & map){
     char new_game = 'n';
     client.socket_send((char*)&new_game, sizeof(char));
-    uint32_t size_1 = htonl(map.size()+1);
+    uint32_t size_1 = htonl(map.size());//magic number
     client.socket_send((char*)&size_1, sizeof(uint32_t));
-    client.socket_send(map.data(), map.size()+1);
+    client.socket_send(map.data(), map.size());
 }
 
 void Client::client_send_intention(std::vector<char> & intention){

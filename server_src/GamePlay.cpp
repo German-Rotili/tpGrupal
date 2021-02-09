@@ -15,6 +15,7 @@ GamePlay::GamePlay(ThClient *player, Map&& map):map(map){
     this->add_client(player);
     IdMaker IdMaker;
     this->id = IdMaker.generate_id()+100;
+    std::cout << this->id <<std::endl;
 }
 
 GamePlay::~GamePlay(){}

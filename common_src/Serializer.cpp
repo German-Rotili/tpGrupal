@@ -126,7 +126,7 @@ void Serializer::deserialize_objects(std::vector <char> & msg, Snapshot & snapsh
     int size_double = sizeof(double);
     object_t* object_aux;
 
-    memcpy(&snap_id, msg.data(), sizeof(char));
+    memcpy(&snap_id, msg.data()+offset, sizeof(char));
     offset += sizeof(char);
 
     if (snap_id == 'o'){

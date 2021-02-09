@@ -8,6 +8,11 @@ Door::Door(char id)
     this->last_open_timer.start();
 }
 
+bool Door::is_walkable() 
+{
+    return walkable;
+}
+
 void Door::toggle() 
 {
     if(this->last_open_timer.elapsed_time() < this->door_cd){

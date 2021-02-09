@@ -66,7 +66,7 @@ bool Map::valid_position(int x, int y) {
     return true;
   }
   if (this->is_door(squareId)) {
-    return this->doors[x][y].is_walkable(); //
+    return this->doors[x][y].is_walkable();
   }
 }
 

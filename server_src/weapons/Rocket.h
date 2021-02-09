@@ -1,7 +1,8 @@
 #ifndef __ROCKET_H__
 #define __ROCKET_H__
 
-
+class Map;
+class Config;
 
 
 class Rocket
@@ -14,7 +15,7 @@ private:
     float x_pos;
     float y_pos;
     Map & map;
-    Config config;
+    Config &config;
 
     void explode();
     void update_position();
@@ -23,7 +24,7 @@ private:
     bool colides_with_player(); //REVISAR si la velocidad es suficiente para pasar por la hitbox sin explotar. 
 
 public:
-    Rocket(Map & map, Config config, float dir_x, float dir_y, float direction);
+    Rocket(Map & map, Config &config, float dir_x, float dir_y, float direction);
     ~Rocket();
     bool tick();
     float get_pos_x();

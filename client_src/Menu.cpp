@@ -372,8 +372,8 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
 
   renderer.setRenderDrawColor(255, 255, 255, 255);
   SdlTexture tx_refresh(renderer, font, "Refresh", 255, 255, 255);
-  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8) + (settings.screenWidth/4), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
-  renderer.renderDrawRect((settings.screenWidth/2) + (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
+  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+  renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
 
   if (renderText) {
     renderer.setRenderDrawColor(100, 100, 100, 255);
@@ -421,8 +421,8 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
 
   renderer.setRenderDrawColor(255, 255, 255, 255);
   SdlTexture tx_refresh(renderer, font, "Refresh", 255, 255, 255);
-  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8) + (settings.screenWidth/4), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
-  renderer.renderDrawRect((settings.screenWidth/2) + (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
+  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+  renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
 
   renderer.renderPresent();
 }

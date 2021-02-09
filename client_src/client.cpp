@@ -12,6 +12,7 @@
 #include "World.h"
 #include "ClientSettings.h"
 #include "client_helper.h"
+#include "ClientConfigHandler.h"
 #include "ThSender.h"
 #include "ThRequester.h"
 #include "Menu.h"
@@ -27,7 +28,7 @@ int main(int argc, char* args[]) {
     const bool FULLSCREEN = false;
     std::string hostname = args[HOSTNAME];
     std::string service = args[SERVICE];
-    Client client(service, hostname);
+
 
     ClientConfigHandler config;
     config.initConfig("../resources/config/clientConfig.yaml");
@@ -53,6 +54,7 @@ int main(int argc, char* args[]) {
 
 
     /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
+    Client client(service, hostname);
     std::string map = client.client_receive_string();
     MapHandler maphandler;
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);

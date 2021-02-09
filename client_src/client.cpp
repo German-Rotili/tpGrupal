@@ -16,6 +16,7 @@
 #include "ThSender.h"
 #include "ThRequester.h"
 #include "Menu.h"
+#include "ClientConfigHandler.h"
 #include "../common_src/Action.h"
 #include <map>
 
@@ -28,6 +29,7 @@ int main(int argc, char* args[]) {
     const bool FULLSCREEN = false;
     std::string hostname = args[HOSTNAME];
     std::string service = args[SERVICE];
+    Client client(service, hostname);
 
 
     ClientConfigHandler config;
@@ -40,28 +42,24 @@ int main(int argc, char* args[]) {
     SdlRenderer renderer = window.getRenderer();
 
     /*Lanzamiento del menu de inicio*/
-    Menu menu;
+    Menu menu(client);
     menu.runInsertUsername(renderer, settings);
     /********************************/
 
-    //cliente manda username
+
         //Server guarda username-id. Chequear si existe
         //Server devuelve nuevo id + id de partidas.
-
-
     //
 
 
 
     /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
-    Client client(service, hostname);
     std::string map = client.client_receive_string();
     MapHandler maphandler;
     std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
 
 
-    int id = 0;//lo debo recibir del server
-    World world(renderer, settings, vector_map, id);
+    World world(renderer, settings, vector_map, client_id);
     bool quit = false;
     SDL_Event e;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);

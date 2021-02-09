@@ -9,9 +9,16 @@
 #include "SDLWrappers/SdlException.h"
 #include "SDLWrappers/SdlFont.h"
 #include "ClientSettings.h"
-
+#include "client_helper.h"
 class Menu {
+ private:
+  Client & client;
+
 public:
+
+  Menu(Client & client);
+  ~Menu();
+
   void runInsertUsername(SdlRenderer& renderer, ClientSettings& settings);
 
   void runStartPage(SdlRenderer& renderer, ClientSettings& settings);

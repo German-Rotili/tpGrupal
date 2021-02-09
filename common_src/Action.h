@@ -7,10 +7,10 @@ class Action{
         int player_id; //-1 para explociones
         char weapon_id;
         std::atomic <bool> state;
-
+        double impact_y;
+        double impact_x;
     public:
-      double impact_y;
-      double impact_x;
+
         explicit Action(int id);
         ~Action();
         bool active();
@@ -22,8 +22,9 @@ class Action{
         // Action(Action&& other);
         // Action& operator=(Action&& other);
 
-    friend class GamePlay;
-    friend class Serializer;
+    friend class World;
+    friend class GamePlay; 
+    friend class Serializer; 
 };
 
 #endif

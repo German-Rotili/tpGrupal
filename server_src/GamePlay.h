@@ -9,6 +9,7 @@
 #include <chrono>
 #include "ThClient.h"
 #include "Map.h"
+#include "Door.h"
 
 
 #define FPS 30
@@ -29,7 +30,8 @@ public:
     GamePlay& operator=(const GamePlay&) = delete;
     GamePlay(const GamePlay&) = delete;
     Snapshot get_snapshot();
-
+    void notify_players();
+    
 
 };
 #endif

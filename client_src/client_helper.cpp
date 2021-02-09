@@ -46,11 +46,76 @@ void Client::recieve_snapshot(Snapshot & snapshot){
         default:
             std::cout << "Error id detection" <<std::endl;
     } 
+}
 
+std::vector<std::string> Client::get_matches_id(){
+    std::vector<std::string> matches_id;
+
+    /*Cantidad de ids*/
+    uint32_t size = 0;
+    client.socket_receive((char*)&size, sizeof(uint32_t));
+    size = ntohl(size);
+
+    for(int i = 0; i < (int)size ; i++){
+        /*Largo de cada id*/
+        uint32_t size_id = 0;
+        client.socket_receive((char*)&size_id , sizeof(uint32_t));
+        size_id = ntohl(size_id);
+
+        /*id*/
+        std::vector<char> buff(size);
+        client.socket_receive(buff.data(), size);
+        std::string id(buff.data());
+        matches_id.push_back(id);
+    }
+
+    return matches_id;
+}
+
+std::vector<std::string> Client::get_players_username(){
+
+    std::vector<std::string> usernames;
+
+    /*Cantidad de jugadores*/
+    uint32_t size = 0;
+    client.socket_receive((char*)&size, sizeof(uint32_t));
+    size = ntohl(size);
+
+    for(int i = 0; i < (int)size ; i++){
+        /*Largo de cada jugador*/
+        uint32_t size_player = 0;
+        client.socket_receive((char*)&size_player , sizeof(uint32_t));
+
+        /*Username*/
+        std::vector<char> buff(size);
+        client.socket_receive(buff.data(), size);
+        std::string username(buff.data());
+        usernames.push_back(username);
+    }
+
+    return usernames;
 
 }
 
 
+void Client::await_game_start(){
+    char start = 'x';
+    while (start != 's'){
+        client.socket_receive((char*)&start, sizeof(char));   
+    }
+}
+
+    // int client_id= -1;
+    // client.socket_receive((char*)&client_id, sizeof(int));   
+    // return (int)ntohl(client_id);
+
+void Client::new_game(std::vector<char> & map){
+    char new_game = 'n';
+    client.socket_send((char*)&new_game, sizeof(char));
+    uint32_t size_1 = htonl(map.size()+1);
+    client.socket_send((char*)&size_1, sizeof(uint32_t));
+    client.socket_send(map.data(), map.size()+1);
+}
 
 void Client::client_send_intention(std::vector<char> & intention){
         Serializer serializer;
@@ -59,14 +124,31 @@ void Client::client_send_intention(std::vector<char> & intention){
         client.socket_send(intention.data(), intention.size());
 }
 
+void Client::start_match(){
+    char join_flag = 's';
+    client.socket_send((char*)&join_flag, sizeof(char));
+}
+
+
+void Client::send_username(std::string & username){
+    uint32_t snap_size = htonl(username.length());
+    client.socket_send((char*)&snap_size, sizeof(uint32_t));
+    client.socket_send(username.c_str(), username.length());
+}
+
+void Client::join_game(std::string & game_id){
+    char join_flag = 'j';
+    client.socket_send((char*)&join_flag, sizeof(char));
+    uint32_t snap_size = htonl(game_id.length());
+    client.socket_send((char*)&snap_size, sizeof(uint32_t));
+    client.socket_send(game_id.c_str(), game_id.length());
+}
 
 std::vector<char> Client::client_receive_vector(){
 
   
     uint32_t size = 0;
     client.socket_receive((char*)&size, sizeof(uint32_t));
-
- 
     size = ntohl(size);
     std::vector<char> buff(size);
     client.socket_receive(buff.data(), size);
@@ -97,12 +179,10 @@ std::string Client::client_receive_string(){
 
 
 
-    //aca puede haber algo raro
     std::string val(msg.data());
     return val;
 }
 
 void Client::run(){
-    //client_send();
-    //client_receive();
+
 }

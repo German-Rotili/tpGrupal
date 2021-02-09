@@ -23,6 +23,7 @@ private:
     Socket peer;
     ThClientSender *sender;
     std::vector<char> intention_queue;
+    std::string username;
     bool state = true;
     GameHandler & game_handler;
     ThClient& operator=(const ThClient&) = delete;
@@ -33,6 +34,8 @@ public:
     ~ThClient();
     void run() override;
     void send_snapshot(Snapshot snapshot);//aca el notify all?
+    void start_game();
+    void notify_players(std::vector<std::string>> &usernames);
 
     /*Devuelve el estado del thread*/
     bool is_dead();

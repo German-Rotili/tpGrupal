@@ -101,7 +101,22 @@ int GamePlay::get_id(){
     return this->id;
 }
 
+void GamePlay::notify_players(){
+    std::vector<std::string> usernames;
+    for(ThClient &client : this->clients){
+        usernames.push_back(client.username);
+    }
+
+    for(ThClient &client : this->clients){
+        client.notify_players(usernames);
+    } 
+}
+
+
 void GamePlay::start(){
     this->state = true;
+    for(ThClient &client : this->clients){
+        client.start_game();
+    }
     this->run();
 }

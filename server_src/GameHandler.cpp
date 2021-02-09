@@ -8,11 +8,13 @@ GameHandler::~GameHandler(){
     }
 }
 
-GamePlay & GameHandler::select_match(std::string id){
-    GamePlay* game_selected;
+GamePlay & GameHandler::select_match(ThClient & player, int id){
+    GamePlay* game_selected = nullptr;
     for (auto & game : this->games) {
-        if(game->get_id() == std::stoi(id)){
+        if(game->get_id() == id){
             game_selected = game;
+            game_selected->add_client(player);
+            //game_selected->notify_players();
             break;
         }
     }

@@ -17,6 +17,7 @@
 #include "rayCaster.h"
 #include "Map/WorldMap.h"
 #include "../common_src/Snapshot.h"
+#include "../common_src/Action.h"
 class World {
   SdlRenderer& renderer;
   ResourcesLoader src;

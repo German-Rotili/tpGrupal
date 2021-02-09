@@ -25,7 +25,6 @@ private:
 
 public:
     Rocket(Map * map, Config *config, float dir_x, float dir_y, float direction);
-    ~Rocket();
 
     bool tick();
     float get_pos_x();

@@ -8,6 +8,11 @@ Door::Door(char id)
     this->last_open_timer.start();
 }
 
+bool Door::is_open() 
+{
+    return this->open;
+}
+
 bool Door::is_walkable() 
 {
     return walkable;

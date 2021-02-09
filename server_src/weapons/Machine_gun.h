@@ -15,7 +15,6 @@ private:
 
 public:
      Machine_gun(Map *, Config *);
-    ~ Machine_gun();
     void tick();
     void attack();
     bool can_fire_next_burst_shot();

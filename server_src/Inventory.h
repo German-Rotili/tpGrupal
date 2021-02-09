@@ -24,7 +24,6 @@ private:
 
 public:
     Inventory(Player*, Map*, Config *);
-    ~Inventory();
     bool pick_up_weapon();
     bool change_weapon(char);
     Player& get_player();
@@ -35,6 +34,7 @@ public:
     char get_current_weapon_id();
     bool* get_weapons();
     bool handle_item(char id);
+    void tick();
 
     
 };

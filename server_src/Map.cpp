@@ -101,6 +101,11 @@ bool Map::is_door(char id) {
   return (id == 34 || id == 35 || (id >= 59 && id <= 62));
 }
 
+bool Map::is_spawn(char id) 
+{
+  return id == 58;
+}
+
 Map::Map(  std::vector<char> raw_map) : raw_map{raw_map}{
   std::string map_aux(raw_map.data());
   MapHandler handler;

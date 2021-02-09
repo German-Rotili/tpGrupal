@@ -40,7 +40,6 @@ public:
     Player(Map *, Config *,Position position);
     Player(Map &,Config &, float, float, float);
     Player(Map *, Config *, char id); 
-    ~Player();
 
     bool is_placed();
     float get_pos_x();
@@ -60,7 +59,6 @@ public:
     float get_distance(float x, float y);
     float get_angle_difference(Position position);
     float get_angle_difference(float x, float y); 
-    void check_if_item();
     void heal(char id);
     void collect_treasure(char id);
 

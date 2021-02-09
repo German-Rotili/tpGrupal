@@ -111,3 +111,9 @@ void Position::update_angle(char intention) {
   this->angle = (this->angle < 0) ? 360 + this->angle : this->angle;
   this->angle = (this->angle > 360) ? this->angle - 360 : this->angle;
 }
+
+Position::Position(Map *map, Config *config) 
+{
+  this->map = map;
+  this->config = config;
+}

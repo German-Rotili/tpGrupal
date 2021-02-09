@@ -9,8 +9,6 @@ class Config
 private:
     /* data */
 public:
-    Config(/* args */);
-    ~Config();
 
     float get_angular_velocity();
     float get_linear_velocity();

@@ -16,19 +16,18 @@ protected:
     int stability_reset;
     int max_acurate_range;
     Map *map;
-    Inventory &inventory;
+    Inventory *inventory;
     
     void fire(float angle);
     bool is_in_cooldown();
     bool has_ammo();
     virtual float get_shot_angle();
 
-    Weapon();
 
 public:
     virtual int get_damage(int distance);
-    void tick();
-    virtual void attack();
+    virtual void tick(){};
+    virtual void attack(){};
 
 };
 

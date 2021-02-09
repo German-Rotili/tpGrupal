@@ -12,7 +12,6 @@ private:
     int damage;
 public:
      Knife(Map *, Config *);
-    ~ Knife();
     void attack();
 };
 

@@ -22,6 +22,11 @@ int Inventory::get_ammo() { return this->ammo; }
 
 void Inventory::spend_ammo(int ammo_spent) { this->ammo -= ammo_spent; }
 
+void Inventory::add_ammo() 
+{
+  this->ammo += 20;
+}
+
 char Inventory::get_current_weapon_id() { return this->current_weapon; }
 
 bool Inventory::handle_item(char id) 
@@ -52,6 +57,11 @@ bool Inventory::handle_item(char id)
     return false;
   }
   return false;
+}
+
+void Inventory::tick() 
+{
+  this->weapons[MACHINE_GUN]->tick();
 }
 
 

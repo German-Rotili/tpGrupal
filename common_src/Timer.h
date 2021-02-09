@@ -13,7 +13,6 @@ private:
     bool running = false;
 public:
     Timer();
-    ~Timer();
     void start();
     int elapsed_time();
     bool is_running();

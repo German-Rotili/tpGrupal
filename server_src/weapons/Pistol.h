@@ -12,7 +12,6 @@ private:
 
 public:
   Pistol(Map *, Config *);
-  ~Pistol();
   void attack();
 };
 

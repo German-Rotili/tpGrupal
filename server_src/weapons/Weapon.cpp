@@ -1,10 +1,10 @@
-#include "../Map.h"
 #include "Weapon.h"
-#include <chrono>
+#include "../../common_src/Timer.h"
 #include "../HitscanRaycast.h"
 #include "../Inventory.h"
-#include "../../common_src/Timer.h"
+#include "../Map.h"
 #include "../Player.h"
+#include <chrono>
 void Weapon::fire(float angle) {
   /*
   tira un raycast. se obtiene la posicion maxima.
@@ -43,11 +43,11 @@ void Weapon::fire(float angle) {
   */
   HitscanRaycast raycaster;
   std::pair<float, float> impact =
-      raycaster.get_impact_point(this->map, this->inventory.get_player());
-      
+      raycaster.get_impact_point(this->map, this->inventory->get_player());
+
   float xpos, ypos;
-  xpos = this->inventory.get_player().get_pos_x();
-  ypos = this->inventory.get_player().get_pos_y();
+  xpos = this->inventory->get_player().get_pos_x();
+  ypos = this->inventory->get_player().get_pos_y();
   int xdir, ydir;
   if (angle < 180) {
     ydir = 1;
@@ -63,7 +63,7 @@ void Weapon::fire(float angle) {
   float dist;
   Player *player_hit;
   float distance;
-  
+
   for (Player &player : this->map->get_players()) {
     float playerx = player.get_pos_x();
     float playery = player.get_pos_x();
@@ -123,8 +123,14 @@ bool Weapon::is_in_cooldown() {
 }
 
 bool Weapon::has_ammo() {
-  return this->inventory.get_ammo() >= this->ammo_cost;
+  return this->inventory->get_ammo() >= this->ammo_cost;
 }
+
+float Weapon::get_shot_angle()
+{
+  return this->inventory->get_player().get_direction();
+}
+
 
 int Weapon::get_damage(int distance) {
   // disminuye el rango maximo en funcion de la distancia. por ahora,

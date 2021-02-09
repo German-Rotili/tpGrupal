@@ -19,10 +19,10 @@ void Knife::attack() {
       float pos_x = player.get_pos_x();
       float pos_y = player.get_pos_y();
 
-      float distance = this->inventory.get_player().get_distance(pos_x, pos_y);
+      float distance = this->inventory->get_player().get_distance(pos_x, pos_y);
 
       if (distance < this->range &&
-          this->inventory.get_player().get_angle_difference(pos_x, pos_y)) {
+          this->inventory->get_player().get_angle_difference(pos_x, pos_y)) {
         // si esta a rango y en un angulo tolerable.
         if (distance < min_distance) {
           closest_player = &player;

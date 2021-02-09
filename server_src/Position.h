@@ -19,6 +19,7 @@ private:
     float linear_vel;
     float angular_vel;
     Map *map;
+    Config *config;
     float get_new_x(char);
     float get_new_y(char);
     float get_y_offset(char);
@@ -27,7 +28,6 @@ private:
 public:
 
     Position(Map *, Config *);
-    ~Position();
     void update(char);
     float get_pos_x();
     float get_pos_y();

@@ -3,7 +3,6 @@
 
 #include "../common_src/Timer.h"
 
-class Timer;
 
 class Door
 {
@@ -16,7 +15,6 @@ private:
 
 public:
     Door(char id);
-    ~Door();
     bool is_open();
     bool is_walkable();
     void toggle();
@@ -25,8 +23,5 @@ public:
 
 
 
-Door::~Door()
-{
-}
 
 #endif // __DOOR_H__

@@ -27,3 +27,9 @@ bool Timer::is_running(){
 
 
 
+
+Timer::Timer() 
+{
+    this->begin = std::chrono::steady_clock::now();
+
+}

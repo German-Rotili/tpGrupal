@@ -23,7 +23,18 @@ void Player::execute_intention(char intention) {
       this->attack();
     }
   }
-  this->check_if_item();
+  this->process_near_item();
+}
+
+void Player::get_damaged(int damage) 
+{
+  this->hitpoints -= damage;
+  
+}
+
+void Player::tick() 
+{
+  this->inventory.tick();
 }
 
 void Player::set_spawn(int x, int y) { 
@@ -53,6 +64,12 @@ float Player::get_angle_difference(Position position) {
 
 float Player::get_angle_difference(float x, float y) {
   return this->position.get_angle_difference(x, y);
+}
+
+
+
+int Player::get_id(){
+  return this->id;
 }
 
 void Player::heal(char id) 

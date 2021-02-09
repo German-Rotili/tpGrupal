@@ -73,8 +73,7 @@ void ThClient::run(){
                 size = ntohl(size);
                 std::vector<char> map(size);
                 peer.socket_receive(map.data(), size);
-                std::string map_data(map.data());
-                GamePlay & game = this->game_handler.new_match(*this, map_data);
+                GamePlay & game = this->game_handler.new_match(*this, map);
                 char start = '0';
                     if(0 < peer.socket_receive((char*)&start, sizeof(char))){
                         std::cout <<"Llego mensaje de comienzo" << std::endl;
@@ -105,6 +104,11 @@ void ThClient::run(){
                 peer.socket_receive((char*)&game_id, sizeof(uint32_t));
                 game_id = ntohl(game_id);
                 GamePlay & game = this->game_handler.select_match(*this, (int)game_id);
+                std::vector <char> map = game.get_raw_map();
+                value = htonl(map.size());
+                peer.socket_send((char*)&value, sizeof(uint32_t));
+                peer.socket_send((char*)map.data(), map.size());
+
                 char start = '0';
                     if(0 < peer.socket_receive((char*)&start, sizeof(char))){
                         std::cout <<"Llego mensaje de comienzo" << std::endl;

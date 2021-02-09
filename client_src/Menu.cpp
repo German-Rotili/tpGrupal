@@ -80,7 +80,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   SdlMusic musicaMenu("../resources/music/menu.mp3");
   musicaMenu.play();
 
-  std::vector<std::vector<int>> vector_map;
+ 
   MapHandler mapHandler;
   std::string inputText = "";
   bool renderText = false;
@@ -129,7 +129,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               input_file.close();
               this->client.new_game(bytes);
 
-            vector_map = mapHandler.readMap(inputText);
+            this->vector_map = mapHandler.readMap(inputText);
 
           } catch (std::exception const& e) {
             printf("Hubo una excepción: ");
@@ -187,7 +187,6 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   bool renderText = false;
   bool insertGameCode = false;
   std::vector<std::string> matches_id;
-
   bool advance = false;
   bool quit = false;
   SDL_Event e;
@@ -215,7 +214,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
           //Ejecutar GameLobby y comunicacion con el server
-          this->client.join_game(inputText);
+          this->vector_map = this->client.join_game(inputText);
           advance = true;
           quit = true;
           break;

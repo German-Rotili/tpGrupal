@@ -26,9 +26,8 @@ GamePlay & GameHandler::select_match(ThClient & player, int id){
     return *game_selected;
 }
 
-GamePlay & GameHandler::new_match(ThClient & player, std::string & map_data){
-    std::vector<std::vector<int>> map_aux = this->map_handler.readMapFromString(map_data);
-    Map map(map_aux);
+GamePlay & GameHandler::new_match(ThClient & player, std::vector<char> & map_data){
+    Map map(map_data);
     GamePlay *gp = new GamePlay(&player, std::move(map));
     this->games.push_back(gp);
     return *gp;

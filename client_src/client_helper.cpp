@@ -144,9 +144,12 @@ void Client::join_game(){
 }
 
 
-void Client::join_game(std::string & game_id){
+std::vector<std::vector<int>> Client::join_game(std::string & game_id){
     uint32_t g_id = htonl(std::stoi(game_id));
     client.socket_send((char*)&g_id, sizeof(uint32_t));
+    std::string map = this->client_receive_string();
+    MapHandler maphandler;
+    return maphandler.readMapFromString(map);
 }
 
 std::vector<char> Client::client_receive_vector(){

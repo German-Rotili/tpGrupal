@@ -48,14 +48,7 @@ int main(int argc, char* args[]) {
 
     int client_id = client.await_game_start();
 
-
-
-    /*PROCESAMIENTO DEL MAPA RECIBIDO POR SERVIDOR*/
-    std::string map = client.client_receive_string();
-    MapHandler maphandler;
-    std::vector<std::vector<int>> vector_map = maphandler.readMapFromString(map);
-
-    World world(renderer, settings, vector_map, client_id);
+    World world(renderer, settings, menu.vector_map, client_id);
     bool quit = false;
     SDL_Event e;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);

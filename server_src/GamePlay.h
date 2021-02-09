@@ -1,5 +1,6 @@
 #ifndef GAMEPLAY
 #define GAMEPLAY
+
 #include <vector>
 #include "../common_src/common_thread.h"
 #include "../common_src/Serializer.h"
@@ -12,7 +13,7 @@
 #include "Door.h"
 #include "ThClient.h"
 
-class ThClient;
+class ThClient; 
 class GameHandler;
 
 #define FPS 30
@@ -34,6 +35,7 @@ public:
     GamePlay(const GamePlay&) = delete;
     Snapshot get_snapshot();
     void notify_players();
+    std::vector<char> get_raw_map();
     
 
 };

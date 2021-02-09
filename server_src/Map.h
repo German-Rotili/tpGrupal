@@ -20,6 +20,7 @@ private:
   std::vector<Rocket> rockets;
   std::vector<Action> actions;
   std::vector<std::vector<int>> map;
+  std::vector<char> raw_map;
   std::map<int, std::map<int, Door>> doors;
   std::map<int, std::map<int, char>> items;
 
@@ -37,7 +38,7 @@ private:
   
 
 public:
-  Map(std::vector<std::vector<int>> map);
+  Map( std::vector<char> raw_map);
   ~Map();
 
   char get_id(int x, int y);
@@ -54,6 +55,9 @@ public:
   void tick();
   void remove_item(int x, int y);
   void execute_intentions(std::vector<char> & intentions, int & client_id);
+
+  std::vector<char> get_raw_map();
+
 
   friend class GamePlay;
   

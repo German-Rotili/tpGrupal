@@ -20,7 +20,9 @@ GamePlay::~GamePlay(){}
 void GamePlay::add_client(ThClient* client){
     this->clients.push_back(client);
 }
-
+std::vector<char> GamePlay::get_raw_map(){
+    return this->map.get_raw_map();
+}
 
 Snapshot GamePlay::get_snapshot(){
     Snapshot snapshot;

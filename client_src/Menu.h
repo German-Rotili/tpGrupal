@@ -13,8 +13,8 @@
 class Menu {
 private:
   Client & client;
-
 public:
+  std::vector<std::vector<int>>  vector_map;
 
   Menu(Client & client);
   ~Menu();

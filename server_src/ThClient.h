@@ -27,7 +27,7 @@ private:
     GameHandler & game_handler;
     ThClient& operator=(const ThClient&) = delete;
     ThClient(const ThClient&) = delete;
-
+    
 public:
     ThClient(Socket&& socket, GameHandler & game_handler);
     ~ThClient();

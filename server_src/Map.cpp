@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
-
+#include "../common_src/MapHandler.h"
 #include "../common_src/Action.h"
 #include "Constants.h"
 #include "GamePlay.h"
@@ -50,6 +50,11 @@ void Map::tick() {
   }
 }
 
+std::vector<char> Map::get_raw_map(){
+  return this->raw_map;
+}
+
+
 void Map::remove_item(int x, int y) {
   this->map[x][y] = EMPTY;
   this->items[x].erase(y);
@@ -93,7 +98,10 @@ bool Map::is_door(char id) {
   return (id == 34 || id == 35 || (id >= 59 && id <= 62));
 }
 
-Map::Map(std::vector<std::vector<int>> map) : map{map}{
+Map::Map(  std::vector<char> raw_map) : raw_map{raw_map}{
+  std::string map_aux(raw_map.data());
+  MapHandler handler;
+  map = handler.readMapFromString(map_aux);
 
 }
 

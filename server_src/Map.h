@@ -18,7 +18,7 @@ class Map {
 private:
   std::vector<Player> players;
   std::vector<Rocket> rockets;
-  std::vector<Action> actions;
+  std::vector<Action*> actions;
   std::vector<std::vector<int>> map;
   std::vector<char> raw_map;
   std::map<int, std::map<int, Door>> doors;

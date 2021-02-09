@@ -72,10 +72,11 @@ Snapshot GamePlay::get_snapshot(){
     }
     
 
-    for(Action &action : this->map.actions){
-       Action *action_aux = new Action(action.player_id);
-       action_aux->update_values(action.impact_x, action.impact_y, action.weapon_id);
+    for(Action *action : this->map.actions){
+       Action *action_aux = new Action(action->player_id);
+       action_aux->update_values(action->impact_x, action->impact_y, action->weapon_id);
        snapshot.add_action(action_aux);
+       //deberia borrar la lista de acciones.
     }
     return snapshot;
 

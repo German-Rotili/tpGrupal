@@ -1,6 +1,9 @@
 #include "Action.h"
 #include <iostream>
+
 Action::Action(int id):player_id(id),state(false){}
+
+Action::~Action(){}
 
 void Action::update_state(bool new_state){
     this->state = new_state;
@@ -43,4 +46,3 @@ bool Action::active(){
 
 
 
-Action::~Action(){}

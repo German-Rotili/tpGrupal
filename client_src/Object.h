@@ -1,8 +1,8 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "SDLWrappers/SdlTexture.h"
-#include "SDLWrappers/SdlRenderer.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
+#include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ZRenderable.h"
 
 class Object : public ZRenderable{

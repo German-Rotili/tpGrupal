@@ -8,7 +8,7 @@
 #include "helper.h"
 #include "../common_src/common_socket.h"
 #include "ThServer.h"
-#define CMD_END "q"
+#include "Constants.h"
 
 Server::Server(){}
 
@@ -20,7 +20,7 @@ void Server::run(std::string & port){
     std::string command = "";
     while (true){
         std::cin >> command;
-        if (command.compare(CMD_END) == 0){
+        if (command.compare(QUIT) == 0){
             break;
         }
     }

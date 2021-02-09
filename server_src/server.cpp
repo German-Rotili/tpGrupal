@@ -3,9 +3,7 @@
 #include "helper.h"
 #include <iostream>
 #include <string>
-#define PORT 1
-#define ROOT 2
-#define QUIT "q"
+#include "Constants.h"
 
 int main(int argc, char const *argv[]){
 

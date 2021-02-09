@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = *.cpp ./SDLWrappers/*.cpp ./Map/*.cpp ../common_src/*.cpp
+OBJS = *.cpp ./../common_src/SDLWrappers/*.cpp ./Map/*.cpp ../common_src/*.cpp
 
 #CC specifies which compiler we're using
 CC = g++ -g

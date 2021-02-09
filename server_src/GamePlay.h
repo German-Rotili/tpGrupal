@@ -12,11 +12,11 @@
 #include "Map.h"
 #include "Door.h"
 #include "ThClient.h"
+#include "Constants.h"
 
 class ThClient; 
 class GameHandler;
 
-#define FPS 30
 
 class GamePlay : public Thread{
 private:

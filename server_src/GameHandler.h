@@ -1,7 +1,10 @@
 #ifndef GAMEHANDLER
 #define GAMEHANDLER
-
-
+#include "../common_src/MapHandler.h"
+#include "GamePlay.h"
+#include "ThClient.h"
+class GamePlay;
+class ThClient;
 //incluir locks
 class GameHandler{
 private:

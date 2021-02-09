@@ -14,6 +14,9 @@
 #include "../common_src/Serializer.h"
 #include "IdMaker.h"
 #include <chrono>
+#include "GamePlay.h"
+#include "GameHandler.h"
+
 #define FPS 30
 #define NEW_GAME 'n'
 #define REFRESH 'r'
@@ -96,6 +99,7 @@ void ThClient::run(){
                 for(int &id : matches_id){
                     value = htonl(id);
                     peer.socket_send((char*)&value, sizeof(int));
+
                 }
                 uint32_t game_id = 0;
                 peer.socket_receive((char*)&game_id, sizeof(uint32_t));
@@ -142,8 +146,8 @@ void ThClient::run(){
             int new_player_id = id_maker.generate_id();
             char player_id_flag = 'i';
             peer.socket_send(&player_id_flag, sizeof(char));
-            uint32_t snap_size = htonl(new_player_id);
-            peer.socket_send((char*)&snap_size, sizeof(uint32_t));
+            uint32_t player_id = htonl(new_player_id);
+            peer.socket_send((char*)&player_id, sizeof(uint32_t));
         /*********************************************/
 
 

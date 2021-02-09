@@ -1,5 +1,4 @@
 #include "GamePlay.h"
-
 #include <vector>
 #include "../common_src/common_thread.h"
 #include "../common_src/Serializer.h"
@@ -9,14 +8,16 @@
 #include <chrono>
 #include "ThClient.h"
 #include "Map.h"
-GamePlay::GamePlay(ThClient & player, Map&& map):map(map){
+#include "weapons/Rocket.h"
+
+GamePlay::GamePlay(ThClient *player, Map&& map):map(map){
     this->add_client(player);
 }
 
 GamePlay::~GamePlay(){}
 
 
-void GamePlay::add_client(ThClient & client){
+void GamePlay::add_client(ThClient* client){
     this->clients.push_back(client);
 }
 
@@ -112,20 +113,20 @@ int GamePlay::get_id(){
 
 void GamePlay::notify_players(){
     std::vector<std::string> usernames;
-    for(ThClient &client : this->clients){
-        usernames.push_back(client.username);
+    for(ThClient *client : this->clients){
+        usernames.push_back(client->username);
     }
 
-    for(ThClient &client : this->clients){
-        client.notify_players(usernames);
+    for(ThClient *client : this->clients){
+        client->notify_players(usernames);
     } 
 }
 
 
 void GamePlay::start(){
     this->state = true;
-    for(ThClient &client : this->clients){
-        client.start_game();
+    for(ThClient *client : this->clients){
+        client->start_game();
     }
     this->run();
 }

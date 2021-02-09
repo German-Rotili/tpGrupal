@@ -5,7 +5,6 @@
 #include "SDLWrappers/SdlRenderer.h"
 #include "SDLWrappers/SdlSound.h"
 #include "ZRenderable.h"
-#include "ResourcesLoader.h"
 
 
 class Explosion : public ZRenderable{
@@ -17,7 +16,7 @@ class Explosion : public ZRenderable{
 	bool finished;
 
 	public:
-		Explosion(double xInicial, double yInicial, SDL_Rect clip, Player& player, ResourcesLoader& src, ClientSettings& settings);
+		Explosion(double xInicial, double yInicial, SDL_Rect clip, Player& player, SdlTexture& txExplosion, SdlSound& sndExplosion, ClientSettings& settings);
 		~Explosion();
 		void actualizar() override;
 		bool isFinished();

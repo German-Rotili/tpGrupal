@@ -13,6 +13,7 @@ public:
   SdlTexture tx_objects;
   SdlTexture tx_rocket;
   SdlTexture tx_explosion;
+  SdlTexture tx_bullethit;
   SdlTexture tx_walls;
   SdlTexture tx_guardDogDown;
   SdlTexture tx_guardDogDownLeft;
@@ -61,6 +62,7 @@ public:
 
   SdlSound snd_dying;
   SdlSound snd_explosion;
+  SdlSound snd_bullethit;
   SdlSound snd_door_open;
   SdlSound snd_door_closed;
 

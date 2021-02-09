@@ -4,6 +4,7 @@ ResourcesLoader::ResourcesLoader(SdlRenderer& renderer):
   tx_objects(renderer, "textures/objects.png", 152, 0, 136),
   tx_rocket(renderer, "textures/rocket.png"),
   tx_explosion(renderer, "textures/explosion_strip9.png"),
+  tx_bullethit(renderer, "textures/bullethit_strip9.png"),
   tx_walls(renderer, "textures/walls.png"),
   tx_guardDogDown(renderer, "textures/enemies/guardDog/down_strip5.png", 152, 0, 136),
   tx_guardDogDownLeft(renderer, "textures/enemies/guardDog/downleft_strip5.png", 152, 0, 136),
@@ -51,6 +52,7 @@ ResourcesLoader::ResourcesLoader(SdlRenderer& renderer):
   snd_lanzacohetes("../resources/sounds/rocket.mp3"),
   snd_dying("../resources/sounds/dying.mp3"),
   snd_explosion("../resources/sounds/explosion.mp3"),
+  snd_bullethit("../resources/sounds/bullethit.mp3"),
   snd_door_open("../resources/sounds/door_open.mp3"),
   snd_door_closed("../resources/sounds/door_closed.mp3") {}
 ResourcesLoader::~ResourcesLoader() {}

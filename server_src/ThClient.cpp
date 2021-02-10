@@ -178,6 +178,7 @@ void ThClient::run(){
             char decision = '0';
             peer.socket_receive((char*)&decision, sizeof(char));
             /*********************************************/
+        std::cout <<"recibe algo" <<std::endl;
 
             switch (decision){
                 case NEW_GAME:{
@@ -197,8 +198,8 @@ void ThClient::run(){
         }
         
         std::cout <<"salio del switch y loop" <<std::endl;
-        this->sender = new ThClientSender(this->peer);
-        this->sender->start();
+/*         this->sender = new ThClientSender(this->peer);
+        this->sender->start(); */
         this->receiver_loop();
         
 }

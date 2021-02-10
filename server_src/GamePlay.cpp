@@ -113,7 +113,7 @@ void GamePlay::run(){
                 std::cout << "partida run" << std::endl;
 
         while (this->state){
-                std::cout << "game loop" << std::endl;
+            std::cout << "game loop" << std::endl;
 
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
             for(ThClient *client : this->clients){
@@ -122,7 +122,7 @@ void GamePlay::run(){
                 this->map.execute_intentions(client->intention_queue, client->client_id);
             }
             Snapshot snapshot = this->get_snapshot();
-            for(auto &client : this->clients){
+            for(ThClient *client : this->clients){
                 std::cout << "envio a cliente" << std::endl;
                 client->send_snapshot(snapshot);
                 std::cout << "fin envio a cliente" << std::endl;
@@ -172,7 +172,9 @@ void GamePlay::start(int & current_id){
          if(client->client_id !=current_id){
             client->start_game();
         }
-    this->map.add_player(client->client_id);
+        this->map.add_player(client->client_id);
+        client->sender = new ThClientSender(client->peer);
+        client->sender->start();
     }
     this->run();
 }

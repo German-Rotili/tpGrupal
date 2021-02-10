@@ -1,0 +1,24 @@
+NEW RUN 
+
+el nombre de usuario recibido es: sdfasdf
+por mandar un new game
+1017 = 1017
+101
+partida comenzada1
+le doy a start
+partida run
+game loop
+game loop
+entramos a exe int
+jugador
+salimos de exe int
+genero snapshot
+genero snapshot players
+genero snapshot objects
+genero snapshot doors
+genero snapshot actions
+genero snapshot rockets
+envio a cliente
+intento enviar snapshot
+envie snapshot
+fin envio a cliente

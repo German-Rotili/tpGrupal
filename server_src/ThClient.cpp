@@ -169,6 +169,7 @@ void ThClient::run(){
             char decision = '0';
             peer.socket_receive((char*)&decision, sizeof(char));
             /*********************************************/
+        std::cout <<"recibe algo" <<std::endl;
 
             switch (decision){
                 case NEW_GAME:{

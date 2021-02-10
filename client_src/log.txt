@@ -1,0 +1,8 @@
+Tamanio mapa: 1017
+Ya envie el mapa, me voy al lobby
+ recibi cantidad de usernames: 1
+ recibi un username: a{²
+ devuelvo lista de usernames de tamanio:  1
+start match
+intento recibir snapshot
+send intention

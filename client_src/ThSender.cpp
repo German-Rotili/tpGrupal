@@ -1,6 +1,7 @@
 #include "ThSender.h"
 
 void ThSender::send_intention(std::vector<char> & intention){
+    std::cout << "send intention" << std::endl;
     client.client_send_intention(intention);
 }
 

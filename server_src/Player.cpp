@@ -43,6 +43,21 @@ void Player::set_spawn(int x, int y) {
   this->spawn_y = y;
 }
 
+int Player::get_hitpoints() 
+{
+  return this->hitpoints;
+}
+
+int Player::get_lives() 
+{
+  return this->lives;
+}
+
+int Player::get_score() 
+{
+  return this->score;
+}
+
 
 bool Player::is_placed() { return this->placed; }
 
@@ -115,7 +130,9 @@ float Player::get_direction() { return this->position.get_angle(); }
 
 
 void Player::process_near_item(){
+  std::cout<< "posicion es x:" << this->get_pos_x() << " y: " << this->get_pos_y();
   char current_id = map->get_id(this->get_pos_x(), this->get_pos_y());
+
   if(current_id >= 49 && current_id <= 52){
     if(this->inventory.handle_item(current_id)){
       this->map->remove_item(this->get_pos_x(), this->get_pos_y());

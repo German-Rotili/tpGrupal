@@ -32,15 +32,15 @@ std::vector<char> GamePlay::get_raw_map(){
 void GamePlay::append_players(Snapshot & snapshot){
     for(Player &player : this->map.players){
         player_t *player_aux = new player_t;
-        player_aux->player_id;
-        player_aux->pos_x;
-        player_aux->pos_y;
-        player_aux->direction;
-        player_aux->current_weapon;
-        player_aux->ammo;
-        player_aux->health;
-        player_aux->lives;
-        player_aux->score;
+        player_aux->player_id = player.get_id();
+        player_aux->pos_x = player.get_pos_x();
+        player_aux->pos_y = player.get_pos_y();
+        player_aux->direction = player.get_direction();
+        player_aux->current_weapon = player.get_current_weapon_id();
+        player_aux->ammo = player.get_ammo();
+        player_aux->health = player.get_hitpoints();
+        player_aux->lives = player.get_lives();
+        player_aux->score = player.get_score();
         snapshot.add_player(player_aux);
     }
 }
@@ -112,7 +112,7 @@ Snapshot GamePlay::get_snapshot(){
 void GamePlay::run(){
                 std::cout << "partida run" << std::endl;
         this->state = true;
-
+        this->map.start();
         while (this->state){
             std::cout << "game loop" << std::endl;
 

@@ -2,7 +2,7 @@
 Snapshot::Snapshot(){}
 
 Snapshot::~Snapshot(){
-    for (auto &object : this->objects){ 
+/*     for (auto &object : this->objects){ 
         delete object;
     }
     for (auto &action : this->actions){ 
@@ -10,7 +10,7 @@ Snapshot::~Snapshot(){
     }
     for (auto &player : this->players){ 
         delete player;
-    }
+    } */
 }
 
 

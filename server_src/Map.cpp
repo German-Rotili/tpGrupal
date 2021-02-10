@@ -114,7 +114,12 @@ bool Map::is_spawn(char id)
 Map::Map(  std::vector<char> raw_map) : raw_map{raw_map}{
   std::string map_aux(raw_map.data());
   MapHandler handler;
-  map = handler.readMapFromString(map_aux);
+  try{
+  this->map = handler.readMapFromString(map_aux);
+  }catch (std::exception const& e) {
+            printf("Hubo una excepción: ");
+            std::cout << e.what() << "\n";
+          }
 
 }
 
@@ -130,6 +135,7 @@ void Map::populate_variables() {
       if (this->is_spawn(id)) {
         for (Player &player : this->players) {
           if (!player.is_placed()) {
+            std::cout << "placing player in " << x << " y " << y;
             player.set_spawn(x, y);
           }
         }

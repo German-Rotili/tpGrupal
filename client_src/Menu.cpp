@@ -315,7 +315,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
       if (e.type == SDL_QUIT) {
         quit = true;
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
-        if (e.button.button == SDL_BUTTON_LEFT && usernames.size() == 4) {
+        if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
             if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Inicia el juego
@@ -421,8 +421,8 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  for (int i = 1; i <= matches_id.size(); i++) {
-    SdlTexture tx_username(renderer, font, matches_id.at(i-1), 255, 255, 255);
+  for (int i = 0; i <= matches_id.size(); i++) {
+    SdlTexture tx_username(renderer, font, matches_id.at(i), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
@@ -457,8 +457,8 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  for (int i = 1; i <= usernames.size(); i++) {
-    SdlTexture tx_username(renderer, font, usernames.at(i-1), 255, 255, 255);
+  for (int i = 0; i < usernames.size(); i++) {
+    SdlTexture tx_username(renderer, font, usernames.at(i), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
@@ -470,15 +470,18 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   }
 
   if (creator) {
-    //Si la partida no esta llena el boton de inicio esta oscuro
-    if (usernames.size() == 4) {
-      renderer.setRenderDrawColor(255, 255, 255, 255);
+    renderer.setRenderDrawColor(255, 255, 255, 255);
+    renderer.renderCopyCentered(this->tx_startGame_active, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
 
-      renderer.renderCopyCentered(this->tx_startGame_active, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
-    } else {
-      renderer.setRenderDrawColor(150, 150, 150, 255);
-      renderer.renderCopyCentered(this->tx_startGame_inactive, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
-    }
+    //Si la partida no esta llena el boton de inicio esta oscuro
+    // if (usernames.size() == 4) {
+    //   renderer.setRenderDrawColor(255, 255, 255, 255);
+    //
+    //   renderer.renderCopyCentered(this->tx_startGame_active, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+    // } else {
+    //   renderer.setRenderDrawColor(150, 150, 150, 255);
+    //   renderer.renderCopyCentered(this->tx_startGame_inactive, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+    // }
 
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
   }

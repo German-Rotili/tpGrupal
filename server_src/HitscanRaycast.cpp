@@ -66,7 +66,7 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map *map, Player &playe
     }
 
     // Distancia de la pared
-    double distortedDist;
+    //double distortedDist;
 
     // Loopea hasta encontrar pared
     bool wallFoundX = false;

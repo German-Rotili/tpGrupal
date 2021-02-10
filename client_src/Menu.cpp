@@ -151,6 +151,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
                 bytes.push_back(byte);
               }
               input_file.close();
+              std::cout << "Tamanio mapa: "<<bytes.size() <<std::endl;
               this->client.new_game(bytes);
 
             this->vector_map = mapHandler.readMap(path);
@@ -207,6 +208,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   if (advance) {
     if (renderText) {
       //CHEQUEO MAPA EN EL SERVIDOR
+      std::cout<<"Ya envie el mapa, me voy al lobby"<<std::endl;
       runGameLobby(renderer, settings, true);
     } else {
       runGameList(renderer, settings);

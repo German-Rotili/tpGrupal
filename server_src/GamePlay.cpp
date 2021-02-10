@@ -131,10 +131,15 @@ void GamePlay::notify_players(){
     std::vector<std::string> usernames;
     for(ThClient *client : this->clients){
         usernames.push_back(client->username);
+        std::cout << " username name: "<<client->username<< std::endl;
     }
+    std::cout << " cantidad de usernames: "<<usernames.size()<< std::endl;
+
 
     for(ThClient *client : this->clients){
         client->notify_players(usernames);
+        std::cout << "Envio usernames a cliente"<< std::endl;
+
     } 
 }
 

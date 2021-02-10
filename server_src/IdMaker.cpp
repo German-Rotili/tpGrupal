@@ -10,5 +10,5 @@ int IdMaker::generate_id(){
 
 
 IdMaker::IdMaker(){
-    this->current == 0;
+    this->current = 0;
 }

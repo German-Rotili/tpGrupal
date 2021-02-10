@@ -75,14 +75,15 @@ std::vector<std::string> Client::get_matches_id(){
 std::vector<std::string> Client::get_players_username(){
 
     std::vector<std::string> usernames;
-
     /*Cantidad de jugadores*/
     uint32_t size = 0;
     client.socket_receive((char*)&size, sizeof(uint32_t));
     size = ntohl(size);
+    std::cout << " recibi cantidad de usernames: "<< size << std::endl;
 
     for(int i = 0; i < (int)size ; i++){
         /*Largo de cada jugador*/
+
         uint32_t size_player = 0;
         client.socket_receive((char*)&size_player , sizeof(uint32_t));
 
@@ -90,8 +91,11 @@ std::vector<std::string> Client::get_players_username(){
         std::vector<char> buff(size);
         client.socket_receive(buff.data(), size);
         std::string username(buff.data());
+        std::cout << " recibi un username: "<< username << std::endl;
+
         usernames.push_back(username);
     }
+        std::cout << " devuelvo lista de usernames de tamanio:  "<<usernames.size() << std::endl;
 
     return usernames;
 
@@ -113,7 +117,7 @@ int Client::await_game_start(){
 void Client::new_game(std::vector<char> & map){
     char new_game = 'n';
     client.socket_send((char*)&new_game, sizeof(char));
-    uint32_t size_1 = htonl(map.size());//magic number
+    uint32_t size_1 = htonl(map.size());
     client.socket_send((char*)&size_1, sizeof(uint32_t));
     client.socket_send(map.data(), map.size());
 }

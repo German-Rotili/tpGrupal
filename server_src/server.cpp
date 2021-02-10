@@ -1,5 +1,3 @@
-//#include "Map.h"
-//#include "Player.h"
 #include "helper.h"
 #include <iostream>
 #include <string>

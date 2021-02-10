@@ -27,7 +27,6 @@ void ThClient::notify_players(std::vector<std::string> &usernames){
     /*cantidad de usernames*/
     uint32_t value = htonl(usernames.size());
     peer.socket_send((char*)&value, sizeof(uint32_t));
-    std::cout << " cantidad de usernames a enviar al Cliente"<< std::endl;
 
     for(std::string &user : usernames){
         /*tamanio de usernames*/
@@ -35,7 +34,6 @@ void ThClient::notify_players(std::vector<std::string> &usernames){
         value = htonl(user.length());
         peer.socket_send((char*)&value, sizeof(uint32_t));
         peer.socket_send((char*)user.c_str(), user.length());
-        std::cout << "Envie un username."<< std::endl;
     }
 }
 
@@ -51,7 +49,6 @@ void ThClient::receive_username(){
         peer.socket_receive(username.data(), size);
         std::string aux(username.data());
         this->username = aux;
-        std::cout <<"el nombre de usuario recibido es: " << aux <<std::endl;
     /*********************************************/
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -83,9 +80,7 @@ void ThClient::new_game(){
 
         peer.socket_receive((char*)&start, sizeof(char));
         if(start == START){
-                std::cout << "partida comenzada1" << std::endl;
                 game.start(this->client_id);
-                std::cout << "partida comenzada2" << std::endl;
 
         }
 
@@ -101,12 +96,10 @@ void ThClient::join_game(){
     try{
     /***************** JOIN GAME*******************/
         std::vector<int> matches_id = this->game_handler.get_matches_id();
-        std::cout << "Tengo esta cantidad de partidas: " << matches_id.size()<<std::endl;
         uint32_t value = htonl(matches_id.size());
         //le indico la cantidad de matches id que va a tener que leer.
         peer.socket_send((char*)&value, sizeof(uint32_t));
         for(int i = 0; i < matches_id.size() ; i++){
-            std::cout << "Mando el match id: " << matches_id[i] <<std::endl;
             value = htonl( matches_id[i]);
             peer.socket_send((char*)&value, sizeof(int));
         }
@@ -116,11 +109,9 @@ void ThClient::join_game(){
         //recibo el id que eligio
         peer.socket_receive((char*)&game_id, sizeof(uint32_t));
         game_id = ntohl(game_id);
-        std::cout << "recibo el match id: " << game_id <<std::endl;
 
         GamePlay & game = this->game_handler.select_match(*this, (int)game_id);
         std::vector <char> map = game.get_raw_map();
-        std::cout << "Tamanio del mapa que le mando al cliente: " << map.size() <<std::endl;
 
         value = htonl(map.size());
         peer.socket_send((char*)&value, sizeof(uint32_t));
@@ -196,7 +187,6 @@ void ThClient::run(){
             }   
         }
         
-        std::cout <<"salio del switch y loop" <<std::endl;
         this->sender = new ThClientSender(this->peer);
         this->sender->start();
         this->receiver_loop();

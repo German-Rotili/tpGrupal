@@ -168,8 +168,7 @@ void GamePlay::start(int & current_id){
     std::cout << "le doy a start"<< std::endl;
 
     for(ThClient *client : this->clients){
-
-         if(client->client_id !=current_id){
+         if(client->client_id != current_id){
             client->start_game();
         }
     this->map.add_player(client->client_id);

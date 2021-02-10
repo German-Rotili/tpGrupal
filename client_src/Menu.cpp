@@ -419,11 +419,11 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  for (int i = 0; i <= matches_id.size(); i++) {
+  for (int i = 0; i < matches_id.size(); i++) {
     SdlTexture tx_username(renderer, font, matches_id.at(i), 255, 255, 255);
-    renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
+    renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * (i+1) + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
-    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
+    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * (i+1), (settings.screenWidth/2), (settings.screenHeight/16));
   }
 
   for (int i = 5; i > matches_id.size(); i--) {
@@ -457,9 +457,9 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
 
   for (int i = 0; i < usernames.size(); i++) {
     SdlTexture tx_username(renderer, font, usernames.at(i), 255, 255, 255);
-    renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
+    renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * (i+1) + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
-    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
+    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * (i+1), (settings.screenWidth/2), (settings.screenHeight/16));
   }
 
   for (int i = 4; i > usernames.size(); i--) {

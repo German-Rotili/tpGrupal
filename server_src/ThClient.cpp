@@ -130,7 +130,7 @@ void ThClient::join_game(){
         if(start == START){
             game.start(this->client_id);
         }
-        
+
     /*********************************************/
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';

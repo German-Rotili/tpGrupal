@@ -108,7 +108,9 @@ void GamePlay::run(){
                 std::cout << "game loop" << std::endl;
 
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-            for(auto &client : this->clients){
+            for(ThClient *client : this->clients){
+                std::cout << "game loop" << std::endl;
+
                 this->map.execute_intentions(client->intention_queue, client->client_id);
             }
             Snapshot snapshot = this->get_snapshot();

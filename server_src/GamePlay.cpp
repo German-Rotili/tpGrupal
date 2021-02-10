@@ -102,7 +102,11 @@ Snapshot GamePlay::get_snapshot(){
 
 /*GAME LOOP*/
 void GamePlay::run(){
+                std::cout << "partida run" << std::endl;
+
         while (this->state){
+                std::cout << "game loop" << std::endl;
+
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
             for(auto &client : this->clients){
                 this->map.execute_intentions(client->intention_queue, client->client_id);
@@ -127,7 +131,7 @@ int GamePlay::get_id(){
     return this->id;
 }
 
-void GamePlay::notify_players(){
+void GamePlay::notify_players(int & current_id){
     std::vector<std::string> usernames;
     for(ThClient *client : this->clients){
         usernames.push_back(client->username);
@@ -137,6 +141,9 @@ void GamePlay::notify_players(){
 
 
     for(ThClient *client : this->clients){
+        if(client->client_id ==current_id){
+            continue;
+        }
         client->notify_players(usernames);
         std::cout << "Envio usernames a cliente"<< std::endl;
 
@@ -144,10 +151,12 @@ void GamePlay::notify_players(){
 }
 
 
-void GamePlay::start(){
+void GamePlay::start(int & current_id){
     this->state = true;
     for(ThClient *client : this->clients){
-        client->start_game();
+         if(client->client_id !=current_id){
+            client->start_game();
+        }
     }
     this->run();
 }

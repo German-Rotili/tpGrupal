@@ -58,15 +58,10 @@ std::vector<std::string> Client::get_matches_id(){
 
     for(int i = 0; i < (int)size ; i++){
         /*Largo de cada id*/
-        uint32_t size_id = 0;
-        client.socket_receive((char*)&size_id , sizeof(uint32_t));
-        size_id = ntohl(size_id);
-
-        /*id*/
-        std::vector<char> buff(size);
-        client.socket_receive(buff.data(), size);
-        std::string id(buff.data());
-        matches_id.push_back(id);
+        int id = 0;
+        client.socket_receive((char*)&id , sizeof(int));
+        id = ntohl(id);
+        matches_id.push_back(std::to_string(id));
     }
 
     return matches_id;

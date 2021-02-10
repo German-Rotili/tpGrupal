@@ -421,7 +421,7 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  for (int i = 0; i <= matches_id.size(); i++) {
+  for (int i = 0; i < matches_id.size(); i++) {
     SdlTexture tx_username(renderer, font, matches_id.at(i), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);

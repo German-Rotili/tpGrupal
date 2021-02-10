@@ -35,7 +35,7 @@ int main(int argc, char* args[]) {
     SdlRenderer renderer = window.getRenderer();
 
     /*Lanzamiento del menu de inicio*/
-    Menu menu(client);
+    Menu menu(client, renderer);
     menu.runInsertUsername(renderer, settings);
     /********************************/
 

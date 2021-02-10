@@ -3,21 +3,34 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <chrono>
+#include <unistd.h>
 #include "../common_src/SDLWrappers/SdlContexto.h"
 #include "../common_src/SDLWrappers/SdlMusic.h"
 #include "../common_src/SDLWrappers/SdlWindow.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "../common_src/SDLWrappers/SdlException.h"
+#include "../common_src/SDLWrappers/SdlTexture.h"
 #include "../common_src/SDLWrappers/SdlFont.h"
 #include "../common_src/MapHandler.h"
 #include "Menu.h"
 #include "ClientSettings.h"
 
-Menu::Menu(Client & client):client(client){}
+Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
+  renderer(renderer),
+  font("../resources/fonts/wolfenstein.ttf", 30),
+  tx_refresh(renderer, font, "Refresh", 255, 255, 255),
+  tx_startGame_active(renderer, font, "Start Game", 255, 255, 255),
+  tx_startGame_inactive(renderer, font, "Start Game", 150, 150, 150),
+  tx_newGame(renderer, font, "New Game", 255, 255, 255),
+  tx_joinGame(renderer, font, "Join Game", 255, 255, 255),
+  tx_descList(renderer, font, "Insert Game Code", 255, 255, 255),
+  tx_enterGame(renderer, font, "Enter Game", 255, 255, 255),
+  tx_descStart(renderer, font, "Insert Map Path", 255, 255, 255),
+  tx_descUser(renderer, font, "Insert Username", 255, 255, 255){}
 Menu::~Menu(){}
 
 void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
-
   std::string inputText = "";
   bool renderText = true;
 
@@ -26,6 +39,7 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
   SDL_Event e;
   //No es el game loop
   while (!quit) {
+    std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     drawInsertUsername(renderer, settings, inputText, renderText);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
@@ -68,6 +82,14 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
         }
       }
     }
+    std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+    unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+    if (sleep_time > 0) {
+      usleep(1000000/settings.fps - elapsed_microseconds);
+    } else {
+      printf("Bajada de FPS\n");
+    }
   }
 
   if (advance) {
@@ -91,6 +113,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   SDL_Event e;
   //No es el game loop
   while (!quit) {
+    std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     drawStartPage(renderer, settings, inputText, renderText);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
@@ -171,6 +194,14 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
         }
       }
     }
+    std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+    unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+    if (sleep_time > 0) {
+      usleep(1000000/settings.fps - elapsed_microseconds);
+    } else {
+      printf("Bajada de FPS\n");
+    }
   }
 
   if (advance) {
@@ -194,6 +225,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   matches_id = this->client.get_matches_id();
   //No es el game loop
   while (!quit) {
+    std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     drawGameList(renderer, settings, inputText, renderText, matches_id);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
@@ -251,6 +283,14 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
         }
       }
     }
+    std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+    unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+    if (sleep_time > 0) {
+      usleep(1000000/settings.fps - elapsed_microseconds);
+    } else {
+      printf("Bajada de FPS\n");
+    }
   }
 
   if (advance) {
@@ -266,6 +306,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
   usernames = this->client.get_players_username();
   //No es el game loop
   while (!quit) {
+    std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     drawGameLobby(renderer, settings, creator, usernames);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
@@ -288,6 +329,14 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
         }
       }
     }
+    std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+    unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+    if (sleep_time > 0) {
+      usleep(1000000/settings.fps - elapsed_microseconds);
+    } else {
+      printf("Bajada de FPS\n");
+    }
   }
 
   if (advance) {
@@ -301,6 +350,7 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
   SDL_Event e;
   //No es el game loop
   while (!quit) {
+    std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     drawEndScreen(renderer, settings);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
@@ -316,6 +366,14 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
         }
       }
     }
+    std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+    unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+    if (sleep_time > 0) {
+      usleep(1000000/settings.fps - elapsed_microseconds);
+    } else {
+      printf("Bajada de FPS\n");
+    }
   }
 
   if (advance) {
@@ -324,13 +382,10 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
 }
 
 void Menu::drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText) {
-  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
-  SdlTexture tx_desc(renderer, font, "Insert Username", 255, 255, 255);
-
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  renderer.renderCopyCentered(tx_desc, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
+  renderer.renderCopyCentered(this->tx_descUser, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
 
   if (renderText) {
     textPrompt(renderer, settings, inputText);
@@ -340,24 +395,19 @@ void Menu::drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, s
 }
 
 void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText) {
-  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
-  SdlTexture tx_newGame(renderer, font, "New Game", 255, 255, 255);
-  SdlTexture tx_joinGame(renderer, font, "Join Game", 255, 255, 255);
-
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  renderer.renderCopyCentered(tx_newGame, NULL, (settings.screenWidth/2) - 90, (settings.screenHeight/2));
+  renderer.renderCopyCentered(this->tx_newGame, NULL, (settings.screenWidth/2) - 90, (settings.screenHeight/2));
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderDrawRect((settings.screenWidth/2) - 150, (settings.screenHeight/2) - 15, 120, 35);
 
-  renderer.renderCopyCentered(tx_joinGame, NULL, (settings.screenWidth/2) + 90, (settings.screenHeight/2));
+  renderer.renderCopyCentered(this->tx_joinGame, NULL, (settings.screenWidth/2) + 90, (settings.screenHeight/2));
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderDrawRect((settings.screenWidth/2) + 30, (settings.screenHeight/2) - 15, 120, 35);
 
   if (renderText) {
-    SdlTexture tx_desc(renderer, font, "Insert Map Path", 255, 255, 255);
-    renderer.renderCopyCentered(tx_desc, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
+    renderer.renderCopyCentered(this->tx_descStart, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
     textPrompt(renderer, settings, inputText);
   }
 
@@ -366,7 +416,6 @@ void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::s
 
 void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id) {
   SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
-
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
@@ -383,21 +432,18 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
   }
 
   renderer.setRenderDrawColor(255, 255, 255, 255);
-  SdlTexture tx_startGame(renderer, font, "Enter Game", 255, 255, 255);
-  renderer.renderCopyCentered(tx_startGame, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+  renderer.renderCopyCentered(this->tx_enterGame, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
 
   renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
 
   renderer.setRenderDrawColor(255, 255, 255, 255);
-  SdlTexture tx_refresh(renderer, font, "Refresh", 255, 255, 255);
-  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+  renderer.renderCopyCentered(this->tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
   renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
 
   if (renderText) {
     renderer.setRenderDrawColor(100, 100, 100, 255);
-    SdlTexture tx_desc(renderer, font, "Insert Game Code", 255, 255, 255);
     renderer.renderFillRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/2)-100, (settings.screenWidth/2), 75);
-    renderer.renderCopyCentered(tx_desc, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
+    renderer.renderCopyCentered(this->tx_descList, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
     textPrompt(renderer, settings, inputText);
   }
 
@@ -406,11 +452,9 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
 
 void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames) {
   SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
-
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  std::cout << usernames.size();
   for (int i = 1; i <= usernames.size(); i++) {
     SdlTexture tx_username(renderer, font, usernames.at(i-1), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
@@ -427,20 +471,18 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
     //Si la partida no esta llena el boton de inicio esta oscuro
     if (usernames.size() == 4) {
       renderer.setRenderDrawColor(255, 255, 255, 255);
-      SdlTexture tx_startGame(renderer, font, "Start Game", 255, 255, 255);
-      renderer.renderCopyCentered(tx_startGame, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+
+      renderer.renderCopyCentered(this->tx_startGame_active, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
     } else {
       renderer.setRenderDrawColor(150, 150, 150, 255);
-      SdlTexture tx_startGame(renderer, font, "Start Game", 150, 150, 150);
-      renderer.renderCopyCentered(tx_startGame, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+      renderer.renderCopyCentered(this->tx_startGame_inactive, NULL, (settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
     }
 
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
   }
 
   renderer.setRenderDrawColor(255, 255, 255, 255);
-  SdlTexture tx_refresh(renderer, font, "Refresh", 255, 255, 255);
-  renderer.renderCopyCentered(tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+  renderer.renderCopyCentered(this->tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
   renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
 
   renderer.renderPresent();
@@ -448,7 +490,6 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
 
 void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
   SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
-
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 

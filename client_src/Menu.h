@@ -13,10 +13,21 @@
 class Menu {
 private:
   Client & client;
+  SdlRenderer & renderer;
+  SdlFont font;
+  SdlTexture tx_refresh;
+  SdlTexture tx_startGame_active;
+  SdlTexture tx_startGame_inactive;
+  SdlTexture tx_newGame;
+  SdlTexture tx_joinGame;
+  SdlTexture tx_descList;
+  SdlTexture tx_enterGame;
+  SdlTexture tx_descStart;
+  SdlTexture tx_descUser;
 public:
   std::vector<std::vector<int>>  vector_map;
 
-  Menu(Client & client);
+  Menu(Client & client, SdlRenderer& renderer);
   ~Menu();
 
   void runInsertUsername(SdlRenderer& renderer, ClientSettings& settings);

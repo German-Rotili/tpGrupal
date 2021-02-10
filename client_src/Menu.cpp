@@ -80,7 +80,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   SdlMusic musicaMenu("../resources/music/menu.mp3");
   musicaMenu.play();
 
-
+  std::string path;
   MapHandler mapHandler;
   std::string inputText = "";
   bool renderText = false;
@@ -114,9 +114,10 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
       } else if (e.type == SDL_KEYDOWN && (insertMapName)) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
-          //Ejecutar GameLobby y comunicacion con el server
+          path = "../resources/config/" + inputText;
           try {
-              std::string filename(inputText);
+
+              std::string filename(path);
               std::vector<char> bytes;
               char byte = 0;
               std::ifstream input_file(filename);
@@ -129,7 +130,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               input_file.close();
               this->client.new_game(bytes);
 
-            this->vector_map = mapHandler.readMap(inputText);
+            this->vector_map = mapHandler.readMap(path);
 
           } catch (std::exception const& e) {
             printf("Hubo una excepción: ");
@@ -190,6 +191,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   bool advance = false;
   bool quit = false;
   SDL_Event e;
+  matches_id = this->client.get_matches_id();
   //No es el game loop
   while (!quit) {
     drawGameList(renderer, settings, inputText, renderText, matches_id);
@@ -200,7 +202,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
-            if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2) + (settings.screenWidth/4)) {
+            if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Le pide al usuario que introduzca un codigo de partida
               insertGameCode = true;
               renderText = true;
@@ -261,6 +263,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
   bool quit = false;
   std::vector<std::string> usernames;
   SDL_Event e;
+  usernames = this->client.get_players_username();
   //No es el game loop
   while (!quit) {
     drawGameLobby(renderer, settings, creator, usernames);
@@ -368,7 +371,7 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
   renderer.renderClear();
 
   for (int i = 1; i <= matches_id.size(); i++) {
-    SdlTexture tx_username(renderer, font, matches_id.at(i), 255, 255, 255);
+    SdlTexture tx_username(renderer, font, matches_id.at(i-1), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
@@ -407,8 +410,9 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
+  std::cout << usernames.size();
   for (int i = 1; i <= usernames.size(); i++) {
-    SdlTexture tx_username(renderer, font, usernames.at(i), 255, 255, 255);
+    SdlTexture tx_username(renderer, font, usernames.at(i-1), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * i + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));

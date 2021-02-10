@@ -60,6 +60,8 @@ void ThClient::receive_username(){
 }
 
 void ThClient::new_game(){
+    std::cout << "por mandar un new game"<< std::endl;
+
     try{
     /***************** NEW GAME *******************/
         uint32_t size = 0;

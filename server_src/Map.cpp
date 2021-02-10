@@ -30,6 +30,11 @@ std::map<int, std::map<int, Door>> Map::get_doors()
 
 }
 
+void Map::start() 
+{
+  this->populate_variables();
+}
+
 
 
 void Map::add_rocket(Rocket rocket) { this->rockets.push_back(rocket); }
@@ -137,6 +142,8 @@ void Map::populate_variables() {
 }
 
 void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
+  std::cout << "entramos a exe int" << std::endl;
+
   for (Player &player : this->players) {
   std::cout << "jugador" << std::endl;
 
@@ -149,4 +156,6 @@ void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
       break;
     }
   }
+  std::cout << "salimos de exe int" << std::endl;
+
 }

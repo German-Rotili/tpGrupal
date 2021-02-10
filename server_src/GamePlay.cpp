@@ -91,11 +91,19 @@ void GamePlay::append_rockets(Snapshot &snapshot){
 
 Snapshot GamePlay::get_snapshot(){
     Snapshot snapshot;
+    std::cout << "genero snapshot" << std::endl;
+
     this->append_players(snapshot);
+    std::cout << "genero snapshot players" << std::endl;
+
     this->append_objects(snapshot);
+    std::cout << "genero snapshot objects" << std::endl;
     this->append_doors(snapshot);
+    std::cout << "genero snapshot doors" << std::endl;
     this->append_actions(snapshot);
+    std::cout << "genero snapshot actions" << std::endl;
     this->append_rockets(snapshot);
+    std::cout << "genero snapshot rockets" << std::endl;
     return snapshot;
 }
 
@@ -115,7 +123,9 @@ void GamePlay::run(){
             }
             Snapshot snapshot = this->get_snapshot();
             for(auto &client : this->clients){
+                std::cout << "envio a cliente" << std::endl;
                 client->send_snapshot(snapshot);
+                std::cout << "fin envio a cliente" << std::endl;
             }
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
@@ -155,10 +165,14 @@ void GamePlay::notify_players(int & current_id){
 
 void GamePlay::start(int & current_id){
     this->state = true;
+    std::cout << "le doy a start"<< std::endl;
+
     for(ThClient *client : this->clients){
+
          if(client->client_id !=current_id){
             client->start_game();
         }
+    this->map.add_player(client->client_id);
     }
     this->run();
 }

@@ -46,6 +46,7 @@ public:
   std::vector<Player> &get_players(); // placeholder
   std::map<int, std::map<int, Door>> get_doors();
 
+  void start();
   void add_rocket(Rocket Rocket);
   bool is_item(char id);
 

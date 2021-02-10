@@ -22,13 +22,13 @@ class Player{
 private:
     char id;
     Position position;
-    bool is_alive;
+    bool is_alive = true;
     Map *map;
     Inventory inventory;
-    bool placed;
+    bool placed = false;
     int spawn_x;
     int spawn_y;
-    char hitpoints;
+    int hitpoints = 300;
 
     void attack();
     void acction();

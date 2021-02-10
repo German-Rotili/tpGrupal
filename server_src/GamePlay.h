@@ -34,7 +34,7 @@ public:
     GamePlay(ThClient *player, Map&& map);
     ~GamePlay();
     void add_client(ThClient* client);
-    void start(int & current_id);
+    void start_game(int & current_id);
     int get_id();
     void run() override;
     GamePlay& operator=(const GamePlay&) = delete;

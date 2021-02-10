@@ -111,6 +111,7 @@ Snapshot GamePlay::get_snapshot(){
 /*GAME LOOP*/
 void GamePlay::run(){
                 std::cout << "partida run" << std::endl;
+        this->state = true;
 
         while (this->state){
             std::cout << "game loop" << std::endl;
@@ -163,7 +164,7 @@ void GamePlay::notify_players(int & current_id){
 }
 
 
-void GamePlay::start(int & current_id){
+void GamePlay::start_game(int & current_id){
     this->state = true;
     std::cout << "le doy a start"<< std::endl;
 
@@ -175,5 +176,4 @@ void GamePlay::start(int & current_id){
         client->sender = new ThClientSender(client->peer);
         client->sender->start();
     }
-    this->run();
 }

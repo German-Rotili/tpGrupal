@@ -76,12 +76,10 @@ void ThClient::new_game(){
         peer.socket_send((char*)&value, sizeof(uint32_t));
         peer.socket_send((char*)this->username.c_str(), this->username.length());
 
-
-
         peer.socket_receive((char*)&start, sizeof(char));
         if(start == START){
-                game.start(this->client_id);
-
+                game.start();
+                game.start_game(this->client_id);
         }
 
     /*********************************************/
@@ -121,7 +119,7 @@ void ThClient::join_game(){
         //aca no podria recibir refresh solo lee si empieza la partida
         peer.socket_receive((char*)&start, sizeof(char));
         if(start == START){
-            game.start(this->client_id);
+            game.start_game(this->client_id);
         }
 
     /*********************************************/
@@ -188,8 +186,8 @@ void ThClient::run(){
             }   
         }
         
-        this->sender = new ThClientSender(this->peer);
-        this->sender->start();
+        // this->sender = new ThClientSender(this->peer);
+        // this->sender->start();
         this->receiver_loop();
         
 }

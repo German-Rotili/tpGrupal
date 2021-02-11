@@ -197,20 +197,15 @@ void ThClient::run(){
 void ThClient::receiver_loop(){
     try{
         while (this->state){
-            std::cout << "entro al reciever loop" << '\n';
             uint32_t size = 0;
             peer.socket_receive((char*)&size, sizeof(uint32_t));
-            std::cout << "despues del receive" << '\n';
 
             size = ntohl(size);
             std::vector<char> intention(size);
             peer.socket_receive(intention.data(), size);
-            std::cout << "despues del segundo receive" << '\n';
 
             for(char value : intention){
-                std::cout << "antes del push back" << '\n';
                 this->intention_queue.push_back(value);
-                std::cout << "despues del push back" << '\n';
 
             }            
         }

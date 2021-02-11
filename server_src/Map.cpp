@@ -88,7 +88,7 @@ bool Map::is_impactable(int x, int y) {
 
 Map::~Map() {}
 
-char Map::get_id(int x, int y) {
+int Map::get_id(int x, int y) {
   return this->map[x][y];
 }
 
@@ -127,7 +127,7 @@ void Map::populate_variables() {
 
   for (int x = 0; x < this->map.size(); x++) {
     for (int y = 0; y < this->map[y].size(); y++) {
-      char id = this->get_id(x,y);
+      int id = this->get_id(x,y);
 
       if (this->is_door(id)) {
         this->doors[x].insert(std::pair<int,Door>(y,Door(id)));
@@ -135,7 +135,6 @@ void Map::populate_variables() {
       if (this->is_spawn(id)) {
         for (Player &player : this->players) {
           if (!player.is_placed()) {
-            std::cout << "placing player in " << x << " y " << y;
             player.set_spawn(x, y);
           }
         }
@@ -148,16 +147,15 @@ void Map::populate_variables() {
 }
 
 void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
-  std::cout << "entramos a exe int" << std::endl;
 
   for (Player &player : this->players) {
-  std::cout << "jugador" << std::endl;
 
     if(player.get_id() == client_id){
-      for (char &i : intentions){
-        std::cout << "execute intention" << std::endl;
 
+      for (char &i : intentions){
+        if(i != 0){
         player.execute_intention(i);
+        }
       }
       break;
     }

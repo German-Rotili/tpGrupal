@@ -13,6 +13,7 @@ void ThSender::run(){
     while (this->state) {
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
         send_intention(intention);
+
         intention.clear();
         //analizar mutex notify all
         std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();

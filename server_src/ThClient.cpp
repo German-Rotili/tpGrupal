@@ -81,6 +81,7 @@ void ThClient::new_game(){
                 game.start();
                 game.start_game(this->client_id);
         }
+        this->state = true;
 
     /*********************************************/
     }

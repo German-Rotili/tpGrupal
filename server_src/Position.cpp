@@ -54,8 +54,8 @@ float Position::get_hitbox_radius() { return this->hitbox_radius; }
 float Position::get_angle() { return this->angle; }
 
 void Position::set_position(int x, int y) {
-  this->x = x;
-  this->y = y;
+  this->x = (float)x;
+  this->y = (float)y;
 }
 
 int Position::colides(Position &) { return 1; }

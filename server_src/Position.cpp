@@ -4,8 +4,10 @@
 #include "Map.h"
 #include "Config.h"
 #include "Constants.h"
+#include <iostream>
 
 void Position::update(char mov) {
+  std::cout << "update pos" << std::endl;
   if (mov == FORWARD || mov == BACKWARDS) {
     float offset_x = this->get_y_offset(mov);
     float offset_y = this->get_x_offset(mov);
@@ -35,8 +37,12 @@ void Position::update(char mov) {
                                   : new_y + hitbox_radius;
     }
   } else {
+
     this->update_angle(mov);
+      std::cout << "update angle to : " << this->get_angle() << std::endl;
   }
+    std::cout << "updated pos fin" << std::endl;
+
 }
 
 float Position::get_pos_x() { return this->x; }
@@ -48,8 +54,8 @@ float Position::get_hitbox_radius() { return this->hitbox_radius; }
 float Position::get_angle() { return this->angle; }
 
 void Position::set_position(int x, int y) {
-  this->x = x;
-  this->y = y;
+  this->x = (float)x;
+  this->y = (float)y;
 }
 
 int Position::colides(Position &) { return 1; }

@@ -14,7 +14,10 @@ void Player::execute_intention(char intention) {
   if (this->is_alive) {
     if (intention == FORWARD || intention == BACKWARDS || intention == RIGHT ||
         intention == LEFT) {
+        std::cout << "intento mover" << std::endl;
       this->position.update(intention);
+      this->process_near_item();
+
     }
     if (intention == ACTION) {
       this->acction();
@@ -23,7 +26,6 @@ void Player::execute_intention(char intention) {
       this->attack();
     }
   }
-  this->process_near_item();
 }
 
 void Player::get_damaged(int damage) 
@@ -41,6 +43,21 @@ void Player::set_spawn(int x, int y) {
   this->position.set_position(x, y); 
   this->spawn_x = x;
   this->spawn_y = y;
+}
+
+int Player::get_hitpoints() 
+{
+  return this->hitpoints;
+}
+
+int Player::get_lives() 
+{
+  return this->lives;
+}
+
+int Player::get_score() 
+{
+  return this->score;
 }
 
 
@@ -99,6 +116,7 @@ Player::Player(Map *map, Config *config, char id)
     : position{Position(map, config)}, inventory{Inventory(this, map, config)}
      {
   this->id = id;
+  this->map = map;
 }
 
 bool Player::is_in_hitbox(float x, float y) {
@@ -115,7 +133,9 @@ float Player::get_direction() { return this->position.get_angle(); }
 
 
 void Player::process_near_item(){
-  char current_id = map->get_id(this->get_pos_x(), this->get_pos_y());
+  std::cout<< "posicion es x:" << this->get_pos_x() << " y: " << this->get_pos_y() << std::endl;
+  int current_id = map->get_id(this->get_pos_x(), this->get_pos_y());
+
   if(current_id >= 49 && current_id <= 52){
     if(this->inventory.handle_item(current_id)){
       this->map->remove_item(this->get_pos_x(), this->get_pos_y());
@@ -123,7 +143,7 @@ void Player::process_near_item(){
   }
   if(id <= 46 && id >= 48){
     this->heal(id);
-    this->map->remove_item(this->get_pos_x(), this->get_pos_y());
+    this->map->remove_item((int)this->get_pos_x(), (int)this->get_pos_y());
   }
   if(id <= 53 && id >= 56){
     this->collect_treasure(id);

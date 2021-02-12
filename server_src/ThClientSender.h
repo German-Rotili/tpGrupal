@@ -19,6 +19,7 @@
 
 class ThClientSender : public Thread{
     Socket & peer;
+    Snapshot snapshot;
     std::atomic<bool> state;
     ThClientSender& operator=(const ThClientSender&) = delete;
     ThClientSender(const ThClientSender&) = delete;

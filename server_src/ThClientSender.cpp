@@ -1,7 +1,7 @@
 #include "ThClientSender.h"
 
 void ThClientSender::send_snapshot(Snapshot & snapshot){
-
+        // std::cout << "intento enviar snapshot" << std::endl;
         char action_id = ACTION_ID;
         char snapshot_id = SNAP_ID;
         Serializer serializer;
@@ -29,6 +29,8 @@ void ThClientSender::send_snapshot(Snapshot & snapshot){
             //MANDO CADENA BINARIA DEL MENSAJE COMPLETO
             peer.socket_send(msg.data(), msg.size());
             /********************/
+            // std::cout << "envie snapshot" << std::endl;
+
 }
 
 void ThClientSender::run(){

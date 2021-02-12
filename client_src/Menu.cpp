@@ -151,9 +151,30 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
                 bytes.push_back(byte);
               }
               input_file.close();
+              std::cout << "Tamanio mapa: "<<bytes.size() <<std::endl;
               this->client.new_game(bytes);
 
             this->vector_map = mapHandler.readMap(path);
+    std::cout << "mapa path: "<<std::endl;
+
+    for(std::vector<int> &i : this->vector_map){
+      for(int &j : i){
+        std::cout << j << " ";
+      }
+      std::cout << "\n";
+    }
+    std::cout << "mapa file: "<<std::endl;
+
+     std::string aux(bytes.data());
+    for(std::vector<int> &i :  mapHandler.readMapFromString(aux)){
+      for(int &j : i){
+        std::cout << j << " ";
+      }
+      std::cout << "\n";
+    }
+
+
+    std::cout << "final mapas cliente "<<std::endl;
 
           } catch (std::exception const& e) {
             printf("Hubo una excepción: ");
@@ -212,6 +233,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   if (advance) {
     if (renderText) {
       //CHEQUEO MAPA EN EL SERVIDOR
+      std::cout<<"Ya envie el mapa, me voy al lobby"<<std::endl;
       runGameLobby(renderer, settings, true);
     } else {
       runGameList(renderer, settings);
@@ -306,9 +328,8 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
 void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator) {
   bool advance = false;
   bool quit = false;
-  std::vector<std::string> usernames;
+  std::vector<std::string> usernames= this->client.get_players_username();
   SDL_Event e;
-  usernames = this->client.get_players_username();
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();

@@ -23,16 +23,22 @@ void ThClient::start_game(){
     peer.socket_send(&start_game, sizeof(char));
 }
 
-void ThClient::notify_players(std::vector<std::string> &usernames){
+void ThClient::notify_players(std::vector<std::vector<char>> &usernames){
     /*cantidad de usernames*/
     uint32_t value = htonl(usernames.size());
     peer.socket_send((char*)&value, sizeof(uint32_t));
-
-    for(std::string &user : usernames){
+    std::cout << "mande cantidad de usernames" << std::endl;
+    for(std::vector<char> &user : usernames){
         /*tamanio de usernames*/
-        value = htonl(user.length());
+
+        value = htonl(user.size());
+        std::cout << "mande un tamanio: "<<user.size() << std::endl;
+
         peer.socket_send((char*)&value, sizeof(uint32_t));
-        peer.socket_send((char*)user.c_str(), user.length());
+        peer.socket_send((char*)user.data(), user.size());
+        std::string aux(user.data());
+        std::cout << "mande un usuario: "<<aux << std::endl;
+
     }
 }
 
@@ -46,16 +52,20 @@ void ThClient::receive_username(){
         size = ntohl(size);
         std::vector<char> username(size);
         peer.socket_receive(username.data(), size);
+        std::string aux(username.data());
+        std::cout << "Usuario: " << aux << std::endl;
+
+        this->username = username;
     /*********************************************/
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Username Error." << '\n';
     }
-    
-  
 }
 
 void ThClient::new_game(){
+    std::cout << "por mandar un new game"<< std::endl;
+
     try{
     /***************** NEW GAME *******************/
         uint32_t size = 0;
@@ -63,13 +73,29 @@ void ThClient::new_game(){
         size = ntohl(size);
         std::vector<char> map(size);
         peer.socket_receive(map.data(), size);
+        std::cout << map.size() << " = " << size << std::endl;
         GamePlay & game = this->game_handler.new_match(*this, map);
+
         char start = '0';
-        while(0 < peer.socket_receive((char*)&start, sizeof(char))){
-            if(start == START){
+        uint32_t value = htonl(1);
+        peer.socket_send((char*)&value, sizeof(uint32_t));
+
+        value = htonl(this->username.size());
+        peer.socket_send((char*)&value, sizeof(uint32_t));
+        peer.socket_send((char*)this->username.data() ,this->username.size());
+        std::string aux(this->username.data());
+        std::cout << "Usuario mandado: " << aux << std::endl;
+          for (int i = 0; i < this->username.size(); i++) {
+      printf(" %02X ", (unsigned)(unsigned char)this->username.data()[i]);
+    } 
+  printf("\n");
+        peer.socket_receive((char*)&start, sizeof(char));
+        if(start == START){
                 game.start();
-            }
+                game.start_game(this->client_id);
         }
+        this->state = true;
+
     /*********************************************/
     }
     catch(const std::exception& e){
@@ -83,25 +109,33 @@ void ThClient::join_game(){
     /***************** JOIN GAME*******************/
         std::vector<int> matches_id = this->game_handler.get_matches_id();
         uint32_t value = htonl(matches_id.size());
+        //le indico la cantidad de matches id que va a tener que leer.
         peer.socket_send((char*)&value, sizeof(uint32_t));
-        for(int &id : matches_id){
-            value = htonl(id);
-        peer.socket_send((char*)&value, sizeof(int));
+        for(int i = 0; i < matches_id.size() ; i++){
+            value = htonl( matches_id[i]);
+            peer.socket_send((char*)&value, sizeof(int));
         }
+
+
         uint32_t game_id = 0;
+        //recibo el id que eligio
         peer.socket_receive((char*)&game_id, sizeof(uint32_t));
         game_id = ntohl(game_id);
+
         GamePlay & game = this->game_handler.select_match(*this, (int)game_id);
         std::vector <char> map = game.get_raw_map();
+
         value = htonl(map.size());
         peer.socket_send((char*)&value, sizeof(uint32_t));
         peer.socket_send((char*)map.data(), map.size());
         char start = '0';
-        while(0 < peer.socket_receive((char*)&start, sizeof(char))){
-            if(start == START){
-                game.start();
-            }
+       
+        //aca no podria recibir refresh solo lee si empieza la partida
+        peer.socket_receive((char*)&start, sizeof(char));
+        if(start == START){
+            game.start_game(this->client_id);
         }
+
     /*********************************************/
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -147,10 +181,13 @@ void ThClient::run(){
             char decision = '0';
             peer.socket_receive((char*)&decision, sizeof(char));
             /*********************************************/
+        std::cout <<"recibe algo" <<std::endl;
 
             switch (decision){
                 case NEW_GAME:{
                     this->new_game();
+                    std::cerr << "salio de new game" << '\n';
+                    this->state = true;
                 }
                     start = true;
                     break;
@@ -165,23 +202,38 @@ void ThClient::run(){
             }   
         }
         
-        this->sender = new ThClientSender(this->peer);
-        this->sender->start();
+        // this->sender = new ThClientSender(this->peer);
+        // this->sender->start();
         this->receiver_loop();
         
 }
+
+std::vector<char> ThClient::get_intention(){
+    // std::unique_lock<std::mutex> lock(this->m);
+    std::vector<char> aux = this->intention_queue;
+    this->intention_queue.clear();
+    return aux;
+}
+
 
 void ThClient::receiver_loop(){
     try{
         while (this->state){
             uint32_t size = 0;
             peer.socket_receive((char*)&size, sizeof(uint32_t));
+
             size = ntohl(size);
             std::vector<char> intention(size);
             peer.socket_receive(intention.data(), size);
+
+            // std::unique_lock<std::mutex> lock(this->m);
+            std::cout << "intention size: " << intention.size() << std::endl;
+
             for(char value : intention){
                 this->intention_queue.push_back(value);
-            }            
+                    printf(" %02X ", (unsigned)(unsigned char)value);
+            }    
+            printf("\n");
         }
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';

@@ -1,18 +1,26 @@
 #include "ThSender.h"
 
 void ThSender::send_intention(std::vector<char> & intention){
+    std::cout << "send intention: " << intention.size() << std::endl;
     client.client_send_intention(intention);
+    this->clean_intention();
+}
+void ThSender::clean_intention(){
+    this->intention.clear();
+    std::cout << "Clean intention: " <<  this->intention.size() << std::endl;
+
 }
 
 ThSender::ThSender(Client & client, std::vector<char> & intention):client(client),intention(intention),state(true){}
    
 void ThSender::run(){
 
-    //DEBERIA MANDAR SOLO CUANDO HAY UNA NUEVA INTENCION, NO POR TIEMPO.
     while (this->state) {
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-        send_intention(intention);
-        intention.clear();
+        if(intention.size() > 0){
+            send_intention(intention);
+        }
+
         //analizar mutex notify all
         std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
         unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();

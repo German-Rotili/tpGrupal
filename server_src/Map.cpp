@@ -30,6 +30,11 @@ std::map<int, std::map<int, Door>> Map::get_doors()
 
 }
 
+void Map::start() 
+{
+  this->populate_variables();
+}
+
 
 
 void Map::add_rocket(Rocket rocket) { this->rockets.push_back(rocket); }
@@ -83,7 +88,7 @@ bool Map::is_impactable(int x, int y) {
 
 Map::~Map() {}
 
-char Map::get_id(int x, int y) {
+int Map::get_id(int x, int y) {
   return this->map[x][y];
 }
 
@@ -109,7 +114,20 @@ bool Map::is_spawn(char id)
 Map::Map(  std::vector<char> raw_map) : raw_map{raw_map}{
   std::string map_aux(raw_map.data());
   MapHandler handler;
-  map = handler.readMapFromString(map_aux);
+  try{
+    this->map = handler.readMapFromString(map_aux);
+    for(std::vector<int> &i : this->map){
+      for(int &j : i){
+        std::cout << j << " ";
+      }
+      std::cout << "\n";
+    }
+//    this->map = handler.readMap("../resources/config/map1.yaml");
+
+  }catch (std::exception const& e) {
+            printf("Hubo una excepción: ");
+            std::cout << e.what() << "\n";
+          }
 
 }
 
@@ -117,7 +135,7 @@ void Map::populate_variables() {
 
   for (int x = 0; x < this->map.size(); x++) {
     for (int y = 0; y < this->map[y].size(); y++) {
-      char id = this->get_id(x,y);
+      int id = this->get_id(x,y);
 
       if (this->is_door(id)) {
         this->doors[x].insert(std::pair<int,Door>(y,Door(id)));
@@ -137,12 +155,23 @@ void Map::populate_variables() {
 }
 
 void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
+
   for (Player &player : this->players) {
+
     if(player.get_id() == client_id){
+
       for (char &i : intentions){
-        player.execute_intention(i);
+        if(i != 0){
+          char aux = intentions.front();
+          intentions.erase (intentions.begin());
+          player.execute_intention(aux);
+        std::cout << "caracter procesado: " <<aux <<std::endl;
+
+        }
       }
       break;
-    }
+    } 
   }
+  // std::cout << "salimos de exe int" << std::endl;
+
 }

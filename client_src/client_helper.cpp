@@ -58,15 +58,10 @@ std::vector<std::string> Client::get_matches_id(){
 
     for(int i = 0; i < (int)size ; i++){
         /*Largo de cada id*/
-        uint32_t size_id = 0;
-        client.socket_receive((char*)&size_id , sizeof(uint32_t));
-        size_id = ntohl(size_id);
-
-        /*id*/
-        std::vector<char> buff(size);
-        client.socket_receive(buff.data(), size);
-        std::string id(buff.data());
-        matches_id.push_back(id);
+        int id = 0;
+        client.socket_receive((char*)&id , sizeof(int));
+        id = ntohl(id);
+        matches_id.push_back(std::to_string(id));
     }
 
     return matches_id;
@@ -75,23 +70,31 @@ std::vector<std::string> Client::get_matches_id(){
 std::vector<std::string> Client::get_players_username(){
 
     std::vector<std::string> usernames;
-
     /*Cantidad de jugadores*/
     uint32_t size = 0;
     client.socket_receive((char*)&size, sizeof(uint32_t));
     size = ntohl(size);
+    std::cout << " recibi cantidad de usernames: "<< size << std::endl;
 
     for(int i = 0; i < (int)size ; i++){
         /*Largo de cada jugador*/
+
         uint32_t size_player = 0;
         client.socket_receive((char*)&size_player , sizeof(uint32_t));
 
+
         /*Username*/
-        std::vector<char> buff(size);
-        client.socket_receive(buff.data(), size);
+        std::vector<char> buff(ntohl(size_player));
+        client.socket_receive(buff.data(), ntohl(size_player));
         std::string username(buff.data());
+        std::cout << "Usuario recibido: " << username << std::endl;
+          for (int i = 0; i < buff.size(); i++) {
+      printf(" %02X ", (unsigned)(unsigned char)buff.data()[i]);
+    } 
+  printf("\n");
         usernames.push_back(username);
     }
+        std::cout << " devuelvo lista de usernames de tamanio:  "<<usernames.size() << std::endl;
 
     return usernames;
 
@@ -101,10 +104,14 @@ std::vector<std::string> Client::get_players_username(){
 int Client::await_game_start(){
     char start = 'x';
     while (start != 's'){
+        std::cout <<"Esperando una S" <<std::endl;
         client.socket_receive((char*)&start, sizeof(char));   
+
     }
     int client_id= -1;
+    std::cout << "por recibir client id" <<std::endl;
     client.socket_receive((char*)&client_id, sizeof(int));   
+    std::cout <<"recibi client id" <<std::endl;
     return (int)ntohl(client_id);
 }
 
@@ -113,7 +120,7 @@ int Client::await_game_start(){
 void Client::new_game(std::vector<char> & map){
     char new_game = 'n';
     client.socket_send((char*)&new_game, sizeof(char));
-    uint32_t size_1 = htonl(map.size());//magic number
+    uint32_t size_1 = htonl(map.size());
     client.socket_send((char*)&size_1, sizeof(uint32_t));
     client.socket_send(map.data(), map.size());
 }
@@ -127,7 +134,9 @@ void Client::client_send_intention(std::vector<char> & intention){
 
 void Client::start_match(){
     char join_flag = 's';
+    std::cout << "mande un start match"<<"\n";
     client.socket_send((char*)&join_flag, sizeof(char));
+    std::cout << "mande un start match" << "\n";
 }
 
 

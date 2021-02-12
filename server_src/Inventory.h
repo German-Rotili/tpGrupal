@@ -15,8 +15,8 @@ class Inventory{
 
 private:
     Player *player;
-    int ammo;
-    char current_weapon;
+    int ammo = 300;
+    char current_weapon = 1;
     std::map<char, Weapon*> weapons;
     bool owned_weapons[NUMBER_OF_WEAPONS];
     Map *map;

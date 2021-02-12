@@ -13,7 +13,7 @@
 #include "Door.h"
 #include "ThClient.h"
 #include "Constants.h"
-
+#include <mutex>
 class ThClient; 
 class GameHandler;
 
@@ -22,6 +22,7 @@ class GamePlay : public Thread{
 private:
     int id;
     bool state;
+    std::mutex m;
     std::vector <ThClient*> clients;
     Map map;
     void append_players(Snapshot &snapshot);
@@ -34,13 +35,13 @@ public:
     GamePlay(ThClient *player, Map&& map);
     ~GamePlay();
     void add_client(ThClient* client);
-    void start();
+    void start_game(int & current_id);
     int get_id();
     void run() override;
     GamePlay& operator=(const GamePlay&) = delete;
     GamePlay(const GamePlay&) = delete;
     Snapshot get_snapshot();
-    void notify_players();
+    void notify_players(int & current_id);
     std::vector<char> get_raw_map();
 };
 #endif

@@ -32,15 +32,15 @@ std::vector<char> GamePlay::get_raw_map(){
 void GamePlay::append_players(Snapshot & snapshot){
     for(Player &player : this->map.players){
         player_t *player_aux = new player_t;
-        player_aux->player_id;
-        player_aux->pos_x;
-        player_aux->pos_y;
-        player_aux->direction;
-        player_aux->current_weapon;
-        player_aux->ammo;
-        player_aux->health;
-        player_aux->lives;
-        player_aux->score;
+        player_aux->player_id = player.get_id();
+        player_aux->pos_x = player.get_pos_x();
+        player_aux->pos_y = player.get_pos_y();
+        player_aux->direction = player.get_direction();
+        player_aux->current_weapon = player.get_current_weapon_id();
+        player_aux->ammo = player.get_ammo();
+        player_aux->health = player.get_hitpoints();
+        player_aux->lives = player.get_lives();
+        player_aux->score = player.get_score();
         snapshot.add_player(player_aux);
     }
 }
@@ -91,6 +91,8 @@ void GamePlay::append_rockets(Snapshot &snapshot){
 
 Snapshot GamePlay::get_snapshot(){
     Snapshot snapshot;
+    std::unique_lock<std::mutex> lock(this->m);
+
     this->append_players(snapshot);
     this->append_objects(snapshot);
     this->append_doors(snapshot);
@@ -102,15 +104,26 @@ Snapshot GamePlay::get_snapshot(){
 
 /*GAME LOOP*/
 void GamePlay::run(){
+                std::cout << "partida run" << std::endl;
+        this->state = true;
+        this->map.start();
         while (this->state){
+
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-            for(auto &client : this->clients){
-                this->map.execute_intentions(client->intention_queue, client->client_id);
+
+            for(ThClient *client : this->clients){
+                 std::vector<char> aux_intention = client->get_intention();
+                 std::unique_lock<std::mutex> lock(this->m);
+                this->map.execute_intentions(aux_intention, client->client_id);
             }
+            std::cout << "por hacer get snapshot" << std::endl;
             Snapshot snapshot = this->get_snapshot();
-            for(auto &client : this->clients){
+            std::cout << "hizo get snapshot" << std::endl;
+            for(ThClient *client : this->clients){
                 client->send_snapshot(snapshot);
             }
+            std::cout << "envio snapshot" << std::endl;
+
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
             int sleep_time = 1000000/FPS - elapsed_microseconds;
@@ -127,22 +140,35 @@ int GamePlay::get_id(){
     return this->id;
 }
 
-void GamePlay::notify_players(){
-    std::vector<std::string> usernames;
+void GamePlay::notify_players(int & current_id){
+    std::vector<std::vector<char>> usernames;
     for(ThClient *client : this->clients){
         usernames.push_back(client->username);
     }
+    std::cout << " cantidad de usernames: "<<usernames.size()<< std::endl;
+
 
     for(ThClient *client : this->clients){
+        if(client->client_id ==current_id){
+            continue;
+        }
         client->notify_players(usernames);
+        std::cout << "Envio usernames a cliente"<< std::endl;
+
     } 
 }
 
 
-void GamePlay::start(){
+void GamePlay::start_game(int & current_id){
     this->state = true;
+    std::cout << "le doy a start"<< std::endl;
+
     for(ThClient *client : this->clients){
-        client->start_game();
+        //  if(client->client_id != current_id){
+            client->start_game();
+        // }
+        this->map.add_player(client->client_id);
+        client->sender = new ThClientSender(client->peer);
+        client->sender->start();
     }
-    this->run();
 }

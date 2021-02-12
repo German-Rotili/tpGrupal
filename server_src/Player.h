@@ -22,13 +22,15 @@ class Player{
 private:
     char id;
     Position position;
-    bool is_alive;
+    bool is_alive = true;
     Map *map;
     Inventory inventory;
-    bool placed;
+    bool placed = false;
     int spawn_x;
     int spawn_y;
-    char hitpoints;
+    int hitpoints = 300;
+    int lives = 5;
+    int score = 200;
 
     void attack();
     void acction();
@@ -49,7 +51,9 @@ public:
     int get_ammo();
     char get_current_weapon_id();
     void set_spawn(int x, int y);
-    
+    int get_hitpoints();
+    int get_lives();
+    int get_score();
    
     void execute_intention(char intention);
     void get_damaged(int damage);

@@ -7,7 +7,7 @@
 #include "../common_src/Snapshot.h"
 #include <atomic>
 #include "client_helper.h"
-
+#include <mutex>
 #define FPS 30
 
 
@@ -16,7 +16,7 @@ private:
     Snapshot snapshot;
     std::atomic<bool> state;
     Client & client;
-
+    std::mutex m;
 public:
     ThRequester(Client & client);
     ~ThRequester();

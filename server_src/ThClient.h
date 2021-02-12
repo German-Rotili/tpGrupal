@@ -11,6 +11,7 @@
 #include "../common_src/Serializer.h"
 #include "ThClientSender.h"
 #include "Constants.h"
+#include <mutex>
 class GameHandler;
 class GamePlay;
 class ThClientSender;
@@ -20,9 +21,10 @@ class ThClient : public Thread{
 private:
     int client_id;
     Socket peer;
+    std::mutex m;
     ThClientSender *sender;
     std::vector<char> intention_queue;
-    std::string username;
+    std::vector<char> username;
     bool state = true;
     GameHandler & game_handler;
     ThClient& operator=(const ThClient&) = delete;
@@ -40,7 +42,8 @@ public:
     void run() override;
     void send_snapshot(Snapshot snapshot);//aca el notify all?
     void start_game();
-    void notify_players(std::vector<std::string> &usernames);
+    void notify_players(std::vector<std::vector<char>> &usernames);
+    std::vector<char> get_intention();
 
 
     /*Devuelve el estado del thread*/

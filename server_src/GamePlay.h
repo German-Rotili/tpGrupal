@@ -13,7 +13,7 @@
 #include "Door.h"
 #include "ThClient.h"
 #include "Constants.h"
-
+#include <mutex>
 class ThClient; 
 class GameHandler;
 
@@ -22,6 +22,7 @@ class GamePlay : public Thread{
 private:
     int id;
     bool state;
+    std::mutex m;
     std::vector <ThClient*> clients;
     Map map;
     void append_players(Snapshot &snapshot);

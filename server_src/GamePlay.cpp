@@ -91,9 +91,9 @@ void GamePlay::append_rockets(Snapshot &snapshot){
 
 Snapshot GamePlay::get_snapshot(){
     Snapshot snapshot;
+    std::unique_lock<std::mutex> lock(this->m);
 
     this->append_players(snapshot);
-
     this->append_objects(snapshot);
     this->append_doors(snapshot);
     this->append_actions(snapshot);
@@ -113,6 +113,7 @@ void GamePlay::run(){
 
             for(ThClient *client : this->clients){
                  std::vector<char> aux_intention = client->get_intention();
+                 std::unique_lock<std::mutex> lock(this->m);
                 this->map.execute_intentions(aux_intention, client->client_id);
             }
             std::cout << "por hacer get snapshot" << std::endl;

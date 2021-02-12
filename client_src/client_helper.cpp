@@ -8,16 +8,10 @@ Client::Client(std::string & service,std::string & hostname){
 
 Client::~Client(){}
 
-void Client::client_send(std::string line){
-//    client.socket_send(line);
-    client.socket_send(line.c_str(), 4);
-}
-
-
 void Client::recieve_snapshot(Snapshot & snapshot){
     
     /*Recibo ID*/
-    char input_id;
+    char input_id = 'x';
     std::vector<char> buff(1);
     client.socket_receive(buff.data(), sizeof(char));
     memcpy(&input_id, buff.data(), sizeof(char));
@@ -26,6 +20,11 @@ void Client::recieve_snapshot(Snapshot & snapshot){
 
     /*Recibimos vector de chars*/
     std::vector<char> msg = this->client_receive_vector(); //aca adentro primero recibe largo y despues lee todo.
+    std::cout << "size: "<<msg.size() <<std::endl;
+    for(char &i : msg){
+        printf(" %02X ", (unsigned)(unsigned char)input_id);
+    }
+    printf("\n");
     /**********/
     
 
@@ -125,7 +124,7 @@ void Client::new_game(std::vector<char> & map){
     client.socket_send(map.data(), map.size());
 }
 
-void Client::client_send_intention(std::vector<char> & intention){
+void Client::client_send_intention(std::vector<char> intention){
         Serializer serializer;
         uint32_t snap_size = htonl(intention.size());
         client.socket_send((char*)&snap_size, sizeof(uint32_t));

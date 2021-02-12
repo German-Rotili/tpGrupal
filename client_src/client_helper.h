@@ -23,7 +23,7 @@ public:
     void start_match();
     void new_game(std::vector<char> & map);
     int await_game_start();
-    void  client_send_intention(std::vector<char> & intention);
+    void  client_send_intention(std::vector<char> intention);
     std::vector<std::string> get_players_username();
     void recieve_snapshot(Snapshot & snapshot);
     std::vector<std::string> get_matches_id();

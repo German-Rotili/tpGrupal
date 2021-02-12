@@ -181,7 +181,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
             std::cout << e.what() << "\n";
           }
 
-          if (/*recibido (Reemplazar por lo que recibo del server)*/) {
+          if (true) {
             advance = true;
             quit = true;
           } else {

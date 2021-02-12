@@ -91,19 +91,13 @@ void GamePlay::append_rockets(Snapshot &snapshot){
 
 Snapshot GamePlay::get_snapshot(){
     Snapshot snapshot;
-    std::cout << "genero snapshot" << std::endl;
 
     this->append_players(snapshot);
-    std::cout << "genero snapshot players" << std::endl;
 
     this->append_objects(snapshot);
-    std::cout << "genero snapshot objects" << std::endl;
     this->append_doors(snapshot);
-    std::cout << "genero snapshot doors" << std::endl;
     this->append_actions(snapshot);
-    std::cout << "genero snapshot actions" << std::endl;
     this->append_rockets(snapshot);
-    std::cout << "genero snapshot rockets" << std::endl;
     return snapshot;
 }
 
@@ -114,19 +108,14 @@ void GamePlay::run(){
         this->state = true;
         this->map.start();
         while (this->state){
-            std::cout << "game loop" << std::endl;
 
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
             for(ThClient *client : this->clients){
-                std::cout << "game loop" << std::endl;
-
                 this->map.execute_intentions(client->intention_queue, client->client_id);
             }
             Snapshot snapshot = this->get_snapshot();
             for(ThClient *client : this->clients){
-                std::cout << "envio a cliente" << std::endl;
                 client->send_snapshot(snapshot);
-                std::cout << "fin envio a cliente" << std::endl;
             }
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();

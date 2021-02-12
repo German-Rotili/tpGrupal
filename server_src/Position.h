@@ -15,7 +15,7 @@ private:
     float x;
     float y;
     float angle;
-    float hitbox_radius;
+    float hitbox_radius = 0.8;
     float linear_vel;
     float angular_vel;
     Map *map;

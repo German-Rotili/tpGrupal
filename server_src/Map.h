@@ -41,7 +41,7 @@ public:
   Map( std::vector<char> raw_map);
   ~Map();
 
-  char get_id(int x, int y);
+  int get_id(int x, int y);
   void add_player(char id);   // ver quien hace los players
   std::vector<Player> &get_players(); // placeholder
   std::map<int, std::map<int, Door>> get_doors();

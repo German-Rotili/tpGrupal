@@ -22,5 +22,7 @@ public:
     ThSender(const ThSender&) = delete;
     ThSender& operator=(const ThSender&) = delete;
     ~ThSender();
+    void clean_intention();
+
 };
 #endif

@@ -3,6 +3,12 @@
 void ThSender::send_intention(std::vector<char> & intention){
     std::cout << "send intention" << std::endl;
     client.client_send_intention(intention);
+    this->clean_intention();
+}
+void ThSender::clean_intention(){
+    this->intention.clear();
+    std::cout << "Clean intention" << std::endl;
+
 }
 
 ThSender::ThSender(Client & client, std::vector<char> & intention):client(client),intention(intention),state(true){}
@@ -12,7 +18,9 @@ void ThSender::run(){
     //DEBERIA MANDAR SOLO CUANDO HAY UNA NUEVA INTENCION, NO POR TIEMPO.
     while (this->state) {
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-        send_intention(intention);
+        // if(intention.size() > 0){
+            send_intention(intention);
+        // }
 
         intention.clear();
         //analizar mutex notify all

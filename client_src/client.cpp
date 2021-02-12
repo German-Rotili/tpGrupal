@@ -93,19 +93,19 @@ int main(int argc, char* args[]) {
         }
       }
       if (currentKeyStates[SDL_SCANCODE_W]) {
-        intention.push_back(SDL_SCANCODE_W);
+        intention.push_back('w');
       }
       if (currentKeyStates[SDL_SCANCODE_S]) {
-        intention.push_back(SDL_SCANCODE_S);
+        intention.push_back('s');
       }
       if (currentKeyStates[SDL_SCANCODE_A ]) {
-        intention.push_back(SDL_SCANCODE_A);
+        intention.push_back('a');
       }
       if (currentKeyStates[SDL_SCANCODE_D ]) {
-        intention.push_back(SDL_SCANCODE_D);
+        intention.push_back('d');
       }
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
-        intention.push_back(SDL_SCANCODE_SPACE);
+        intention.push_back(' ');
       }
 
       update_snapshot = requester.get_snapshot();

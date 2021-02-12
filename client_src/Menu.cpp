@@ -155,6 +155,26 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               this->client.new_game(bytes);
 
             this->vector_map = mapHandler.readMap(path);
+    std::cout << "mapa path: "<<std::endl;
+
+    for(std::vector<int> &i : this->vector_map){
+      for(int &j : i){
+        std::cout << j << " ";
+      }
+      std::cout << "\n";
+    }
+    std::cout << "mapa file: "<<std::endl;
+
+     std::string aux(bytes.data());
+    for(std::vector<int> &i :  mapHandler.readMapFromString(aux)){
+      for(int &j : i){
+        std::cout << j << " ";
+      }
+      std::cout << "\n";
+    }
+
+
+    std::cout << "final mapas cliente "<<std::endl;
 
           } catch (std::exception const& e) {
             printf("Hubo una excepción: ");

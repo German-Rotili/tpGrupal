@@ -16,8 +16,8 @@ private:
     float y;
     float angle = 0;
     float hitbox_radius = 0.8;
-    float linear_vel = 0.2;
-    float angular_vel = 2;
+    float linear_vel = 0.06;
+    float angular_vel = 0.01;
     Map *map;
     Config *config;
     float get_new_x(char);

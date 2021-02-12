@@ -160,8 +160,13 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
             std::cout << e.what() << "\n";
           }
 
-          advance = true;
-          quit = true;
+          if (/*recibido (Reemplazar por lo que recibo del server)*/) {
+            advance = true;
+            quit = true;
+          } else {
+            inputText = "";
+          }
+
           break;
 
           case SDLK_BACKSPACE:

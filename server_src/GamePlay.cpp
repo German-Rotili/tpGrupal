@@ -110,13 +110,19 @@ void GamePlay::run(){
         while (this->state){
 
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
+
             for(ThClient *client : this->clients){
-                this->map.execute_intentions(client->intention_queue, client->client_id);
+                 std::vector<char> aux_intention = client->get_intention();
+                this->map.execute_intentions(aux_intention, client->client_id);
             }
+            std::cout << "por hacer get snapshot" << std::endl;
             Snapshot snapshot = this->get_snapshot();
+            std::cout << "hizo get snapshot" << std::endl;
             for(ThClient *client : this->clients){
                 client->send_snapshot(snapshot);
             }
+            std::cout << "envio snapshot" << std::endl;
+
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
             int sleep_time = 1000000/FPS - elapsed_microseconds;
@@ -134,10 +140,9 @@ int GamePlay::get_id(){
 }
 
 void GamePlay::notify_players(int & current_id){
-    std::vector<std::string> usernames;
+    std::vector<std::vector<char>> usernames;
     for(ThClient *client : this->clients){
         usernames.push_back(client->username);
-        std::cout << " username name: "<<client->username<< std::endl;
     }
     std::cout << " cantidad de usernames: "<<usernames.size()<< std::endl;
 
@@ -158,9 +163,9 @@ void GamePlay::start_game(int & current_id){
     std::cout << "le doy a start"<< std::endl;
 
     for(ThClient *client : this->clients){
-         if(client->client_id != current_id){
+        //  if(client->client_id != current_id){
             client->start_game();
-        }
+        // }
         this->map.add_player(client->client_id);
         client->sender = new ThClientSender(client->peer);
         client->sender->start();

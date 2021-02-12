@@ -37,9 +37,11 @@ int main(int argc, char* args[]) {
     /*Lanzamiento del menu de inicio*/
     Menu menu(client, renderer);
     menu.runInsertUsername(renderer, settings);
+    std::cout <<"sale del menu" <<std::endl;
     /********************************/
 
     int client_id = client.await_game_start();
+    std::cout <<"pase el await game" <<std::endl;
 
     World world(renderer, settings, menu.vector_map, client_id);
     bool quit = false;
@@ -58,7 +60,6 @@ int main(int argc, char* args[]) {
     // Main (o game) Loop
     while (!quit) {
       std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-      intention = { false, false, false, false, false, false, 0 };
 
       // Event Loop
       while (SDL_PollEvent(&e) != 0) {

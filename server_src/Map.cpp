@@ -162,12 +162,16 @@ void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
 
       for (char &i : intentions){
         if(i != 0){
-        player.execute_intention(i);
+          char aux = intentions.front();
+          intentions.erase (intentions.begin());
+          player.execute_intention(aux);
+        std::cout << "caracter procesado: " <<aux <<std::endl;
+
         }
       }
       break;
-    }
+    } 
   }
-  std::cout << "salimos de exe int" << std::endl;
+  // std::cout << "salimos de exe int" << std::endl;
 
 }

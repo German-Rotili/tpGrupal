@@ -323,9 +323,8 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
 void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator) {
   bool advance = false;
   bool quit = false;
-  std::vector<std::string> usernames;
+  std::vector<std::string> usernames= this->client.get_players_username();
   SDL_Event e;
-  usernames = this->client.get_players_username();
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();

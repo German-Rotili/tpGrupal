@@ -23,17 +23,22 @@ void ThClient::start_game(){
     peer.socket_send(&start_game, sizeof(char));
 }
 
-void ThClient::notify_players(std::vector<std::string> &usernames){
+void ThClient::notify_players(std::vector<std::vector<char>> &usernames){
     /*cantidad de usernames*/
     uint32_t value = htonl(usernames.size());
     peer.socket_send((char*)&value, sizeof(uint32_t));
-
-    for(std::string &user : usernames){
+    std::cout << "mande cantidad de usernames" << std::endl;
+    for(std::vector<char> &user : usernames){
         /*tamanio de usernames*/
 
-        value = htonl(user.length());
+        value = htonl(user.size());
+        std::cout << "mande un tamanio: "<<user.size() << std::endl;
+
         peer.socket_send((char*)&value, sizeof(uint32_t));
-        peer.socket_send((char*)user.c_str(), user.length());
+        peer.socket_send((char*)user.data(), user.size());
+        std::string aux(user.data());
+        std::cout << "mande un usuario: "<<aux << std::endl;
+
     }
 }
 
@@ -48,7 +53,9 @@ void ThClient::receive_username(){
         std::vector<char> username(size);
         peer.socket_receive(username.data(), size);
         std::string aux(username.data());
-        this->username = aux;
+        std::cout << "Usuario: " << aux << std::endl;
+
+        this->username = username;
     /*********************************************/
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -68,14 +75,20 @@ void ThClient::new_game(){
         peer.socket_receive(map.data(), size);
         std::cout << map.size() << " = " << size << std::endl;
         GamePlay & game = this->game_handler.new_match(*this, map);
-        char start = '0';
 
+        char start = '0';
         uint32_t value = htonl(1);
         peer.socket_send((char*)&value, sizeof(uint32_t));
-        value = htonl(this->username.length());
-        peer.socket_send((char*)&value, sizeof(uint32_t));
-        peer.socket_send((char*)this->username.c_str(), this->username.length());
 
+        value = htonl(this->username.size());
+        peer.socket_send((char*)&value, sizeof(uint32_t));
+        peer.socket_send((char*)this->username.data() ,this->username.size());
+        std::string aux(this->username.data());
+        std::cout << "Usuario mandado: " << aux << std::endl;
+          for (int i = 0; i < this->username.size(); i++) {
+      printf(" %02X ", (unsigned)(unsigned char)this->username.data()[i]);
+    } 
+  printf("\n");
         peer.socket_receive((char*)&start, sizeof(char));
         if(start == START){
                 game.start();
@@ -195,6 +208,14 @@ void ThClient::run(){
         
 }
 
+std::vector<char> ThClient::get_intention(){
+    // std::unique_lock<std::mutex> lock(this->m);
+    std::vector<char> aux = this->intention_queue;
+    this->intention_queue.clear();
+    return aux;
+}
+
+
 void ThClient::receiver_loop(){
     try{
         while (this->state){
@@ -205,10 +226,14 @@ void ThClient::receiver_loop(){
             std::vector<char> intention(size);
             peer.socket_receive(intention.data(), size);
 
+            // std::unique_lock<std::mutex> lock(this->m);
+            std::cout << "intention size: " << intention.size() << std::endl;
+
             for(char value : intention){
                 this->intention_queue.push_back(value);
-
-            }            
+                    printf(" %02X ", (unsigned)(unsigned char)value);
+            }    
+            printf("\n");
         }
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';

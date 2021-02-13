@@ -199,7 +199,8 @@ int main(int argc, char* args[]) {
         map_ui.drawMap(renderer, walls, objects, scrollX, scrollY);
 
         menu_ui.drawMenu(renderer, walls, objects, font, renderText, action,
-        menuScrollX, inputText, realWidth, IDScrollOffset, sizeStep);
+        menuScrollX, inputText, realWidth, IDScrollOffset,
+        sizeStep);
 
         renderer.renderPresent();
 

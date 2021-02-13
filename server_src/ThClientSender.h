@@ -16,10 +16,13 @@
 #include <atomic>
 #include <chrono>
 #include "Constants.h"
+#include <condition_variable>
 
 class ThClientSender : public Thread{
     Socket & peer;
     Snapshot snapshot;
+    std::condition_variable cond_var;
+    std::mutex m;
     std::atomic<bool> state;
     ThClientSender& operator=(const ThClientSender&) = delete;
     ThClientSender(const ThClientSender&) = delete;

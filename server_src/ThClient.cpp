@@ -42,8 +42,6 @@ void ThClient::notify_players(std::vector<std::vector<char>> &usernames){
     }
 }
 
-
-
 void ThClient::receive_username(){
     try{
     /***********Recibo Username*******************/
@@ -64,8 +62,6 @@ void ThClient::receive_username(){
 }
 
 void ThClient::new_game(){
-    std::cout << "por mandar un new game"<< std::endl;
-
     try{
     /***************** NEW GAME *******************/
         uint32_t size = 0;
@@ -84,15 +80,14 @@ void ThClient::new_game(){
         peer.socket_send((char*)&value, sizeof(uint32_t));
         peer.socket_send((char*)this->username.data() ,this->username.size());
         std::string aux(this->username.data());
-        std::cout << "Usuario mandado: " << aux << std::endl;
-          for (int i = 0; i < this->username.size(); i++) {
-      printf(" %02X ", (unsigned)(unsigned char)this->username.data()[i]);
-    } 
-  printf("\n");
+       
         peer.socket_receive((char*)&start, sizeof(char));
+       
         if(start == START){
                 game.start();
                 game.start_game(this->client_id);
+        }else{
+            std::cout  << "Error inicio de partida." << std::endl;
         }
         this->state = true;
 
@@ -177,17 +172,15 @@ void ThClient::run(){
         this->receive_username();
         bool start = false;
         while(!start){
+        
             /***********Recibo Decision sobre Partida********/
             char decision = '0';
             peer.socket_receive((char*)&decision, sizeof(char));
             /*********************************************/
-        std::cout <<"recibe algo" <<std::endl;
 
             switch (decision){
                 case NEW_GAME:{
                     this->new_game();
-                    std::cerr << "salio de new game" << '\n';
-                    this->state = true;
                 }
                     start = true;
                     break;
@@ -201,17 +194,19 @@ void ThClient::run(){
                 }
             }   
         }
-        
-        // this->sender = new ThClientSender(this->peer);
-        // this->sender->start();
         this->receiver_loop();
         
 }
 
 std::vector<char> ThClient::get_intention(){
-    // std::unique_lock<std::mutex> lock(this->m);
+    std::unique_lock<std::mutex> lock(this->m);
+    std::cout << "mutex locked" << std::endl;
     std::vector<char> aux = this->intention_queue;
+       for(char aux :  intention_queue){
+                    printf(" %02X ", (unsigned)(unsigned char)aux);
+                }
     this->intention_queue.clear();
+    std::cout << "cleared queue" << std::endl;
     return aux;
 }
 
@@ -225,13 +220,11 @@ void ThClient::receiver_loop(){
             size = ntohl(size);
             std::vector<char> intention(size);
             peer.socket_receive(intention.data(), size);
-
-            // std::unique_lock<std::mutex> lock(this->m);
             std::cout << "intention size: " << intention.size() << std::endl;
-
             for(char value : intention){
+                std::unique_lock<std::mutex> lock(this->m);
                 this->intention_queue.push_back(value);
-                    printf(" %02X ", (unsigned)(unsigned char)value);
+                printf(" %02X ", (unsigned)(unsigned char)value);
             }    
             printf("\n");
         }
@@ -250,6 +243,6 @@ ThClient::~ThClient(){
     delete this->sender;//revisar seg fault
 }
 
-void ThClient::send_snapshot(Snapshot snapshot){
-    this->sender->send_snapshot(snapshot);
+void ThClient::send_snapshot(Snapshot snapshot){//Cuando llamo este metodo desde otro hilo
+    this->sender->send_snapshot(snapshot);      //se esta ejecutando el reciever_loop en este hilo.
 }

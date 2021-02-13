@@ -10,15 +10,9 @@ void ThRequester::stop(){
 }
 
 Snapshot ThRequester::get_snapshot(){
-
     std::unique_lock<std::mutex> lock(m);
-
     Snapshot new_snapshot = this->snapshot;
-    /*******/
-    
-    
     return new_snapshot;
-
 }
 
 void ThRequester::run(){
@@ -27,11 +21,7 @@ void ThRequester::run(){
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
         
         Snapshot snap_aux;
-        std::cout << "intento recibir snapshot" << std::endl;
-
         client.recieve_snapshot(snap_aux);
-        
-        std::cout << "logro recibir snapshot" << std::endl;
         {
             std::unique_lock<std::mutex> lock(this->m);
             this->snapshot = snap_aux;

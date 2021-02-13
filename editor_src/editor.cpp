@@ -37,10 +37,11 @@ int main(int argc, char* args[]) {
     int IDScrollOffset = 0;
     int wallIdX = 0;
     int wallIdY = 0;
+    int sizeStep = 0;
 
     std::string inputText = "";
     bool renderText = false;
-    bool save = false, load = false;
+    bool save = false, load = false, size = false;
 
     std::string path = "../resources/config/editorConfig.yaml";
     EditorConfigHandler configHandler;
@@ -63,7 +64,7 @@ int main(int argc, char* args[]) {
         while (SDL_PollEvent(&e) != 0) {
           if (e.type == SDL_QUIT) {
             quit = true;
-          } else if (e.type == SDL_KEYDOWN && save == false && load == false) {
+          } else if (e.type == SDL_KEYDOWN && save == false && load == false && size == false) {
             switch (e.key.keysym.sym) {
               case SDLK_UP:
               if (scrollY > 0)
@@ -95,6 +96,30 @@ int main(int argc, char* args[]) {
                 menuScrollX -= 1;
               break;
             }
+          } else if (e.type == SDL_KEYDOWN && (size == true)) {
+            switch (e.key.keysym.sym) {
+              case SDLK_RETURN:
+              if (sizeStep == 1) {
+                sizeStep = 2;
+                mapX = std::stoi(inputText);
+                inputText = "";
+              } else if (sizeStep == 2) {
+                sizeStep = 0;
+                mapY = std::stoi(inputText);
+                inputText = "";
+                renderText = false;
+                map_ui.createMap(mapX, mapY);
+                size = false;
+              }
+              break;
+
+              case SDLK_BACKSPACE:
+              if (inputText.length() > 0) {
+                inputText.pop_back();
+                renderText = true;
+              }
+              break;
+            }
           } else if (e.type == SDL_KEYDOWN && (save == true || load == true)) {
             switch (e.key.keysym.sym) {
               case SDLK_RETURN:
@@ -106,6 +131,7 @@ int main(int argc, char* args[]) {
               renderText = false;
               save = false;
               load = false;
+              inputText = "";
               break;
 
               case SDLK_BACKSPACE:
@@ -129,7 +155,7 @@ int main(int argc, char* args[]) {
               break;
             }
           } else if (e.type == SDL_TEXTINPUT &&
-            (save == true || load == true)) {
+            (save == true || load == true || size == true)) {
             if(!(SDL_GetModState() & KMOD_CTRL && (e.text.text[0] == 'c' ||
             e.text.text[0] == 'C' || e.text.text[0] == 'v' ||
             e.text.text[0] == 'V' ))) {
@@ -158,16 +184,22 @@ int main(int argc, char* args[]) {
                 load = true;
                 save = false;
                 renderText = true;
+              } else if ((e.button.x >= 125 && e.button.x <= 175) &&
+                (e.button.y >= 5 && e.button.y <= 40)) {
+                size = true;
+                sizeStep = 1;
+                renderText = true;
               }
             }
           }
         }
+
         renderer.renderClear();
 
         map_ui.drawMap(renderer, walls, objects, scrollX, scrollY);
 
         menu_ui.drawMenu(renderer, walls, objects, font, renderText, action,
-        menuScrollX, inputText, realWidth, IDScrollOffset);
+        menuScrollX, inputText, realWidth, IDScrollOffset, sizeStep);
 
         renderer.renderPresent();
 

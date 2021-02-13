@@ -11,12 +11,16 @@
 
 void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls,
   SdlTexture& objects, SdlFont& font, bool renderText, int action, int menuScrollX,
-  std::string inputText, int realWidth, int IDScrollOffset) {
+  std::string inputText, int realWidth, int IDScrollOffset, int sizeStep) {
   SDL_Rect clipMenuWalls;
   SDL_Rect clipMenuObjects;
 
   SdlTexture tx_load_button(renderer, font, "Load", 255, 255, 255);
   SdlTexture tx_save_button(renderer, font, "Save", 255, 255, 255);
+  SdlTexture tx_settings_button(renderer, font, "Size", 255, 255, 255);
+
+  SdlTexture tx_insertX(renderer, font, "Introduzca el tamanio X", 255, 255, 255);
+  SdlTexture tx_insertY(renderer, font, "Introduzca el tamanio Y", 255, 255, 255);
 
   SdlFont text_font("../resources/fonts/wolfenstein.ttf", 24);
 
@@ -139,6 +143,20 @@ void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls,
   renderer.renderCopyCentered(tx_load_button, NULL, 90, 20);
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderDrawRect(65, 5, 50, 35);
+
+  renderer.renderCopyCentered(tx_settings_button, NULL, 150, 20);
+  renderer.setRenderDrawColor(255, 255, 255, 255);
+  renderer.renderDrawRect(125, 5, 50, 35);
+
+  if (sizeStep == 1) {
+    renderer.setRenderDrawColor(100, 100, 100, 255);
+    renderer.renderFillRect((realWidth/2)-128, (SCREEN_HEIGHT/2)-66, 256, 32);
+    renderer.renderCopyCentered(tx_insertX, NULL, (realWidth/2), (SCREEN_HEIGHT/2) - 50);
+  } else if (sizeStep == 2) {
+    renderer.setRenderDrawColor(100, 100, 100, 255);
+    renderer.renderFillRect((realWidth/2)-128, (SCREEN_HEIGHT/2)-66, 256, 32);
+    renderer.renderCopyCentered(tx_insertY, NULL, (realWidth/2), (SCREEN_HEIGHT/2) - 50);
+  }
 
   if (renderText) {
     if (inputText == "") inputText = " ";

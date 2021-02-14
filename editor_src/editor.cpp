@@ -125,6 +125,7 @@ int main(int argc, char* args[]) {
               case SDLK_RETURN:
               if (save == true) {
                 mapHandler.emitMap(inputText, map_ui.getMap());
+                mapHandler.generateMapList(inputText);
               } else if  (load == true) {
                 map_ui.setMap(mapHandler.readMap(inputText));
               }

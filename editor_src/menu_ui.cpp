@@ -149,6 +149,12 @@ void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls,
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderDrawRect(125, 5, 50, 35);
 
+  renderer.renderFillRect(5, 50, 25, 5);
+  renderer.renderFillRect(5, 45, 5, 5);
+
+  renderer.renderFillRect(160, 50, 25, 5);
+  renderer.renderFillRect(180, 45, 5, 5);
+
   if (sizeStep == 1) {
     renderer.setRenderDrawColor(100, 100, 100, 255);
     renderer.renderFillRect((realWidth/2)-128, (SCREEN_HEIGHT/2)-66, 256, 32);
@@ -175,9 +181,35 @@ void Menu_ui::getTooltip(int action, SdlRenderer& renderer, SdlFont& font) {
   if (action >= 0 && action <= 33) {
     SdlTexture tx_tooltip(renderer, font, "Pared", 255, 255, 0);
     renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
-  } else if (action >= 36 && action <= 56) {
-    //Tengo que expandirlo
-    SdlTexture tx_tooltip(renderer, font, "Objeto", 255, 255, 0);
+  } else if (action >= 36 && action <= 39) {
+    SdlTexture tx_tooltip(renderer, font, "Objeto Bloqueante", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action >= 40 && action <= 43) {
+    SdlTexture tx_tooltip(renderer, font, "Objeto No Bloqueante", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action == 44) {
+    SdlTexture tx_tooltip(renderer, font, "Llave Oro", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action == 45) {
+    SdlTexture tx_tooltip(renderer, font, "Llave Cyan", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action >= 46 && action <= 48) {
+    SdlTexture tx_tooltip(renderer, font, "Vida", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action == 49) {
+    SdlTexture tx_tooltip(renderer, font, "Municion", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action == 50) {
+    SdlTexture tx_tooltip(renderer, font, "Ametralladora", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action == 51) {
+    SdlTexture tx_tooltip(renderer, font, "Canion de Cadena", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action == 52) {
+    SdlTexture tx_tooltip(renderer, font, "Lanzacohetes", 255, 255, 0);
+    renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
+  } else if (action >= 53 && action <= 56) {
+    SdlTexture tx_tooltip(renderer, font, "Tesoro", 255, 255, 0);
     renderer.renderCopy(tx_tooltip, NULL, 2, SCREEN_HEIGHT-35);
   } else if (action == 34) {
     SdlTexture tx_tooltip(renderer, font, "Puerta sin llave Horizontal", 255, 255, 0);

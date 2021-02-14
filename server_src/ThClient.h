@@ -1,7 +1,7 @@
 #ifndef __SERVER_THCLIENT_H__
 #define __SERVER_THCLIENT_H__
 
-#include "../common_src/common_socket.h"
+#include "../common_src/Protocol.h"
 #include "GameHandler.h"
 #include "GamePlay.h"
 #include "../common_src/common_thread.h"
@@ -20,7 +20,7 @@ class ThClientSender;
 class ThClient : public Thread{
 private:
     int client_id;
-    Socket peer;
+    Protocol protocol;
     std::mutex m;
     ThClientSender *sender;
     std::vector<char> intention_queue;
@@ -37,7 +37,7 @@ private:
     void receiver_loop();
 
 public:
-    ThClient(Socket&& socket, GameHandler & game_handler);
+    ThClient(Protocol&& Protocol, GameHandler & game_handler);
     ~ThClient();
     void run() override;
     void send_snapshot(Snapshot snapshot);//aca el notify all?

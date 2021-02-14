@@ -146,12 +146,13 @@ void GamePlay::notify_players(int & current_id){
 }
 
 
-void GamePlay::start_game(int & current_id){
+void GamePlay::start_game(){
+    //Le aviso al cliente que empiece la partida.
     this->state = true;
     for(ThClient *client : this->clients){
         client->start_game();
         this->map.add_player(client->client_id);
-        client->sender = new ThClientSender(client->peer);
+        client->sender = new ThClientSender(client->protocol);
         client->sender->start();
     }
 }

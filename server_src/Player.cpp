@@ -112,7 +112,7 @@ void Player::acction() {
   }
 }
 
-Player::Player(Map *map, Config *config, char id)
+Player::Player(Map *map, Config *config, int id)
     : position{Position(map, config)}, inventory{Inventory(this, map, config)}
      {
   this->id = id;
@@ -141,7 +141,7 @@ void Player::process_near_item(){
       this->map->remove_item(this->get_pos_x(), this->get_pos_y());
     }
   }
-  if(id <= 46 && id >= 48){
+  if(id <= 46 && id >= 48){//CAMBIE CHAR POR INT el ID DE PLAYER!
     this->heal(id);
     this->map->remove_item((int)this->get_pos_x(), (int)this->get_pos_y());
   }

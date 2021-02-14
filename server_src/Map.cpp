@@ -14,7 +14,7 @@
 
 
 
-void Map::add_player(char id) {
+void Map::add_player(int id) {
   this->players.push_back(Player(this, &(this->config), id));
 }
 

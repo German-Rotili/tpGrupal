@@ -20,7 +20,7 @@ class Config;
 
 class Player{
 private:
-    char id;
+    int id;
     Position position;
     bool is_alive = true;
     Map *map;
@@ -41,7 +41,7 @@ private:
 public:
     Player(Map *, Config *,Position position);
     Player(Map &,Config &, float, float, float);
-    Player(Map *, Config *, char id); 
+    Player(Map *, Config *, int id); 
 
     bool is_placed();
     float get_pos_x();

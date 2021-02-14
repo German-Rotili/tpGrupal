@@ -10,9 +10,7 @@ Serializer::~Serializer(){}
 void Serializer::append_variable(std::vector<char> &message, char *variable, size_t size){
     for(int i = 0; i < (int)size; i++){
         message.push_back(variable[i]);
-        //printf("%02X", (unsigned)(unsigned char)variable[i]);
     }
-        //printf(" ");
 }
 std::vector<char> Serializer::serialize_action(Snapshot & snapshot) {
     std::vector<char> message;
@@ -70,7 +68,6 @@ void Serializer::append_player_info(std::vector<char> & message, std::vector<pla
         append_variable(message, (char*) &(player_info->score), sizeof(int));
     }
 }
-/********************/
 
 
 
@@ -190,10 +187,6 @@ void Serializer::deserialize_action(std::vector <char> & msg, Snapshot & snapsho
 
         snapshot.add_action(action);
     }
-    
-  
-
-
     // std::cout << "/*******intention*******/"<<std::endl;
     // std::cout << action->player_id <<std::endl;
     // std::cout << action->impact_x <<std::endl;
@@ -201,9 +194,3 @@ void Serializer::deserialize_action(std::vector <char> & msg, Snapshot & snapsho
     // std::cout << action->weapon_id <<std::endl;
     // std::cout << "/**********************/"<<std::endl;
 }
-/********************/
-
-
-
-
-

@@ -33,7 +33,7 @@ GamePlay & GameHandler::new_match(ThClient & player, std::vector<char> & map_dat
     return *gp;
 }
 
-std::vector<int> GameHandler::get_matches_id(){
+std::vector<int>  GameHandler::get_matches_id(){
     std::vector<int> games_id;
     for (auto & game : this->games) {
         games_id.push_back(game->get_id());

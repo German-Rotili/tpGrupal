@@ -14,7 +14,7 @@
 
 
 
-void Map::add_player(char id) {
+void Map::add_player(int id) {
   this->players.push_back(Player(this, &(this->config), id));
 }
 
@@ -116,12 +116,6 @@ Map::Map(  std::vector<char> raw_map) : raw_map{raw_map}{
   MapHandler handler;
   try{
     this->map = handler.readMapFromString(map_aux);
-    for(std::vector<int> &i : this->map){
-      for(int &j : i){
-        std::cout << j << " ";
-      }
-      std::cout << "\n";
-    }
 //    this->map = handler.readMap("../resources/config/map1.yaml");
 
   }catch (std::exception const& e) {

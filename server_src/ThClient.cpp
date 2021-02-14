@@ -19,41 +19,19 @@
 
 
 void ThClient::start_game(){
-    char start_game = START;
-    peer.socket_send(&start_game, sizeof(char));
+    char start_flag = START;
+    this->protocol.send_char(start_flag);
 }
 
 void ThClient::notify_players(std::vector<std::vector<char>> &usernames){
-    /*cantidad de usernames*/
-    uint32_t value = htonl(usernames.size());
-    peer.socket_send((char*)&value, sizeof(uint32_t));
-    std::cout << "mande cantidad de usernames" << std::endl;
-    for(std::vector<char> &user : usernames){
-        /*tamanio de usernames*/
-
-        value = htonl(user.size());
-        std::cout << "mande un tamanio: "<<user.size() << std::endl;
-
-        peer.socket_send((char*)&value, sizeof(uint32_t));
-        peer.socket_send((char*)user.data(), user.size());
-        std::string aux(user.data());
-        std::cout << "mande un usuario: "<<aux << std::endl;
-
-    }
+    this->protocol.send_usernames(usernames);
 }
 
 void ThClient::receive_username(){
     try{
     /***********Recibo Username*******************/
-        uint32_t size = 0;
-        peer.socket_receive((char*)&size, sizeof(uint32_t));
-        size = ntohl(size);
-        std::vector<char> username(size);
-        peer.socket_receive(username.data(), size);
-        std::string aux(username.data());
-        std::cout << "Usuario: " << aux << std::endl;
-
-        this->username = username;
+        this->username = this->protocol.receive_standar_msg();
+        std::string aux(this->username.data());
     /*********************************************/
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -63,37 +41,23 @@ void ThClient::receive_username(){
 
 void ThClient::new_game(){
     try{
-    /***************** NEW GAME *******************/
-        uint32_t size = 0;
-        peer.socket_receive((char*)&size, sizeof(uint32_t));
-        size = ntohl(size);
-        std::vector<char> map(size);
-        peer.socket_receive(map.data(), size);
-        std::cout << map.size() << " = " << size << std::endl;
-        GamePlay & game = this->game_handler.new_match(*this, map);
-
-        char start = '0';
-        uint32_t value = htonl(1);
-        peer.socket_send((char*)&value, sizeof(uint32_t));
-
-        value = htonl(this->username.size());
-        peer.socket_send((char*)&value, sizeof(uint32_t));
-        peer.socket_send((char*)this->username.data() ,this->username.size());
-        std::string aux(this->username.data());
-       
-        peer.socket_receive((char*)&start, sizeof(char));
-       
-        if(start == START){
-                game.start();
-                game.start_game(this->client_id);
-        }else{
-            std::cout  << "Error inicio de partida." << std::endl;
+        std::vector<char> map = this->protocol.receive_standar_msg();//recibo el mapa
+        GamePlay & game = this->game_handler.new_match(*this, map);//nueva partida con ese mapa
+        this->protocol.send_username(this->username);
+            std::string aux(this->username.data());
+        while(true){
+            char msg_char = this->protocol.receive_char();
+            if(msg_char == START){
+                    game.start();//Lanzo hilo de la partida
+                    game.start_game();// le aviso a todos que comenzo la partida.
+                    break;
+            }else if (msg_char == REFRESH){
+                this->refresh_matches();
+            }else{
+                std::cout  << "Llego cualquier cosa." <<  msg_char << std::endl;
+            }
         }
-        this->state = true;
-
-    /*********************************************/
-    }
-    catch(const std::exception& e){
+    }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "New Game Error" << '\n';
     }
@@ -101,37 +65,12 @@ void ThClient::new_game(){
 
 void ThClient::join_game(){
     try{
-    /***************** JOIN GAME*******************/
         std::vector<int> matches_id = this->game_handler.get_matches_id();
-        uint32_t value = htonl(matches_id.size());
-        //le indico la cantidad de matches id que va a tener que leer.
-        peer.socket_send((char*)&value, sizeof(uint32_t));
-        for(int i = 0; i < matches_id.size() ; i++){
-            value = htonl( matches_id[i]);
-            peer.socket_send((char*)&value, sizeof(int));
-        }
-
-
-        uint32_t game_id = 0;
-        //recibo el id que eligio
-        peer.socket_receive((char*)&game_id, sizeof(uint32_t));
-        game_id = ntohl(game_id);
-
-        GamePlay & game = this->game_handler.select_match(*this, (int)game_id);
-        std::vector <char> map = game.get_raw_map();
-
-        value = htonl(map.size());
-        peer.socket_send((char*)&value, sizeof(uint32_t));
-        peer.socket_send((char*)map.data(), map.size());
-        char start = '0';
-       
-        //aca no podria recibir refresh solo lee si empieza la partida
-        peer.socket_receive((char*)&start, sizeof(char));
-        if(start == START){
-            game.start_game(this->client_id);
-        }
-
-    /*********************************************/
+        this->protocol.send_vector_int(matches_id);//mando ids de partidas
+        int game_id = this->protocol.receive_int();//recibo id elegido y me uno
+        GamePlay & game = this->game_handler.select_match(*this, game_id);
+        std::vector <char> map = game.get_raw_map();//cambiar al archivo yaml entero.
+        this->protocol.send_vector_char(map);//mando mapa al cliente para que dibuje
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Join Game Error" << '\n';
@@ -140,15 +79,9 @@ void ThClient::join_game(){
 
 void ThClient::refresh_matches(){
     try{
-        std::vector<int> matches_id = this->game_handler.get_matches_id();
-        uint32_t value = htonl(matches_id.size());
-        peer.socket_send((char*)&value, sizeof(uint32_t));
-        for(int &id : matches_id){
-            value = htonl(id);
-            peer.socket_send((char*)&value, sizeof(int));
-        }
-    }
-    catch(const std::exception& e){
+        std::vector <int> aux = this->game_handler.get_matches_id();
+        this->protocol.send_vector_int(aux);
+    }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Refresh Error" << '\n';
     }
@@ -156,12 +89,9 @@ void ThClient::refresh_matches(){
 
 void ThClient::send_client_id(){
     try{
-    /***********Creo y mando ID******/
         IdMaker id_maker;
         int new_player_id = id_maker.generate_id();
-        uint32_t player_id = htonl(new_player_id);
-        peer.socket_send((char*)&player_id, sizeof(uint32_t));
-    /*********************************************/
+        this->protocol.send_integer(new_player_id);
     }catch(std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "ID Sending Error" << '\n';
@@ -170,14 +100,13 @@ void ThClient::send_client_id(){
 
 void ThClient::run(){
         this->receive_username();
+        
         bool start = false;
         while(!start){
         
             /***********Recibo Decision sobre Partida********/
-            char decision = '0';
-            peer.socket_receive((char*)&decision, sizeof(char));
+            char decision = this->protocol.receive_char();
             /*********************************************/
-
             switch (decision){
                 case NEW_GAME:{
                     this->new_game();
@@ -187,10 +116,13 @@ void ThClient::run(){
                 case JOIN_GAME:{
                     this->join_game();
                 }
-                    start = true;
                     break;
                 case REFRESH:{
                     this->refresh_matches();
+                }
+                case START:{
+                    break;
+                    start = true;
                 }
             }   
         }
@@ -199,14 +131,9 @@ void ThClient::run(){
 }
 
 std::vector<char> ThClient::get_intention(){
-    std::unique_lock<std::mutex> lock(this->m);
-    std::cout << "mutex locked" << std::endl;
+    std::unique_lock<std::mutex> lock(this->m);//implementar recontra cola protegida.
     std::vector<char> aux = this->intention_queue;
-       for(char aux :  intention_queue){
-                    printf(" %02X ", (unsigned)(unsigned char)aux);
-                }
     this->intention_queue.clear();
-    std::cout << "cleared queue" << std::endl;
     return aux;
 }
 
@@ -214,19 +141,13 @@ std::vector<char> ThClient::get_intention(){
 void ThClient::receiver_loop(){
     try{
         while (this->state){
-            uint32_t size = 0;
-            peer.socket_receive((char*)&size, sizeof(uint32_t));
-
-            size = ntohl(size);
-            std::vector<char> intention(size);
-            peer.socket_receive(intention.data(), size);
-            std::cout << "intention size: " << intention.size() << std::endl;
+            std::vector<char> intention = this->protocol.receive_standar_msg();
+           /*GUARDAR EN COLA PROTEGIDA REY*/
             for(char value : intention){
                 std::unique_lock<std::mutex> lock(this->m);
                 this->intention_queue.push_back(value);
-                printf(" %02X ", (unsigned)(unsigned char)value);
             }    
-            printf("\n");
+           /*******************************/
         }
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -234,12 +155,11 @@ void ThClient::receiver_loop(){
     }
 }
 
-ThClient::ThClient(Socket&& socket, GameHandler & game_handler):game_handler(game_handler){
-    this->peer = std::move(socket);
+ThClient::ThClient(Protocol&& protocol, GameHandler & game_handler):game_handler(game_handler){
+    this->protocol = std::move(protocol);
 }
 
 ThClient::~ThClient(){
-    peer.socket_shutdown(SHUT_RDWR);
     delete this->sender;//revisar seg fault
 }
 

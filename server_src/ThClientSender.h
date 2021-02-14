@@ -1,6 +1,7 @@
 #ifndef __THCLIENTSENDER_
 #define  __THCLIENTSENDER_
 #include "../common_src/common_socket.h"
+#include "../common_src/Protocol.h"
 #include "../common_src/common_thread.h"
 #include "ThClient.h"
 #include <string>
@@ -19,7 +20,7 @@
 #include <condition_variable>
 
 class ThClientSender : public Thread{
-    Socket & peer;
+    Protocol & protocol;
     Snapshot snapshot;
     std::condition_variable cond_var;
     std::mutex m;
@@ -28,7 +29,7 @@ class ThClientSender : public Thread{
     ThClientSender(const ThClientSender&) = delete;
 
 public:
-    ThClientSender(Socket& socket);
+    ThClientSender(Protocol& protocol);
 
     void send_snapshot(Snapshot & snapshot);
 

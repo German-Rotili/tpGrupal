@@ -139,92 +139,71 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
             }
           }
         }
+      } else if (e.type == SDL_KEYDOWN && (insertMapName)) {
+        switch (e.key.keysym.sym) {
+          case SDLK_RETURN:
+          path = "../resources/config/" + inputText;
+          try {
+
+              std::string filename(path);
+              std::vector<char> bytes;
+              char byte = 0;
+              std::ifstream input_file(filename);
+              if (!input_file.is_open()) {
+                std::cerr << "Error al abrir mapa" << std::endl;
+              }
+              while (input_file.get(byte)) {
+                bytes.push_back(byte);
+              }
+              input_file.close();
+
+              this->client.new_game(bytes);
+
+              this->vector_map = mapHandler.readMap(path);
+
+           } catch (std::exception const& e) {
+            printf("Hubo una excepción: ");
+            std::cout << e.what() << "\n";
+          }
+
+          if (true) {
+            advance = true;
+            quit = true;
+          } else {
+            inputText = "";
+          }
+
+          break;
+
+          case SDLK_BACKSPACE:
+          if (inputText.length() > 0) {
+            inputText.pop_back();
+            renderText = true;
+          }
+          break;
+
+          case SDLK_c:
+          if (SDL_GetModState() & KMOD_CTRL) {
+            SDL_SetClipboardText(inputText.c_str());
+          }
+          break;
+
+          case SDLK_v:
+          if (SDL_GetModState() & KMOD_CTRL) {
+            inputText = SDL_GetClipboardText();
+            renderText = true;
+          }
+          break;
+        }
+      } else if (e.type == SDL_TEXTINPUT &&
+        (insertMapName)) {
+        if(!(SDL_GetModState() & KMOD_CTRL && (e.text.text[0] == 'c' ||
+        e.text.text[0] == 'C' || e.text.text[0] == 'v' ||
+        e.text.text[0] == 'V' ))) {
+          inputText += e.text.text;
+          renderText = true;
+        }
       }
-    //   else if (e.type == SDL_KEYDOWN && (insertMapName)) {
-    //     switch (e.key.keysym.sym) {
-    //       case SDLK_RETURN:
-    //       path = "../resources/config/" + inputText;
-    //       try {
-    //
-    //           std::string filename(path);
-    //           std::vector<char> bytes;
-    //           char byte = 0;
-    //           std::ifstream input_file(filename);
-    //           if (!input_file.is_open()) {
-    //             std::cerr << "Error al abrir mapa" << std::endl;
-    //           }
-    //           while (input_file.get(byte)) {
-    //             bytes.push_back(byte);
-    //           }
-    //           input_file.close();
-    //           std::cout << "Tamanio mapa: "<<bytes.size() <<std::endl;
-    //           this->client.new_game(bytes);
-    //
-    //         this->vector_map = mapHandler.readMap(path);
-    // std::cout << "mapa path: "<<std::endl;
-    //
-    // for(std::vector<int> &i : this->vector_map){
-    //   for(int &j : i){
-    //     std::cout << j << " ";
-    //   }
-    //   std::cout << "\n";
-    // }
-    // std::cout << "mapa file: "<<std::endl;
-    //
-    //  std::string aux(bytes.data());
-    // for(std::vector<int> &i :  mapHandler.readMapFromString(aux)){
-    //   for(int &j : i){
-    //     std::cout << j << " ";
-    //   }
-    //   std::cout << "\n";
-    // }
-    //
-    //
-    // std::cout << "final mapas cliente "<<std::endl;
-    //
-    //       } catch (std::exception const& e) {
-    //         printf("Hubo una excepción: ");
-    //         std::cout << e.what() << "\n";
-    //       }
-    //
-    //       if (true) {
-    //         advance = true;
-    //         quit = true;
-    //       } else {
-    //         inputText = "";
-    //       }
-    //
-    //       break;
-    //
-    //       case SDLK_BACKSPACE:
-    //       if (inputText.length() > 0) {
-    //         inputText.pop_back();
-    //         renderText = true;
-    //       }
-    //       break;
-    //
-    //       case SDLK_c:
-    //       if (SDL_GetModState() & KMOD_CTRL) {
-    //         SDL_SetClipboardText(inputText.c_str());
-    //       }
-    //       break;
-    //
-    //       case SDLK_v:
-    //       if (SDL_GetModState() & KMOD_CTRL) {
-    //         inputText = SDL_GetClipboardText();
-    //         renderText = true;
-    //       }
-    //       break;
-    //     }
-    //   } else if (e.type == SDL_TEXTINPUT &&
-    //     (insertMapName)) {
-    //     if(!(SDL_GetModState() & KMOD_CTRL && (e.text.text[0] == 'c' ||
-    //     e.text.text[0] == 'C' || e.text.text[0] == 'v' ||
-    //     e.text.text[0] == 'V' ))) {
-    //       inputText += e.text.text;
-    //       renderText = true;
-    //     }
-    //   }
     }
     std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
     unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
@@ -243,6 +222,8 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
       // runGameLobby(renderer, settings, true);
       runMapSelection(renderer, settings);
     } else {
+    std::cout <<"Me voy a la lista de espera " <<std::endl;
+
       runGameList(renderer, settings);
     }
   }
@@ -278,7 +259,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   std::string inputText = "";
   bool renderText = false;
   bool insertGameCode = false;
-  std::vector<std::string> matches_id;
+  std::vector<int> matches_id;
   bool advance = false;
   bool quit = false;
   SDL_Event e;
@@ -361,7 +342,9 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
 void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator) {
   bool advance = false;
   bool quit = false;
+
   std::vector<std::string> usernames= this->client.get_players_username();
+
   SDL_Event e;
   //No es el game loop
   while (!quit) {
@@ -376,7 +359,6 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
             if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Inicia el juego
-              std::cout<<"start match"<<std::endl;
               this->client.start_match();
               quit = true;
               advance = true;
@@ -473,35 +455,13 @@ void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::s
   renderer.renderPresent();
 }
 
-void Menu::drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> maps) {
-  renderer.setRenderDrawColor(100, 100, 100, 255);
-  renderer.renderClear();
-
-  renderer.renderCopyCentered(this->tx_descMaps, NULL, (settings.screenWidth/2), 10);
-
-  for (int i = 0; i < maps.size(); i++) {
-    SdlTexture tx_map(renderer, font, maps[i], 255, 255, 255);
-    renderer.renderCopyCentered(tx_map, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * (i+1) + (settings.screenHeight/32));
-    renderer.setRenderDrawColor(255, 255, 255, 255);
-    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * (i+1), (settings.screenWidth/2), (settings.screenHeight/16));
-  }
-
-  for (int i = 5; i > maps.size(); i--) {
-    renderer.setRenderDrawColor(150, 150, 150, 255);
-    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * i, (settings.screenWidth/2), (settings.screenHeight/16));
-  }
-
-  renderer.renderCopyCentered(this->tx_continue, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
-  renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/8), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
-}
-
-void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id) {
+void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<int> matches_id) {
   SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
   for (int i = 0; i < matches_id.size(); i++) {
-    SdlTexture tx_username(renderer, font, matches_id.at(i), 255, 255, 255);
+    SdlTexture tx_username(renderer, font, std::to_string(matches_id.at(i)), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * (i+1) + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * (i+1), (settings.screenWidth/2), (settings.screenHeight/16));

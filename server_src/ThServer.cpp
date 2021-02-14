@@ -8,6 +8,7 @@
 #include "../common_src/common_thread.h"
 #include "../common_src/common_socket.h"
 #include "../common_src/common_exception.h"
+#include "../common_src/Protocol.h"
 #include "../common_src/common_socket_exception.h"
 
 ThServer::ThServer(std::string & port):
@@ -37,8 +38,11 @@ void ThServer::run(){
         while (state){
             Socket peer;
             server.socket_accept(peer);
+            std::cout << "Socket aceptado" <<std::endl;
+
+            Protocol protocol(std::move(peer));
             this->threads.push_back(new 
-                ThClient(std::move(peer), game_handler));
+                ThClient(std::move(protocol), game_handler));
                 
             (this->threads.back())->start();
             remove_dead(this->threads);

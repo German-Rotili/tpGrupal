@@ -149,6 +149,12 @@ void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls,
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderDrawRect(125, 5, 50, 35);
 
+  renderer.renderFillRect(5, 50, 25, 5);
+  renderer.renderFillRect(5, 45, 5, 5);
+
+  renderer.renderFillRect(160, 50, 25, 5);
+  renderer.renderFillRect(180, 45, 5, 5);
+
   if (sizeStep == 1) {
     renderer.setRenderDrawColor(100, 100, 100, 255);
     renderer.renderFillRect((realWidth/2)-128, (SCREEN_HEIGHT/2)-66, 256, 32);

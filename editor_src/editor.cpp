@@ -174,6 +174,14 @@ int main(int argc, char* args[]) {
                 IDScrollOffset = menuScrollX;
                 action = wallIdX + (wallIdY*3);
                 action += IDScrollOffset * 27;
+              } else if ((e.button.x >= 5 && e.button.x <= 30) &&
+                (e.button.y >= 45 && e.button.y <= 55)) {
+                  if (menuScrollX > 0)
+                    menuScrollX -= 1;
+              } else if ((e.button.x >= 160 && e.button.x <= 185) &&
+                (e.button.y >= 45 && e.button.y <= 55)) {
+                  if (menuScrollX < 2)
+                    menuScrollX += 1;
               } else if ((e.button.x >= 5 && e.button.x <= 55) &&
                 (e.button.y >= 5 && e.button.y <= 40)) {
                 save = true;

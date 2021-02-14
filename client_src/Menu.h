@@ -24,6 +24,8 @@ private:
   SdlTexture tx_enterGame;
   SdlTexture tx_descStart;
   SdlTexture tx_descUser;
+  SdlTexture tx_descMaps;
+  SdlTexture tx_continue;
 public:
   std::vector<std::vector<int>>  vector_map;
 
@@ -34,6 +36,8 @@ public:
 
   void runStartPage(SdlRenderer& renderer, ClientSettings& settings);
 
+  void runMapSelection(SdlRenderer& renderer, ClientSettings& settings);
+
   void runGameList(SdlRenderer& renderer, ClientSettings& settings);
 
   void runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator);
@@ -43,6 +47,8 @@ public:
   void drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
 
   void drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
+
+  void drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> maps);
 
   void drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id);
 

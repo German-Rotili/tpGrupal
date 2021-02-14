@@ -31,6 +31,7 @@ void ThClient::receive_username(){
     try{
     /***********Recibo Username*******************/
         this->username = this->protocol.receive_standar_msg();
+        std::string aux(this->username.data());
     /*********************************************/
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -42,9 +43,8 @@ void ThClient::new_game(){
     try{
         std::vector<char> map = this->protocol.receive_standar_msg();//recibo el mapa
         GamePlay & game = this->game_handler.new_match(*this, map);//nueva partida con ese mapa
-        char start = '0';
-        this->protocol.send_char(start);//Aviso que empezo la partida
-        this->protocol.send_vector_char(this->username);//Envio mi username
+        this->protocol.send_username(this->username);
+            std::string aux(this->username.data());
         while(true){
             char msg_char = this->protocol.receive_char();
             if(msg_char == START){
@@ -100,13 +100,13 @@ void ThClient::send_client_id(){
 
 void ThClient::run(){
         this->receive_username();
+        
         bool start = false;
         while(!start){
         
             /***********Recibo Decision sobre Partida********/
             char decision = this->protocol.receive_char();
             /*********************************************/
-
             switch (decision){
                 case NEW_GAME:{
                     this->new_game();

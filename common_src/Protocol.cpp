@@ -1,6 +1,8 @@
 #include "Protocol.h"
 
-Protocol::Protocol(Socket&& socket){}
+Protocol::Protocol(Socket&& socket){
+    this->socket = std::move(socket);
+}
 Protocol::Protocol(){}
 Protocol::Protocol(Protocol&& other){
   this->socket = std::move(other.socket);
@@ -16,14 +18,14 @@ Protocol::~Protocol(){
 }
 
 int Protocol::receive_int(){
-    uint32_t integer = 0;
-    this->socket.socket_receive((char*)&integer, sizeof(uint32_t));
-    return (int)ntohl(integer);
+    uint32_t aux = 0;
+    this->socket.socket_receive((char*)&aux, sizeof(uint32_t));
+    return (int)ntohl(aux);
 }
 
 char Protocol::receive_char(){
     char aux = '0';
-    this->socket.socket_receive((char*)&aux, sizeof(uint32_t));
+    this->socket.socket_receive((char*)&aux, sizeof(char));
     return aux;
 }
 
@@ -35,9 +37,7 @@ void Protocol::send_standard_msg(std::vector<char> & msg){
 
 std::vector<char> Protocol::receive_standar_msg(){
     /*Recibo la cantidad de bytes a leer*/
-    uint32_t size = 0;
-    this->socket.socket_receive((char*)&size, sizeof(uint32_t));
-    size = ntohl(size);
+    int size = this->receive_int();
     /************************************/
 
     /* Recibo el mensaje completo a leer*/
@@ -47,11 +47,38 @@ std::vector<char> Protocol::receive_standar_msg(){
     /************************************/
 }
 
+void Protocol::send_username(std::vector<char> username){
+    int aux = 1;
+    this->send_integer(aux);
+    this->send_vector_char(username);
+
+}
+
+
+std::vector<std::string> Protocol::receive_usernames(){
+    std::vector<std::string> usernames;
+    int size = this->receive_int();
+    for(int i = 0; i < (int)size ; i++){
+        std::vector<char> user = this->receive_standar_msg();
+        std::cout <<user.size() << std::endl;
+        user.push_back('\0');
+        std::string username(user.data());
+        usernames.push_back(username);
+    }
+    return usernames;
+}
+
+void Protocol::send_string_msg(std::string & msg){
+    uint32_t msg_size = htonl(msg.length());
+    this->socket.socket_send((char*)&msg_size, sizeof(uint32_t));
+    this->socket.socket_send(msg.c_str(), msg.length());
+}
 void Protocol::send_usernames(std::vector<std::vector<char>> & usernames){
     int aux = usernames.size();
     this->send_integer(aux);
     for(std::vector<char> &user : usernames){
         this->send_vector_char(user);
+        std::string aux(user.data());
     }
 }
 
@@ -66,7 +93,18 @@ void Protocol::send_integer(int & value){
 void Protocol::send_vector_char(std::vector<char> & value){
     int aux = value.size();
     this->send_integer(aux);
-    this->socket.socket_send((char*)value.data(), value.size());
+    this->socket.socket_send((char*)value.data(), aux);
+}
+
+
+std::vector<int> Protocol::receive_vector_int(){
+    int msg_size = this->receive_int();
+    std::vector<int> msg;
+    for(int i = 0; i < (int)msg_size ; i++){
+        int element = this->receive_int();
+        msg.push_back(element);
+    }
+    return msg;
 }
 
 void Protocol::send_vector_int(std::vector<int> & value){

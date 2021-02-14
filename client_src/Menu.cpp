@@ -151,32 +151,12 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
                 bytes.push_back(byte);
               }
               input_file.close();
-              std::cout << "Tamanio mapa: "<<bytes.size() <<std::endl;
+
               this->client.new_game(bytes);
 
-            this->vector_map = mapHandler.readMap(path);
-    std::cout << "mapa path: "<<std::endl;
+              this->vector_map = mapHandler.readMap(path);
 
-    for(std::vector<int> &i : this->vector_map){
-      for(int &j : i){
-        std::cout << j << " ";
-      }
-      std::cout << "\n";
-    }
-    std::cout << "mapa file: "<<std::endl;
-
-     std::string aux(bytes.data());
-    for(std::vector<int> &i :  mapHandler.readMapFromString(aux)){
-      for(int &j : i){
-        std::cout << j << " ";
-      }
-      std::cout << "\n";
-    }
-
-
-    std::cout << "final mapas cliente "<<std::endl;
-
-          } catch (std::exception const& e) {
+           } catch (std::exception const& e) {
             printf("Hubo una excepción: ");
             std::cout << e.what() << "\n";
           }
@@ -236,6 +216,8 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
       std::cout<<"Ya envie el mapa, me voy al lobby"<<std::endl;
       runGameLobby(renderer, settings, true);
     } else {
+    std::cout <<"Me voy a la lista de espera " <<std::endl;
+
       runGameList(renderer, settings);
     }
   }
@@ -245,7 +227,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   std::string inputText = "";
   bool renderText = false;
   bool insertGameCode = false;
-  std::vector<std::string> matches_id;
+  std::vector<int> matches_id;
   bool advance = false;
   bool quit = false;
   SDL_Event e;
@@ -328,7 +310,9 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
 void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator) {
   bool advance = false;
   bool quit = false;
+
   std::vector<std::string> usernames= this->client.get_players_username();
+
   SDL_Event e;
   //No es el game loop
   while (!quit) {
@@ -343,7 +327,6 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
             if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
               //Inicia el juego
-              std::cout<<"start match"<<std::endl;
               this->client.start_match();
               quit = true;
               advance = true;
@@ -440,13 +423,13 @@ void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::s
   renderer.renderPresent();
 }
 
-void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id) {
+void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<int> matches_id) {
   SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
   for (int i = 0; i < matches_id.size(); i++) {
-    SdlTexture tx_username(renderer, font, matches_id.at(i), 255, 255, 255);
+    SdlTexture tx_username(renderer, font, std::to_string(matches_id.at(i)), 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), (settings.screenHeight/10) * (i+1) + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10) * (i+1), (settings.screenWidth/2), (settings.screenHeight/16));

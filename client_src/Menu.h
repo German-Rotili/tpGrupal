@@ -44,7 +44,7 @@ public:
 
   void drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
 
-  void drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<std::string> matches_id);
+  void drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<int> matches_id);
 
   void drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames);
 

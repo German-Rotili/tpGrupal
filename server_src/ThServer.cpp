@@ -38,6 +38,8 @@ void ThServer::run(){
         while (state){
             Socket peer;
             server.socket_accept(peer);
+            std::cout << "Socket aceptado" <<std::endl;
+
             Protocol protocol(std::move(peer));
             this->threads.push_back(new 
                 ThClient(std::move(protocol), game_handler));

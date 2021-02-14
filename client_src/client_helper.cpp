@@ -1,204 +1,93 @@
 #include "client_helper.h"
 #define SNAPSHOT_ID '0'
 #define ACTION_ID '1'
-
+#define START 's'
+#define NEW_GAME 'n'
+#define JOIN_MATCH 'j'
 Client::Client(std::string & service,std::string & hostname){
-    this->client.socket_connect(service.c_str(), hostname.c_str());
+    Socket client;
+    client.socket_connect(service.c_str(), hostname.c_str());
+    this->protocol = Protocol(std::move(client));
 }
 
 Client::~Client(){}
 
 void Client::recieve_snapshot(Snapshot & snapshot){
+    /*Recibo ID Tipo msg*/
+    char input_id = this->protocol.receive_char();
+    /*Recibimos vector de chars-msg */
+    std::vector<char> msg = this->protocol.receive_standar_msg();
     
-    /*Recibo ID*/
-    char input_id = 'x';
-    std::vector<char> buff(1);
-    client.socket_receive(buff.data(), sizeof(char));
-    memcpy(&input_id, buff.data(), sizeof(char));
-    /**********/
-
-
-    /*Recibimos vector de chars*/
-    std::vector<char> msg = this->client_receive_vector(); //aca adentro primero recibe largo y despues lee todo.
-    std::cout << "size: "<<msg.size() <<std::endl;
-    for(char &i : msg){
-        printf(" %02X ", (unsigned)(unsigned char)input_id);
-    }
-    printf("\n");
-    /**********/
-    
-
-    /********/
-    Serializer serializer;
-    /**********/
-
     switch (input_id){
-
         case SNAPSHOT_ID:
-            serializer.deserializer(msg, snapshot);
+            this->serializer.deserializer(msg, snapshot);
             break;
-        
         case ACTION_ID:
-            serializer.deserialize_action(msg, snapshot);
+            this->serializer.deserialize_action(msg, snapshot);
             break;
-
         default:
             std::cout << "Error id detection" <<std::endl;
     } 
 }
 
-std::vector<std::string> Client::get_matches_id(){
-    std::vector<std::string> matches_id;
-
-    /*Cantidad de ids*/
-    uint32_t size = 0;
-    client.socket_receive((char*)&size, sizeof(uint32_t));
-    size = ntohl(size);
-
-    for(int i = 0; i < (int)size ; i++){
-        /*Largo de cada id*/
-        int id = 0;
-        client.socket_receive((char*)&id , sizeof(int));
-        id = ntohl(id);
-        matches_id.push_back(std::to_string(id));
-    }
-
-    return matches_id;
+std::vector<int> Client::get_matches_id(){
+    return this->protocol.receive_vector_int();
 }
 
 std::vector<std::string> Client::get_players_username(){
-
-    std::vector<std::string> usernames;
-    /*Cantidad de jugadores*/
-    uint32_t size = 0;
-    client.socket_receive((char*)&size, sizeof(uint32_t));
-    size = ntohl(size);
-    std::cout << " recibi cantidad de usernames: "<< size << std::endl;
-
-    for(int i = 0; i < (int)size ; i++){
-        /*Largo de cada jugador*/
-
-        uint32_t size_player = 0;
-        client.socket_receive((char*)&size_player , sizeof(uint32_t));
-
-
-        /*Username*/
-        std::vector<char> buff(ntohl(size_player));
-        client.socket_receive(buff.data(), ntohl(size_player));
-        std::string username(buff.data());
-        std::cout << "Usuario recibido: " << username << std::endl;
-          for (int i = 0; i < buff.size(); i++) {
-      printf(" %02X ", (unsigned)(unsigned char)buff.data()[i]);
-    } 
-  printf("\n");
-        usernames.push_back(username);
-    }
-        std::cout << " devuelvo lista de usernames de tamanio:  "<<usernames.size() << std::endl;
-
-    return usernames;
-
+    return this->protocol.receive_usernames();
 }
 
 
 int Client::await_game_start(){
-    char start = 'x';
-    while (start != 's'){
-        std::cout <<"Esperando una S" <<std::endl;
-        client.socket_receive((char*)&start, sizeof(char));   
-
-    }
-    int client_id= -1;
-    std::cout << "por recibir client id" <<std::endl;
-    client.socket_receive((char*)&client_id, sizeof(int));   
-    std::cout <<"recibi client id" <<std::endl;
-    return (int)ntohl(client_id);
+    while (this->protocol.receive_char() != START){}//START MATCH
+    return this->protocol.receive_int();//ID CLIENT/PLAYER
 }
 
 
 
 void Client::new_game(std::vector<char> & map){
-    char new_game = 'n';
-    client.socket_send((char*)&new_game, sizeof(char));
-    uint32_t size_1 = htonl(map.size());
-    client.socket_send((char*)&size_1, sizeof(uint32_t));
-    client.socket_send(map.data(), map.size());
+    char new_game = NEW_GAME;
+    this->protocol.send_char(new_game);
+    this->protocol.send_standard_msg(map);
 }
 
 void Client::client_send_intention(std::vector<char> intention){
-        Serializer serializer;
-        uint32_t snap_size = htonl(intention.size());
-        client.socket_send((char*)&snap_size, sizeof(uint32_t));
-        client.socket_send(intention.data(), intention.size());
+    this->protocol.send_standard_msg(intention);
 }
 
 void Client::start_match(){
-    char join_flag = 's';
-    std::cout << "mande un start match"<<"\n";
-    client.socket_send((char*)&join_flag, sizeof(char));
-    std::cout << "mande un start match" << "\n";
+    char start = START;
+    this->protocol.send_char(start);
 }
 
 
 void Client::send_username(std::string & username){
-    uint32_t snap_size = htonl(username.length());
-    client.socket_send((char*)&snap_size, sizeof(uint32_t));
-    client.socket_send(username.c_str(), username.length());
+    this->protocol.send_string_msg(username);
 }
 
 
 void Client::join_game(){
-    char join_flag = 'j';
-    client.socket_send((char*)&join_flag, sizeof(char));
+    char join_flag = JOIN_MATCH;
+    this->protocol.send_char(join_flag);
 }
 
 
 std::vector<std::vector<int>> Client::join_game(std::string & game_id){
-    uint32_t g_id = htonl(std::stoi(game_id));
-    client.socket_send((char*)&g_id, sizeof(uint32_t));
+    int aux = std::stoi(game_id);
+    this->protocol.send_integer(aux);
     std::string map = this->client_receive_string();
-    MapHandler maphandler;
-    return maphandler.readMapFromString(map);
+    MapHandler maphandler;//CAMMBIAR A RECIBIR EL ARCHIVO YAML COMPLETO
+    return maphandler.readMapFromString(map);//cambiar a envio completo del yaml.
 }
 
 std::vector<char> Client::client_receive_vector(){
-
-  
-    uint32_t size = 0;
-    client.socket_receive((char*)&size, sizeof(uint32_t));
-    size = ntohl(size);
-    std::vector<char> buff(size);
-    client.socket_receive(buff.data(), size);
-
-   
-    // std::cout << "vector size after filled: " << buff.size() <<std::endl;
-    // for(int i=0 ; i < buff.size(); i ++){
-    //     printf("%02X ", (unsigned)(unsigned char)buff.data()[i]);
-    // }
-    // printf("\n");
-    return buff;
+    return this->protocol.receive_standar_msg();
 }
 
 std::string Client::client_receive_string(){
-    uint32_t size = 0;
-    client.socket_receive((char*)&size, sizeof(uint32_t));
-    size = ntohl(size);
-    // std::cout << "recibi el tamanio a leer: " << size <<std::endl;
-    std::vector <char> msg(size);
-    client.socket_receive(msg.data(), size);
-    // std::cout << "recibi el vector "<<std::endl;
-
-            // printf("****************MAP CLIENT*************\n");
-            // for (int i = 0; i < msg.size(); i++) {
-            //     printf("%02X ", (unsigned)(unsigned char)msg.data()[i]);
-            // }
-            // printf("*****************************\n");
-
-
-
-    std::string val(msg.data());
+    std::vector<char> aux = this->protocol.receive_standar_msg();
+    std::string val(aux.data());//REVISAR EL CARACTER DE FIN DE STRING!!!!!!!!
     return val;
 }
 
-void Client::run(){
-
-}

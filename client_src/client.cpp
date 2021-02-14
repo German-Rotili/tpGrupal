@@ -36,6 +36,8 @@ int main(int argc, char* args[]) {
 
     /*Lanzamiento del menu de inicio*/
     Menu menu(client, renderer);
+
+    std::cout <<"inicio menu" <<std::endl;
     menu.runInsertUsername(renderer, settings);
     std::cout <<"sale del menu" <<std::endl;
     /********************************/

@@ -1,6 +1,6 @@
 server_src/Flujo_e_ideas.md
-.idea
-.vscode
+.idea/
+.vscode/
 client_src/*.o
 editor_src/*.o
 server_src/*.o

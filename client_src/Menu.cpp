@@ -126,13 +126,12 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/2) - 15 && e.button.y <= (settings.screenHeight/2) + 20) {
             if (e.button.x >= (settings.screenWidth/2) - 150 && e.button.x <= (settings.screenWidth/2) - 30){
-              // insertMapName = true;
+              //New Game
+              insertMapName = true;
               renderText = true;
-              advance = true;
-              quit = true;
               //Despues pide un nombre de archivo .yaml y despues de un SDLK_RETURN va al GameLobby
             } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
-              // Boton de Unirse a Partida
+              //Join Game
               this->client.join_game();
               advance = true;
               quit = true;

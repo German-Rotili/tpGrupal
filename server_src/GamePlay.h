@@ -24,6 +24,7 @@ class GamePlay : public Thread{
 private:
     int id;
     bool state;
+    std::vector<std::vector<char>> usernames;
     ProtectedQueueIntention *intentions;
     BlockingQueueSnapshot *snapshots;
     std::vector <ThClient*> clients;
@@ -38,7 +39,7 @@ private:
 public:
     GamePlay(ThClient *player, Map&& map);
     ~GamePlay();
-    std::vector<std::vector<char>>  get_usernames();
+    std::vector<std::vector<char>>  &get_usernames();
 
     void add_client(ThClient* client);
     void start_game();
@@ -47,7 +48,7 @@ public:
     GamePlay& operator=(const GamePlay&) = delete;
     GamePlay(const GamePlay&) = delete;
     Snapshot get_snapshot();
-    void notify_players(int & current_id);
+    // void notify_players(int & current_id);
     std::vector<char> get_raw_map();
 };
 #endif

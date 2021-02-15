@@ -56,6 +56,8 @@ void Protocol::send_username(std::vector<char> username){
 
 
 std::vector<std::string> Protocol::receive_usernames(){
+    std::cout << "recibo usernames" << std::endl;
+
     std::vector<std::string> usernames;
     int size = this->receive_int();
     for(int i = 0; i < (int)size ; i++){

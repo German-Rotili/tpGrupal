@@ -61,8 +61,7 @@ void ThClient::new_game(){
                     break;
             }else if (msg_char == REFRESH){
                 std::cout  << "REFRESH" <<  msg_char << std::endl;
-
-                this->refresh_matches();
+                this->refresh_players(game.get_usernames());
             }else{
                 std::cout  << "Llego cualquier cosa." <<  msg_char << std::endl;
             }
@@ -81,11 +80,22 @@ void ThClient::join_game(){
         GamePlay & game = this->game_handler.select_match(*this, game_id);
         std::vector <char> map = game.get_raw_map();//cambiar al archivo yaml entero.
         this->protocol.send_vector_char(map);//mando mapa al cliente para que dibuje
-        std::vector<std::vector<char>> aux = game.get_usernames();
-        this->protocol.send_usernames(aux);
+        this->protocol.send_usernames(game.get_usernames());
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Join Game Error" << '\n';
+    }
+}
+
+
+void ThClient::refresh_players(std::vector<std::vector<char>> & usernames){
+    try{
+        this->protocol.send_usernames(usernames);
+        std::cout  << "Sendig player usernames" << std::endl;
+
+    }catch(const std::exception& e){
+        std::cerr << e.what() << '\n';
+        std::cerr << "Refresh Error" << '\n';
     }
 }
 

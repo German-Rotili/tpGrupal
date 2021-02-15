@@ -32,6 +32,7 @@ private:
     void receive_username();
     void new_game();
     void join_game();
+    void refresh_players(std::vector<std::vector<char>> & usernames);
     void refresh_matches();
     void receiver_loop();
 

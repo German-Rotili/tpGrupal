@@ -30,17 +30,14 @@ GamePlay::~GamePlay(){
     }
 }
 
-std::vector<std::vector<char>>  GamePlay::get_usernames(){
-   std::vector<std::vector<char>> usernames;
-    for(ThClient *client : this->clients){
-        usernames.push_back(client->username);
-    }
-   return usernames; 
+std::vector<std::vector<char>> & GamePlay::get_usernames(){
+   return this->usernames; 
 }
 
 
 void GamePlay::add_client(ThClient* client){
     this->clients.push_back(client);
+    this->usernames.push_back(client->username);
 }
 std::vector<char> GamePlay::get_raw_map(){
     return this->map.get_raw_map();
@@ -155,18 +152,18 @@ int GamePlay::get_id(){
     return this->id;
 }
 
-void GamePlay::notify_players(int & current_id){
-    std::vector<std::vector<char>> usernames;
-    for(ThClient *client : this->clients){
-        usernames.push_back(client->username);
-    }
-    for(ThClient *client : this->clients){
-        if(client->client_id ==current_id){
-            continue;
-        }
-        client->notify_players(usernames);
-    } 
-}
+// void GamePlay::notify_players(int & current_id){
+//     std::vector<std::vector<char>> usernames;
+//     for(ThClient *client : this->clients){
+//         usernames.push_back(client->username);
+//     }
+//     for(ThClient *client : this->clients){
+//         if(client->client_id ==current_id){
+//             continue;
+//         }
+//         client->notify_players(usernames);
+//     } 
+// }
 
 
 void GamePlay::start_game(){

@@ -12,10 +12,15 @@
 #include "ThClientSender.h"
 #include "../common_src/Action.h"
 #include "../common_src/Serializer.h"
+#include "../common_src/Intention.h"
 #include "IdMaker.h"
 #include <chrono>
 #include "GamePlay.h"
 #include "GameHandler.h"
+
+void ThClient::attach_queue(ProtectedQueueIntention *intentions){
+    this->intentions = intentions; 
+}
 
 
 void ThClient::start_game(){
@@ -42,12 +47,18 @@ void ThClient::receive_username(){
 void ThClient::new_game(){
     try{
         std::vector<char> map = this->protocol.receive_standar_msg();//recibo el mapa
+        std::cout  << "recibo el mapa" << std::endl;
+        
         GamePlay & game = this->game_handler.new_match(*this, map);//nueva partida con ese mapa
         this->protocol.send_username(this->username);
             std::string aux(this->username.data());
         while(true){
             char msg_char = this->protocol.receive_char();
+            std::cout  << "Esperando a que comience la partida" << std::endl;
+
             if(msg_char == START){
+                std::cout  << "Partida comenzada" << std::endl;
+
                     game.start();//Lanzo hilo de la partida
                     game.start_game();// le aviso a todos que comenzo la partida.
                     break;
@@ -106,6 +117,8 @@ void ThClient::run(){
         
             /***********Recibo Decision sobre Partida********/
             char decision = this->protocol.receive_char();
+            printf("Decision %02X ", (unsigned)(unsigned char)decision);
+
             /*********************************************/
             switch (decision){
                 case NEW_GAME:{
@@ -130,24 +143,12 @@ void ThClient::run(){
         
 }
 
-std::vector<char> ThClient::get_intention(){
-    std::unique_lock<std::mutex> lock(this->m);//implementar recontra cola protegida.
-    std::vector<char> aux = this->intention_queue;
-    this->intention_queue.clear();
-    return aux;
-}
-
-
 void ThClient::receiver_loop(){
     try{
         while (this->state){
             std::vector<char> intention = this->protocol.receive_standar_msg();
-           /*GUARDAR EN COLA PROTEGIDA REY*/
-            for(char value : intention){
-                std::unique_lock<std::mutex> lock(this->m);
-                this->intention_queue.push_back(value);
-            }    
-           /*******************************/
+            Intention intention_aux(this->client_id, intention); 
+            this->intentions->add_element(intention_aux);//std::move a la intencion
         }
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -160,9 +161,9 @@ ThClient::ThClient(Protocol&& protocol, GameHandler & game_handler):game_handler
 }
 
 ThClient::~ThClient(){
-    delete this->sender;//revisar seg fault
+    // delete this->sender;//revisar seg fault
 }
 
-void ThClient::send_snapshot(Snapshot snapshot){//Cuando llamo este metodo desde otro hilo
-    this->sender->send_snapshot(snapshot);      //se esta ejecutando el reciever_loop en este hilo.
-}
+// void ThClient::send_snapshot(Snapshot snapshot){//Cuando llamo este metodo desde otro hilo
+//     this->sender->send_snapshot(snapshot);      //se esta ejecutando el reciever_loop en este hilo.
+// }

@@ -26,6 +26,8 @@ public:
     void add_object(object_t* object);
     void add_action(Action *action);
 
+    void print();
+
 
 friend class Serializer;
 friend class World;

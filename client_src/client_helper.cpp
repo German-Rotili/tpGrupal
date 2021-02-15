@@ -40,7 +40,13 @@ std::vector<std::string> Client::get_players_username(){
 
 
 int Client::await_game_start(){
-    while (this->protocol.receive_char() != START){}//START MATCH
+    std::cout << "Await start"<<std::endl;
+    char aux_char =this->protocol.receive_char(); 
+    while ( aux_char!= START){
+        
+        std::cout << "Recibi un char invalido: "<< aux_char <<  std::endl;
+
+    }//START MATCH
     return this->protocol.receive_int();//ID CLIENT/PLAYER
 }
 

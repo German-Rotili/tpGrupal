@@ -37,24 +37,21 @@ int main(int argc, char* args[]) {
     /*Lanzamiento del menu de inicio*/
     Menu menu(client, renderer);
 
-    std::cout <<"inicio menu" <<std::endl;
     menu.runInsertUsername(renderer, settings);
-    std::cout <<"sale del menu" <<std::endl;
     /********************************/
 
     int client_id = client.await_game_start();
-    std::cout <<"pase el await game" <<std::endl;
 
     World world(renderer, settings, menu.vector_map, client_id);
     bool quit = false;
     SDL_Event e;
     const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
-    /*Creamos y corremos los hilos*/
-    std::vector<char> intention;
     Snapshot update_snapshot;
+
+    BlockingQueueIntention intentions;
     ThRequester requester(client);
-    ThSender sender(client, intention);
+    ThSender sender(client, intentions);
     requester.start();
     sender.start();
     /***************************/
@@ -62,7 +59,7 @@ int main(int argc, char* args[]) {
     // Main (o game) Loop
     while (!quit) {
       std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-
+      std::vector<char> intention;
       // Event Loop
       while (SDL_PollEvent(&e) != 0) {
         if (e.type == SDL_QUIT) {
@@ -110,8 +107,16 @@ int main(int argc, char* args[]) {
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
         intention.push_back(' ');
       }
+      
+      if(intention.size() > 0){
+        Intention intention_aux(client_id, intention);
+        intentions.add_element(intention_aux);
+      }
 
       update_snapshot = requester.get_snapshot();
+
+      update_snapshot.print();
+      
       world.actualizar(update_snapshot);
       world.renderizar(settings);
 

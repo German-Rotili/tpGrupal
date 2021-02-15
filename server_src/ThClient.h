@@ -5,6 +5,7 @@
 #include "GameHandler.h"
 #include "GamePlay.h"
 #include "../common_src/common_thread.h"
+#include "../common_src/ProtectedQueueIntention.h"
 #include <vector>
 #include <string>
 #include <utility>
@@ -14,16 +15,15 @@
 #include <mutex>
 class GameHandler;
 class GamePlay;
-class ThClientSender;
 
 
 class ThClient : public Thread{
 private:
     int client_id;
     Protocol protocol;
+    ProtectedQueueIntention *intentions;
     std::mutex m;
-    ThClientSender *sender;
-    std::vector<char> intention_queue;
+    // ThClientSender *sender;
     std::vector<char> username;
     bool state = true;
     GameHandler & game_handler;
@@ -40,11 +40,10 @@ public:
     ThClient(Protocol&& Protocol, GameHandler & game_handler);
     ~ThClient();
     void run() override;
-    void send_snapshot(Snapshot snapshot);//aca el notify all?
+    // void send_snapshot(Snapshot snapshot);//aca el notify all?
     void start_game();
     void notify_players(std::vector<std::vector<char>> &usernames);
-    std::vector<char> get_intention();
-
+    void attach_queue(ProtectedQueueIntention * intentions);
 
     /*Devuelve el estado del thread*/
     bool is_dead();

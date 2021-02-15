@@ -13,6 +13,20 @@ Snapshot::~Snapshot(){
     } */
 }
 
+void Snapshot::print(){
+    for (auto &player : this->players){ 
+    std::cout << "/********PLAYER*********/"<<std::endl;
+    std::cout << player->player_id <<std::endl;
+    std::cout << player->pos_x <<std::endl;
+    std::cout << player->pos_y <<std::endl;
+    std::cout << player->direction <<std::endl;
+    std::cout << player->ammo <<std::endl;
+    std::cout << player->current_weapon <<std::endl;
+    std::cout << "/**********************/"<<std::endl;    
+    }
+}
+
+
 
 /**************SETTERS*******************/
 void Snapshot::add_action(Action *action){

@@ -73,12 +73,12 @@ bool Map::is_item(char id)
 bool Map::valid_position(int x, int y) {
   char squareId = this->get_id(x, y);
   if (this->is_solid(squareId)) {
-    return true;
+    return false;
   }
   if (this->is_door(squareId)) {
-    this->doors.find(x)->second.find(y)->second.is_walkable();
+    return this->doors.find(x)->second.find(y)->second.is_walkable();
   }
-  return false;
+  return true;
 }
 
 bool Map::is_impactable(int x, int y) {

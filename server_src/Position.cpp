@@ -7,10 +7,12 @@
 #include <iostream>
 
 void Position::update(char mov) {
-  std::cout << "update pos" << std::endl;
   if (mov == FORWARD || mov == BACKWARDS) {
-    float offset_x = this->get_y_offset(mov);
-    float offset_y = this->get_x_offset(mov);
+    float offset_x = this->get_x_offset(mov);
+    float offset_y = this->get_y_offset(mov);
+    std::cout << "offset x: " << offset_x;
+    std::cout << " offset y: " << offset_y;
+
     int new_x = (int)(this->x + offset_x);
     int new_y = (int)this->y;
 
@@ -18,11 +20,12 @@ void Position::update(char mov) {
                                         : new_x - this->hitbox_radius;
 
     if (this->map->valid_position(hitbox_limit_x, new_y)) {
-      this->x = new_x;
+      this->x += offset_x;
     } else { // si se choca contra una pared muevo el personaje para que la
              // hitbox este justo al limite.
       this->x = (this->x < new_x) ? new_x - this->hitbox_radius
                                   : new_x + hitbox_radius;
+      std::cout << "compenso por pared";
     }
     new_x = (int)(this->x);
     new_y = (int)this->y + offset_y;
@@ -30,18 +33,18 @@ void Position::update(char mov) {
     int hitbox_limit_y = (offset_y > 0) ? new_y + this->hitbox_radius
                                         : new_y - this->hitbox_radius;
     if (this->map->valid_position(new_x, hitbox_limit_y)) {
-      this->x = new_x;
+      this->y += offset_y;
     } else { // si se choca contra una pared muevo el personaje para que la
              // hitbox este justo al limite.
       this->y = (this->y < new_y) ? new_y - this->hitbox_radius
-                                  : new_y + hitbox_radius;
+                                  : new_y + this->hitbox_radius;
+      std::cout << "compenso por pared";
+
     }
   } else {
 
     this->update_angle(mov);
-      std::cout << "update angle to : " << this->get_angle() << std::endl;
   }
-    std::cout << "updated pos fin" << std::endl;
 
 }
 
@@ -106,7 +109,7 @@ float Position::get_x_offset(char intention) {
 
 void Position::update_angle(char intention) {
   if (intention == RIGHT) {
-    this->angle -= this->angular_vel;
+    this->angle += this->angular_vel;
   }
   if (intention == LEFT) {
     this->angle -= this->angular_vel;

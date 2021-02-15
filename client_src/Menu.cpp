@@ -284,7 +284,10 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
               renderText = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
               //Refresh
+              std::cout  << "Refreshed asked" << std::endl;
               matches_id = this->client.get_matches_id();
+              std::cout  << "Refreshed" << std::endl;
+
             }
           }
         }

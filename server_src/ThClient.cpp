@@ -59,6 +59,8 @@ void ThClient::new_game(){
                     game.start_game();// le aviso a todos que comenzo la partida.
                     break;
             }else if (msg_char == REFRESH){
+                std::cout  << "REFRESH" <<  msg_char << std::endl;
+
                 this->refresh_matches();
             }else{
                 std::cout  << "Llego cualquier cosa." <<  msg_char << std::endl;
@@ -90,6 +92,8 @@ void ThClient::refresh_matches(){
     try{
         std::vector <int> aux = this->game_handler.get_matches_id();
         this->protocol.send_vector_int(aux);
+        std::cout  << "Sendig matches id" << std::endl;
+
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Refresh Error" << '\n';

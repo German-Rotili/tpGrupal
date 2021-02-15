@@ -18,6 +18,8 @@ int Map_ui::checkMap(int x, int y) {
 }
 
 void Map_ui::toggleTile(int x, int y, int action) {
+  if (x >= map[0].size()) return;
+  if (y >= map.size()) return;
   map[y][x] = action;
 }
 
@@ -128,4 +130,12 @@ void Map_ui::setMap(std::vector<std::vector<int>> map) {
 
 std::vector<std::vector<int>> Map_ui::getMap() {
   return this->map;
+}
+
+int Map_ui::getX() {
+  return this->map[0].size();
+}
+
+int Map_ui::getY() {
+  return this->map.size();
 }

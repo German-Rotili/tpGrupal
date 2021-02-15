@@ -3,6 +3,7 @@
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 640
+#define FULL_SCREEN_HEIGHT 680
 #define MAP_Y 12
 #define MAP_X 12
 /* (64 * 3 == 192) */

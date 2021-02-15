@@ -20,7 +20,7 @@ int main(int argc, char* args[]) {
 
     int realWidth = SCREEN_WIDTH + MENU_OFFSET;
 
-    SdlWindow window("Wolfenstein_Editor", realWidth, SCREEN_HEIGHT, false);
+    SdlWindow window("Wolfenstein_Editor", realWidth, FULL_SCREEN_HEIGHT, false);
 
     SdlRenderer renderer = window.getRenderer();
 
@@ -128,6 +128,8 @@ int main(int argc, char* args[]) {
                 mapHandler.generateMapList(inputText);
               } else if  (load == true) {
                 map_ui.setMap(mapHandler.readMap(inputText));
+                mapX = map_ui.getX();
+                mapY = map_ui.getY();
               }
               renderText = false;
               save = false;
@@ -175,6 +177,9 @@ int main(int argc, char* args[]) {
                 IDScrollOffset = menuScrollX;
                 action = wallIdX + (wallIdY*3);
                 action += IDScrollOffset * 27;
+                if (action > 64) {
+                  action = 64;
+                }
               } else if ((e.button.x >= 5 && e.button.x <= 30) &&
                 (e.button.y >= 45 && e.button.y <= 55)) {
                   if (menuScrollX > 0)

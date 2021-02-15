@@ -7,6 +7,7 @@
 #include "../common_src/SDLWrappers/SdlTexture.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "../common_src/SDLWrappers/SdlMusic.h"
+#include "../common_src/ProtectedQueueAction.h"
 #include "ClientSettings.h"
 #include "ZRenderable.h"
 #include "Object.h"
@@ -18,6 +19,7 @@
 #include "Map/WorldMap.h"
 #include "../common_src/Snapshot.h"
 #include "../common_src/Action.h"
+#define MAX_ACTIONS_PROCESSED 20
 class World {
   SdlRenderer& renderer;
   ResourcesLoader src;
@@ -66,7 +68,7 @@ class World {
 //		World(SdlRenderer& renderer, ClientSettings& settings);
 		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map, int player_id);
     ~World();
-    void actualizar(Snapshot & snapshot);
+    void actualizar(Snapshot & snapshot, ProtectedQueueAction & actions);
     void renderizar(ClientSettings& settings);
 };
 

@@ -133,7 +133,7 @@ void World::agregarObjetoDinamico(object_t* object) {
   }
 }
 
-void World::actualizar(Snapshot & snapshot) {
+void World::actualizar(Snapshot & snapshot, ProtectedQueueAction & actions) {
     for (auto &player : snapshot.players) {
       if (player->player_id == this->player_id){
         jugador.setPosicion(player->pos_x , player->pos_y);
@@ -153,21 +153,24 @@ void World::actualizar(Snapshot & snapshot) {
         enemigos.at(player->player_id)->setIsAlive(player->health > 0);
       }
     }
-
-    for (auto &action : snapshot.actions){
-      if ((action->get_id() == -1) && (action->active())){ // Caso explosion
-        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src.tx_explosion,src.snd_explosion, settings));
-      } else if ((action->get_id() == this->player_id) && (action->active())) {  // caso disparo jugador
+    int actions_processed = 0;
+    while(!actions.is_empty() || actions_processed == MAX_ACTIONS_PROCESSED){
+      actions_processed +=1;
+      Action action = actions.get_element(); 
+      if (action.get_id() == -1){ // Caso explosion
+        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, jugador, src.tx_explosion,src.snd_explosion, settings));
+      } else if (action.get_id() == this->player_id) {  // caso disparo jugador
         jugador.setShootingAction();
-        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
-      } else if ((enemigos.find(action->get_id()) != enemigos.end()) && (action->active())) {  // caso disparo enemigo
-        enemigos.at(action->get_id())->setShootingAction();
-        explosiones.push_back(new Explosion(action->impact_x, action->impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
+        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
+      } else if (enemigos.find(action.get_id()) != enemigos.end()) {  // caso disparo enemigo
+        enemigos.at(action.get_id())->setShootingAction();
+        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
       } else {
         continue;
       }
-      action->update_state(false);
     }
+
+
 
   // Actualizar objetos / puertas
   limpiarObjetosDinamicos();

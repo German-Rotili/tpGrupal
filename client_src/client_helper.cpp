@@ -12,7 +12,7 @@ Client::Client(std::string & service,std::string & hostname){
 
 Client::~Client(){}
 
-void Client::recieve_snapshot(Snapshot & snapshot){
+void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions){
     /*Recibo ID Tipo msg*/
     char input_id = this->protocol.receive_char();
     /*Recibimos vector de chars-msg */
@@ -23,12 +23,30 @@ void Client::recieve_snapshot(Snapshot & snapshot){
             this->serializer.deserializer(msg, snapshot);
             break;
         case ACTION_ID:
-            this->serializer.deserialize_action(msg, snapshot);
+            this->serializer.deserialize_action(msg, actions);
             break;
         default:
             std::cout << "Error id detection" <<std::endl;
-    } 
+    }    
 }
+
+// void Client::recieve_snapshot(Snapshot & snapshot){
+//     /*Recibo ID Tipo msg*/
+//     char input_id = this->protocol.receive_char();
+//     /*Recibimos vector de chars-msg */
+//     std::vector<char> msg = this->protocol.receive_standar_msg();
+    
+//     switch (input_id){
+//         case SNAPSHOT_ID:
+//             this->serializer.deserializer(msg, snapshot);
+//             break;
+//         case ACTION_ID:
+//             this->serializer.deserialize_action(msg, snapshot);
+//             break;
+//         default:
+//             std::cout << "Error id detection" <<std::endl;
+//     } 
+// }
 
 std::vector<int> Client::get_matches_id(){
   std::cout << "recibo vector de ints." << std::endl;

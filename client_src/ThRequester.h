@@ -3,6 +3,7 @@
 #include "../common_src/common_thread.h"
 #include "../common_src/common_socket.h"
 #include "../common_src/common_exception.h"
+#include "../common_src/ProtectedQueueAction.h"
 #include "../common_src/Action.h"
 #include "../common_src/Snapshot.h"
 #include <atomic>
@@ -17,8 +18,9 @@ private:
     std::atomic<bool> state;
     Client & client;
     std::mutex m;
+    ProtectedQueueAction & actions;
 public:
-    ThRequester(Client & client);
+    ThRequester(Client & client, ProtectedQueueAction & actions);
     ~ThRequester();
     Snapshot get_snapshot();
     void run() override;

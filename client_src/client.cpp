@@ -11,6 +11,7 @@
 #include "client_helper.h"
 #include "ClientConfigHandler.h"
 #include "ThSender.h"
+#include "../common_src/ProtectedQueueAction.h"
 #include "ThRequester.h"
 #include "Menu.h"
 #include "ClientConfigHandler.h"
@@ -49,7 +50,8 @@ int main(int argc, char* args[]) {
     Snapshot update_snapshot;
 
     BlockingQueueIntention intentions;
-    ThRequester requester(client);
+    ProtectedQueueAction actions;
+    ThRequester requester(client, actions);
     ThSender sender(client, intentions);
     requester.start();
     sender.start();
@@ -116,7 +118,7 @@ int main(int argc, char* args[]) {
 
 //      update_snapshot.print();
       
-      world.actualizar(update_snapshot);
+      world.actualizar(update_snapshot, actions);
       world.renderizar(settings);
 
       std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();

@@ -47,6 +47,7 @@ void ThClient::receive_username(){
 
 void ThClient::new_game(){
     try{
+
         std::vector<char> map = this->protocol.receive_standar_msg();//recibo el mapa
         GamePlay & game = this->game_handler.new_match(*this, map);//nueva partida con ese mapa
         this->protocol.send_username(this->username);
@@ -150,10 +151,4 @@ ThClient::ThClient(Protocol&& protocol, GameHandler & game_handler):game_handler
     this->protocol = std::move(protocol);
 }
 
-ThClient::~ThClient(){
-    // delete this->sender;//revisar seg fault
-}
-
-// void ThClient::send_snapshot(Snapshot snapshot){//Cuando llamo este metodo desde otro hilo
-//     this->sender->send_snapshot(snapshot);      //se esta ejecutando el reciever_loop en este hilo.
-// }
+ThClient::~ThClient(){}

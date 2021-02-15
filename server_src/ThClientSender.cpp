@@ -1,5 +1,5 @@
 #include "ThClientSender.h"
-
+#include "IdMaker.h"
 void ThClientSender::run(){
         Serializer serializer;
         std::vector <char> msg;
@@ -22,7 +22,9 @@ void ThClientSender::run(){
 }
 
 ThClientSender::ThClientSender(Protocol& protocol, BlockingQueueSnapshot *snapshots):
-    protocol(protocol),snapshots(snapshots),state(true){}
+    protocol(protocol),snapshots(snapshots),state(true){
+    IdMaker *IdMaker = IdMaker::GetInstance();
+    }
 
 ThClientSender::~ThClientSender(){
     this->state = false;

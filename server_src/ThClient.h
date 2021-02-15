@@ -33,7 +33,6 @@ private:
     void new_game();
     void join_game();
     void refresh_matches();
-    void send_client_id();
     void receiver_loop();
 
 public:

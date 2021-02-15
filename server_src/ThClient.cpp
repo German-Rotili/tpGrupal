@@ -48,17 +48,13 @@ void ThClient::receive_username(){
 void ThClient::new_game(){
     try{
         std::vector<char> map = this->protocol.receive_standar_msg();//recibo el mapa
-        std::cout  << "recibo el mapa" << std::endl;
-        
         GamePlay & game = this->game_handler.new_match(*this, map);//nueva partida con ese mapa
         this->protocol.send_username(this->username);
             std::string aux(this->username.data());
         while(true){
             char msg_char = this->protocol.receive_char();
-            std::cout  << "Esperando a que comience la partida" << std::endl;
 
             if(msg_char == START){
-                std::cout  << "Partida comenzada" << std::endl;
 
                     game.start();//Lanzo hilo de la partida
                     game.start_game();// le aviso a todos que comenzo la partida.
@@ -99,16 +95,6 @@ void ThClient::refresh_matches(){
     }
 }
 
-void ThClient::send_client_id(){
-    try{
-        IdMaker id_maker;
-        int new_player_id = id_maker.generate_id();
-        this->protocol.send_integer(new_player_id);
-    }catch(std::exception& e){
-        std::cerr << e.what() << '\n';
-        std::cerr << "ID Sending Error" << '\n';
-    }
-}
 
 void ThClient::run(){
         this->receive_username();

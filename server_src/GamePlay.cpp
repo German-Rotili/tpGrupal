@@ -3,6 +3,7 @@
 #include "../common_src/common_thread.h"
 #include "../common_src/Serializer.h"
 #include "../common_src/BlockingQueueSnapshot.h"
+#include "../common_src/EmptyQueueException.h"
 #include "../common_src/Snapshot.h"
 #include <iostream>
 #include <utility>
@@ -126,9 +127,14 @@ void GamePlay::run(){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
             int index = 0;
             while (!this->intentions->is_empty() || index == MAX_INTENTION_PER_FRAME){//analizar poner una cantidad fija para que no se llene mientras loopea EJ hacer un FOR
-                Intention intention_aux = this->intentions->get_element();
-                this->map.execute_intentions(intention_aux.get_intention(), intention_aux.get_id());
-                index+=1;
+                try{
+                    Intention intention_aux = this->intentions->get_element();
+                    this->map.execute_intentions(intention_aux.get_intention(), intention_aux.get_id());
+                    index+=1;
+                }
+                catch(const EmptyQueueException& e){}
+                
+              
             }
               
             Snapshot snapshot = this->get_snapshot();

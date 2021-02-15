@@ -13,9 +13,8 @@ Intention ProtectedQueueIntention::get_element(){
       Intention element = queue.front();
       queue.pop();
       return element;
-    }else{
-      std::cout << "Temporarily empty" << std::endl;
     }
+    throw ProtectedQueueException();
 }
 
 void ProtectedQueueIntention::add_element(Intention element){

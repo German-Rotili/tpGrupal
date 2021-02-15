@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include "ProtectedQueueException.h"
-#include "../common_src/Intention.h"
+#include "Intention.h"
 
 class ProtectedQueueIntention : public std::exception {
   private:

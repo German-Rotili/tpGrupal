@@ -1,7 +1,7 @@
 #include "ThRequester.h"
 #include "client_helper.h"
 
-ThRequester::ThRequester(Client & client):client(client),state(true){}
+ThRequester::ThRequester(Client & client, ProtectedQueueAction & actions):client(client),state(true), actions(actions){}
 
 ThRequester::~ThRequester(){}
 
@@ -21,7 +21,9 @@ void ThRequester::run(){
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
         
         Snapshot snap_aux;
-        client.recieve_snapshot(snap_aux);
+        client.receive_update(snap_aux, this->actions);
+        // client.recieve_snapshot(snap_aux);
+
         {
             std::unique_lock<std::mutex> lock(this->m);
             this->snapshot = snap_aux;

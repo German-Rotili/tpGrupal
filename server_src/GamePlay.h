@@ -15,7 +15,6 @@
 #include "Map.h"
 #include "Door.h"
 #include "Constants.h"
-#include <mutex>
 class ThClient; 
 class ThClientSender; 
 class GameHandler;
@@ -27,7 +26,6 @@ private:
     bool state;
     ProtectedQueueIntention *intentions;
     BlockingQueueSnapshot *snapshots;
-    std::mutex m;
     std::vector <ThClient*> clients;
     std::vector <ThClientSender*> client_senders;
     Map map;

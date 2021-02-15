@@ -11,6 +11,7 @@
 #include <inttypes.h>
 #include <byteswap.h>
 #include "structDefinitions.h"
+#include "ProtectedQueueAction.h"
 
 class Snapshot;
 
@@ -28,7 +29,7 @@ public:
     void append_actions(std::vector<char> & message, std::vector<Action*> & actions);
     std::vector<char> serialize_action(Snapshot & snapshot);
     void deserializer(std::vector <char> & msg, Snapshot & snapshot); 
-    void deserialize_action(std::vector <char> & msg, Snapshot & snapshot);
+    void deserialize_action(std::vector <char> & msg, ProtectedQueueAction & actions);
     void deserialize_players(std::vector <char> & msg, Snapshot & snapshot, int & offset);
     void deserialize_objects(std::vector <char> & msg,  Snapshot & snapshot, int & offset);
 

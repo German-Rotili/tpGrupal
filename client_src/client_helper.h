@@ -6,6 +6,7 @@
 #include "../common_src/Serializer.h"
 #include "../common_src/Snapshot.h"
 #include "../common_src/Protocol.h"
+#include "../common_src/ProtectedQueueAction.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -25,6 +26,7 @@ public:
     void start_match();
     void new_game(std::vector<char> & map);
     int await_game_start();
+    void receive_update(Snapshot & snapshot, ProtectedQueueAction & actions);
     void  client_send_intention(std::vector<char> intention);
     std::vector<std::string> get_players_username();
     void recieve_snapshot(Snapshot & snapshot);

@@ -1,5 +1,6 @@
 #include "Serializer.h"
 
+#include "ProtectedQueueAction.h"
 
 Serializer::Serializer(){}
 
@@ -160,8 +161,7 @@ void Serializer::deserializer(std::vector <char> & msg, Snapshot & snapshot){
     // std::cout << "/**********************/"<<std::endl;
 
 }
-void Serializer::deserialize_action(std::vector <char> & msg, Snapshot & snapshot){
-    //Posibilidad de que haya un deserializer para cada "tipo" de objeto
+void Serializer::deserialize_action(std::vector <char> & msg, ProtectedQueueAction & actions){
     int offset = 0;
     int action_id = -1;
     int size_int = sizeof(int);
@@ -175,17 +175,17 @@ void Serializer::deserialize_action(std::vector <char> & msg, Snapshot & snapsho
     for(int i = 0; i < amount ; i++){
         memcpy(&action_id, msg.data() + offset, size_int);
         offset += size_int;
-        Action *action = new Action(action_id);//snapshot.get_action(action_id);
-        memcpy(&action->impact_x, msg.data() + offset, size_double);
+        Action action(action_id);
+        memcpy(&action.impact_x, msg.data() + offset, size_double);
         offset += size_double;
-        memcpy(&action->impact_y, msg.data() + offset, size_double);
+        memcpy(&action.impact_y, msg.data() + offset, size_double);
         offset += size_double;
-        memcpy(&action->weapon_id, msg.data() + offset, sizeof(char));
+        memcpy(&action.weapon_id, msg.data() + offset, sizeof(char));
         offset += sizeof(char);
-        memcpy(&action->state, msg.data() + offset, sizeof(bool));
+        memcpy(&action.state, msg.data() + offset, sizeof(bool));
         offset += sizeof(bool);
-
-        snapshot.add_action(action);
+        actions.add_element(action);
+        // snapshot.add_action(action);
     }
     // std::cout << "/*******intention*******/"<<std::endl;
     // std::cout << action->player_id <<std::endl;

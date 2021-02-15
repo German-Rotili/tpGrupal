@@ -108,7 +108,6 @@ void GamePlay::append_rockets(Snapshot &snapshot){
 
 Snapshot GamePlay::get_snapshot(){
     Snapshot snapshot;
-    std::unique_lock<std::mutex> lock(this->m);
     this->append_players(snapshot);
     this->append_objects(snapshot);
     this->append_doors(snapshot);

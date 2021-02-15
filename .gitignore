@@ -3,6 +3,7 @@ server_src/Flujo_e_ideas.md
 .vscode/
 client_src/*.o
 editor_src/*.o
+common_src/*.o
 server_src/*.o
 client_src/client
 editor_src/editor

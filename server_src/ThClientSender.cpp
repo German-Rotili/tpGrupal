@@ -5,6 +5,7 @@ void ThClientSender::run(){
         std::vector <char> msg;
         while (true){
             Snapshot snapshot = this->snapshots->get_element();
+            // snapshot.print();
             char action_id = ACTION_ID;
             char snapshot_id = SNAP_ID;
 

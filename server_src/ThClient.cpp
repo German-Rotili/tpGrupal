@@ -26,6 +26,7 @@ void ThClient::attach_queue(ProtectedQueueIntention *intentions){
 void ThClient::start_game(){
     char start_flag = START;
     this->protocol.send_char(start_flag);
+    this->protocol.send_integer(this->client_id);
 }
 
 void ThClient::notify_players(std::vector<std::vector<char>> &usernames){

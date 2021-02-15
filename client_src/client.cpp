@@ -41,7 +41,6 @@ int main(int argc, char* args[]) {
     /********************************/
 
     int client_id = client.await_game_start();
-
     World world(renderer, settings, menu.vector_map, client_id);
     bool quit = false;
     SDL_Event e;
@@ -115,7 +114,7 @@ int main(int argc, char* args[]) {
 
       update_snapshot = requester.get_snapshot();
 
-      update_snapshot.print();
+//      update_snapshot.print();
       
       world.actualizar(update_snapshot);
       world.renderizar(settings);

@@ -30,6 +30,7 @@ public:
     void  client_send_intention(std::vector<char> intention);
     std::vector<std::string> get_players_username();
     void recieve_snapshot(Snapshot & snapshot);
+    void refresh_game();
     std::vector<int> get_matches_id();
 
     ~Client();

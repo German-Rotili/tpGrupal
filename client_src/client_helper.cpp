@@ -4,6 +4,8 @@
 #define START 's'
 #define NEW_GAME 'n'
 #define JOIN_MATCH 'j'
+#define REFRESH 'r'
+
 Client::Client(std::string & service,std::string & hostname){
     Socket client;
     client.socket_connect(service.c_str(), hostname.c_str());
@@ -88,6 +90,10 @@ void Client::send_username(std::string & username){
     this->protocol.send_string_msg(username);
 }
 
+void Client::refresh_game(){
+    char flag = REFRESH;
+    this->protocol.send_char(flag);
+}
 
 void Client::join_game(){
     char join_flag = JOIN_MATCH;

@@ -370,6 +370,8 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
               advance = true;
               quit = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
+              printf("REFRESH\n");
+              this->client.refresh_game();
               usernames = this->client.get_players_username();
             }
           }

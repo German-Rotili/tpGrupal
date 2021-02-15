@@ -26,5 +26,9 @@ public:
   void setMap(std::vector<std::vector<int>> map);
 
   std::vector<std::vector<int>> getMap();
+
+  int getX();
+
+  int getY();
 };
 #endif /* MAP_UI */

@@ -28,6 +28,7 @@
 #define PORT 1
 #define ROOT 2
 #define QUIT "q"
+#define MAX_INTENTION_PER_FRAME 20
 
 
 

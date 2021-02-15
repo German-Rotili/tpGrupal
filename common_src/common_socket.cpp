@@ -169,10 +169,10 @@ int Socket::socket_receive(char *buffer, int length){
       return total_bytes;
     }
   } 
-  for (int i = 0; i < total_bytes; i++) {
-      printf(" %02X ", (unsigned)(unsigned char)buffer[i]);
-    } 
-  printf("\n");
+  // for (int i = 0; i < total_bytes; i++) {
+  //     printf(" %02X ", (unsigned)(unsigned char)buffer[i]);
+  //   } 
+  // printf("\n");
   return total_bytes;
 }
 
@@ -184,11 +184,11 @@ int Socket::socket_send(const char *buffer, int length){
     if (result == -1){
       throw SuperException("Error al enviar bytes en el socket");
     }
-    for (int i = 0; i < result; i++) {
-      printf("%02X ", (unsigned)(unsigned char)buffer[bytes_sent+i]);
-    } 
+    // for (int i = 0; i < result; i++) {
+    //   printf("%02X ", (unsigned)(unsigned char)buffer[bytes_sent+i]);
+    // } 
     bytes_sent += result;
   }
-  printf("\n");
+  // printf("\n");
   return bytes_sent;
 }

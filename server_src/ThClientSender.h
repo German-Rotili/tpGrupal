@@ -14,6 +14,7 @@
 #include "../common_src/Action.h"
 #include "../common_src/Snapshot.h"
 #include "../common_src/Serializer.h"
+#include "../common_src/BlockingQueueSnapshot.h"
 #include <atomic>
 #include <chrono>
 #include "Constants.h"
@@ -21,15 +22,13 @@
 
 class ThClientSender : public Thread{
     Protocol & protocol;
-    Snapshot snapshot;
-    std::condition_variable cond_var;
-    std::mutex m;
+    BlockingQueueSnapshot *snapshots;
     std::atomic<bool> state;
     ThClientSender& operator=(const ThClientSender&) = delete;
     ThClientSender(const ThClientSender&) = delete;
 
 public:
-    ThClientSender(Protocol& protocol);
+    ThClientSender(Protocol& protocol, BlockingQueueSnapshot *snapshots);
 
     void send_snapshot(Snapshot & snapshot);
 
@@ -37,7 +36,6 @@ public:
 
     void run() override;
 
-    /*Devuelve el estado del thread*/
     bool is_dead();
 };
 

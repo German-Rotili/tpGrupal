@@ -126,9 +126,16 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/2) - 15 && e.button.y <= (settings.screenHeight/2) + 20) {
             if (e.button.x >= (settings.screenWidth/2) - 150 && e.button.x <= (settings.screenWidth/2) - 30){
+<<<<<<< HEAD
               //New Game
               insertMapName = true;
               renderText = true;
+=======
+              insertMapName = true;
+              renderText = true;
+              //advance = true;
+              // quit = true;
+>>>>>>> 2b0ea135d9116f689873f2a32bab4c0444de6e60
               //Despues pide un nombre de archivo .yaml y despues de un SDLK_RETURN va al GameLobby
             } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
               //Join Game
@@ -141,7 +148,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
       } else if (e.type == SDL_KEYDOWN && (insertMapName)) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
-          path = "../resources/config/" + inputText;
+          path = "../resources/config/" + inputText + ".yaml";
           try {
 
               std::string filename(path);
@@ -158,7 +165,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
 
               this->client.new_game(bytes);
 
-              this->vector_map = mapHandler.readMap(path);
+              this->vector_map = mapHandler.readMap(inputText);
 
            } catch (std::exception const& e) {
             printf("Hubo una excepción: ");
@@ -216,10 +223,8 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
 
   if (advance) {
     if (renderText) {
-      //CHEQUEO MAPA EN EL SERVIDOR
-      // std::cout<<"Ya envie el mapa, me voy al lobby"<<std::endl;
-      // runGameLobby(renderer, settings, true);
-      runMapSelection(renderer, settings);
+      std::cout<<"Ya envie el mapa, me voy al lobby"<<std::endl;
+      runGameLobby(renderer, settings, true);
     } else {
     std::cout <<"Me voy a la lista de espera " <<std::endl;
 
@@ -228,31 +233,31 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   }
 }
 
-void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
-  MapHandler mapHandler;
-  std::string inputText = "";
-  bool renderText = false;
-  bool insertMapName = false;
+// void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
+//   MapHandler mapHandler;
+//   std::string inputText = "";
+//   bool renderText = false;
+//   bool insertMapName = false;
 
-  bool advance = false;
-  bool quit = false;
-  SDL_Event e;
+//   bool advance = false;
+//   bool quit = false;
+//   SDL_Event e;
 
-  std::vector<std::string> maps = mapHandler.getMapList();
-  //No es el game loop
-  while (!quit) {
-    std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-    drawMapSelection(renderer, settings, maps);
-    std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
-    unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-    int sleep_time = 1000000/settings.fps - elapsed_microseconds;
-    if (sleep_time > 0) {
-      usleep(1000000/settings.fps - elapsed_microseconds);
-    } else {
-      printf("Bajada de FPS\n");
-    }
-  }
-}
+//   std::vector<std::string> maps = mapHandler.getMapList();
+//   //No es el game loop
+//   while (!quit) {
+//     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
+//     drawMapSelection(renderer, settings, maps);
+//     std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+//     unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+//     int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+//     if (sleep_time > 0) {
+//       usleep(1000000/settings.fps - elapsed_microseconds);
+//     } else {
+//       printf("Bajada de FPS\n");
+//     }
+//   }
+// }
 
 void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   std::string inputText = "";

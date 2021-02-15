@@ -2,6 +2,7 @@
 #include <vector>
 #include "../common_src/common_thread.h"
 #include "../common_src/Serializer.h"
+#include "../common_src/BlockingQueueSnapshot.h"
 #include "../common_src/Snapshot.h"
 #include <iostream>
 #include <utility>
@@ -14,10 +15,19 @@
 GamePlay::GamePlay(ThClient *player, Map&& map):map(map){
     this->add_client(player);
     IdMaker IdMaker;
+    this->intentions = new ProtectedQueueIntention();
+    this->snapshots = new BlockingQueueSnapshot();
     this->id = IdMaker.generate_id()+100;//aplicar singleton
 }
 
-GamePlay::~GamePlay(){}
+GamePlay::~GamePlay(){
+    delete this->intentions;
+    delete this->snapshots;
+    for(ThClientSender *sender : this->client_senders){
+        sender->join();
+        delete sender;
+    }
+}
 
 void GamePlay::add_client(ThClient* client){
     this->clients.push_back(client);
@@ -105,16 +115,16 @@ void GamePlay::run(){
         while (this->state){
 
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-
-            for(ThClient *client : this->clients){
-                std::vector<char> aux_intention = client->get_intention();
-                this->map.execute_intentions(aux_intention, client->client_id);
+            int index = 0;
+            while (!this->intentions->is_empty() || index == MAX_INTENTION_PER_FRAME){//analizar poner una cantidad fija para que no se llene mientras loopea EJ hacer un FOR
+                Intention intention_aux = this->intentions->get_element();
+                this->map.execute_intentions(intention_aux.get_intention(), intention_aux.get_id());
+                index+=1;
             }
+              
             Snapshot snapshot = this->get_snapshot();
-            for(ThClient *client : this->clients){
-                client->send_snapshot(snapshot);
-            }
-
+            this->snapshots->add_element(snapshot);
+            
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
             int sleep_time = 1000000/FPS - elapsed_microseconds;
@@ -150,8 +160,9 @@ void GamePlay::start_game(){
     this->state = true;
     for(ThClient *client : this->clients){
         client->start_game();
+        client->attach_queue(this->intentions);
         this->map.add_player(client->client_id);
-        client->sender = new ThClientSender(client->protocol);
-        client->sender->start();
+        this->client_senders.push_back(new ThClientSender(client->protocol, this->snapshots));
+        this->client_senders.back()->start();
     }
 }

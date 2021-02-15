@@ -50,7 +50,6 @@ void ThClient::new_game(){
         std::vector<char> map = this->protocol.receive_standar_msg();//recibo el mapa
         GamePlay & game = this->game_handler.new_match(*this, map);//nueva partida con ese mapa
         this->protocol.send_username(this->username);
-            std::string aux(this->username.data());
         while(true){
             char msg_char = this->protocol.receive_char();
 
@@ -79,6 +78,8 @@ void ThClient::join_game(){
         GamePlay & game = this->game_handler.select_match(*this, game_id);
         std::vector <char> map = game.get_raw_map();//cambiar al archivo yaml entero.
         this->protocol.send_vector_char(map);//mando mapa al cliente para que dibuje
+        std::vector<std::vector<char>> aux = game.get_usernames();
+        this->protocol.send_usernames(aux);
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Join Game Error" << '\n';
@@ -104,8 +105,6 @@ void ThClient::run(){
         
             /***********Recibo Decision sobre Partida********/
             char decision = this->protocol.receive_char();
-            printf("Decision %02X ", (unsigned)(unsigned char)decision);
-
             /*********************************************/
             switch (decision){
                 case NEW_GAME:{

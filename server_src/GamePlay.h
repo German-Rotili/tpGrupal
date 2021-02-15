@@ -40,6 +40,8 @@ private:
 public:
     GamePlay(ThClient *player, Map&& map);
     ~GamePlay();
+    std::vector<std::vector<char>>  get_usernames();
+
     void add_client(ThClient* client);
     void start_game();
     int get_id();

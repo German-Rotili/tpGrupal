@@ -133,7 +133,10 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               //Despues pide un nombre de archivo .yaml y despues de un SDLK_RETURN va al GameLobby
             } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
               //Join Game
+              std::cout << "JOIN" << std::endl;
               this->client.join_game();
+              std::cout << "Envio flag de join" << std::endl;
+
               advance = true;
               quit = true;
             }
@@ -261,6 +264,8 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   bool advance = false;
   bool quit = false;
   SDL_Event e;
+  std::cout << "get matches id" << std::endl;
+
   matches_id = this->client.get_matches_id();
   //No es el game loop
   while (!quit) {

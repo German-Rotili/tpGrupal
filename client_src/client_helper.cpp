@@ -31,6 +31,8 @@ void Client::recieve_snapshot(Snapshot & snapshot){
 }
 
 std::vector<int> Client::get_matches_id(){
+  std::cout << "recibo vector de ints." << std::endl;
+
     return this->protocol.receive_vector_int();
 }
 
@@ -42,11 +44,7 @@ std::vector<std::string> Client::get_players_username(){
 int Client::await_game_start(){
     std::cout << "Await start"<<std::endl;
     char aux_char =this->protocol.receive_char(); 
-    while ( aux_char!= START){
-        
-        std::cout << "Recibi un char invalido: "<< aux_char <<  std::endl;
-
-    }//START MATCH
+    while ( aux_char!= START){  }//START MATCH
     return this->protocol.receive_int();//ID CLIENT/PLAYER
 }
 
@@ -84,7 +82,7 @@ std::vector<std::vector<int>> Client::join_game(std::string & game_id){
     this->protocol.send_integer(aux);
     std::string map = this->client_receive_string();
     MapHandler maphandler;//CAMMBIAR A RECIBIR EL ARCHIVO YAML COMPLETO
-    return maphandler.readMapFromString(map);//cambiar a envio completo del yaml.
+    return maphandler.readMap("map1");//cambiar a envio completo del yaml.
 }
 
 std::vector<char> Client::client_receive_vector(){

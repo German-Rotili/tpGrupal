@@ -113,10 +113,10 @@ void Protocol::send_vector_int(std::vector<int> & value){
     this->socket.socket_send((char*)&size_to_send, sizeof(uint32_t));
     /*******************************************/
 
-    /*******Envio cada elemento del vecto *******/
+    /*******Envio cada elemento del vector *******/
     for(int &element : value){
         size_to_send = htonl(element);
-        this->socket.socket_send((char*)&value, sizeof(int));
+        this->socket.socket_send((char*)&size_to_send, sizeof(int));
     }
     /*******************************************/
 }

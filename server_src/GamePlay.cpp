@@ -29,6 +29,15 @@ GamePlay::~GamePlay(){
     }
 }
 
+std::vector<std::vector<char>>  GamePlay::get_usernames(){
+   std::vector<std::vector<char>> usernames;
+    for(ThClient *client : this->clients){
+        usernames.push_back(client->username);
+    }
+   return usernames; 
+}
+
+
 void GamePlay::add_client(ThClient* client){
     this->clients.push_back(client);
 }

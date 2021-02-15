@@ -71,6 +71,9 @@ bool Map::is_item(char id)
 }
 
 bool Map::valid_position(int x, int y) {
+  if(x < 0 || x >= this->map.size() || y < 0 || y >= this->map[x].size()){
+    return false;
+  }
   char squareId = this->get_id(x, y);
   if (this->is_solid(squareId)) {
     return false;

@@ -22,10 +22,11 @@ private:
   SdlTexture tx_joinGame;
   SdlTexture tx_descList;
   SdlTexture tx_enterGame;
-  SdlTexture tx_descStart;
+  SdlTexture tx_chooseMap;
   SdlTexture tx_descUser;
   SdlTexture tx_descMaps;
   SdlTexture tx_continue;
+  SdlMusic music_menu;
 public:
   std::vector<std::vector<int>>  vector_map;
 
@@ -40,15 +41,19 @@ public:
 
   void runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator);
 
+  void runMapSelection(SdlRenderer& renderer, ClientSettings& settings);
+
   void runEndScreen(SdlRenderer& renderer, ClientSettings& settings);
 
   void drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
 
-  void drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText);
+  void drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText);
 
   void drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<int> matches_id);
 
   void drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames);
+
+  void drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list);
 
   void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings);
 

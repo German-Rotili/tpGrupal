@@ -111,5 +111,16 @@ std::vector<std::string> MapHandler::getMapList() {
     maps[i] = root[i].as<std::string>();
   }
 
+  // Hago un purge de mapas inválidos.
+  for (std::vector<std::string>::iterator it = maps.begin();
+  it != maps.end(); it++) {
+    try {
+      (this->readMap(*it));
+    } catch (std::exception const& e) {
+      maps.erase(it);
+      --it;
+    }
+  }
+
   return maps;
 }

@@ -26,10 +26,13 @@ Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   tx_joinGame(renderer, font, "Join Game", 255, 255, 255),
   tx_descList(renderer, font, "Insert Game Code", 255, 255, 255),
   tx_enterGame(renderer, font, "Enter Game", 255, 255, 255),
-  tx_descStart(renderer, font, "Insert Map Path", 255, 255, 255),
+  tx_chooseMap(renderer, font, "Choose a map:", 255, 255, 255),
   tx_descUser(renderer, font, "Insert Username", 255, 255, 255),
   tx_descMaps(renderer, font, "Choose a Map", 255, 255, 255),
-  tx_continue(renderer, font, "Continue", 255, 255, 255){}
+  tx_continue(renderer, font, "Continue", 255, 255, 255),
+  music_menu("../resources/music/menu.mp3") {
+    music_menu.play();
+  }
 
 Menu::~Menu(){}
 
@@ -101,15 +104,10 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
 }
 
 void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
-
-  SdlMusic musicaMenu("../resources/music/menu.mp3");
-  musicaMenu.play();
-
   std::string path;
   MapHandler mapHandler;
   std::string inputText = "";
-  bool renderText = false;
-  bool insertMapName = false;
+  bool selectMap = false;
 
   bool advance = false;
   bool quit = false;
@@ -117,7 +115,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-    drawStartPage(renderer, settings, inputText, renderText);
+    drawStartPage(renderer, settings, inputText);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
@@ -126,10 +124,9 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/2) - 15 && e.button.y <= (settings.screenHeight/2) + 20) {
             if (e.button.x >= (settings.screenWidth/2) - 150 && e.button.x <= (settings.screenWidth/2) - 30){
-              insertMapName = true;
-              renderText = true;
-              //advance = true;
-              // quit = true;
+              selectMap = true;
+              advance = true;
+              quit = true;
               //Despues pide un nombre de archivo .yaml y despues de un SDLK_RETURN va al GameLobby
             } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
               //Join Game
@@ -141,70 +138,6 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               quit = true;
             }
           }
-        }
-      } else if (e.type == SDL_KEYDOWN && (insertMapName)) {
-        switch (e.key.keysym.sym) {
-          case SDLK_RETURN:
-          path = "../resources/config/" + inputText + ".yaml";
-          try {
-
-              std::string filename(path);
-              std::vector<char> bytes;
-              char byte = 0;
-              std::ifstream input_file(filename);
-              if (!input_file.is_open()) {
-                std::cerr << "Error al abrir mapa" << std::endl;
-              }
-              while (input_file.get(byte)) {
-                bytes.push_back(byte);
-              }
-              input_file.close();
-
-              this->client.new_game(bytes);
-
-              this->vector_map = mapHandler.readMap(inputText);
-
-           } catch (std::exception const& e) {
-            printf("Hubo una excepción: ");
-            std::cout << e.what() << "\n";
-          }
-
-          if (true) {
-            advance = true;
-            quit = true;
-          } else {
-            inputText = "";
-          }
-
-          break;
-
-          case SDLK_BACKSPACE:
-          if (inputText.length() > 0) {
-            inputText.pop_back();
-            renderText = true;
-          }
-          break;
-
-          case SDLK_c:
-          if (SDL_GetModState() & KMOD_CTRL) {
-            SDL_SetClipboardText(inputText.c_str());
-          }
-          break;
-
-          case SDLK_v:
-          if (SDL_GetModState() & KMOD_CTRL) {
-            inputText = SDL_GetClipboardText();
-            renderText = true;
-          }
-          break;
-        }
-      } else if (e.type == SDL_TEXTINPUT &&
-        (insertMapName)) {
-        if(!(SDL_GetModState() & KMOD_CTRL && (e.text.text[0] == 'c' ||
-        e.text.text[0] == 'C' || e.text.text[0] == 'v' ||
-        e.text.text[0] == 'V' ))) {
-          inputText += e.text.text;
-          renderText = true;
         }
       }
     }
@@ -219,9 +152,9 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   }
 
   if (advance) {
-    if (renderText) {
+    if (selectMap) {
       std::cout<<"Ya envie el mapa, me voy al lobby"<<std::endl;
-      runGameLobby(renderer, settings, true);
+      runMapSelection(renderer, settings);
     } else {
     std::cout <<"Me voy a la lista de espera " <<std::endl;
 
@@ -230,31 +163,72 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   }
 }
 
-// void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
-//   MapHandler mapHandler;
-//   std::string inputText = "";
-//   bool renderText = false;
-//   bool insertMapName = false;
+void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
+   MapHandler mapHandler;
 
-//   bool advance = false;
-//   bool quit = false;
-//   SDL_Event e;
+   int boton_apretado = -1;
+   std::string path = "";
+   bool advance = false;
+   bool quit = false;
+   SDL_Event e;
 
-//   std::vector<std::string> maps = mapHandler.getMapList();
-//   //No es el game loop
-//   while (!quit) {
-//     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-//     drawMapSelection(renderer, settings, maps);
-//     std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
-//     unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-//     int sleep_time = 1000000/settings.fps - elapsed_microseconds;
-//     if (sleep_time > 0) {
-//       usleep(1000000/settings.fps - elapsed_microseconds);
-//     } else {
-//       printf("Bajada de FPS\n");
-//     }
-//   }
-// }
+  std::vector<std::string> maps = mapHandler.getMapList();
+
+  //No es el game loop
+  while (!quit) {
+    std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
+    drawMapSelection(renderer, settings, maps);
+    while (SDL_PollEvent(&e) != 0) {
+      if (e.type == SDL_QUIT) {
+        quit = true;
+      } else if (e.type == SDL_MOUSEBUTTONDOWN) {
+        if (e.button.button == SDL_BUTTON_LEFT) {
+          if (e.button.y >= (settings.screenHeight/8) && e.button.y <= (settings.screenHeight/16 * 10) + (settings.screenHeight/16)) {
+            if (e.button.x >= (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2 + settings.screenWidth/4)) {
+             boton_apretado = int(e.button.y/(settings.screenHeight/16)) - 2 ;
+             if (boton_apretado >= maps.size()) continue;
+             path = "../resources/config/" + maps[boton_apretado] + ".yaml";
+             try {
+              std::string filename(path);
+              std::vector<char> bytes;
+              char byte = 0;
+              std::ifstream input_file(filename);
+              if (!input_file.is_open()) {
+                std::cerr << "Error al abrir mapa" << std::endl;
+              }
+              while (input_file.get(byte)) {
+                bytes.push_back(byte);
+              }
+              input_file.close();
+
+              this->client.new_game(bytes);
+
+              this->vector_map = mapHandler.readMap(maps[boton_apretado]);
+
+           } catch (std::exception const& e) {
+              printf("Hubo una excepción: ");
+              std::cout << e.what() << "\n";
+            }
+             advance = true;
+             quit = true;
+            }
+          }
+        }
+      }
+    }
+    std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
+    unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    int sleep_time = 1000000/settings.fps - elapsed_microseconds;
+    if (sleep_time > 0) {
+      usleep(1000000/settings.fps - elapsed_microseconds);
+    } else {
+      printf("Bajada de FPS\n");
+    }
+  }
+  if (advance) {
+    runGameLobby(renderer, settings, true);
+  }
+}
 
 void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   std::string inputText = "";
@@ -443,7 +417,7 @@ void Menu::drawInsertUsername(SdlRenderer& renderer, ClientSettings& settings, s
   renderer.renderPresent();
 }
 
-void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText) {
+void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::string inputText) {
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
@@ -454,11 +428,6 @@ void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::s
   renderer.renderCopyCentered(this->tx_joinGame, NULL, (settings.screenWidth/2) + 90, (settings.screenHeight/2));
   renderer.setRenderDrawColor(255, 255, 255, 255);
   renderer.renderDrawRect((settings.screenWidth/2) + 30, (settings.screenHeight/2) - 15, 120, 35);
-
-  if (renderText) {
-    renderer.renderCopyCentered(this->tx_descStart, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
-    textPrompt(renderer, settings, inputText);
-  }
 
   renderer.renderPresent();
 }
@@ -493,6 +462,27 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
     renderer.renderFillRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/2)-100, (settings.screenWidth/2), 75);
     renderer.renderCopyCentered(this->tx_descList, NULL, (settings.screenWidth/2), (settings.screenHeight/2)-50);
     textPrompt(renderer, settings, inputText);
+  }
+
+  renderer.renderPresent();
+}
+
+void Menu::drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list) {
+  renderer.setRenderDrawColor(100, 100, 100, 255);
+  renderer.renderClear();
+  renderer.renderCopyCentered(tx_chooseMap, NULL, settings.screenWidth/2, settings.screenHeight/16);
+  // dibujar mensaje de seleccion
+  for (int i = 0; i < map_list.size(); i++) {
+    if (i >= 10) continue;
+    SdlTexture tx_mapname(renderer, font, map_list.at(i), 255, 255, 255);
+    renderer.renderCopyCentered(tx_mapname, NULL, (settings.screenWidth/2), (settings.screenHeight/16) * (i+2) + (settings.screenHeight/32));
+    renderer.setRenderDrawColor(255, 255, 255, 255);
+    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/16) * (i+2), (settings.screenWidth/2), (settings.screenHeight/16));
+  }
+
+  for (int i = 10; i > map_list.size(); i--) {
+    renderer.setRenderDrawColor(150, 150, 150, 255);
+    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/16) * (i+1), (settings.screenWidth/2), (settings.screenHeight/16));
   }
 
   renderer.renderPresent();

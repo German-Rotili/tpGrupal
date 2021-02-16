@@ -59,6 +59,16 @@ std::vector<char> Map::get_raw_map(){
   return this->raw_map;
 }
 
+void Map::add_action(int player_id, float weapon_id, float posx, float posy) 
+{
+  Action *action = new Action(player_id);
+  action->update_values(posx, posy, weapon_id);
+  this->actions.push_back(action);
+
+}
+
+
+
 
 void Map::remove_item(int x, int y) {
   this->map[x][y] = EMPTY;
@@ -72,13 +82,18 @@ bool Map::is_item(char id)
 
 bool Map::valid_position(int x, int y) {
   if(x < 0 || x >= this->map.size() || y < 0 || y >= this->map[x].size()){
+    std::cout << "en x: " << x << " y: " << y << "fuera de rango" << std::endl;
     return false;
   }
-  char squareId = this->get_id(x, y);
+  int squareId = this->get_id(x, y);
   if (this->is_solid(squareId)) {
+    std::cout << "en x: " << x << " y: " << y << "solid id: " << squareId << std::endl;
+
     return false;
   }
   if (this->is_door(squareId)) {
+        std::cout << "en x: " << x << " y: " << y << "door id: " << squareId << std::endl;
+
     return this->doors.find(x)->second.find(y)->second.is_walkable();
   }
   return true;
@@ -118,9 +133,14 @@ Map::Map(  std::vector<char> raw_map) : raw_map{raw_map}{
   std::string map_aux(raw_map.data());
   MapHandler handler;
   try{
-    this->map = handler.readMapFromString(map_aux);
+    std::vector<std::vector <int>> vector_al_revez = handler.readMapFromString(map_aux);
 //    this->map = handler.readMap("../resources/config/map1.yaml");
-
+    for(int x = 0; x < vector_al_revez[0].size(); x++){
+        this->map.push_back(std::vector<int>());
+        for(int y = 0; y < vector_al_revez.size(); y++){
+          this->map[x].push_back(vector_al_revez[y][x]);
+        }
+    }
   }catch (std::exception const& e) {
             printf("Hubo una excepción: ");
             std::cout << e.what() << "\n";

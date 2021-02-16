@@ -59,9 +59,9 @@ public:
 
   std::vector<char> get_raw_map();
 
-
-  friend class GamePlay;
+  void add_action(int player_id, float weapon_id, float posx, float posy);
   
+  friend class GamePlay;
 };
 
 

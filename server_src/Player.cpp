@@ -23,6 +23,7 @@ void Player::execute_intention(char intention) {
       this->acction();
     }
     if (intention == ATTACK) {
+      std::cout << "attack" << std::endl;
       this->attack();
     }
   }

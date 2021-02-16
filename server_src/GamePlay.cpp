@@ -90,6 +90,10 @@ void GamePlay::append_actions(Snapshot &snapshot){
        snapshot.add_action(action_aux);
        //deberia borrar la lista de acciones.
     }
+    for(Action *action : this->map.actions){
+       free(action);
+    }
+    this->map.actions.clear();
 }
 void GamePlay::append_rockets(Snapshot &snapshot){
     for(Rocket &rocket : this->map.rockets){

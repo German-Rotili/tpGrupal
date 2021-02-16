@@ -112,6 +112,8 @@ void Weapon::fire(float angle) {
   if (distance != 0) {
     player_hit->get_damaged(this->get_damage(distance));
     // appendear la accion al helper de acciones.
+    this->map->add_action(this->inventory->get_player().get_id(), this->inventory->get_current_weapon_id(),impact.first,impact.second);
+
   }
 }
 

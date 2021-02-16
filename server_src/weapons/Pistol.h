@@ -8,7 +8,6 @@ class Config;
 class Pistol : public Weapon {
 private:
   float get_shot_angle() override;
-  
 
 public:
   Pistol(Map *, Config *);

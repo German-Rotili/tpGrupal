@@ -7,6 +7,7 @@
 #include "../common_src/SDLWrappers/SdlContexto.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
+#include "Player.h"
 #include "Map/WorldMap.h"
 
 class RayCaster {
@@ -33,7 +34,7 @@ public:
   explicit RayCaster(SdlTexture& walls, ClientSettings& settings);
   ~RayCaster();
 
-  void cast3D(SdlRenderer& renderer, WorldMap& myMap, double x, double y,
-    double actorAngle, ClientSettings& settings);
+  void cast3D(SdlRenderer& renderer, WorldMap& myMap, Player& player,
+    ClientSettings& settings);
 };
 #endif

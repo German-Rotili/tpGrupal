@@ -156,7 +156,7 @@ void World::actualizar(Snapshot & snapshot, ProtectedQueueAction & actions) {
     int actions_processed = 0;
     while(!actions.is_empty() || actions_processed == MAX_ACTIONS_PROCESSED){
       actions_processed +=1;
-      Action action = actions.get_element(); 
+      Action action = actions.get_element();
       if (action.get_id() == -1){ // Caso explosion
         explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, jugador, src.tx_explosion,src.snd_explosion, settings));
       } else if (action.get_id() == this->player_id) {  // caso disparo jugador
@@ -198,7 +198,7 @@ void World::actualizar(Snapshot & snapshot, ProtectedQueueAction & actions) {
 }
 
 void World::renderizar(ClientSettings& settings) {
-  rayCaster.cast3D(renderer, worldMap, jugador.getX(), jugador.getY(), jugador.getDirection(), settings);
+  rayCaster.cast3D(renderer, worldMap, jugador, settings);
 
   std::vector<ZRenderable*> visibles;
   // obtengo objetos visibles

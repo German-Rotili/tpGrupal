@@ -1,6 +1,5 @@
-amount: 5
+amount: 4
 0: map1
 1: map2
-2: mapa_largo.yaml
-3: mapa_largo
-4: mapa_largo
+2: mapa_largo
+3: mapbig

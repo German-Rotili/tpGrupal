@@ -11,8 +11,6 @@ class ClientSettings {
     std::string username;
 		ClientSettings(int screenWidth, int screenHeight, int fps, int fov);
 		~ClientSettings();
-    // Esto deberia ir en otra clase
-    double distance(double x1, double y1, double x2, double y2);
 };
 
 #endif  // CLIENTSETTINGS_H

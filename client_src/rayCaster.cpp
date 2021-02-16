@@ -59,15 +59,15 @@ void RayCaster::dibujarPisoYTecho(SdlRenderer& renderer, ClientSettings& setting
   renderer.renderFillRect(0, 0, settings.screenWidth, HALF_SCREEN_HEIGHT);
 }
 
-void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
-  double y, double actorAngle, ClientSettings& settings) {
+void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, Player& player,
+   ClientSettings& settings) {
   dibujarPisoYTecho(renderer, settings);
-  int tileX = int(x);
-  double dx = x - tileX;
-  int tileY = int(y);
-  double dy = y - tileY;
+  int tileX = int(player.getX());
+  double dx = player.getX() - tileX;
+  int tileY = int(player.getY());
+  double dy = player.getY() - tileY;
 
-  double rayAngle = actorAngle - HALF_FOV;
+  double rayAngle = player.getDirection() - HALF_FOV;
 
   for (int rayNumber = 0; rayNumber < settings.screenWidth; rayNumber++) {
     double x = tileX;
@@ -177,8 +177,8 @@ void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
       }
     }
 
-    double d1 = settings.distance(tileX+dx, tileY+dy, xIntercept, y+int(tileStepY == 1));
-    double d2 = settings.distance(tileX+dx, tileY+dy, x+int(tileStepX == 1), yIntercept);
+    double d1 = player.getDistanceToPoint(xIntercept, y+int(tileStepY == 1));
+    double d2 = player.getDistanceToPoint(x+int(tileStepX == 1), yIntercept);
 
     int texture_id;
     SDL_Rect clip;
@@ -195,7 +195,7 @@ void RayCaster::cast3D(SdlRenderer& renderer, WorldMap& myMap, double x,
     }
     clip.w = 1;
     // Distancia proyectada a la camara
-    double proy = distortedDist * cos((actorAngle - rayAngle)*M_PI_180);
+    double proy = distortedDist * cos((player.getDirection() - rayAngle)*M_PI_180);
     double scale = (1/proy) * TEXTURE_RELATIVE_HSCALE;
 
     zBuffer[rayNumber] = distortedDist;

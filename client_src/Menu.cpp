@@ -5,7 +5,7 @@
 #include <iostream>
 #include <chrono>
 #include <unistd.h>
-#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlContext.h"
 #include "../common_src/SDLWrappers/SdlMusic.h"
 #include "../common_src/SDLWrappers/SdlWindow.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
@@ -94,7 +94,7 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
     if (sleep_time > 0) {
       usleep(1000000/settings.fps - elapsed_microseconds);
     } else {
-      printf("Bajada de FPS\n");
+      std::cout << "Bajada de FPS" << std::endl;
     }
   }
 
@@ -147,7 +147,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
     if (sleep_time > 0) {
       usleep(1000000/settings.fps - elapsed_microseconds);
     } else {
-      printf("Bajada de FPS\n");
+      std::cout << "Bajada de FPS" << std::endl;
     }
   }
 
@@ -206,7 +206,7 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
               this->vector_map = mapHandler.readMap(maps[boton_apretado]);
 
            } catch (std::exception const& e) {
-              printf("Hubo una excepción: ");
+              std::cout << "Hubo una excepcion" << std::endl;
               std::cout << e.what() << "\n";
             }
              advance = true;
@@ -222,7 +222,7 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
     if (sleep_time > 0) {
       usleep(1000000/settings.fps - elapsed_microseconds);
     } else {
-      printf("Bajada de FPS\n");
+      std::cout << "Bajada de FPS" << std::endl;
     }
   }
   if (advance) {
@@ -310,7 +310,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
     if (sleep_time > 0) {
       usleep(1000000/settings.fps - elapsed_microseconds);
     } else {
-      printf("Bajada de FPS\n");
+      std::cout << "Bajada de FPS" << std::endl;
     }
   }
 
@@ -358,7 +358,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
     if (sleep_time > 0) {
       usleep(1000000/settings.fps - elapsed_microseconds);
     } else {
-      printf("Bajada de FPS\n");
+      std::cout << "Bajada de FPS" << std::endl;
     }
   }
 
@@ -395,7 +395,7 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
     if (sleep_time > 0) {
       usleep(1000000/settings.fps - elapsed_microseconds);
     } else {
-      printf("Bajada de FPS\n");
+      std::cout << "Bajada de FPS" << std::endl;
     }
   }
 

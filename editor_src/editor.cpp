@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
-#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlContext.h"
 #include "../common_src/SDLWrappers/SdlWindow.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "../common_src/SDLWrappers/SdlException.h"
@@ -16,7 +16,7 @@
 
 int main(int argc, char* args[]) {
   try {
-    SdlContexto contexto;  // Inicializa SDL y SDL_image
+    SdlContext contexto;  // Inicializa SDL y SDL_image
 
     int realWidth = SCREEN_WIDTH + MENU_OFFSET;
 

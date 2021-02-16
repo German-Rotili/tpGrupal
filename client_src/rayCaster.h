@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <iostream>
-#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlContext.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
 #include "Player.h"

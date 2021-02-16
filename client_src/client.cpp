@@ -1,9 +1,8 @@
-#include <stdio.h>
 #include <unistd.h>  // Para usleep
 #include <iostream>
 #include <vector>
 #include <chrono>
-#include "../common_src/SDLWrappers/SdlContexto.h"
+#include "../common_src/SDLWrappers/SdlContext.h"
 #include "../common_src/SDLWrappers/SdlWindow.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "World.h"
@@ -29,7 +28,7 @@ int main(int argc, char* args[]) {
     ClientConfigHandler config;
     config.initConfig("../resources/config/clientConfig.yaml");
     ClientSettings settings(config.getWidth(), config.getHeight(), FPS, config.getFOV());
-    SdlContexto contexto;  // Inicializa SDL, image, ttf y mixer
+    SdlContext sdlContext;  // Inicializa SDL, image, ttf y mixer
     const char* WINDOW_NAME = "Wolfenstein Client";
     SdlWindow window(WINDOW_NAME, settings.screenWidth, settings.screenHeight, config.getFullscreen());
 
@@ -108,8 +107,8 @@ int main(int argc, char* args[]) {
       if (currentKeyStates[SDL_SCANCODE_SPACE ]) {
         intention.push_back(' ');
       }
-      
-      if(intention.size() > 0){
+
+      if (intention.size() > 0) {
         Intention intention_aux(client_id, intention);
         intentions.add_element(intention_aux);
       }
@@ -117,7 +116,7 @@ int main(int argc, char* args[]) {
       update_snapshot = requester.get_snapshot();
 
 //      update_snapshot.print();
-      
+
       world.actualizar(update_snapshot, actions);
       world.renderizar(settings);
 
@@ -128,20 +127,16 @@ int main(int argc, char* args[]) {
       if (sleep_time > 0) {
         usleep(1000000/settings.fps - elapsed_microseconds);
       } else {
-        printf("Bajada de FPS\n");
+        std::cout << "Bajada de FPS" << std::endl;
       }
     }
   }
-  catch (SdlException& e) {
-    printf("Hubo una excepción:\n");
-    std::cout << e.what();
-  }
   catch (std::exception const& e) {
-    printf("Hubo una excepción:\n");
-    std::cout << e.what();
+    std::cout << "Hubo una excepción:" << std::endl;
+    std::cout << e.what() << std::endl;
   }
   catch (...) {
-    printf("Error inesperado\n");
+    std::cout << "Error inesperado" << std::endl;
   }
   return 0;
 }

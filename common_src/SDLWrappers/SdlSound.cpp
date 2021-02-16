@@ -27,7 +27,6 @@ const {
 	// angle 135 sería atras a la izquierda
 	int retChannel = Mix_PlayChannel(channel, sound, times);
 	if(!Mix_SetPosition(retChannel, angle, distance)) {
-    printf("Mix_SetPosition: %s\n", Mix_GetError());
-    // no position effect, is it ok?
+    std::cout << "Mix_SetPosition: " << Mix_GetError() << std::endl;
 	}
 }

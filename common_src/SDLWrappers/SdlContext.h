@@ -1,16 +1,17 @@
-#ifndef SDLCONTEXTO_H
-#define SDLCONTEXTO_H
+#ifndef SDLCONTEXT_H
+#define SDLCONTEXT_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 #include "SdlException.h"
+#include <iostream>
 
-class SdlContexto {
+class SdlContext {
   public:
-    SdlContexto();
-    ~SdlContexto();
+    SdlContext();
+    ~SdlContext();
 };
 
-#endif  // SDLCONTEXTO_H
+#endif  // SdlContext_H

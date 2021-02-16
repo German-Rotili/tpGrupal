@@ -1,6 +1,6 @@
-#include "SdlContexto.h"
+#include "SdlContext.h"
 
-SdlContexto::SdlContexto() {
+SdlContext::SdlContext() {
 // Inicializo SDL
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     char error[BUF_SIZE];
@@ -28,7 +28,7 @@ SdlContexto::SdlContexto() {
  }
  Mix_AllocateChannels(64);
 }
-SdlContexto::~SdlContexto() {
+SdlContext::~SdlContext() {
   TTF_Quit();
   IMG_Quit();
   SDL_Quit();

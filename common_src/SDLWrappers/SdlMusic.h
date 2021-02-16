@@ -1,7 +1,7 @@
 #ifndef SDLMUSIC_H
 #define SDLMUSIC_H
 
-#include "SdlContexto.h"
+#include "SdlContext.h"
 #include <string>
 
 class SdlMusic {

@@ -1,7 +1,7 @@
 #ifndef SDLSOUND_H
 #define SDLSOUND_H
 
-#include "SdlContexto.h"
+#include "SdlContext.h"
 #include <string>
 
 class SdlSound {

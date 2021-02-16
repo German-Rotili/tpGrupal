@@ -25,7 +25,7 @@ class DoorTile: public Tile {
     ~DoorTile();
     double getClosedPercentage() const;
     void setClosed(bool isClosed);
-    void actualizar() override;
+    void update() override;
 };
 
 #endif  // DOORTILE_H

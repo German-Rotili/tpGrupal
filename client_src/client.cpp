@@ -117,8 +117,8 @@ int main(int argc, char* args[]) {
 
 //      update_snapshot.print();
 
-      world.actualizar(update_snapshot, actions);
-      world.renderizar(settings);
+      world.update(update_snapshot, actions);
+      world.render(settings);
 
       std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
 

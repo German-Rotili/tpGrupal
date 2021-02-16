@@ -38,7 +38,7 @@ class Enemy : public ZRenderable {
 		void setIsRunning(bool isRunning);
 		void setShootingAction();
 		void setIsAlive(bool isAlive);
-		void actualizar() override;
+		void update() override;
 };
 
 #endif  // ENEMY_H

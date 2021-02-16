@@ -24,7 +24,7 @@ class World {
   SdlRenderer& renderer;
   ResourcesLoader src;
   ClientSettings& settings;
-  Player jugador;
+  Player myPlayer;
   WorldMap worldMap;
   int player_id;
   std::vector<Object*> objetosConstantes;
@@ -68,8 +68,8 @@ class World {
 //		World(SdlRenderer& renderer, ClientSettings& settings);
 		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map, int player_id);
     ~World();
-    void actualizar(Snapshot & snapshot, ProtectedQueueAction & actions);
-    void renderizar(ClientSettings& settings);
+    void update(Snapshot & snapshot, ProtectedQueueAction & actions);
+    void render(ClientSettings& settings);
 };
 
 #endif  // WORLD_H

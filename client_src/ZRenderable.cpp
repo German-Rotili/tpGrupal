@@ -68,7 +68,7 @@ void ZRenderable::updateDistToPlayer() {
 	distToPlayer = player.getDistanceToPoint(x, y);
 }
 
-void ZRenderable::renderizar(SdlRenderer& renderer, double zBuffer[],
+void ZRenderable::render(SdlRenderer& renderer, double zBuffer[],
 	 ClientSettings& settings) {
 	double proy = distToPlayer * cos(difAnglePlayer*M_PI_180);
 	double scale = (1/proy) * SCREENHEIGHT_CLIPW;

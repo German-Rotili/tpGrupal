@@ -54,20 +54,20 @@ class Hud {
 	int displayScore;
 	int displayLives;
 
-	void actualizarAmmo();
-	void actualizarHealth();
-	void actualizarLives();
-	void actualizarScore();
-	void actualizarWeapons();
-	void actualizarFaceBlood();
-	void actualizarFaceAnimation();
+	void updateAmmo();
+	void updateHealth();
+	void updateLives();
+	void updateScore();
+	void updateWeapons();
+	void updateFaceBlood();
+	void updateFaceAnimation();
 	// Llama a las funciones de actualizacion
 	public:
 		Hud(class SdlRenderer& renderer, const class Player& player, const class ClientSettings& settings);
 
 		~Hud();
-		void actualizar();
-		void renderizar(const class ClientSettings& settings);
+		void update();
+		void render(const class ClientSettings& settings);
 };
 
 #endif  // HUD_H

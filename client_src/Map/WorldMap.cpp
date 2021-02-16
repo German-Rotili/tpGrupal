@@ -91,8 +91,8 @@ void WorldMap::setEstadoPuerta(int x, int y, bool isClosed) {
       (door)->setClosed(isClosed);
 }
 
-void WorldMap::actualizar() {
+void WorldMap::update() {
   for (auto tile = actualizables.begin(); tile != actualizables.end(); tile++) {
-    (*tile)->actualizar();
+    (*tile)->update();
   }
 }

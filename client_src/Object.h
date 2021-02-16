@@ -11,7 +11,7 @@ class Object : public ZRenderable{
 	public:
 		Object(double xInicial, double yInicial, SDL_Rect clip, const SdlTexture& texture, Player& player, ClientSettings& settings);
 		~Object();
-		void actualizar() override {};
+		void update() override {};
 };
 
 #endif  // OBJECT_H

@@ -7,7 +7,7 @@ class WallTile : public Tile {
     explicit WallTile(const SDL_Rect* clip):
       Tile::Tile(clip) {}
     ~WallTile() {}
-    void actualizar() override {}
+    void update() override {}
 };
 
 #endif  // WALLTILE_H

@@ -16,7 +16,7 @@ class ZRenderable {
 	// calcular posicion de renderizado o sonidos.
 	const Player& player;
 	// difAngle guarda la diferencia (de grados) entre el angulo que
-	// mira el jugador y el angulo desde el x,y del jugador hasta el x,y del objeto
+	// mira el player y el angulo desde el x,y del player hasta el x,y del objeto
 	double difAnglePlayer;
 	// distToPlayer guarda la distancia
 	double distToPlayer;
@@ -46,9 +46,9 @@ class ZRenderable {
 		// Retorna true si la posicion es distinta a la que tenia antes
 		bool setPosicion(double x, double y);
 
-		virtual void actualizar() = 0;
+		virtual void update() = 0;
 		void updateDistToPlayer();
-    void renderizar(SdlRenderer& renderer,
+    void render(SdlRenderer& renderer,
 		 double zBuffer[], ClientSettings& settings);
 };
 

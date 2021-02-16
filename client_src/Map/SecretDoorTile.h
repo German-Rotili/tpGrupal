@@ -12,7 +12,7 @@ class SecretDoorTile: public Tile {
     ~SecretDoorTile();
     double getDepthPercentage() const;
     void setClosed(bool isClosed);
-    void actualizar() override;
+    void update() override;
 };
 
 #endif  // SECRETDOORTILE_H

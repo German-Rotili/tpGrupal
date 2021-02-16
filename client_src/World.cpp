@@ -9,10 +9,10 @@ World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::v
   renderer(renderer),
   src(renderer),
   settings(settings),
-  jugador(renderer, src, settings, 1.5, 2.5, -45, 100, 0, 3),
-  worldMap(map, jugador, src),
+  myPlayer(renderer, src, settings, 1.5, 2.5, -45, 100, 0, 3),
+  worldMap(map, myPlayer, src),
   player_id(player_id),
-  hud_jugador(renderer, jugador, settings),
+  hud_jugador(renderer, myPlayer, settings),
   music("../resources/music/music2.mp3"),
   rayCaster(src.tx_walls, settings) {
     music.play();
@@ -29,28 +29,28 @@ void World::cargarObjetosConstantes(std::vector<std::vector<int>> & map) {
     for (col = row->begin(); col != row->end(); col++) {
         switch (*col) {
          case 36:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, barril_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, barril_clip, src.tx_objects, myPlayer, settings));
          break;
          case 37:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, pozo_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, pozo_clip, src.tx_objects, myPlayer, settings));
          break;
          case 38:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, columna_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, columna_clip, src.tx_objects, myPlayer, settings));
          break;
          case 39:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, estatua_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, estatua_clip, src.tx_objects, myPlayer, settings));
          break;
          case 40:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp1_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp1_clip, src.tx_objects, myPlayer, settings));
          break;
          case 41:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp2_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, lamp2_clip, src.tx_objects, myPlayer, settings));
          break;
          case 42:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, charco_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, charco_clip, src.tx_objects, myPlayer, settings));
          break;
          case 43:
-         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, huesos_clip, src.tx_objects, jugador, settings));
+         objetosConstantes.push_back(new Object(xmap + 0.5, ymap + 0.5, huesos_clip, src.tx_objects, myPlayer, settings));
          break;
        }
       xmap++;
@@ -89,64 +89,64 @@ void World::agregarObjetoDinamico(object_t* object) {
   double y = object->pos_y + 0.5;
   switch (object->id) {
     case 35:
-    objetosDinamicos.push_back(new Object(x, y, basic_clip, src.tx_rocket, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, basic_clip, src.tx_rocket, myPlayer, settings));
     break;
     case 44:
-    objetosDinamicos.push_back(new Object(x, y, llave1_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, llave1_clip, src.tx_objects, myPlayer, settings));
     break;
     case 45:
-    objetosDinamicos.push_back(new Object(x, y, llave2_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, llave2_clip, src.tx_objects, myPlayer, settings));
     break;
     case 46:
-    objetosDinamicos.push_back(new Object(x, y, sangre_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, sangre_clip, src.tx_objects, myPlayer, settings));
     break;
     case 47:
-    objetosDinamicos.push_back(new Object(x, y, comida_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, comida_clip, src.tx_objects, myPlayer, settings));
     break;
     case 48:
-    objetosDinamicos.push_back(new Object(x, y, kit_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, kit_clip, src.tx_objects, myPlayer, settings));
     break;
     case 49:
-    objetosDinamicos.push_back(new Object(x, y, balas_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, balas_clip, src.tx_objects, myPlayer, settings));
     break;
     case 50:
-    objetosDinamicos.push_back(new Object(x, y, ametralladora_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, ametralladora_clip, src.tx_objects, myPlayer, settings));
     break;
     case 51:
-    objetosDinamicos.push_back(new Object(x, y, canionDeCadena_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, canionDeCadena_clip, src.tx_objects, myPlayer, settings));
     break;
     case 52:
-    objetosDinamicos.push_back(new Object(x, y, lanzacohetes_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, lanzacohetes_clip, src.tx_objects, myPlayer, settings));
     break;
     case 53:
-    objetosDinamicos.push_back(new Object(x, y, cruz_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, cruz_clip, src.tx_objects, myPlayer, settings));
     break;
     case 54:
-    objetosDinamicos.push_back(new Object(x, y, copa_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, copa_clip, src.tx_objects, myPlayer, settings));
     break;
     case 55:
-    objetosDinamicos.push_back(new Object(x, y, cofre_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, cofre_clip, src.tx_objects, myPlayer, settings));
     break;
     case 56:
-    objetosDinamicos.push_back(new Object(x, y, corona_clip, src.tx_objects, jugador, settings));
+    objetosDinamicos.push_back(new Object(x, y, corona_clip, src.tx_objects, myPlayer, settings));
     break;
   }
 }
 
-void World::actualizar(Snapshot & snapshot, ProtectedQueueAction & actions) {
+void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
     for (auto &player : snapshot.players) {
       if (player->player_id == this->player_id){
-        jugador.setPosicion(player->pos_x , player->pos_y);
-        jugador.setDirection(player->direction);
-        jugador.setHealth(player->health);
-        jugador.setLives(player->lives);
-        jugador.setArmaActual(player->current_weapon);
-        jugador.setScore(player->score);
+        myPlayer.setPosicion(player->pos_x , player->pos_y);
+        myPlayer.setDirection(player->direction);
+        myPlayer.setHealth(player->health);
+        myPlayer.setLives(player->lives);
+        myPlayer.setArmaActual(player->current_weapon);
+        myPlayer.setScore(player->score);
       } else {
         if (enemigos.find(player->player_id) == enemigos.end()) {
-          enemigos.insert(std::pair<int, Enemy*>(player->player_id, new Enemy(-1, -1, basic_clip, 0, jugador, src, settings)));
+          enemigos.insert(std::pair<int, Enemy*>(player->player_id, new Enemy(-1, -1, basic_clip, 0, myPlayer, src, settings)));
         }
-        enemigos.at(player->player_id)->setRelativeDirection(player->direction, jugador.getDirection());  // Esto puede dar pequeños bugs visuales si se actualiza primero el enemigo y luego el player
+        enemigos.at(player->player_id)->setRelativeDirection(player->direction, myPlayer.getDirection());  // Esto puede dar pequeños bugs visuales si se actualiza primero el enemigo y luego el myPlayer
         bool seMovio = enemigos.at(player->player_id)->setPosicion(player->pos_x, player->pos_y);
         enemigos.at(player->player_id)->setIsRunning(seMovio);
         enemigos.at(player->player_id)->setWeapon(player->current_weapon);
@@ -158,21 +158,19 @@ void World::actualizar(Snapshot & snapshot, ProtectedQueueAction & actions) {
       actions_processed +=1;
       Action action = actions.get_element();
       if (action.get_id() == -1){ // Caso explosion
-        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, jugador, src.tx_explosion,src.snd_explosion, settings));
-      } else if (action.get_id() == this->player_id) {  // caso disparo jugador
-        jugador.setShootingAction();
-        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
+        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, myPlayer, src.tx_explosion,src.snd_explosion, settings));
+      } else if (action.get_id() == this->player_id) {  // caso disparo myPlayer
+        myPlayer.setShootingAction();
+        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, myPlayer, src.tx_bullethit,src.snd_bullethit, settings));
       } else if (enemigos.find(action.get_id()) != enemigos.end()) {  // caso disparo enemigo
         enemigos.at(action.get_id())->setShootingAction();
-        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, jugador, src.tx_bullethit,src.snd_bullethit, settings));
+        explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, myPlayer, src.tx_bullethit,src.snd_bullethit, settings));
       } else {
         continue;
       }
     }
 
-
-
-  // Actualizar objetos / puertas
+  // update objetos / puertas
   limpiarObjetosDinamicos();
   objetosDinamicos.resize(0);
   for (auto &object : snapshot.objects){
@@ -193,12 +191,12 @@ void World::actualizar(Snapshot & snapshot, ProtectedQueueAction & actions) {
      }
   }
 
-  worldMap.actualizar();
-  hud_jugador.actualizar();
+  worldMap.update();
+  hud_jugador.update();
 }
 
-void World::renderizar(ClientSettings& settings) {
-  rayCaster.cast3D(renderer, worldMap, jugador, settings);
+void World::render(ClientSettings& settings) {
+  rayCaster.cast3D(renderer, worldMap, myPlayer, settings);
 
   std::vector<ZRenderable*> visibles;
   // obtengo objetos visibles
@@ -220,7 +218,7 @@ void World::renderizar(ClientSettings& settings) {
   // obtengo explosiones visibles
   for (std::vector<Explosion*>::iterator it = explosiones.begin();
    it!= explosiones.end(); ++it) {
-     (*it)->actualizar();
+     (*it)->update();
      if ((*it)->esVisiblePorPlayer(settings)) {
        (*it)->updateDistToPlayer();
        visibles.push_back((*it));
@@ -230,7 +228,7 @@ void World::renderizar(ClientSettings& settings) {
   // obtengo enemigos visibles
   for (std::map<int, Enemy*>::iterator it = enemigos.begin();
    it!= enemigos.end(); ++it) {
-     (*it).second->actualizar();
+     (*it).second->update();
      if ((*it).second->esVisiblePorPlayer(settings)) {
        (*it).second->updateDistToPlayer();
        visibles.push_back((*it).second);
@@ -241,10 +239,10 @@ void World::renderizar(ClientSettings& settings) {
   // dibujo ordenadamente todos los visibles
   for (std::vector<ZRenderable*>::iterator it = visibles.begin();
    it!= visibles.end(); ++it) {
-    (*it)->renderizar(renderer, rayCaster.zBuffer, settings);
+    (*it)->render(renderer, rayCaster.zBuffer, settings);
   }
 
-  jugador.renderizar(settings);
-  hud_jugador.renderizar(settings);
+  myPlayer.render(settings);
+  hud_jugador.render(settings);
   renderer.renderPresent();
 }

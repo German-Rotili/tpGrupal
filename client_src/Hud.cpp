@@ -46,7 +46,7 @@ Hud::Hud(class SdlRenderer& renderer, const class Player& player, const ClientSe
 		livesTexture = NULL;
 		ammoIcon.setColorMod(c_yellow.r, c_yellow.g, c_yellow.b);
 		liveIcon.setColorMod(c_green.r, c_green.g, c_green.b);
-		actualizar();
+		update();
 		rectangleScreen_alpha = 0;
 }
 
@@ -57,7 +57,7 @@ Hud::~Hud() {
 	delete livesTexture;
 }
 
-void Hud::actualizarFaceBlood() {
+void Hud::updateFaceBlood() {
 	if (displayHealth <= 0) {
 		faceClip.y = 33*6;
 	} else if (displayHealth >= 100) {
@@ -66,7 +66,7 @@ void Hud::actualizarFaceBlood() {
 		faceClip.y = 33 * static_cast<int>((100-displayHealth)*7/100);
 	}
 }
-void Hud::actualizarFaceAnimation() {
+void Hud::updateFaceAnimation() {
 	if (playerWaitAnimation == 0) {
 		playerFaceAnimation += 0.1;
 		if (playerFaceAnimation > (2*M_PI)) {
@@ -79,7 +79,7 @@ void Hud::actualizarFaceAnimation() {
 	}
 }
 
-void Hud::actualizarAmmo() {
+void Hud::updateAmmo() {
 	int auxAmmo = player.getCantBalas();
 	if (auxAmmo != displayAmmo) {
 		if (auxAmmo > displayAmmo) {
@@ -94,7 +94,7 @@ void Hud::actualizarAmmo() {
 	}
 }
 
-void Hud::actualizarHealth() {
+void Hud::updateHealth() {
 	int auxHealth = player.getHealth();
 	if (auxHealth < displayHealth) {
 		c_rectangleScreen = c_red;
@@ -110,10 +110,10 @@ void Hud::actualizarHealth() {
 	delete healthTexture;
 	healthTexture = new SdlTexture(renderer, font,
 		"+" + std::to_string(displayHealth), c_green.r, c_green.g, c_green.b);
-	actualizarFaceBlood();
+	updateFaceBlood();
 }
 
-void Hud::actualizarScore() {
+void Hud::updateScore() {
 	int auxScore = player.getScore();
 	if (auxScore != displayScore) {
 		if (auxScore > displayScore) {
@@ -128,7 +128,7 @@ void Hud::actualizarScore() {
 	}
 }
 
-void Hud::actualizarLives() {
+void Hud::updateLives() {
 	int auxLives = player.getLives();
 	if (auxLives != displayLives) {
 		displayLives = auxLives;
@@ -138,23 +138,23 @@ void Hud::actualizarLives() {
 	}
 }
 
-void Hud::actualizarWeapons() {
+void Hud::updateWeapons() {
 	displayWeapons = player.getArmasDisponibles();
 }
 
-void Hud::actualizar() {
+void Hud::update() {
 	if (rectangleScreen_alpha > 0) {
 		rectangleScreen_alpha -= 20;
 	}
-	actualizarHealth();
-	actualizarAmmo();
-	actualizarScore();
-	actualizarLives();
-	actualizarWeapons();
-	actualizarFaceAnimation();
+	updateHealth();
+	updateAmmo();
+	updateScore();
+	updateLives();
+	updateWeapons();
+	updateFaceAnimation();
 }
 
-void Hud::renderizar(const ClientSettings & settings) {
+void Hud::render(const ClientSettings & settings) {
 	if (rectangleScreen_alpha > 0) {
 		renderer.setRenderDrawColor(c_rectangleScreen.r, c_rectangleScreen.g,
 			c_rectangleScreen.b, rectangleScreen_alpha);

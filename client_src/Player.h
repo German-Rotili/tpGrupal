@@ -66,7 +66,7 @@ class Player {
 		void setShootingAction();
 		void setCantBalas(int cantBalas);
 
-    void renderizar(ClientSettings& settings);
+    void render(ClientSettings& settings);
 };
 
 #endif  // PLAYER_H

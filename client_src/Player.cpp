@@ -133,7 +133,7 @@ void Player::setCantBalas(int cantBalas) {
 	this->cantBalas = cantBalas;
 }
 
-void Player::renderizar(ClientSettings& settings) {
+void Player::render(ClientSettings& settings) {
 	SDL_Rect auxClip = weaponClip;
 	auxClip.x += int(frameActual)*65;
 	if (animarArma) {

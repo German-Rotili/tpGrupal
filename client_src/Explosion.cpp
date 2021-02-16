@@ -22,7 +22,7 @@ Explosion::Explosion(double xInicial, double yInicial, SDL_Rect clip,
 
 Explosion::~Explosion() {}
 
-void Explosion::actualizar() {
+void Explosion::update() {
 	if (!finished) {
 		image_index += ANIMATION_SPEED;
 		if (image_index >= CANT_FRAMES) {

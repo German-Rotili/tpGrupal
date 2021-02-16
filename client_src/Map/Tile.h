@@ -19,7 +19,7 @@ class Tile {
       return clip;
     }
 
-    virtual void actualizar() = 0;
+    virtual void update() = 0;
 };
 
 #endif  // TILE_H

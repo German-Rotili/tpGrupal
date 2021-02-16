@@ -51,11 +51,11 @@ void Enemy::setShootingAction() {
 	image_index = 1;
 	// Sonido de disparo
 	this->setDifAnglePlayer();
-	int angulosonido = this->getDifAnglePlayer();
-	if (angulosonido < 0) {
-		angulosonido += 360;
+	int soundAngle = this->getDifAnglePlayer();
+	if (soundAngle < 0) {
+		soundAngle += 360;
 	}
-	sndWeapons[id_weapon]->playInPosition(-1, 0, angulosonido, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
+	sndWeapons[id_weapon]->playInPosition(-1, 0, soundAngle, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
 	//
 }
 void Enemy::setIsAlive(bool isAlive) {
@@ -64,11 +64,11 @@ void Enemy::setIsAlive(bool isAlive) {
 		image_index = 0;
 		// Sonido de muerte
 		this->setDifAnglePlayer();
-		int angulosonido = this->getDifAnglePlayer();
-		if (angulosonido < 0) {
-			angulosonido += 360;
+		int soundAngle = this->getDifAnglePlayer();
+		if (soundAngle < 0) {
+			soundAngle += 360;
 		}
-		sndDying.playInPosition(-1, 0, angulosonido, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
+		sndDying.playInPosition(-1, 0, soundAngle, std::min(int(player.getDistanceToPoint(x, y) * 22), 255));
 
 	} else if (!this->isAlive && isAlive) {
 		animarMuerte = false;
@@ -76,7 +76,7 @@ void Enemy::setIsAlive(bool isAlive) {
 	this->isAlive = isAlive;
 }
 
-void Enemy::actualizar() {
+void Enemy::update() {
 	if (animarMuerte) {
 		currentTexture = sDying[id_weapon];
 		clip.x = int(image_index) * 64;

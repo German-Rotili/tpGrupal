@@ -61,7 +61,7 @@ class WorldMap {
     ~WorldMap();
     const class Tile* getTile(int x, int y);
     void setEstadoPuerta(int x, int y, bool isClosed);
-    void actualizar();
+    void update();
 };
 
 #endif  // WORLDMAP_H

@@ -31,7 +31,7 @@ Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   tx_descMaps(renderer, font, "Choose a Map", 255, 255, 255),
   tx_continue(renderer, font, "Continue", 255, 255, 255),
   music_menu("../resources/music/menu.mp3") {
-    // music_menu.play();
+    music_menu.play();
   }
 
 Menu::~Menu(){}
@@ -108,6 +108,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
   MapHandler mapHandler;
   std::string inputText = "";
   bool selectMap = false;
+  bool musicStop = false;
 
   bool advance = false;
   bool quit = false;
@@ -137,6 +138,17 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               advance = true;
               quit = true;
             }
+          }
+        }
+      } else if (e.type == SDL_KEYDOWN) {
+        if (e.key.keysym.sym == SDLK_m) {
+          if (musicStop) {
+            music_menu.stop();
+            musicStop = true;
+          }
+          else {
+            music_menu.play();
+            musicStop = false;
           }
         }
       }
@@ -326,6 +338,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
 void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator) {
   bool advance = false;
   bool quit = false;
+  bool refresh = false;
   char input_id = 'x';
   std::vector<std::string> usernames= this->client.get_players_username();
 
@@ -334,21 +347,24 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     drawGameLobby(renderer, settings, creator, usernames);
-   
+
 
     //EJECUTAR ESTE SWITCH SOLO SI NOO SOS HOST
-    input_id = this->client.receive_flag();
-    switch (input_id){
-      case START:{
-        quit = true;
-        advance = true;
+    if (!creator) {
+      input_id = this->client.receive_flag();
+      switch (input_id){
+        case START:{
+          quit = true;
+          advance = true;
+        }
+        break;
+        case REFRESH:{
+          usernames = this->client.get_players_username();
+        }
+        break;
       }
-      break;
-      case REFRESH:{
-        usernames = this->client.get_players_username();
-      }
-      break;
-    }   
+    }
+
 
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
@@ -356,12 +372,16 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
-            if (e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) {
+            if ((e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) && creator) {
               //Inicia el juego
               this->client.start_match();
               quit = true;
               advance = true;
-            } //removed refresh button
+            } else if ((e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) && creator) {
+              printf("REFRESH\n");
+              this->client.refresh_game();
+              usernames = this->client.get_players_username();
+            }
           }
         }
       }
@@ -534,12 +554,12 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
     // }
 
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
+
+    renderer.setRenderDrawColor(255, 255, 255, 255);
+    renderer.renderCopyCentered(this->tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
+    renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
   }
-
-  renderer.setRenderDrawColor(255, 255, 255, 255);
-  renderer.renderCopyCentered(this->tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
-  renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
-
+  
   renderer.renderPresent();
 }
 

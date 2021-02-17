@@ -10,7 +10,8 @@ private:
   YAML::Node root;
 
 public:
-  void initConfig(std::string path);
+  explicit ClientConfigHandler(std::string path);
+  ~ClientConfigHandler();
 
   int getHeight();
 

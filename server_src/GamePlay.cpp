@@ -17,13 +17,11 @@ GamePlay::GamePlay(ThClient *player, Map&& map):map(map){
     this->add_client(player);
     IdMaker *IdMaker = IdMaker::GetInstance();
     this->intentions = new ProtectedQueueIntention();
-    // this->snapshots = new BlockingQueueSnapshot();
     this->id = IdMaker->generate_id();
 }
 
 GamePlay::~GamePlay(){
     delete this->intentions;
-    // delete this->snapshots;
     for(ThClientSender *sender : this->client_senders){
         sender->join();
         delete sender;
@@ -88,7 +86,6 @@ void GamePlay::append_actions(Snapshot &snapshot){
        Action *action_aux = new Action(action->player_id);
        action_aux->update_values(action->impact_x, action->impact_y, action->weapon_id);
        snapshot.add_action(action_aux);
-       //deberia borrar la lista de acciones.
     }
     for(Action *action : this->map.actions){
        free(action);
@@ -143,9 +140,9 @@ void GamePlay::run(){
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-            int sleep_time = 1000000/20 - elapsed_microseconds;
+            int sleep_time = 1000000/28 - elapsed_microseconds;
             if (sleep_time > 0) {
-                usleep(1000000/20 - elapsed_microseconds);
+                usleep(1000000/28 - elapsed_microseconds);
             }else{
                 std::cout << "Bajada FPS" << std::endl;
             }

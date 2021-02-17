@@ -4,7 +4,7 @@ void ThClientSender::run(){
         Serializer serializer;
         std::vector <char> msg;
         while (true){
-            Snapshot snapshot = this->snapshots->get_element();
+            Snapshot snapshot = this->snapshots.get_element();
             // snapshot.print();
             char action_id = ACTION_ID;
             char snapshot_id = SNAP_ID;
@@ -21,8 +21,8 @@ void ThClientSender::run(){
         }
 }
 
-ThClientSender::ThClientSender(Protocol& protocol, BlockingQueueSnapshot *snapshots):
-    protocol(protocol),snapshots(snapshots),state(true){
+ThClientSender::ThClientSender(Protocol& protocol):
+    protocol(protocol),state(true){
     IdMaker *IdMaker = IdMaker::GetInstance();
     }
 

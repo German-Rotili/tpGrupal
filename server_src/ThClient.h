@@ -23,7 +23,6 @@ private:
     Protocol protocol;
     ProtectedQueueIntention *intentions;
     std::mutex m;
-    // ThClientSender *sender;
     std::vector<char> username;
     bool state = true;
     GameHandler & game_handler;
@@ -40,7 +39,6 @@ public:
     ThClient(Protocol&& Protocol, GameHandler & game_handler);
     ~ThClient();
     void run() override;
-    // void send_snapshot(Snapshot snapshot);//aca el notify all?
     void start_game();
     void notify_players(std::vector<std::vector<char>> &usernames);
     void attach_queue(ProtectedQueueIntention * intentions);

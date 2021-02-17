@@ -26,7 +26,7 @@ private:
     bool state;
     std::vector<std::vector<char>> usernames;
     ProtectedQueueIntention *intentions;
-    BlockingQueueSnapshot *snapshots;
+    // BlockingQueueSnapshot *snapshots;
     std::vector <ThClient*> clients;
     std::vector <ThClientSender*> client_senders;
     Map map;

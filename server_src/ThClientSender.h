@@ -22,13 +22,13 @@
 
 class ThClientSender : public Thread{
     Protocol & protocol;
-    BlockingQueueSnapshot *snapshots;
+    BlockingQueueSnapshot snapshots;
     std::atomic<bool> state;
     ThClientSender& operator=(const ThClientSender&) = delete;
     ThClientSender(const ThClientSender&) = delete;
 
 public:
-    ThClientSender(Protocol& protocol, BlockingQueueSnapshot *snapshots);
+    ThClientSender(Protocol& protocol);
 
     void send_snapshot(Snapshot & snapshot);
 
@@ -37,6 +37,7 @@ public:
     void run() override;
 
     bool is_dead();
+    friend class GamePlay;
 };
 
 #endif

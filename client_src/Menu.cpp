@@ -31,7 +31,7 @@ Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   tx_descMaps(renderer, font, "Choose a Map", 255, 255, 255),
   tx_continue(renderer, font, "Continue", 255, 255, 255),
   music_menu("../resources/music/menu.mp3") {
-    music_menu.play();
+    // music_menu.play();
   }
 
 Menu::~Menu(){}

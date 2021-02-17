@@ -25,8 +25,7 @@ int main(int argc, char* args[]) {
     std::string service = args[SERVICE];
     Client client(service, hostname);
 
-    ClientConfigHandler config;
-    config.initConfig("../resources/config/clientConfig.yaml");
+    ClientConfigHandler config("../resources/config/clientConfig.yaml");
     ClientSettings settings(config.getWidth(), config.getHeight(), FPS, config.getFOV());
     SdlContext sdlContext;  // Inicializa SDL, image, ttf y mixer
     const char* WINDOW_NAME = "Wolfenstein Client";

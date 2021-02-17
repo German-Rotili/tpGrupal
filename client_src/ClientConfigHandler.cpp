@@ -3,9 +3,10 @@
 #include <fstream>
 #include "ClientConfigHandler.h"
 
-void ClientConfigHandler::initConfig(std::string path) {
-  root = YAML::LoadFile(path);
-}
+ClientConfigHandler::ClientConfigHandler(std::string path):
+  root(YAML::LoadFile(path)) {}
+
+ClientConfigHandler::~ClientConfigHandler() {}
 
 int ClientConfigHandler::getHeight() {
   int height = root["height"].as<int>();

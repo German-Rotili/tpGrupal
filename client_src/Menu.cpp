@@ -131,10 +131,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
               //Despues pide un nombre de archivo .yaml y despues de un SDLK_RETURN va al GameLobby
             } else if (e.button.x >= (settings.screenWidth/2) + 30 && e.button.x <= (settings.screenWidth/2) + 150) {
               //Join Game
-              std::cout << "JOIN" << std::endl;
               this->client.join_game();
-              std::cout << "Envio flag de join" << std::endl;
-
               advance = true;
               quit = true;
             }
@@ -165,11 +162,8 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
 
   if (advance) {
     if (selectMap) {
-      std::cout<<"Ya envie el mapa, me voy al lobby"<<std::endl;
       runMapSelection(renderer, settings);
     } else {
-    std::cout <<"Me voy a la lista de espera " <<std::endl;
-
       runGameList(renderer, settings);
     }
   }
@@ -254,7 +248,6 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
   bool advance = false;
   bool quit = false;
   SDL_Event e;
-  std::cout << "get matches id" << std::endl;
 
   matches_id = this->client.get_matches_id();
   //No es el game loop
@@ -274,9 +267,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
               renderText = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
               //Refresh
-              std::cout  << "Refreshed asked" << std::endl;
               matches_id = this->client.get_matches_id();
-              std::cout  << "Refreshed" << std::endl;
 
             }
           }
@@ -341,7 +332,6 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
   bool refresh = false;
   char input_id = 'x';
   std::vector<std::string> usernames= this->client.get_players_username();
-
   SDL_Event e;
   //No es el game loop
   while (!quit) {
@@ -349,8 +339,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
     drawGameLobby(renderer, settings, creator, usernames);
 
 
-    //EJECUTAR ESTE SWITCH SOLO SI NOO SOS HOST
-    if (!creator) {
+      if (!creator) {
       input_id = this->client.receive_flag();
       switch (input_id){
         case START:{
@@ -373,15 +362,18 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
             if ((e.button.x >= (settings.screenWidth/2) - (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2)) && creator) {
-              //Inicia el juego
               this->client.start_match();
+              input_id = this->client.receive_flag();
+              if(input_id == START){
+                std::cout << "OK FROM SERVER" << std::endl;
+              }
               quit = true;
               advance = true;
             } else if ((e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) && creator) {
-              printf("REFRESH\n");
               this->client.refresh_game();
               usernames = this->client.get_players_username();
             }
+            
           }
         }
       }

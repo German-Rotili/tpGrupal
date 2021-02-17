@@ -32,26 +32,7 @@ void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions)
     }    
 }
 
-// void Client::recieve_snapshot(Snapshot & snapshot){
-//     /*Recibo ID Tipo msg*/
-//     char input_id = this->protocol.receive_char();
-//     /*Recibimos vector de chars-msg */
-//     std::vector<char> msg = this->protocol.receive_standar_msg();
-    
-//     switch (input_id){
-//         case SNAPSHOT_ID:
-//             this->serializer.deserializer(msg, snapshot);
-//             break;
-//         case ACTION_ID:
-//             this->serializer.deserialize_action(msg, snapshot);
-//             break;
-//         default:
-//             std::cout << "Error id detection" <<std::endl;
-//     } 
-// }
-
 std::vector<int> Client::get_matches_id(){
-  std::cout << "recibo vector de ints." << std::endl;
 
     return this->protocol.receive_vector_int();
 }
@@ -66,10 +47,7 @@ char Client::receive_flag(){
 
 
 int Client::await_game_start(){
-    std::cout << "Await start"<<std::endl;
-    char aux_char =this->protocol.receive_char(); 
-    while ( aux_char!= START){  }//START MATCH
-    return this->protocol.receive_int();//ID CLIENT/PLAYER
+        return this->protocol.receive_int();//ID CLIENT/PLAYER
 }
 
 
@@ -109,7 +87,6 @@ std::vector<std::vector<int>> Client::join_game(std::string & game_id){
     int aux = std::stoi(game_id);
     this->protocol.send_integer(aux);
     std::string map = this->client_receive_string();
-    std::cout << map << std::endl;
     MapHandler maphandler;
     return maphandler.readMapFromString(map);
 }

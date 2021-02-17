@@ -24,6 +24,8 @@ void ThClient::attach_queue(ProtectedQueueIntention *intentions){
 
 
 void ThClient::start_game(){
+    std::cout << "server avisa que empieza y manda id" << std::endl;
+
     char start_flag = START;
     this->protocol.send_char(start_flag);
     this->protocol.send_integer(this->client_id);
@@ -33,6 +35,8 @@ void ThClient::notify_players(std::vector<std::vector<char>> &usernames){
     char refresh_flag = REFRESH;
     this->protocol.send_char(refresh_flag);
     this->protocol.send_usernames(usernames);
+    std::cout << "se unio uno nuevo, mando nuevos usernames con flag" << std::endl;
+
 }
 
 void ThClient::receive_username(){
@@ -58,9 +62,12 @@ void ThClient::new_game(){
             if(msg_char == START){
                     game.start();//Lanzo hilo de la partida
                     game.start_game();// le aviso a todos que comenzo la partida.
+                    std::cout << "Start by host" << std::endl;
                     break;
             }else if (msg_char == REFRESH){
                 this->refresh_players(game.get_usernames());
+                  std::cout << "usernames sent" << std::endl;
+
             }else{
                 std::cout  << "Llego cualquier cosa." <<  msg_char << std::endl;
             }

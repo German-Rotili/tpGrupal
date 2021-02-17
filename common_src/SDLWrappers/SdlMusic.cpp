@@ -22,7 +22,7 @@ void SdlMusic::play() const {
 	// detengo musica si la hay:
 	this->stop();
 	// Reproduzco esta musica:
-	Mix_VolumeMusic(50);
+	Mix_VolumeMusic(0);
 	Mix_PlayMusic(this->music, -1);
 }
 

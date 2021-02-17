@@ -31,7 +31,7 @@ Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   tx_descMaps(renderer, font, "Choose a Map", 255, 255, 255),
   tx_continue(renderer, font, "Continue", 255, 255, 255),
   music_menu("../resources/music/menu.mp3") {
-    music_menu.play();
+    // music_menu.play();
   }
 
 Menu::~Menu(){}
@@ -200,10 +200,14 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
                 bytes.push_back(byte);
               }
               input_file.close();
-
+              bytes.push_back('\0');
               this->client.new_game(bytes);
+              std::string aux(bytes.data());
+              std::cout << aux << std::endl;
 
-              this->vector_map = mapHandler.readMap(maps[boton_apretado]);
+              this->vector_map = mapHandler.readMapFromString(aux);
+
+              //this->vector_map = mapHandler.readMap(maps[boton_apretado]);
 
            } catch (std::exception const& e) {
               std::cout << "Hubo una excepcion" << std::endl;
@@ -322,7 +326,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
 void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator) {
   bool advance = false;
   bool quit = false;
-
+  char input_id = 'x';
   std::vector<std::string> usernames= this->client.get_players_username();
 
   SDL_Event e;
@@ -330,7 +334,22 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     drawGameLobby(renderer, settings, creator, usernames);
-    // Event Loop
+   
+
+    //EJECUTAR ESTE SWITCH SOLO SI NOO SOS HOST
+    input_id = this->client.receive_flag();
+    switch (input_id){
+      case START:{
+        quit = true;
+        advance = true;
+      }
+      break;
+      case REFRESH:{
+        usernames = this->client.get_players_username();
+      }
+      break;
+    }   
+
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
@@ -342,12 +361,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
               this->client.start_match();
               quit = true;
               advance = true;
-              quit = true;
-            } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
-              printf("REFRESH\n");
-              this->client.refresh_game();
-              usernames = this->client.get_players_username();
-            }
+            } //removed refresh button
           }
         }
       }

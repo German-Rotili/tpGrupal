@@ -19,7 +19,7 @@ GamePlay & GameHandler::select_match(ThClient & player, int id){
         if(game->get_id() == id){
             game_selected = game;
             game_selected->add_client(&player);
-            //game_selected->notify_players();
+            game_selected->notify_players(player.get_id());
             break;
         }
     }

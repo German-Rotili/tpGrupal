@@ -48,7 +48,7 @@ public:
     GamePlay& operator=(const GamePlay&) = delete;
     GamePlay(const GamePlay&) = delete;
     Snapshot get_snapshot();
-    // void notify_players(int & current_id);
+    void notify_players(int & current_id);
     std::vector<char> get_raw_map();
 };
 #endif

@@ -44,7 +44,7 @@ public:
     void start_game();
     void notify_players(std::vector<std::vector<char>> &usernames);
     void attach_queue(ProtectedQueueIntention * intentions);
-
+    int & get_id();
     /*Devuelve el estado del thread*/
     bool is_dead();
 friend class GamePlay;

@@ -30,6 +30,8 @@ void ThClient::start_game(){
 }
 
 void ThClient::notify_players(std::vector<std::vector<char>> &usernames){
+    char refresh_flag = REFRESH;
+    this->protocol.send_char(refresh_flag);
     this->protocol.send_usernames(usernames);
 }
 
@@ -53,14 +55,11 @@ void ThClient::new_game(){
         this->protocol.send_username(this->username);
         while(true){
             char msg_char = this->protocol.receive_char();
-
             if(msg_char == START){
-
                     game.start();//Lanzo hilo de la partida
                     game.start_game();// le aviso a todos que comenzo la partida.
                     break;
             }else if (msg_char == REFRESH){
-                std::cout  << "REFRESH" <<  msg_char << std::endl;
                 this->refresh_players(game.get_usernames());
             }else{
                 std::cout  << "Llego cualquier cosa." <<  msg_char << std::endl;
@@ -71,6 +70,10 @@ void ThClient::new_game(){
         std::cerr << "New Game Error" << '\n';
     }
 }
+int &ThClient::get_id(){
+    return this->client_id;
+}
+
 
 void ThClient::join_game(){
     try{
@@ -80,7 +83,7 @@ void ThClient::join_game(){
         GamePlay & game = this->game_handler.select_match(*this, game_id);
         std::vector <char> map = game.get_raw_map();//cambiar al archivo yaml entero.
         this->protocol.send_vector_char(map);//mando mapa al cliente para que dibuje
-        this->protocol.send_usernames(game.get_usernames());
+        this->refresh_players(game.get_usernames());//mando usernames        
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Join Game Error" << '\n';
@@ -91,7 +94,6 @@ void ThClient::join_game(){
 void ThClient::refresh_players(std::vector<std::vector<char>> & usernames){
     try{
         this->protocol.send_usernames(usernames);
-        std::cout  << "Sendig player usernames" << std::endl;
 
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -103,7 +105,6 @@ void ThClient::refresh_matches(){
     try{
         std::vector <int> aux = this->game_handler.get_matches_id();
         this->protocol.send_vector_int(aux);
-        std::cout  << "Sendig matches id" << std::endl;
 
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';

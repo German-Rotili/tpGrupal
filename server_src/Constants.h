@@ -29,7 +29,7 @@
 #define ROOT 2
 #define QUIT "q"
 #define MAX_INTENTION_PER_FRAME 20
-
+#define NEW_PLAYER 'P'
 
 
 #endif // __CONSTANTS_H__

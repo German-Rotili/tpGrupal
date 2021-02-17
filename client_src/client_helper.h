@@ -24,6 +24,7 @@ public:
     std::vector<char>  client_receive_vector();
     std::vector<std::vector<int>> join_game(std::string & game_id);
     void start_match();
+    char receive_flag();
     void new_game(std::vector<char> & map);
     int await_game_start();
     void receive_update(Snapshot & snapshot, ProtectedQueueAction & actions);

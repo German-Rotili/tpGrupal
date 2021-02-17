@@ -156,18 +156,14 @@ int GamePlay::get_id(){
     return this->id;
 }
 
-// void GamePlay::notify_players(int & current_id){
-//     std::vector<std::vector<char>> usernames;
-//     for(ThClient *client : this->clients){
-//         usernames.push_back(client->username);
-//     }
-//     for(ThClient *client : this->clients){
-//         if(client->client_id ==current_id){
-//             continue;
-//         }
-//         client->notify_players(usernames);
-//     } 
-// }
+void GamePlay::notify_players(int & current_id){
+    
+    for(ThClient *client : this->clients){
+        if(client->client_id != current_id){
+            client->notify_players(this->usernames);
+        }
+    } 
+}
 
 
 void GamePlay::start_game(){

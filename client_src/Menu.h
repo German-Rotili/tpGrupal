@@ -10,6 +10,9 @@
 #include "../common_src/SDLWrappers/SdlFont.h"
 #include "ClientSettings.h"
 #include "client_helper.h"
+#define START 's'
+#define REFRESH 'r'
+
 class Menu {
 private:
   Client & client;

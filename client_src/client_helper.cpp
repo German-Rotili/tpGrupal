@@ -60,6 +60,10 @@ std::vector<std::string> Client::get_players_username(){
     return this->protocol.receive_usernames();
 }
 
+char Client::receive_flag(){
+    return this->protocol.receive_char();
+}
+
 
 int Client::await_game_start(){
     std::cout << "Await start"<<std::endl;
@@ -105,8 +109,9 @@ std::vector<std::vector<int>> Client::join_game(std::string & game_id){
     int aux = std::stoi(game_id);
     this->protocol.send_integer(aux);
     std::string map = this->client_receive_string();
-    MapHandler maphandler;//CAMMBIAR A RECIBIR EL ARCHIVO YAML COMPLETO
-    return maphandler.readMap("map1");//cambiar a envio completo del yaml.
+    std::cout << map << std::endl;
+    MapHandler maphandler;
+    return maphandler.readMapFromString(map);
 }
 
 std::vector<char> Client::client_receive_vector(){

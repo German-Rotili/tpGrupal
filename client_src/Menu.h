@@ -56,7 +56,7 @@ public:
 
   void drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames);
 
-  void drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list);
+  void drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list, int scroll);
 
   void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings);
 

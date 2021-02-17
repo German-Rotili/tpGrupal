@@ -12,7 +12,10 @@ Game::Game(Client & client, World & world, ClientSettings & settings):
 }
 
 Game::~Game() {
-  // Hacer join de requester y sender?
+  requester.stop();
+  requester.join();
+  sender.stop();
+  sender.join();
 }
 
 void Game::processInput() {

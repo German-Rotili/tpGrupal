@@ -1,5 +1,6 @@
 #include "ThRequester.h"
 #include "client_helper.h"
+#include "../common_src/ConnectionClosedException.h"
 
 ThRequester::ThRequester(Client & client, ProtectedQueueAction & actions):client(client),state(true), actions(actions){}
 
@@ -9,21 +10,22 @@ void ThRequester::stop(){
     this->state = false;
 }
 
-Snapshot ThRequester::get_snapshot(){
+Snapshot ThRequester::get_snapshot() {
+    if (this->is_dead()) {
+      throw ConnectionClosedException();
+    }
     std::unique_lock<std::mutex> lock(m);
     Snapshot new_snapshot = this->snapshot;
     return new_snapshot;
 }
 
 void ThRequester::run(){
-
+  try{
     while (this->state) {
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 
         Snapshot snap_aux;
         client.receive_update(snap_aux, this->actions);
-        // client.recieve_snapshot(snap_aux);
-
         {
             std::unique_lock<std::mutex> lock(this->m);
             this->snapshot = snap_aux;
@@ -38,4 +40,12 @@ void ThRequester::run(){
             std::cout << "Server tarda en responder" << std::endl;
         }
     }
+  } catch (std::exception const& e) {
+    std::cout << "Hubo una excepción:" << std::endl;
+    std::cout << e.what() << std::endl;
+    this->dead = true;
+  }
+  catch (...) {
+    std::cout << "Error inesperado en conexion" << std::endl;
+  }
 }

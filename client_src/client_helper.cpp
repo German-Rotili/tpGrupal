@@ -19,7 +19,7 @@ void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions)
     char input_id = this->protocol.receive_char();
     /*Recibimos vector de chars-msg */
     std::vector<char> msg = this->protocol.receive_standar_msg();
-    
+
     switch (input_id){
         case SNAPSHOT_ID:
             this->serializer.deserializer(msg, snapshot);
@@ -29,7 +29,7 @@ void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions)
             break;
         default:
             std::cout << "Error id detection" <<std::endl;
-    }    
+    }
 }
 
 std::vector<int> Client::get_matches_id(){
@@ -47,7 +47,7 @@ char Client::receive_flag(){
 
 
 int Client::await_game_start(){
-        return this->protocol.receive_int();//ID CLIENT/PLAYER
+    return this->protocol.receive_int();//ID CLIENT/PLAYER
 }
 
 
@@ -100,4 +100,3 @@ std::string Client::client_receive_string(){
     std::string val(aux.data());//REVISAR EL CARACTER DE FIN DE STRING!!!!!!!!
     return val;
 }
-

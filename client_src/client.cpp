@@ -32,7 +32,8 @@ int main(int argc, char* args[]) {
     menu.runInsertUsername(renderer, settings);
     /********************************/
 
-    settings.myCurrentId = client.await_game_start();  // Aca puede haber un lock no-responsibe
+
+    settings.myCurrentId = client.await_game_start();  // Aca puede haber un lock no-responsive
     World world(renderer, settings, menu.vector_map);
     Game game(client, world, settings);
     game.loop();
@@ -40,8 +41,7 @@ int main(int argc, char* args[]) {
   catch (std::exception const& e) {
     std::cout << "Hubo una excepción:" << std::endl;
     std::cout << e.what() << std::endl;
-  }
-  catch (...) {
+  } catch (...) {
     std::cout << "Error inesperado" << std::endl;
   }
   return 0;

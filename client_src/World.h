@@ -26,7 +26,6 @@ class World {
   ClientSettings& settings;
   Player myPlayer;
   WorldMap worldMap;
-  int player_id;
   std::vector<Object*> objetosConstantes;
   std::vector<Object*> objetosDinamicos;
   std::vector<Explosion*> explosiones;
@@ -66,7 +65,7 @@ class World {
 
 	public:
 //		World(SdlRenderer& renderer, ClientSettings& settings);
-		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map, int player_id);
+		World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map);
     ~World();
     void update(Snapshot & snapshot, ProtectedQueueAction & actions);
     void render(ClientSettings& settings);

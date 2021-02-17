@@ -10,7 +10,9 @@
 
 class SdlContext {
   public:
+    // Inicializa SDL, image, ttf y mixer
     SdlContext();
+    // Libera lo inicializado
     ~SdlContext();
 };
 

@@ -5,13 +5,12 @@ static bool compareDistances(ZRenderable* o1, ZRenderable* o2) {
 }
 
 
-World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map, int player_id) :
+World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::vector<int>> & map) :
   renderer(renderer),
   src(renderer),
   settings(settings),
   myPlayer(renderer, src, settings, 1.5, 2.5, -45, 100, 0, 3),
   worldMap(map, myPlayer, src),
-  player_id(player_id),
   hud_jugador(renderer, myPlayer, settings),
   music("../resources/music/music2.mp3"),
   rayCaster(src.tx_walls, settings) {
@@ -135,7 +134,7 @@ void World::agregarObjetoDinamico(object_t* object) {
 
 void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
     for (auto &player : snapshot.players) {
-      if (player->player_id == this->player_id){
+      if (player->player_id == settings.myCurrentId){
         myPlayer.setPosicion(player->pos_x , player->pos_y);
         myPlayer.setDirection(player->direction);
         myPlayer.setHealth(player->health);
@@ -159,7 +158,7 @@ void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
       Action action = actions.get_element();
       if (action.get_id() == -1){ // Caso explosion
         explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, myPlayer, src.tx_explosion,src.snd_explosion, settings));
-      } else if (action.get_id() == this->player_id) {  // caso disparo myPlayer
+      } else if (action.get_id() == settings.myCurrentId) {  // caso disparo myPlayer
         myPlayer.setShootingAction();
         explosiones.push_back(new Explosion(action.impact_x, action.impact_y, basic_clip, myPlayer, src.tx_bullethit,src.snd_bullethit, settings));
       } else if (enemigos.find(action.get_id()) != enemigos.end()) {  // caso disparo enemigo

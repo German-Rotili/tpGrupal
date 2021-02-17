@@ -173,6 +173,7 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
    MapHandler mapHandler;
 
    int boton_apretado = -1;
+   int scroll = 0;
    std::string path = "";
    bool advance = false;
    bool quit = false;
@@ -183,15 +184,15 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-    drawMapSelection(renderer, settings, maps);
+    drawMapSelection(renderer, settings, maps, scroll);
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
-          if (e.button.y >= (settings.screenHeight/8) && e.button.y <= (settings.screenHeight/16 * 10) + (settings.screenHeight/16)) {
-            if (e.button.x >= (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2 + settings.screenWidth/4)) {
-             boton_apretado = int(e.button.y/(settings.screenHeight/16)) - 2 ;
+          if (e.button.y >= (settings.screenHeight/8) && e.button.y <= (settings.screenHeight/16 * 10) + (settings.screenHeight/16)
+          && e.button.x >= (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2 + settings.screenWidth/4)) {
+             boton_apretado = int(e.button.y/(settings.screenHeight/16)) - 2 + scroll;
              if (boton_apretado >= maps.size()) continue;
              path = "../resources/config/" + maps[boton_apretado] + ".yaml";
              try {
@@ -221,6 +222,17 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
             }
              advance = true;
              quit = true;
+          } else if (e.button.y >= settings.screenHeight/16 && e.button.y <= settings.screenHeight/16+25
+            && e.button.x >= settings.screenWidth/4 - settings.screenWidth/8 - 5
+            && e.button.x <= settings.screenWidth/4 - settings.screenWidth/8 + 5) {
+            if (scroll > 0) {
+              scroll -= 1;
+            }
+          } else if ((e.button.y >= settings.screenHeight/16)*10 && (e.button.y >= settings.screenHeight/16)*10+25
+            && e.button.x >= settings.screenWidth/4 - settings.screenWidth/8 - 5
+            && e.button.x <= settings.screenWidth/4 - settings.screenWidth/8 + 5) {
+            if (scroll < int(int(maps.size())-10)) {
+              scroll += 1;
             }
           }
         }
@@ -373,7 +385,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
               this->client.refresh_game();
               usernames = this->client.get_players_username();
             }
-            
+
           }
         }
       }
@@ -493,23 +505,26 @@ void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::st
   renderer.renderPresent();
 }
 
-void Menu::drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list) {
+void Menu::drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list, int scroll) {
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
   renderer.renderCopyCentered(tx_chooseMap, NULL, settings.screenWidth/2, settings.screenHeight/16);
   // dibujar mensaje de seleccion
   for (int i = 0; i < map_list.size(); i++) {
-    if (i >= 10) continue;
-    SdlTexture tx_mapname(renderer, font, map_list.at(i), 255, 255, 255);
+    if ((i >= 10 + scroll) || (i < scroll)) continue;
+    SdlTexture tx_mapname(renderer, font, map_list.at(i+scroll), 255, 255, 255);
     renderer.renderCopyCentered(tx_mapname, NULL, (settings.screenWidth/2), (settings.screenHeight/16) * (i+2) + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/16) * (i+2), (settings.screenWidth/2), (settings.screenHeight/16));
   }
 
-  for (int i = 10; i > map_list.size(); i--) {
-    renderer.setRenderDrawColor(150, 150, 150, 255);
-    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/16) * (i+1), (settings.screenWidth/2), (settings.screenHeight/16));
-  }
+  //Flecha arriba
+  renderer.renderFillRect(settings.screenWidth/4 - settings.screenWidth/8, settings.screenHeight/16, 5, 25);
+  renderer.renderFillRect(settings.screenWidth/4 - settings.screenWidth/8 - 5, settings.screenHeight/16, 5, 5);
+
+  //Flecha abajo
+  renderer.renderFillRect(settings.screenWidth/4 - settings.screenWidth/8, (settings.screenHeight/16)*10-25, 5, 25);
+  renderer.renderFillRect(settings.screenWidth/4 - settings.screenWidth/8 - 5, (settings.screenHeight/16)*10-5, 5, 5);
 
   renderer.renderPresent();
 }
@@ -551,7 +566,7 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
     renderer.renderCopyCentered(this->tx_refresh, NULL, (settings.screenWidth/2) + (settings.screenWidth/8), (settings.screenHeight/10) * 8 + (settings.screenHeight/32));
     renderer.renderDrawRect((settings.screenWidth/2), (settings.screenHeight/10)*8, (settings.screenWidth/4), (settings.screenHeight/16));
   }
-  
+
   renderer.renderPresent();
 }
 

@@ -86,9 +86,9 @@ void WorldMap::setEstadoPuerta(int x, int y, bool isClosed) {
   if (x < 0 || x >= xsize || y < 0 || y >= ysize) return;
   Tile* tile = map[y][x];
     if (DoorTile* door = dynamic_cast<DoorTile*> (tile))
-      (door)->setClosed(isClosed);
+      (door)->setClosed(!isClosed);
     else if (SecretDoorTile* door = dynamic_cast<SecretDoorTile*> (tile))
-      (door)->setClosed(isClosed);
+      (door)->setClosed(!isClosed);
 }
 
 void WorldMap::update() {

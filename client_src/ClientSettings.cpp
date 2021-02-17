@@ -6,6 +6,7 @@ ClientSettings::ClientSettings(int screenWidth, int screenHeight, int fps, int f
   screenWidth(screenWidth),
   screenHeight(screenHeight),
   fps(fps),
-  fov(fov) {}
+  fov(fov),
+  myCurrentId(-9999) {}
 
 ClientSettings::~ClientSettings() {}

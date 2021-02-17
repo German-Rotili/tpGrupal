@@ -9,6 +9,7 @@ class ClientSettings {
     const int fps;
     const double fov;
     std::string username;
+    int myCurrentId;
 		ClientSettings(int screenWidth, int screenHeight, int fps, int fov);
 		~ClientSettings();
 };

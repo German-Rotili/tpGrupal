@@ -2,9 +2,13 @@
 #include "client_helper.h"
 #include "../common_src/ConnectionClosedException.h"
 
-ThRequester::ThRequester(Client & client, ProtectedQueueAction & actions):client(client),state(true), actions(actions){}
+ThRequester::ThRequester(Client & client, ProtectedQueueAction & actions):
+client(client),
+state(true),
+actions(actions),
+obtainedId(INVALID_ID) {}
 
-ThRequester::~ThRequester(){}
+ThRequester::~ThRequester() {}
 
 void ThRequester::stop(){
     this->state = false;
@@ -19,9 +23,16 @@ Snapshot ThRequester::get_snapshot() {
     return new_snapshot;
 }
 
+int ThRequester::getObtainedId() {
+  return this->obtainedId;
+}
+
 void ThRequester::run(){
   try{
+    obtainedId = client.await_game_start();
+
     while (this->state) {
+      std::cout << "inicio loop requester" << std::endl;
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 
         Snapshot snap_aux;
@@ -39,6 +50,7 @@ void ThRequester::run(){
         } else {
             std::cout << "Server tarda en responder" << std::endl;
         }
+      std::cout << "termino loop requester" << std::endl;
     }
   } catch (std::exception const& e) {
     std::cout << "Hubo una excepción:" << std::endl;

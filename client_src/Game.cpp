@@ -6,16 +6,25 @@ Game::Game(Client & client, World & world, ClientSettings & settings):
   world(world),
   settings(settings),
   currentKeyStates(SDL_GetKeyboardState(NULL)),
+  gameStarted(false),
   quit(false) {
     requester.start();
     sender.start();
 }
 
 Game::~Game() {
+  std::cout << "espero al requester:" << std::endl;
   requester.stop();
+  std::cout << "hago join.." << std::endl;
   requester.join();
+
+  this->intentionsQueue.close_queue();
+
+  std::cout << "espero al sender:" << std::endl;
   sender.stop();
+  std::cout << "hago join.." << std::endl;
   sender.join();
+  std::cout << "Game destruido correctamente" << std::endl;
 }
 
 void Game::processInput() {
@@ -23,6 +32,7 @@ void Game::processInput() {
   // Event Loop
   while (SDL_PollEvent(&e) != 0) {
     if (e.type == SDL_QUIT) {
+        std::cout << "quit" << std::endl;
       quit = true;
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
@@ -81,8 +91,18 @@ void Game::loop() {
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     processInput();
-    sendIntentions();
-    updateWorld();
+    if (gameStarted) {
+      sendIntentions();
+      updateWorld();
+    } else {  // En cada frame chequeo si el requester ya obtuvo id valida.
+      int obtainedId = requester.getObtainedId();
+      if (obtainedId != INVALID_ID) {  // Si la obtuvo empiezo el juego
+        settings.myCurrentId = obtainedId;
+        gameStarted = true;
+      } else {
+        // no hago nada, sigo esperando a que el juego comience.
+      }
+    }
     std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
     unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
     int sleep_time = 1000000/settings.fps - elapsed_microseconds;

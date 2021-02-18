@@ -32,11 +32,10 @@ int main(int argc, char* args[]) {
     menu.runInsertUsername(renderer, settings);
     /********************************/
 
-
-    settings.myCurrentId = client.await_game_start();  // Aca puede haber un lock no-responsive
-    World world(renderer, settings, menu.vector_map);
+    World world(renderer, settings, menu.vector_map);  // settings va a tener un id inválido hasta que se inicie la partida (no importa porque no se inicia partida hasta que el id sea válido)
     Game game(client, world, settings);
     game.loop();
+    std::cout << "salgo de scope" << std::endl;
   }
   catch (std::exception const& e) {
     std::cout << "Hubo una excepción:" << std::endl;

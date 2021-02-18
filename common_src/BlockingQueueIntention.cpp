@@ -3,7 +3,10 @@
 
 BlockingQueueIntention::BlockingQueueIntention() : isBlocked(false) {}
 
-BlockingQueueIntention::~BlockingQueueIntention(){}
+BlockingQueueIntention::~BlockingQueueIntention(){
+  std::cout << "Destruyendo queueintention" << std::endl;
+  isBlocked = true;
+}
 
 Intention BlockingQueueIntention::get_element(){
   while (true) {

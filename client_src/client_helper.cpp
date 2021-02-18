@@ -17,15 +17,18 @@ Client::~Client(){}
 void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions){
     /*Recibo ID Tipo msg*/
     char input_id = this->protocol.receive_char();
+    std::cout << "termino input id" <<std::endl;
     /*Recibimos vector de chars-msg */
     std::vector<char> msg = this->protocol.receive_standar_msg();
-
+    std::cout << "recibe msg" <<std::endl;
     switch (input_id){
         case SNAPSHOT_ID:
             this->serializer.deserializer(msg, snapshot);
+            std::cout << "case snapshot id terminado" <<std::endl;
             break;
         case ACTION_ID:
             this->serializer.deserialize_action(msg, actions);
+            std::cout << "case action id terminado" <<std::endl;
             break;
         default:
             std::cout << "Error id detection" <<std::endl;

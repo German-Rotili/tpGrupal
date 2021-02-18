@@ -16,7 +16,7 @@ void Serializer::append_variable(std::vector<char> &message, char *variable, siz
 std::vector<char> Serializer::serialize_action(Snapshot & snapshot) {
     std::vector<char> message;
     append_actions(message, snapshot.actions);
-    return message;    
+    return message;
 }
 std::vector<char> Serializer::serialize_snapshot(Snapshot & snapshot){
     std::vector<char> message;
@@ -81,7 +81,7 @@ void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapsh
     int size_int = sizeof(int);
     int size_float = sizeof(float);
     player_t* player_aux;
-    
+
     memcpy(&snap_id, msg.data(), sizeof(char));
     offset += sizeof(char);
 
@@ -92,7 +92,7 @@ void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapsh
         for(int i = 0; i < amount;i++){
             memcpy(&player_id, msg.data()+offset, size_int);
             offset += size_int;
-            
+
             player_aux = new player_t;//snapshot.get_player(player_id);
             player_aux->player_id = player_id;
 
@@ -149,8 +149,13 @@ void Serializer::deserialize_objects(std::vector <char> & msg, Snapshot & snapsh
 }
 void Serializer::deserializer(std::vector <char> & msg, Snapshot & snapshot){
     int offset = 0;
+    std::cout << "intento deseralizar players" <<std::endl;
     deserialize_players(msg, snapshot, offset);
+    std::cout << "intento deseralizar objects" <<std::endl;
+
     deserialize_objects(msg, snapshot, offset);
+    std::cout << "termino deseralizer" <<std::endl;
+
     // std::cout << "/********PLAYER*********/"<<std::endl;
     // std::cout << player_info.player_id <<std::endl;
     // std::cout << player_info.pos_x <<std::endl;

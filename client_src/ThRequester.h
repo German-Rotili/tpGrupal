@@ -11,11 +11,13 @@
 #include <mutex>
 #define FPS 30
 
+#define INVALID_ID -9999
 
 class ThRequester : public Thread{
 private:
     Snapshot snapshot;
     std::atomic<bool> state;
+    std::atomic<int> obtainedId;
     Client & client;
     std::mutex m;
     ProtectedQueueAction & actions;
@@ -23,6 +25,7 @@ public:
     ThRequester(Client & client, ProtectedQueueAction & actions);
     ~ThRequester();
     Snapshot get_snapshot();
+    int getObtainedId();
     void run() override;
     void stop();
     ThRequester(const ThRequester&) = delete;

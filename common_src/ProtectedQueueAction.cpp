@@ -2,7 +2,9 @@
 
 ProtectedQueueAction::ProtectedQueueAction() : isBlocked(false) {}
 
-ProtectedQueueAction::~ProtectedQueueAction(){}
+ProtectedQueueAction::~ProtectedQueueAction(){
+  std::cout << "Destruyendo queueaction" << std::endl;
+}
 
 Action ProtectedQueueAction::get_element(){
     std::unique_lock<std::mutex> lock(m);

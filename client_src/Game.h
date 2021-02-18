@@ -26,6 +26,7 @@ class Game {
   std::vector<char> currentFrameIntentions;
   SDL_Event e;
   const Uint8* currentKeyStates;
+  bool gameStarted;
   bool quit;
 
   void processInput();

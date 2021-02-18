@@ -9,9 +9,12 @@ ThSender::ThSender(Client & client, BlockingQueueIntention & intention):client(c
 void ThSender::run(){
   try {
     while (this->state) {
+        std::cout << "inicio loopsender" << std::endl;
         Intention intention_aux = this->intentions.get_element();
         send_intention(intention_aux.get_intention());
+        std::cout << "termino loopsender" << std::endl;
     }
+    std::cout << "Salgo del loop sender" << std::endl;
   } catch (std::exception const& e) {
     std::cout << "Hubo una excepción:" << std::endl;
     std::cout << e.what() << std::endl;
@@ -27,4 +30,6 @@ void ThSender::stop(){
 }
 
 
-ThSender::~ThSender(){}
+ThSender::~ThSender(){
+  std::cout << "Destruyendo requester" << std::endl;
+}

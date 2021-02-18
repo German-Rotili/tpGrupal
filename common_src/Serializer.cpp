@@ -81,7 +81,6 @@ void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapsh
     int size_int = sizeof(int);
     int size_float = sizeof(float);
     player_t* player_aux;
-
     memcpy(&snap_id, msg.data(), sizeof(char));
     offset += sizeof(char);
 
@@ -112,7 +111,6 @@ void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapsh
             offset += size_int;
             memcpy(&player_aux->score, msg.data() + offset, size_int);
             offset += size_int;
-
             snapshot.add_player(player_aux);
         }
     }
@@ -149,12 +147,11 @@ void Serializer::deserialize_objects(std::vector <char> & msg, Snapshot & snapsh
 }
 void Serializer::deserializer(std::vector <char> & msg, Snapshot & snapshot){
     int offset = 0;
-    std::cout << "intento deseralizar players" <<std::endl;
-    deserialize_players(msg, snapshot, offset);
-    std::cout << "intento deseralizar objects" <<std::endl;
-
-    deserialize_objects(msg, snapshot, offset);
-    std::cout << "termino deseralizer" <<std::endl;
+    if (msg.size() > 0){
+        deserialize_players(msg, snapshot, offset);
+        deserialize_objects(msg, snapshot, offset);
+    }
+   
 
     // std::cout << "/********PLAYER*********/"<<std::endl;
     // std::cout << player_info.player_id <<std::endl;

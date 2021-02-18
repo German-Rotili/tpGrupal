@@ -13,18 +13,11 @@ Game::Game(Client & client, World & world, ClientSettings & settings):
 }
 
 Game::~Game() {
-  std::cout << "espero al requester:" << std::endl;
   requester.stop();
-  std::cout << "hago join.." << std::endl;
   requester.join();
-
   this->intentionsQueue.close_queue();
-
-  std::cout << "espero al sender:" << std::endl;
   sender.stop();
-  std::cout << "hago join.." << std::endl;
   sender.join();
-  std::cout << "Game destruido correctamente" << std::endl;
 }
 
 void Game::processInput() {
@@ -32,7 +25,6 @@ void Game::processInput() {
   // Event Loop
   while (SDL_PollEvent(&e) != 0) {
     if (e.type == SDL_QUIT) {
-        std::cout << "quit" << std::endl;
       quit = true;
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {

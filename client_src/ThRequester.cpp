@@ -58,6 +58,9 @@ void ThRequester::run(){
     this->dead = true;
   }
   catch (...) {
+    this->dead = true;
     std::cout << "Error inesperado en conexion" << std::endl;
   }
+  std::cout << "salio loop rarisismo" << std::endl;
+
 }

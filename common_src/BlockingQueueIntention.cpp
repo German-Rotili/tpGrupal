@@ -4,7 +4,6 @@
 BlockingQueueIntention::BlockingQueueIntention() : isBlocked(false) {}
 
 BlockingQueueIntention::~BlockingQueueIntention(){
-  std::cout << "Destruyendo queueintention" << std::endl;
   isBlocked = true;
 }
 

@@ -210,7 +210,6 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
               bytes.push_back('\0');
               this->client.new_game(bytes);
               std::string aux(bytes.data());
-              std::cout << aux << std::endl;
 
               this->vector_map = mapHandler.readMapFromString(aux);
 

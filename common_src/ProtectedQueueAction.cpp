@@ -3,7 +3,6 @@
 ProtectedQueueAction::ProtectedQueueAction() : isBlocked(false) {}
 
 ProtectedQueueAction::~ProtectedQueueAction(){
-  std::cout << "Destruyendo queueaction" << std::endl;
 }
 
 Action ProtectedQueueAction::get_element(){

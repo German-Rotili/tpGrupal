@@ -35,7 +35,6 @@ int main(int argc, char* args[]) {
     World world(renderer, settings, menu.vector_map);  // settings va a tener un id inválido hasta que se inicie la partida (no importa porque no se inicia partida hasta que el id sea válido)
     Game game(client, world, settings);
     game.loop();
-    std::cout << "salgo de scope" << std::endl;
   }
   catch (std::exception const& e) {
     std::cout << "Hubo una excepción:" << std::endl;

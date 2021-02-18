@@ -8,6 +8,7 @@
 #include "common_socket.h"
 #include "common_exception.h"
 #include "common_socket_exception.h"
+#include "ConnectionClosedException.h"
 
 Socket::Socket():fd(-1){}
 
@@ -165,14 +166,18 @@ int Socket::socket_receive(char *buffer, int length){
       throw SuperException("Error al recibir bytes en el socket");
     }
     total_bytes+=bytes_read;
-    if (bytes_read==0){
+    if (bytes_read == 0 && total_bytes == 0){
+      throw ConnectionClosedException();
+      
+    }else if((bytes_read == 0)){
       return total_bytes;
+
     }
   } 
-  // for (int i = 0; i < total_bytes; i++) {
-  //     printf(" %02X ", (unsigned)(unsigned char)buffer[i]);
-  //   } 
-  // printf("\n");
+  for (int i = 0; i < total_bytes; i++) {
+      printf(" %02X ", (unsigned)(unsigned char)buffer[i]);
+    } 
+  printf("\n");
   return total_bytes;
 }
 

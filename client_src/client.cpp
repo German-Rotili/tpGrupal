@@ -32,15 +32,15 @@ int main(int argc, char* args[]) {
     menu.runInsertUsername(renderer, settings);
     /********************************/
 
-    World world(renderer, settings, menu.vector_map);  // settings va a tener un id inválido hasta que se inicie la partida (no importa porque no se inicia partida hasta que el id sea válido)
+    World world(renderer, settings, menu.vector_map);
     Game game(client, world, settings);
     game.loop();
   }
   catch (std::exception const& e) {
-    std::cout << "Hubo una excepción:" << std::endl;
+    std::cout << "Excepción en client:" << std::endl;
     std::cout << e.what() << std::endl;
   } catch (...) {
-    std::cout << "Error inesperado" << std::endl;
+    std::cout << "Error inesperado en client" << std::endl;
   }
   return 0;
 }

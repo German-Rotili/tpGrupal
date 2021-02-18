@@ -59,7 +59,6 @@ void World::cargarObjetosConstantes(std::vector<std::vector<int>> & map) {
 }
 
 World::~World() {
-  std::cout << "Destruyendo world" << std::endl;
   // Borrar los elementos de todos los vectores y el map de enemigos
   for (std::vector<Object*>::iterator it = objetosConstantes.begin();
    it!= objetosConstantes.end(); ++it) {
@@ -75,7 +74,6 @@ World::~World() {
    it!= enemigos.end(); ++it) {
     delete (*it).second;
   }
-
 }
 
 void World::limpiarObjetosDinamicos() {

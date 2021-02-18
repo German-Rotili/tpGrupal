@@ -31,4 +31,5 @@ ThClientSender::~ThClientSender(){
 
 void ThClientSender::stop(){
     this->state = false;
+    this->snapshots.close_queue();
 }

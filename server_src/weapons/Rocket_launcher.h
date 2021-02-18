@@ -12,7 +12,7 @@ private:
 
 public:
 
-    Rocket_launcher(Map *, Config *);
+    Rocket_launcher(Map *, Config *, Inventory *);
     bool fire();
 };
 #endif // __ROCKET_LAUNCHER_H__

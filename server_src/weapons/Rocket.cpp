@@ -36,10 +36,10 @@ bool Rocket::tick() {
 
 
 void Rocket::explode() {
-  for (Player &player : this->map->get_players()) {
-    float distance = player.get_distance(this->x_pos, this->y_pos);
+  for (Player *player : this->map->get_players()) {
+    float distance = player->get_distance(this->x_pos, this->y_pos);
     if (distance <= this->explotion_radius) {
-      player.get_damaged(this->damage * (this->explotion_radius) /
+      player->get_damaged(this->damage * (this->explotion_radius) /
                          std::min(this->explotion_radius, distance));
     }
     // avisar al action helper que exploto y donde.
@@ -60,8 +60,8 @@ float Rocket::get_x_offset() {
 }
 
 bool Rocket::colides_with_player() {
-    for (Player &player : this->map->get_players()) {
-        if(player.is_in_hitbox(this->x_pos, this->y_pos)){
+    for (Player *player : this->map->get_players()) {
+        if(player->is_in_hitbox(this->x_pos, this->y_pos)){
             this->explode();
             return true;
         }

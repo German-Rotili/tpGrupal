@@ -24,7 +24,7 @@ private:
     bool colides_with_player(); //REVISAR si la velocidad es suficiente para pasar por la hitbox sin explotar. 
 
 public:
-    Rocket(Map * map, Config *config, float dir_x, float dir_y, float direction);
+    Rocket(Map *, Config *, float dir_x, float dir_y, float direction);
 
     bool tick();
     float get_pos_x();

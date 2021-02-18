@@ -5,7 +5,7 @@
 #include "../Map.h"
 #include "../Player.h"
 
-Knife::Knife(Map *map, Config *config) {
+Knife::Knife(Map *map, Config *config, Inventory *inventory) : Weapon{map, config, inventory} {
   this->map = map;
 }
 
@@ -15,17 +15,17 @@ void Knife::attack() {
   if (!this->is_in_cooldown()) {
     Player *closest_player = nullptr;
     float min_distance = 0;
-    for (Player &player : this->map->get_players()) {
-      float pos_x = player.get_pos_x();
-      float pos_y = player.get_pos_y();
+    for (Player *player : this->map->get_players()) {
+      float pos_x = player->get_pos_x();
+      float pos_y = player->get_pos_y();
 
-      float distance = this->inventory->get_player().get_distance(pos_x, pos_y);
+      float distance = this->inventory->get_player()->get_distance(pos_x, pos_y);
 
       if (distance < this->range &&
-          this->inventory->get_player().get_angle_difference(pos_x, pos_y)) {
+          this->inventory->get_player()->get_angle_difference(pos_x, pos_y)) {
         // si esta a rango y en un angulo tolerable.
         if (distance < min_distance) {
-          closest_player = &player;
+          closest_player = player;
         }
       }
     }

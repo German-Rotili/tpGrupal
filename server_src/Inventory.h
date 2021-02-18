@@ -26,7 +26,7 @@ public:
     Inventory(Player*, Map*, Config *);
     bool pick_up_weapon();
     bool change_weapon(char);
-    Player& get_player();
+    Player* get_player();
     void attack();
     int get_ammo();
     void spend_ammo(int);

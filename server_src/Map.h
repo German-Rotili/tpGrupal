@@ -16,7 +16,7 @@ class GamePlay;
 #include "Door.h"
 class Map {
 private:
-  std::vector<Player> players;
+  std::vector<Player*> players;
   std::vector<Rocket> rockets;
   std::vector<Action> actions;
   std::vector<std::vector<int>> map;
@@ -31,9 +31,9 @@ private:
   esto pone los jugadores en sus lugares y carga las puertas y paredes especiales. 
   */
   void populate_variables();
-  bool is_solid(char id);
-  bool is_door(char id);
-  bool is_spawn(char id);
+  bool is_solid(int id);
+  bool is_door(int id);
+  bool is_spawn(int id);
   
   
 
@@ -43,7 +43,7 @@ public:
 
   int get_id(int x, int y);
   void add_player(int id);   // ver quien hace los players
-  std::vector<Player> &get_players(); // placeholder
+  std::vector<Player*> &get_players(); // placeholder
   std::map<int, std::map<int, Door>> get_doors();
 
   void start();

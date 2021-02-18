@@ -1,22 +1,25 @@
+#include "Player.h"
 #include "Inventory.h"
 #include "weapons/Knife.h"
 #include "weapons/Pistol.h"
 #include "weapons/Machine_gun.h"
 #include "weapons/Chain_gun.h"
 #include "weapons/Rocket_launcher.h"
-#include "Player.h"
 #include "Constants.h"
 #include "weapons/Weapon.h"
 #include <memory>
 #include <map>
 #include "Map.h"
 #include "Config.h"
-
+#include <iostream>
 #include <memory>
 
-Player &Inventory::get_player() { return *this->player; }
+Player* Inventory::get_player() { return this->player; }
 
-void Inventory::attack() { this->weapons[current_weapon]->attack(); }
+void Inventory::attack() { 
+  std::cout << this->get_player()->get_direction() << "DIRECCION";
+this->weapons[current_weapon]->attack(); 
+  }
 
 int Inventory::get_ammo() { return this->ammo; }
 
@@ -65,18 +68,20 @@ void Inventory::tick()
 }
 
 
-Inventory::Inventory(Player *player, Map *map, Config *config) {
+Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   this->map = map;
   this->config = config;
-  this->player = player;
-  this->weapons[KNIFE] = new Knife(this->map, this->config);
-  this->weapons[PISTOL] = new Pistol(this->map, this->config);
-  this->weapons[MACHINE_GUN] = new Machine_gun(this->map, this->config);
-  this->weapons[CHAIN_GUN] = new Chain_gun(this->map, this->config);
-  this->weapons[ROCKET_LAUNCHER] = new Rocket_launcher(this->map, this->config);
+  this->player = player_passed;
+  this->weapons[KNIFE] = new Knife(this->map, this->config, this);
+  this->weapons[PISTOL] = new Pistol(this->map, this->config, this);
+  this->weapons[MACHINE_GUN] = new Machine_gun(this->map, this->config, this);
+  this->weapons[CHAIN_GUN] = new Chain_gun(this->map, this->config, this);
+  this->weapons[ROCKET_LAUNCHER] = new Rocket_launcher(this->map, this->config, this);
 
   this->owned_weapons[KNIFE] = true;
   this->owned_weapons[PISTOL] = true;
+
+  this->ammo = 300;
   
 
   // this->ammo = Config.initialammo;

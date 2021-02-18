@@ -7,7 +7,7 @@
 #include <random>
 
 
-Machine_gun::Machine_gun(Map *map, Config *config) {
+Machine_gun::Machine_gun(Map *map, Config *config, Inventory *inventory)  : Weapon{map, config, inventory} {
   this->max_damage = 20; //config->get_max_damage(MACHINE_GUN);
   this->max_spread = 5; //config->get_max_spread(MACHINE_GUN);
   this->map = map;
@@ -36,7 +36,7 @@ void Machine_gun::attack() {
 }
 
 float Machine_gun::get_shot_angle() {
-  float angle = this->inventory->get_player().get_direction();
+  float angle = this->inventory->get_player()->get_direction();
   // cuando mas tiempo paso desde el ultimo disparo menos afecta el spred. hasta
   // el tiempo de reset. REVISAR PARA QUE AUMENTE CON EL NUMERO DE DISPAROS.
   float angle_variation =

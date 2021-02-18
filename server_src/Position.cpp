@@ -57,6 +57,7 @@ float Position::get_hitbox_radius() { return this->hitbox_radius; }
 float Position::get_angle() { return this->angle; }
 
 void Position::set_position(int x, int y) {
+  std::cout << "set position en  " << x << " " << y << std::endl;
   this->x = (float)x;
   this->y = (float)y;
 }
@@ -125,4 +126,5 @@ Position::Position(Map *map, Config *config)
 {
   this->map = map;
   this->config = config;
+  this->angle = 30;
 }

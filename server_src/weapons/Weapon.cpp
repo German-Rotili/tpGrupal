@@ -1,9 +1,9 @@
 #include "Weapon.h"
+#include "../Player.h"
 #include "../../common_src/Timer.h"
 #include "../HitscanRaycast.h"
 #include "../Inventory.h"
 #include "../Map.h"
-#include "../Player.h"
 #include <chrono>
 void Weapon::fire(float angle) {
   /*
@@ -46,8 +46,8 @@ void Weapon::fire(float angle) {
       raycaster.get_impact_point(this->map, this->inventory->get_player());
 
   float xpos, ypos;
-  xpos = this->inventory->get_player().get_pos_x();
-  ypos = this->inventory->get_player().get_pos_y();
+  xpos = this->inventory->get_player()->get_pos_x();
+  ypos = this->inventory->get_player()->get_pos_y();
   int xdir, ydir;
   if (angle < 180) {
     ydir = 1;
@@ -62,17 +62,17 @@ void Weapon::fire(float angle) {
 
   float dist;
   Player *player_hit;
-  float distance;
+  float distance = 0;
 
-  for (Player &player : this->map->get_players()) {
-    float playerx = player.get_pos_x();
-    float playery = player.get_pos_x();
-    float hitboxRadius = player.get_hitbox_radius();
+  for (Player *player : this->map->get_players()) {
+    float playerx = player->get_pos_x();
+    float playery = player->get_pos_x();
+    float hitboxRadius = player->get_hitbox_radius();
 
-    if (((impact.first - player.get_pos_x()) * xdir) > 0) {
-      if (((impact.second - player.get_pos_y()) * ydir) > 0) {
-        if (((player.get_pos_x() - xpos) * xdir) > 0) {
-          if (((player.get_pos_y() - ypos) * ydir) > 0) {
+    if (((impact.first - player->get_pos_x()) * xdir) > 0) {
+      if (((impact.second - player->get_pos_y()) * ydir) > 0) {
+        if (((player->get_pos_x() - xpos) * xdir) > 0) {
+          if (((player->get_pos_y() - ypos) * ydir) > 0) {
             /*
               logica de interseccion: por algebra, encuentro la interseccion de
               la recta jugador, impacto y busco la inter con la recta que
@@ -92,7 +92,7 @@ void Weapon::fire(float angle) {
                 xpos;
             if (abs(xintersection - playerx) < hitboxRadius &&
                 (distance == 0 || lambda < distance)) {
-              player_hit = &player;
+              player_hit = player;
               distance = lambda;
             }
             float yintersection = ((impact.first - ypos) * (xhitbox - playerx) /
@@ -100,7 +100,7 @@ void Weapon::fire(float angle) {
                                   ypos;
             if (abs(yintersection - playery) < hitboxRadius &&
                 (distance == 0 || lambda < distance)) {
-              player_hit = &player;
+              player_hit = player;
               distance = lambda;
             }
           }
@@ -112,7 +112,7 @@ void Weapon::fire(float angle) {
   if (distance != 0) {
     player_hit->get_damaged(this->get_damage(distance));
     // appendear la accion al helper de acciones.
-    this->map->add_action(this->inventory->get_player().get_id(), this->inventory->get_current_weapon_id(),impact.first,impact.second);
+    this->map->add_action(this->inventory->get_player()->get_id(), this->inventory->get_current_weapon_id(),impact.first,impact.second);
 
   }
 }
@@ -130,7 +130,16 @@ bool Weapon::has_ammo() {
 
 float Weapon::get_shot_angle()
 {
-  return this->inventory->get_player().get_direction();
+  return this->inventory->get_player()->get_direction();
+}
+
+
+
+Weapon::Weapon(Map *map, Config *config, Inventory *inventory) 
+{
+  this->map = map;
+  this->inventory = inventory;
+  this->config = config;
 }
 
 

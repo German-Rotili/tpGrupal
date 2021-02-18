@@ -14,7 +14,7 @@ private:
   Timer burst_timer;
 
 public:
-     Machine_gun(Map *, Config *);
+    Machine_gun(Map *, Config *,Inventory *);
     void tick();
     void attack();
     bool can_fire_next_burst_shot();

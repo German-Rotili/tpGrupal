@@ -2,15 +2,17 @@
 #define __PISTOL_H__
 
 #include "Weapon.h"
+
 class Map;
 class Config;
 
 class Pistol : public Weapon {
 private:
+  Inventory *inventory;
   float get_shot_angle() override;
 
 public:
-  Pistol(Map *, Config *);
+  Pistol(Map *, Config *, Inventory *);
   void attack();
 };
 

@@ -15,10 +15,10 @@
 
 
 void Map::add_player(int id) {
-  this->players.push_back(Player(this, &(this->config), id));
+  this->players.push_back(new Player(this, &(this->config), id));
 }
 
-std::vector<Player>& Map::get_players() 
+std::vector<Player*>& Map::get_players() 
 {
   return this->players;
 }
@@ -40,8 +40,8 @@ void Map::start()
 void Map::add_rocket(Rocket rocket) { this->rockets.push_back(rocket); }
 
 void Map::tick() {
-  for (Player &player : this->players) {
-    player.tick();
+  for (Player *player : this->players) {
+    player->tick();
   }
   for (Rocket &rocket : this->rockets) {
     auto i = std::begin(this->rockets);
@@ -100,6 +100,9 @@ bool Map::valid_position(int x, int y) {
 }
 
 bool Map::is_impactable(int x, int y) {
+  if(x < 0 || x >= this->map.size() || y < 0 || y >= this->map[x].size()){
+    return true;
+  }
   char squareId = this->get_id(x, y);
   return (this->is_solid(squareId));
 }
@@ -110,7 +113,7 @@ int Map::get_id(int x, int y) {
   return this->map[x][y];
 }
 
-bool Map::is_solid(char id) {
+bool Map::is_solid(int id) {
   if (id >= 0 && id <= 33) {
     return true;
   }
@@ -120,11 +123,11 @@ bool Map::is_solid(char id) {
   return false;
 }
 
-bool Map::is_door(char id) {
+bool Map::is_door(int id) {
   return (id == 34 || id == 35 || (id >= 59 && id <= 62));
 }
 
-bool Map::is_spawn(char id) 
+bool Map::is_spawn(int id) 
 {
   return id == 58;
 }
@@ -152,15 +155,19 @@ void Map::populate_variables() {
 
   for (int x = 0; x < this->map.size(); x++) {
     for (int y = 0; y < this->map[y].size(); y++) {
+      std::cout << "populating x: " << x << " y: " << y << std::endl;
       int id = this->get_id(x,y);
 
       if (this->is_door(id)) {
         this->doors[x].insert(std::pair<int,Door>(y,Door(id)));
       }
       if (this->is_spawn(id)) {
-        for (Player &player : this->players) {
-          if (!player.is_placed()) {
-            player.set_spawn(x, y);
+        std::cout << "is spawn" << std::endl;
+        for (Player *player : this->players) {
+          if (!player->is_placed()) {
+        std::cout << "placing" << std::endl;
+
+            player->set_spawn(x, y);
           }
         }
       }
@@ -173,15 +180,15 @@ void Map::populate_variables() {
 
 void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
 
-  for (Player &player : this->players) {
+  for (Player *player : this->players) {
 
-    if(player.get_id() == client_id){
+    if(player->get_id() == client_id){
 
       for (char &i : intentions){
         if(i != 0){
           char aux = intentions.front();
           intentions.erase (intentions.begin());
-          player.execute_intention(aux);
+          player->execute_intention(aux);
         // std::cout << "caracter procesado: " <<aux <<std::endl;
 
         }

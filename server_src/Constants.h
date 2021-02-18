@@ -6,7 +6,7 @@
 #define RIGHT 'd'
 #define LEFT 'a'
 #define ACTION 'e'
-#define ATTACK 'f'
+#define ATTACK ' '
 #define PI 3.14159265
 #define THREADS_NUM 10
 #define FPS_SENDER 30

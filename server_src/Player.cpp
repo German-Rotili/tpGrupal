@@ -44,6 +44,7 @@ void Player::set_spawn(int x, int y) {
   this->position.set_position(x, y); 
   this->spawn_x = x;
   this->spawn_y = y;
+  this->placed = true;
 }
 
 int Player::get_hitpoints() 

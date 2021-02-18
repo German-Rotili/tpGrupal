@@ -11,10 +11,10 @@
 
 
 
-Pistol::Pistol(Map *map, Config *config) {
+Pistol::Pistol(Map *map, Config *config, Inventory *inventory) : Weapon{map, config, inventory} {
     this->max_damage = 20; //config->get_max_damage(PISTOL);
     this->max_spread = 5; //config->get_max_spread(PISTOL);
-    this->map = map;
+    this->inventory = inventory;
 }
 
 
@@ -28,7 +28,7 @@ void Pistol::attack(){
     }
 }
 float Pistol::get_shot_angle(){
-    float angle = this->inventory->get_player().get_direction();
+    float angle = this->inventory->get_player()->get_direction();
     // cuando mas tiempo paso desde el ultimo disparo menos afecta el spred. hasta el tiempo de reset.
     float angle_variation = rand() % (this->max_spread * std::min(this->last_shot_timer.elapsed_time(), this->stability_reset) /this->stability_reset );
     return angle + angle_variation;

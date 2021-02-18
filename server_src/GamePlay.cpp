@@ -144,7 +144,9 @@ void GamePlay::run(){
             Snapshot snapshot = this->get_snapshot();
             
             for(ThClientSender *client_s : this->client_senders){
-                client_s->snapshots.add_element(snapshot);
+                if (!client_s->snapshots.is_closed()){
+                    client_s->snapshots.add_element(snapshot);
+                }
             }
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();

@@ -2,15 +2,15 @@
 Snapshot::Snapshot(){}
 
 Snapshot::~Snapshot(){
-/*     for (auto &object : this->objects){ 
-        delete object;
-    }
-    for (auto &action : this->actions){ 
-        delete action;
-    }
-    for (auto &player : this->players){ 
-        delete player;
-    } */
+    // for (object_t *object : this->objects){ 
+    //     delete object;
+    // }
+    // for (Action *action : this->actions){ 
+    //     delete action;
+    // }
+    // for (player_t *player : this->players){ 
+    //     delete player;
+    // }
 }
 
 void Snapshot::print(){

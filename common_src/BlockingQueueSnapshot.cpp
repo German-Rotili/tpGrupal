@@ -7,7 +7,7 @@ BlockingQueueSnapshot::~BlockingQueueSnapshot(){}
 Snapshot BlockingQueueSnapshot::get_element(){
   while (true) {
     std::unique_lock<std::mutex> lock(m);
-    if (isBlocked && queue.empty()) {
+    if (isBlocked) {
       throw ProtectedQueueException();
     }
     if (queue.empty() == 0) {

@@ -32,7 +32,6 @@ void ThRequester::run(){
     obtainedId = client.await_game_start();
 
     while (this->state) {
-      std::cout << "inicio loop requester" << std::endl;
         std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 
         Snapshot snap_aux;
@@ -50,7 +49,6 @@ void ThRequester::run(){
         } else {
             std::cout << "Server tarda en responder" << std::endl;
         }
-      std::cout << "termino loop requester" << std::endl;
     }
   } catch (std::exception const& e) {
     std::cout << "Hubo una excepción:" << std::endl;
@@ -61,6 +59,5 @@ void ThRequester::run(){
     this->dead = true;
     std::cout << "Error inesperado en conexion" << std::endl;
   }
-  std::cout << "salio loop rarisismo" << std::endl;
 
 }

@@ -33,7 +33,7 @@ static const void remove_dead(std::vector<Thread*> & list){
 
 void ThServer::run(){
     try {
-        while (state){
+        while (this->state){
             Socket peer;
             server.socket_accept(peer);
             Protocol protocol(std::move(peer));

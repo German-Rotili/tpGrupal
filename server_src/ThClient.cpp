@@ -150,7 +150,6 @@ void ThClient::run(){
             }   
         }
         this->receiver_loop();
-        
 }
 
 void ThClient::receiver_loop(){
@@ -173,4 +172,5 @@ ThClient::ThClient(Protocol&& protocol, GameHandler & game_handler):game_handler
 }
 
 ThClient::~ThClient(){
+    this->dead = true;
 }

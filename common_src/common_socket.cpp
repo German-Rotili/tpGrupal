@@ -174,10 +174,10 @@ int Socket::socket_receive(char *buffer, int length){
 
     }
   } 
-  for (int i = 0; i < total_bytes; i++) {
-      printf(" %02X ", (unsigned)(unsigned char)buffer[i]);
-    } 
-  printf("\n");
+  // for (int i = 0; i < total_bytes; i++) {
+  //     printf(" %02X ", (unsigned)(unsigned char)buffer[i]);
+  //   } 
+  // printf("\n");
   return total_bytes;
 }
 

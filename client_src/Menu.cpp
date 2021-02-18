@@ -51,9 +51,11 @@ void Menu::runInsertUsername(SdlRenderer& renderer, ClientSettings& settings) {
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
+        throw "Game Closed Exception";
       } else if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:
+            if (inputText == "") inputText = "Default";
             this->client.send_username(inputText);
             advance = true;
             quit = true;
@@ -121,6 +123,7 @@ void Menu::runStartPage(SdlRenderer& renderer, ClientSettings& settings) {
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
+        throw "Game Closed Exception";
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/2) - 15 && e.button.y <= (settings.screenHeight/2) + 20) {
@@ -188,6 +191,7 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
+        throw "Game Closed Exception";
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/8) && e.button.y <= (settings.screenHeight/16 * 10) + (settings.screenHeight/16)
@@ -269,6 +273,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
+        throw "Game Closed Exception";
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
@@ -369,6 +374,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
+        throw "Game Closed Exception";
       } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_LEFT) {
           if (e.button.y >= (settings.screenHeight/10 * 8) && e.button.y <= (settings.screenHeight/10 * 8) + (settings.screenHeight/16)) {
@@ -416,6 +422,7 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
         quit = true;
+        throw "Game Closed Exception";
       } else if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
           case SDLK_RETURN:

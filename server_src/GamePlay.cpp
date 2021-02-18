@@ -25,7 +25,7 @@ GamePlay::~GamePlay(){
 }
 
 std::vector<std::vector<char>> & GamePlay::get_usernames(){
-   return this->usernames; 
+   return this->usernames;
 }
 
 
@@ -136,9 +136,9 @@ void GamePlay::run(){
                 }
                 catch(const EmptyQueueException& e){}
             }
-              
+
             Snapshot snapshot = this->get_snapshot();
-            
+
             for(ThClientSender *client_s : this->client_senders){
                 if (!client_s->snapshots.is_closed()){
                     client_s->snapshots.add_element(snapshot);
@@ -147,9 +147,9 @@ void GamePlay::run(){
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-            int sleep_time = 1000000/28 - elapsed_microseconds;
+            int sleep_time = 1000000/FPS - elapsed_microseconds;
             if (sleep_time > 0) {
-                usleep(1000000/28 - elapsed_microseconds);
+                usleep(1000000/FPS - elapsed_microseconds);
             }else{
                 std::cout << "Bajada FPS" << std::endl;
             }
@@ -162,12 +162,12 @@ int GamePlay::get_id(){
 }
 
 void GamePlay::notify_players(int & current_id){
-    
+
     for(ThClient *client : this->clients){
         if(client->client_id != current_id){
             client->notify_players(this->usernames);
         }
-    } 
+    }
 }
 
 
@@ -175,7 +175,7 @@ void GamePlay::start_game(){
     //Le aviso al cliente que empiece la partida.
     this->state = true;
     for(ThClient *client : this->clients){
-        
+
         client->start_game();
         client->attach_queue(this->intentions);
         this->map.add_player(client->client_id);

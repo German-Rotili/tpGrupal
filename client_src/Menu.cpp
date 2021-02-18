@@ -357,6 +357,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
 
       if (!creator) {
       input_id = this->client.receive_flag();
+
       switch (input_id){
         case START:{
           quit = true;

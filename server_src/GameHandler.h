@@ -3,11 +3,13 @@
 #include "../common_src/MapHandler.h"
 #include "GamePlay.h"
 #include "ThClient.h"
+#include "IdMaker.h"
 class GamePlay;
 class ThClient;
 
 class GameHandler{
 private:
+    IdMaker *id_maker;
     MapHandler map_handler;
     std::vector<GamePlay*> games;
 public:

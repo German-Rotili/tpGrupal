@@ -76,7 +76,6 @@ void Serializer::append_player_info(std::vector<char> & message, std::vector<pla
 void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapshot, int & offset){
 
     char snap_id = 'p';
-    int player_id = -1;
     int amount = 0;
     int size_int = sizeof(int);
     int size_float = sizeof(float);
@@ -88,12 +87,9 @@ void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapsh
         offset += size_int;
         amount = ntohl(amount);
         for(int i = 0; i < amount;i++){
-            memcpy(&player_id, msg.data()+offset, size_int);
-            offset += size_int;
-
             player_t player_aux;
-            player_aux.player_id = player_id;
-
+            memcpy(&player_aux.player_id, msg.data()+offset, size_int);
+            offset += size_int;
             memcpy(&player_aux.pos_x, msg.data() + offset, size_float);
             offset += size_float;
             memcpy(&player_aux.pos_y, msg.data() + offset, size_float);

@@ -46,6 +46,7 @@ public:
     /*Devuelve el estado del thread*/
     bool is_dead();
 friend class GamePlay;
+friend class GameHandler;
 };
 
 

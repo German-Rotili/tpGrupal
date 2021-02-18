@@ -30,6 +30,7 @@ public:
     char receive_char();
     void send_string_msg(std::string & msg);
     int receive_int();
+    void close();
 };
 
 #endif

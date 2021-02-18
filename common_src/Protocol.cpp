@@ -122,3 +122,7 @@ void Protocol::send_vector_int(std::vector<int> & value){
     }
     /*******************************************/
 }
+
+void Protocol::close(){
+    this->socket.socket_shutdown(SHUT_RDWR);
+}

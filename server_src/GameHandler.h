@@ -14,6 +14,7 @@ public:
     GamePlay & select_match(ThClient & player, int id);
     GamePlay & new_match(ThClient & player, std::vector<char> & map);
     std::vector<int> get_matches_id();
+    void end_games();
     GameHandler();
     ~GameHandler();
 };

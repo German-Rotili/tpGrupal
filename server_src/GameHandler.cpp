@@ -7,8 +7,12 @@
 
 GameHandler::GameHandler(){}
 
-GameHandler::~GameHandler(){
-    for (auto & game : this->games) {
+GameHandler::~GameHandler(){}
+
+void GameHandler::end_games(){
+    for (GamePlay *game : this->games) {
+        game->stop();
+        game->join();
         delete game;
     }
 }

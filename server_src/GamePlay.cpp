@@ -13,7 +13,7 @@
 #include "weapons/Rocket.h"
 #include "IdMaker.h"
 
-GamePlay::GamePlay(ThClient *player, Map&& map):map(map){
+GamePlay::GamePlay(ThClient *player, Map&& map):map(map),state(true){
     this->add_client(player);
     IdMaker *IdMaker = IdMaker::GetInstance();
     this->intentions = new ProtectedQueueIntention();
@@ -22,10 +22,7 @@ GamePlay::GamePlay(ThClient *player, Map&& map):map(map){
 
 GamePlay::~GamePlay(){
     delete this->intentions;
-    for(ThClientSender *sender : this->client_senders){
-        sender->join();
-        delete sender;
-    }
+
 }
 
 std::vector<std::vector<char>> & GamePlay::get_usernames(){
@@ -69,6 +66,7 @@ void GamePlay::append_objects(Snapshot &snapshot){
        }
      }
 }
+
 void GamePlay::append_doors(Snapshot &snapshot){
     for(auto &x : this->map.doors){
        object_t *object_aux = new object_t;
@@ -81,6 +79,17 @@ void GamePlay::append_doors(Snapshot &snapshot){
        }
     }
 }
+
+void GamePlay::stop(){
+    this->state = false;
+    for(ThClientSender *sender : this->client_senders){
+        sender->stop();
+        sender->join();
+        delete sender;
+    }
+}
+
+
 void GamePlay::append_actions(Snapshot &snapshot){
     for(Action *action : this->map.actions){
        Action *action_aux = new Action(action->player_id);
@@ -92,6 +101,7 @@ void GamePlay::append_actions(Snapshot &snapshot){
     }
     this->map.actions.clear();
 }
+
 void GamePlay::append_rockets(Snapshot &snapshot){
     for(Rocket &rocket : this->map.rockets){
          object_t *object_aux = new object_t;
@@ -117,7 +127,6 @@ Snapshot GamePlay::get_snapshot(){
 
 /*GAME LOOP*/
 void GamePlay::run(){
-        this->state = true;
         this->map.start();
         while (this->state){
 

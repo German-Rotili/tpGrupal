@@ -12,6 +12,7 @@
 #include "ThClientSender.h"
 #include "../common_src/Action.h"
 #include "../common_src/Serializer.h"
+#include "../common_src/common_exception.h"
 #include "../common_src/Intention.h"
 #include "IdMaker.h"
 #include <chrono>
@@ -159,6 +160,8 @@ void ThClient::receiver_loop(){
             Intention intention_aux(this->client_id, intention); 
             this->intentions->add_element(intention_aux);//std::move a la intencion
         }
+    }catch( SuperException& e){
+        std::cout << "Client Closed" << '\n';
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "Receiver Loop Error" << '\n';
@@ -169,4 +172,5 @@ ThClient::ThClient(Protocol&& protocol, GameHandler & game_handler):game_handler
     this->protocol = std::move(protocol);
 }
 
-ThClient::~ThClient(){}
+ThClient::~ThClient(){
+}

@@ -26,7 +26,6 @@ private:
     bool state;
     std::vector<std::vector<char>> usernames;
     ProtectedQueueIntention *intentions;
-    // BlockingQueueSnapshot *snapshots;
     std::vector <ThClient*> clients;
     std::vector <ThClientSender*> client_senders;
     Map map;
@@ -40,6 +39,7 @@ public:
     GamePlay(ThClient *player, Map&& map);
     ~GamePlay();
     std::vector<std::vector<char>>  &get_usernames();
+    void stop();
 
     void add_client(ThClient* client);
     void start_game();

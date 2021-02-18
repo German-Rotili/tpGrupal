@@ -3,7 +3,7 @@
 void ThClientSender::run(){
         Serializer serializer;
         std::vector <char> msg;
-        while (true){
+        while (this->state){
             Snapshot snapshot = this->snapshots.get_element();
             // snapshot.print();
             char action_id = ACTION_ID;
@@ -27,5 +27,8 @@ ThClientSender::ThClientSender(Protocol& protocol):
     }
 
 ThClientSender::~ThClientSender(){
+}
+
+void ThClientSender::stop(){
     this->state = false;
 }

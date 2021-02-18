@@ -32,23 +32,17 @@ static const void remove_dead(std::vector<Thread*> & list){
 }
 
 void ThServer::run(){
-
     try {
-        GameHandler game_handler;
         while (state){
             Socket peer;
             server.socket_accept(peer);
-            std::cout << "Socket aceptado" <<std::endl;
-
             Protocol protocol(std::move(peer));
             this->threads.push_back(new 
-                ThClient(std::move(protocol), game_handler));
+                ThClient(std::move(protocol), this->game_handler));
                 
             (this->threads.back())->start();
             remove_dead(this->threads);
         }
-       
-    }catch(CloseSocketException& e){
     }catch(std::exception& e){
         perror(e.what());
     }catch(...){}
@@ -67,5 +61,6 @@ void ThServer::clean_clients(std::vector<Thread*> threads){
 }
 
 ThServer::~ThServer(){
+    this->game_handler.end_games();
     clean_clients(threads);
 }

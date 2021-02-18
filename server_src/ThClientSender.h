@@ -35,7 +35,7 @@ public:
     ~ThClientSender();
 
     void run() override;
-
+    void stop();
     bool is_dead();
     friend class GamePlay;
 };

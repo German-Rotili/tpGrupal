@@ -19,6 +19,7 @@ class ThServer : public Thread{
 private:
     std::atomic<bool> state;
     Socket server;
+    GameHandler game_handler;
     std::vector<Thread*> threads;
     /*Elimina los threads que ya finalizaron su proceso*/
     void clean_clients(std::vector<Thread*> threads);

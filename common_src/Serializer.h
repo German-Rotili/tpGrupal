@@ -24,9 +24,9 @@ public:
     ~Serializer();
 
     std::vector<char> serialize_snapshot(Snapshot & snapshot);
-    void append_player_info(std::vector<char> & message, std::vector<player_t*> & players);
-    void append_object_info(std::vector<char> & message, std::vector<object_t*> & objects);
-    void append_actions(std::vector<char> & message, std::vector<Action*> & actions);
+    void append_player_info(std::vector<char> & message, std::vector<player_t> & players);
+    void append_object_info(std::vector<char> & message, std::vector<object_t> & objects);
+    void append_actions(std::vector<char> & message, std::vector<Action> & actions);
     std::vector<char> serialize_action(Snapshot & snapshot);
     void deserializer(std::vector <char> & msg, Snapshot & snapshot); 
     void deserialize_action(std::vector <char> & msg, ProtectedQueueAction & actions);

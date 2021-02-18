@@ -61,8 +61,8 @@ std::vector<char> Map::get_raw_map(){
 
 void Map::add_action(int player_id, float weapon_id, float posx, float posy) 
 {
-  Action *action = new Action(player_id);
-  action->update_values(posx, posy, weapon_id);
+  Action action(player_id);
+  action.update_values(posx, posy, weapon_id);
   this->actions.push_back(action);
 
 }

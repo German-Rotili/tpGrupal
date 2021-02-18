@@ -34,7 +34,7 @@ class World {
 
   void cargarObjetosConstantes(std::vector<std::vector<int>> & map);
   void limpiarObjetosDinamicos();
-  void agregarObjetoDinamico(object_t* object);
+  void agregarObjetoDinamico(object_t& object);
 
   SdlMusic music;
   RayCaster rayCaster;

@@ -22,7 +22,6 @@ GamePlay::GamePlay(ThClient *player, Map&& map):map(map),state(true){
 
 GamePlay::~GamePlay(){
     delete this->intentions;
-
 }
 
 std::vector<std::vector<char>> & GamePlay::get_usernames(){
@@ -40,28 +39,28 @@ std::vector<char> GamePlay::get_raw_map(){
 
 void GamePlay::append_players(Snapshot & snapshot){
     for(Player &player : this->map.players){
-        player_t *player_aux = new player_t;
-        player_aux->player_id = player.get_id();
-        player_aux->pos_x = player.get_pos_x();
-        player_aux->pos_y = player.get_pos_y();
-        player_aux->direction = player.get_direction();
-        player_aux->current_weapon = player.get_current_weapon_id();
-        player_aux->ammo = player.get_ammo();
-        player_aux->health = player.get_hitpoints();
-        player_aux->lives = player.get_lives();
-        player_aux->score = player.get_score();
+        player_t player_aux;
+        player_aux.player_id = player.get_id();
+        player_aux.pos_x = player.get_pos_x();
+        player_aux.pos_y = player.get_pos_y();
+        player_aux.direction = player.get_direction();
+        player_aux.current_weapon = player.get_current_weapon_id();
+        player_aux.ammo = player.get_ammo();
+        player_aux.health = player.get_hitpoints();
+        player_aux.lives = player.get_lives();
+        player_aux.score = player.get_score();
         snapshot.add_player(player_aux);
     }
 }
 
 void GamePlay::append_objects(Snapshot &snapshot){
    for(auto &x : this->map.items){
-       object_t *object_aux = new object_t;
+       object_t object_aux;
      for(auto &y : x.second){
-         object_aux->id = y.second;
-         object_aux->pos_x = x.first;
-         object_aux->pos_y = y.first;
-         object_aux->state = false;
+         object_aux.id = y.second;
+         object_aux.pos_x = x.first;
+         object_aux.pos_y = y.first;
+         object_aux.state = false;
         snapshot.add_object(object_aux);
        }
      }
@@ -69,12 +68,12 @@ void GamePlay::append_objects(Snapshot &snapshot){
 
 void GamePlay::append_doors(Snapshot &snapshot){
     for(auto &x : this->map.doors){
-       object_t *object_aux = new object_t;
+       object_t object_aux;
         for(auto &y : x.second){
-         object_aux->id = 34;
-         object_aux->pos_x = x.first;
-         object_aux->pos_y = y.first;
-         object_aux->state = y.second.is_open();
+         object_aux.id = 34;
+         object_aux.pos_x = x.first;
+         object_aux.pos_y = y.first;
+         object_aux.state = y.second.is_open();
          snapshot.add_object(object_aux);
        }
     }
@@ -91,24 +90,21 @@ void GamePlay::stop(){
 
 
 void GamePlay::append_actions(Snapshot &snapshot){
-    for(Action *action : this->map.actions){
-       Action *action_aux = new Action(action->player_id);
-       action_aux->update_values(action->impact_x, action->impact_y, action->weapon_id);
+    for(Action action : this->map.actions){
+       Action action_aux(action.player_id);
+       action_aux.update_values(action.impact_x, action.impact_y, action.weapon_id);
        snapshot.add_action(action_aux);
-    }
-    for(Action *action : this->map.actions){
-       free(action);
     }
     this->map.actions.clear();
 }
 
 void GamePlay::append_rockets(Snapshot &snapshot){
     for(Rocket &rocket : this->map.rockets){
-         object_t *object_aux = new object_t;
-         object_aux->id = 35;
-         object_aux->pos_x = rocket.get_pos_x();
-         object_aux->pos_y = rocket.get_pos_y();
-         object_aux->state = false;
+         object_t object_aux;
+         object_aux.id = 35;
+         object_aux.pos_x = rocket.get_pos_x();
+         object_aux.pos_y = rocket.get_pos_y();
+         object_aux.state = false;
          snapshot.add_object(object_aux);
     }
 }

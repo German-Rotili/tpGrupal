@@ -1,6 +1,8 @@
 #include "IdMaker.h"
 
-IdMaker::~IdMaker(){}
+IdMaker::~IdMaker(){
+    delete instance;
+}
 
 IdMaker* IdMaker::instance{nullptr};
 std::mutex IdMaker::m;

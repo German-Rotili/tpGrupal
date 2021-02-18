@@ -26,47 +26,47 @@ std::vector<char> Serializer::serialize_snapshot(Snapshot & snapshot){
     //append_actions(message, snapshot.actions);
     return message;
 }
-void Serializer::append_actions(std::vector<char> & message, std::vector<Action*> & actions){
+void Serializer::append_actions(std::vector<char> & message, std::vector<Action> & actions){
     uint32_t actions_amount = htonl(actions.size());
     append_variable(message, (char*) &(actions_amount), sizeof(uint32_t));
 
     for (auto &action : actions){
-        append_variable(message, (char*) &(action->player_id), sizeof(int));
-        append_variable(message, (char*) &(action->impact_x), sizeof(double));
-        append_variable(message, (char*) &(action->impact_y), sizeof(double));
-        append_variable(message, (char*) &(action->weapon_id), sizeof(char));
-        append_variable(message, (char*) &(action->state), sizeof(bool));
+        append_variable(message, (char*) &(action.player_id), sizeof(int));
+        append_variable(message, (char*) &(action.impact_x), sizeof(double));
+        append_variable(message, (char*) &(action.impact_y), sizeof(double));
+        append_variable(message, (char*) &(action.weapon_id), sizeof(char));
+        append_variable(message, (char*) &(action.state), sizeof(bool));
     }
 }
-void Serializer::append_object_info(std::vector<char> & message, std::vector<object_t*> & objects){
+void Serializer::append_object_info(std::vector<char> & message, std::vector<object_t> & objects){
     char snap_id = 'o';
     append_variable(message, (char*) &(snap_id), sizeof(char));
     uint32_t objects_amount = htonl(objects.size());
     append_variable(message, (char*) &(objects_amount), sizeof(uint32_t));
 
     for (auto &object_info : objects){
-        append_variable(message, (char*) &(object_info->id), sizeof(int));
-        append_variable(message, (char*) &(object_info->pos_x), sizeof(double));
-        append_variable(message, (char*) &(object_info->pos_y), sizeof(double));
-        append_variable(message, (char*) &(object_info->state), sizeof(bool));
+        append_variable(message, (char*) &(object_info.id), sizeof(int));
+        append_variable(message, (char*) &(object_info.pos_x), sizeof(double));
+        append_variable(message, (char*) &(object_info.pos_y), sizeof(double));
+        append_variable(message, (char*) &(object_info.state), sizeof(bool));
     }
 }
-void Serializer::append_player_info(std::vector<char> & message, std::vector<player_t*> & players){
+void Serializer::append_player_info(std::vector<char> & message, std::vector<player_t> & players){
     char snap_id = 'p';
     append_variable(message, (char*) &(snap_id), sizeof(char));
     uint32_t players_amount = htonl(players.size());
     append_variable(message, (char*) &(players_amount), sizeof(uint32_t));
 
     for (auto &player_info : players){
-        append_variable(message, (char*) &(player_info->player_id), sizeof(int));
-        append_variable(message, (char*) &(player_info->pos_x), sizeof(float));
-        append_variable(message, (char*) &(player_info->pos_y), sizeof(float));
-        append_variable(message, (char*) &(player_info->direction), sizeof(float));
-        append_variable(message, (char*) &(player_info->ammo), sizeof(int));
-        append_variable(message, (char*) &(player_info->current_weapon), sizeof(char));
-        append_variable(message, (char*) &(player_info->health), sizeof(double));
-        append_variable(message, (char*) &(player_info->lives), sizeof(int));
-        append_variable(message, (char*) &(player_info->score), sizeof(int));
+        append_variable(message, (char*) &(player_info.player_id), sizeof(int));
+        append_variable(message, (char*) &(player_info.pos_x), sizeof(float));
+        append_variable(message, (char*) &(player_info.pos_y), sizeof(float));
+        append_variable(message, (char*) &(player_info.direction), sizeof(float));
+        append_variable(message, (char*) &(player_info.ammo), sizeof(int));
+        append_variable(message, (char*) &(player_info.current_weapon), sizeof(char));
+        append_variable(message, (char*) &(player_info.health), sizeof(double));
+        append_variable(message, (char*) &(player_info.lives), sizeof(int));
+        append_variable(message, (char*) &(player_info.score), sizeof(int));
     }
 }
 
@@ -80,7 +80,6 @@ void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapsh
     int amount = 0;
     int size_int = sizeof(int);
     int size_float = sizeof(float);
-    player_t* player_aux;
     memcpy(&snap_id, msg.data(), sizeof(char));
     offset += sizeof(char);
 
@@ -92,24 +91,24 @@ void Serializer::deserialize_players(std::vector <char> & msg, Snapshot & snapsh
             memcpy(&player_id, msg.data()+offset, size_int);
             offset += size_int;
 
-            player_aux = new player_t;//snapshot.get_player(player_id);
-            player_aux->player_id = player_id;
+            player_t player_aux;
+            player_aux.player_id = player_id;
 
-            memcpy(&player_aux->pos_x, msg.data() + offset, size_float);
+            memcpy(&player_aux.pos_x, msg.data() + offset, size_float);
             offset += size_float;
-            memcpy(&player_aux->pos_y, msg.data() + offset, size_float);
+            memcpy(&player_aux.pos_y, msg.data() + offset, size_float);
             offset += size_float;
-            memcpy(&player_aux->direction, msg.data() + offset, size_float);
+            memcpy(&player_aux.direction, msg.data() + offset, size_float);
             offset += size_float;
-            memcpy(&player_aux->ammo, msg.data() + offset,size_int);
+            memcpy(&player_aux.ammo, msg.data() + offset,size_int);
             offset += size_int;
-            memcpy(&player_aux->current_weapon, msg.data() + offset, sizeof(char));
+            memcpy(&player_aux.current_weapon, msg.data() + offset, sizeof(char));
             offset += sizeof(char);
-            memcpy(&player_aux->health, msg.data() + offset, sizeof(double));
+            memcpy(&player_aux.health, msg.data() + offset, sizeof(double));
             offset += sizeof(double);
-            memcpy(&player_aux->lives, msg.data() + offset, size_int);
+            memcpy(&player_aux.lives, msg.data() + offset, size_int);
             offset += size_int;
-            memcpy(&player_aux->score, msg.data() + offset, size_int);
+            memcpy(&player_aux.score, msg.data() + offset, size_int);
             offset += size_int;
             snapshot.add_player(player_aux);
         }
@@ -132,14 +131,14 @@ void Serializer::deserialize_objects(std::vector <char> & msg, Snapshot & snapsh
         amount = ntohl(amount);
 
         for(int i = 0; i<amount; i++){
-            object_aux = new object_t;//snapshot.get_object(object_id);
-            memcpy(&object_aux->id, msg.data()+offset, size_int);
+            object_t object_aux;
+            memcpy(&object_aux.id, msg.data()+offset, size_int);
             offset += size_int;
-            memcpy(&object_aux->pos_x, msg.data() + offset, size_double);
+            memcpy(&object_aux.pos_x, msg.data() + offset, size_double);
             offset += size_double;
-            memcpy(&object_aux->pos_y, msg.data() + offset, size_double);
+            memcpy(&object_aux.pos_y, msg.data() + offset, size_double);
             offset += size_double;
-            memcpy(&object_aux->state, msg.data() + offset, size_bool);
+            memcpy(&object_aux.state, msg.data() + offset, size_bool);
             offset += size_bool;
             snapshot.add_object(object_aux);
         }

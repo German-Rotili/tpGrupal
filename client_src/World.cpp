@@ -85,10 +85,10 @@ void World::limpiarObjetosDinamicos() {
   }
 }
 
-void World::agregarObjetoDinamico(object_t* object) {
-  double x = object->pos_x + 0.5;
-  double y = object->pos_y + 0.5;
-  switch (object->id) {
+void World::agregarObjetoDinamico(object_t & object) {
+  double x = object.pos_x + 0.5;
+  double y = object.pos_y + 0.5;
+  switch (object.id) {
     case 35:
     objetosDinamicos.push_back(new Object(x, y, basic_clip, src.tx_rocket, myPlayer, settings));
     break;
@@ -136,22 +136,22 @@ void World::agregarObjetoDinamico(object_t* object) {
 
 void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
     for (auto &player : snapshot.players) {
-      if (player->player_id == settings.myCurrentId){
-        myPlayer.setPosicion(player->pos_x , player->pos_y);
-        myPlayer.setDirection(player->direction);
-        myPlayer.setHealth(player->health);
-        myPlayer.setLives(player->lives);
-        myPlayer.setArmaActual(player->current_weapon);
-        myPlayer.setScore(player->score);
+      if (player.player_id == settings.myCurrentId){
+        myPlayer.setPosicion(player.pos_x , player.pos_y);
+        myPlayer.setDirection(player.direction);
+        myPlayer.setHealth(player.health);
+        myPlayer.setLives(player.lives);
+        myPlayer.setArmaActual(player.current_weapon);
+        myPlayer.setScore(player.score);
       } else {
-        if (enemigos.find(player->player_id) == enemigos.end()) {
-          enemigos.insert(std::pair<int, Enemy*>(player->player_id, new Enemy(-1, -1, basic_clip, 0, myPlayer, src, settings)));
+        if (enemigos.find(player.player_id) == enemigos.end()) {
+          enemigos.insert(std::pair<int, Enemy*>(player.player_id, new Enemy(-1, -1, basic_clip, 0, myPlayer, src, settings)));
         }
-        enemigos.at(player->player_id)->setRelativeDirection(player->direction, myPlayer.getDirection());  // Esto puede dar pequeños bugs visuales si se actualiza primero el enemigo y luego el myPlayer
-        bool seMovio = enemigos.at(player->player_id)->setPosicion(player->pos_x, player->pos_y);
-        enemigos.at(player->player_id)->setIsRunning(seMovio);
-        enemigos.at(player->player_id)->setWeapon(player->current_weapon);
-        enemigos.at(player->player_id)->setIsAlive(player->health > 0);
+        enemigos.at(player.player_id)->setRelativeDirection(player.direction, myPlayer.getDirection());  // Esto puede dar pequeños bugs visuales si se actualiza primero el enemigo y luego el myPlayer
+        bool seMovio = enemigos.at(player.player_id)->setPosicion(player.pos_x, player.pos_y);
+        enemigos.at(player.player_id)->setIsRunning(seMovio);
+        enemigos.at(player.player_id)->setWeapon(player.current_weapon);
+        enemigos.at(player.player_id)->setIsAlive(player.health > 0);
       }
     }
     int actions_processed = 0;
@@ -175,8 +175,8 @@ void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
   limpiarObjetosDinamicos();
   objetosDinamicos.resize(0);
   for (auto &object : snapshot.objects){
-    if ((object->id) == 34) {
-      worldMap.setEstadoPuerta(object->pos_x, object->pos_y, object->state);
+    if ((object.id) == 34) {
+      worldMap.setEstadoPuerta(object.pos_x, object.pos_y, object.state);
     } else {
       agregarObjetoDinamico(object);
     }

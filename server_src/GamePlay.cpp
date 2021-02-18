@@ -129,7 +129,6 @@ void GamePlay::run(){
             while (!this->intentions->is_empty() || index == MAX_INTENTION_PER_FRAME){//analizar poner una cantidad fija para que no se llene mientras loopea EJ hacer un FOR
                 try{
                     Intention intention_aux = this->intentions->get_element();
-                    std::cout << "Process intention of player: " << intention_aux.get_id() << '\n';
                     this->map.execute_intentions(intention_aux.get_intention(), intention_aux.get_id());
                     index+=1;
                 }

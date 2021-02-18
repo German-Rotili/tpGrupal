@@ -25,7 +25,6 @@ void ThClient::attach_queue(ProtectedQueueIntention *intentions){
 
 
 void ThClient::start_game(){
-    std::cout << "server avisa que empieza y manda id" << std::endl;
     char start_flag = START;
     this->protocol.send_char(start_flag);
     this->protocol.send_integer(this->client_id);
@@ -35,7 +34,6 @@ void ThClient::notify_players(std::vector<std::vector<char>> &usernames){
     char refresh_flag = REFRESH;
     this->protocol.send_char(refresh_flag);
     this->protocol.send_usernames(usernames);
-    std::cout << "se unio uno nuevo, mando nuevos usernames con flag" << std::endl;
 
 }
 
@@ -61,11 +59,9 @@ void ThClient::new_game(){
             if(msg_char == START){
                     game.start();//Lanzo hilo de la partida
                     game.start_game();// le aviso a todos que comenzo la partida.
-                    std::cout << "Start by host" << std::endl;
                     break;
             }else if (msg_char == REFRESH){
                 this->refresh_players(game.get_usernames());
-                  std::cout << "usernames sent" << std::endl;
 
             }else{
                 std::cout  << "Llego cualquier cosa." <<  msg_char << std::endl;
@@ -90,7 +86,6 @@ void ThClient::join_game(){
         std::vector <char> map = game.get_raw_map();//cambiar al archivo yaml entero.
         this->protocol.send_vector_char(map);//mando mapa al cliente para que dibuje
         this->refresh_players(game.get_usernames());//mando usernames     
-        std::cout << "hice join y mande usernames" << '\n';
 
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
@@ -130,7 +125,6 @@ void ThClient::run(){
             /***********Recibo Decision sobre Partida********/
             char decision = this->protocol.receive_char();
             /*********************************************/
-            std::cout << "Decisiones! " << decision << '\n';
 
             switch (decision){
                 case NEW_GAME:{
@@ -144,7 +138,6 @@ void ThClient::run(){
                     start = true;
                     break;
                 case REFRESH:{
-            std::cout << "refresh menos" << '\n';
                     this->refresh_matches();
                 }
                 case START:{
@@ -153,7 +146,6 @@ void ThClient::run(){
                 }
             }   
         }
-        std::cout << "My client ID is: "<<this->client_id <<'\n';
         this->receiver_loop();
 }
 
@@ -165,9 +157,6 @@ void ThClient::receiver_loop(){
             if(intention.size() > 0){
                 Intention intention_aux(this->client_id, intention); 
                 this->intentions->add_element(intention_aux);//std::move a la intencion
-                std::cout << "Client "<< this->client_id <<" received intention" << '\n';
-            }else{
-                std::cout << "intention vacia" << '\n';
             }
 
         }

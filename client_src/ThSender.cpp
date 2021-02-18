@@ -11,7 +11,6 @@ void ThSender::run(){
     while (this->state) {
         Intention intention_aux = this->intentions.get_element();
         send_intention(intention_aux.get_intention());
-        std::cout << "Mando intencion: "<<intention_aux.get_id() << std::endl;
 
     }
   } catch (std::exception const& e) {

@@ -352,17 +352,14 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
 
       if (!creator) {
       input_id = this->client.receive_flag();
-      std::cout<<"recibo flag porque soy join: " << input_id <<std::endl;
 
       switch (input_id){
         case START:{
-          std::cout<<"recibi un start, soy join"<<std::endl;
           quit = true;
           advance = true;
         }
         break;
         case REFRESH:{
-          std::cout<<"recibi un refresh"<<std::endl;
           usernames = this->client.get_players_username();
         }
         break;

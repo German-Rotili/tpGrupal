@@ -10,8 +10,8 @@ void Position::update(char mov) {
   if (mov == FORWARD || mov == BACKWARDS) {
     float offset_x = this->get_x_offset(mov);
     float offset_y = this->get_y_offset(mov);
-    std::cout << "offset x: " << offset_x;
-    std::cout << " offset y: " << offset_y;
+    // std::cout << "offset x: " << offset_x;
+    // std::cout << " offset y: " << offset_y;
 
     int new_x = (int)(this->x + offset_x);
     int new_y = (int)this->y;
@@ -25,7 +25,7 @@ void Position::update(char mov) {
              // hitbox este justo al limite.
       this->x = (this->x < new_x) ? new_x - this->hitbox_radius
                                   : new_x + hitbox_radius;
-      std::cout << "compenso por pared";
+      // std::cout << "compenso por pared";
     }
     new_x = (int)(this->x);
     new_y = (int)this->y + offset_y;
@@ -38,7 +38,7 @@ void Position::update(char mov) {
              // hitbox este justo al limite.
       this->y = (this->y < new_y) ? new_y - this->hitbox_radius
                                   : new_y + this->hitbox_radius;
-      std::cout << "compenso por pared";
+      // std::cout << "compenso por pared";
 
     }
   } else {

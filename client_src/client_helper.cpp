@@ -46,7 +46,10 @@ char Client::receive_flag(){
 
 
 int Client::await_game_start(){
-    return this->protocol.receive_int();//ID CLIENT/PLAYER
+    int client_id =  this->protocol.receive_int();//ID CLIENT/PLAYER
+    // char aux = START;
+    // this->protocol.send_char(aux);
+    return client_id;
 }
 
 
@@ -65,7 +68,6 @@ void Client::start_match(){
     char start = START;
     this->protocol.send_char(start);
 }
-
 
 void Client::send_username(std::string & username){
     this->protocol.send_string_msg(username);

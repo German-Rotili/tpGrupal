@@ -182,7 +182,7 @@ void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
           char aux = intentions.front();
           intentions.erase (intentions.begin());
           player.execute_intention(aux);
-        std::cout << "caracter procesado: " <<aux <<std::endl;
+        // std::cout << "caracter procesado: " <<aux <<std::endl;
 
         }
       }

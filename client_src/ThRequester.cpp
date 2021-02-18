@@ -32,17 +32,18 @@ void ThRequester::run() {
     obtainedId = client.await_game_start();
     while (this->state) {
         Snapshot snap_aux;
-        client.receive_update(snap_aux, this->actions);
+        client.receive_update(snap_aux, this->actions);        
         std::unique_lock<std::mutex> lock(this->m);
         this->snapshot = snap_aux;
+        // snap_aux.print();
     }
   } catch (std::exception const& e) {
-    std::cout << "Exception on ThRequester:" << std::endl;
-    std::cout << e.what() << std::endl;
+    std::cerr << "Exception on ThRequester:" << std::endl;
+    std::cerr << e.what() << std::endl;
     this->dead = true;
   }
   catch (...) {
     this->dead = true;
-    std::cout << "Error inesperado en ThRequester" << std::endl;
+    std::cerr << "Error inesperado en ThRequester" << std::endl;
   }
 }

@@ -11,13 +11,11 @@
 #include "ThClient.h"
 #include "Map.h"
 #include "weapons/Rocket.h"
-#include "IdMaker.h"
 
-GamePlay::GamePlay(ThClient *player, Map&& map):map(map),state(true){
+GamePlay::GamePlay(ThClient *player, Map&& map, int id):map(map),state(true), id(id){
     this->add_client(player);
-    IdMaker *IdMaker = IdMaker::GetInstance();
+    this->host_id = player->client_id;
     this->intentions = new ProtectedQueueIntention();
-    this->id = IdMaker->generate_id();
 }
 
 GamePlay::~GamePlay(){
@@ -131,6 +129,7 @@ void GamePlay::run(){
             while (!this->intentions->is_empty() || index == MAX_INTENTION_PER_FRAME){//analizar poner una cantidad fija para que no se llene mientras loopea EJ hacer un FOR
                 try{
                     Intention intention_aux = this->intentions->get_element();
+                    std::cout << "Process intention of player: " << intention_aux.get_id() << '\n';
                     this->map.execute_intentions(intention_aux.get_intention(), intention_aux.get_id());
                     index+=1;
                 }
@@ -142,6 +141,7 @@ void GamePlay::run(){
             for(ThClientSender *client_s : this->client_senders){
                 if (!client_s->snapshots.is_closed()){
                     client_s->snapshots.add_element(snapshot);
+                    //ojo que no borra clientes cuando se descontectan
                 }
             }
 
@@ -164,7 +164,7 @@ int GamePlay::get_id(){
 void GamePlay::notify_players(int & current_id){
 
     for(ThClient *client : this->clients){
-        if(client->client_id != current_id){
+        if(client->client_id != current_id && client->client_id != this->host_id){
             client->notify_players(this->usernames);
         }
     }
@@ -175,7 +175,6 @@ void GamePlay::start_game(){
     //Le aviso al cliente que empiece la partida.
     this->state = true;
     for(ThClient *client : this->clients){
-
         client->start_game();
         client->attach_queue(this->intentions);
         this->map.add_player(client->client_id);

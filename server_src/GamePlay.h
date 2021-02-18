@@ -4,6 +4,7 @@
 #include <vector>
 #include "../common_src/common_thread.h"
 #include "../common_src/Serializer.h"
+#include "IdMaker.h"
 #include "../common_src/ProtectedQueueIntention.h"
 #include "../common_src/BlockingQueueSnapshot.h"
 #include "../common_src/Snapshot.h"
@@ -23,12 +24,13 @@ class GameHandler;
 class GamePlay : public Thread{
 private:
     int id;
+    int host_id;
     bool state;
     std::vector<std::vector<char>> usernames;
     ProtectedQueueIntention *intentions;
     std::vector <ThClient*> clients;
     std::vector <ThClientSender*> client_senders;
-    Map map;
+    Map map; 
     void append_players(Snapshot &snapshot);
     void append_objects(Snapshot &snapshot);
     void append_doors(Snapshot &snapshot);
@@ -36,7 +38,7 @@ private:
     void append_rockets(Snapshot &snapshot);
 
 public:
-    GamePlay(ThClient *player, Map&& map);
+    GamePlay(ThClient *player, Map&& map, int id);
     ~GamePlay();
     std::vector<std::vector<char>>  &get_usernames();
     void stop();

@@ -14,7 +14,7 @@ void Player::execute_intention(char intention) {
   if (this->is_alive) {
     if (intention == FORWARD || intention == BACKWARDS || intention == RIGHT ||
         intention == LEFT) {
-        std::cout << "intento mover" << std::endl;
+        // std::cout << "intento mover" << std::endl;
       this->position.update(intention);
       this->process_near_item();
 
@@ -134,7 +134,7 @@ float Player::get_direction() { return this->position.get_angle(); }
 
 
 void Player::process_near_item(){
-  std::cout<< "posicion es x:" << this->get_pos_x() << " y: " << this->get_pos_y() << std::endl;
+  // std::cout<< "posicion es x:" << this->get_pos_x() << " y: " << this->get_pos_y() << std::endl;
   int current_id = map->get_id(this->get_pos_x(), this->get_pos_y());
 
   if(current_id >= 49 && current_id <= 52){

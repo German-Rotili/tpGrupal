@@ -43,7 +43,9 @@ GamePlay & GameHandler::new_match(ThClient & player, std::vector<char> & map_dat
 std::vector<int>  GameHandler::get_matches_id(){
     std::vector<int> games_id;
     for (auto & game : this->games) {
-        games_id.push_back(game->get_id());
+        if(!game->is_blocked()){
+            games_id.push_back(game->get_id());
+        }
     }
     return games_id;
 }

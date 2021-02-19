@@ -30,10 +30,20 @@ void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions)
             std::cout << "Error id detection" <<std::endl;
     }
 }
+std::vector<int> Client::refresh_game(){
+    char aux = REFRESH;
+    this->protocol.send_char(aux);
+    return this->get_matches_id();
+}
+
 
 std::vector<int> Client::get_matches_id(){
-
     return this->protocol.receive_vector_int();
+}
+
+void Client::send_refresh_flag(){
+    char aux = REFRESH;
+    this->protocol.send_char(aux);
 }
 
 std::vector<std::string> Client::get_players_username(){
@@ -73,10 +83,7 @@ void Client::send_username(std::string & username){
     this->protocol.send_string_msg(username);
 }
 
-void Client::refresh_game(){
-    char flag = REFRESH;
-    this->protocol.send_char(flag);
-}
+
 
 void Client::join_game(){
     char join_flag = JOIN_MATCH;
@@ -85,6 +92,7 @@ void Client::join_game(){
 
 
 std::vector<std::vector<int>> Client::join_game(std::string & game_id){
+    this->join_game();
     int aux = std::stoi(game_id);
     this->protocol.send_integer(aux);
     std::string map = this->client_receive_string();

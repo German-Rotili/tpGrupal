@@ -48,11 +48,18 @@ void ThClient::receive_username(){
     }
 }
 
+void ThClient::stop(){
+    this->state = false;
+    this->protocol.close();
+}
+
+
 void ThClient::new_game(){
-    try{
+    
 
         std::vector<char> map = this->protocol.receive_standar_msg();//recibo el mapa
         GamePlay & game = this->game_handler.new_match(*this, map);//nueva partida con ese mapa
+    try{
         this->protocol.send_username(this->username);
         while(true){
             char msg_char = this->protocol.receive_char();
@@ -70,6 +77,9 @@ void ThClient::new_game(){
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';
         std::cerr << "New Game Error" << '\n';
+        game.stop();
+    }catch(...){
+        game.stop();
     }
 }
 int &ThClient::get_id(){
@@ -81,6 +91,11 @@ void ThClient::join_game(){
     try{
         std::vector<int> matches_id = this->game_handler.get_matches_id();
         this->protocol.send_vector_int(matches_id);//mando ids de partidas
+        char response = 'x';
+        while((response = this->protocol.receive_char()) == REFRESH){
+            matches_id = this->game_handler.get_matches_id();
+            this->protocol.send_vector_int(matches_id);
+        }
         int game_id = this->protocol.receive_int();//recibo id elegido y me uno
         GamePlay & game = this->game_handler.select_match(*this, game_id);
         std::vector <char> map = game.get_raw_map();//cambiar al archivo yaml entero.
@@ -117,11 +132,12 @@ void ThClient::refresh_matches(){
 
 
 void ThClient::run(){
+    try{
         this->receive_username();
         
         bool start = false;
         while(!start){
-        
+    
             /***********Recibo Decision sobre Partida********/
             char decision = this->protocol.receive_char();
             /*********************************************/
@@ -137,15 +153,19 @@ void ThClient::run(){
                 }
                     start = true;
                     break;
-                case REFRESH:{
-                    this->refresh_matches();
-                }
                 case START:{
                     break;
                     start = true;
                 }
             }   
         }
+    }catch(ConnectionClosedException& e){
+        std::cerr << "Client Closed" << '\n';
+    }catch(const std::exception& e){
+        std::cerr << e.what() << '\n';
+        std::cerr << "Menu Error" << '\n';
+    }
+    
         this->receiver_loop();
 }
 
@@ -160,7 +180,7 @@ void ThClient::receiver_loop(){
             }
 
         }
-    }catch( SuperException& e){
+    }catch(ConnectionClosedException& e){
         std::cerr << "Client Closed" << '\n';
     }catch(const std::exception& e){
         std::cerr << e.what() << '\n';

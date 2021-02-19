@@ -60,7 +60,6 @@ std::vector<std::string> Protocol::receive_usernames(){
     int size = this->receive_int();
     for(int i = 0; i < (int)size ; i++){
         std::vector<char> user = this->receive_standar_msg();
-        std::cout <<user.size() << std::endl;
         user.push_back('\0');
         std::string username(user.data());
         usernames.push_back(username);

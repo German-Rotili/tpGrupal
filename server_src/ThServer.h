@@ -20,9 +20,9 @@ private:
     std::atomic<bool> state;
     Socket server;
     GameHandler game_handler;
-    std::vector<Thread*> threads;
+    std::vector<ThClient*> threads;
     /*Elimina los threads que ya finalizaron su proceso*/
-    void clean_clients(std::vector<Thread*> threads);
+    void clean_clients(std::vector<ThClient*> threads);
 
 public:
     ThServer(std::string & port);

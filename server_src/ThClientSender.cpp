@@ -21,7 +21,7 @@ void ThClientSender::run(){
                 this->protocol.send_standard_msg(msg);
             }
          } catch (std::exception const& e) {
-            std::cout << "Hubo una excepción:" << std::endl;
+            std::cout << "ThSender: ";
             std::cout << e.what() << std::endl;
             this->dead = true;
         }
@@ -34,7 +34,7 @@ void ThClientSender::run(){
 ThClientSender::ThClientSender(Protocol& protocol):
     protocol(protocol),state(true){
     IdMaker *IdMaker = IdMaker::GetInstance();
-    }
+}
 
 ThClientSender::~ThClientSender(){
 }

@@ -26,6 +26,7 @@ private:
     int id;
     int host_id;
     bool state;
+    bool blocked;
     std::vector<std::vector<char>> usernames;
     ProtectedQueueIntention *intentions;
     std::vector <ThClient*> clients;
@@ -42,7 +43,7 @@ public:
     ~GamePlay();
     std::vector<std::vector<char>>  &get_usernames();
     void stop();
-
+    bool is_blocked();
     void add_client(ThClient* client);
     void start_game();
     int get_id();

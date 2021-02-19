@@ -6,6 +6,7 @@
 #include "GamePlay.h"
 #include "../common_src/common_thread.h"
 #include "../common_src/ProtectedQueueIntention.h"
+#include "../common_src/ConnectionClosedException.h"
 #include <vector>
 #include <string>
 #include <utility>
@@ -40,11 +41,10 @@ public:
     ~ThClient();
     void run() override;
     void start_game();
+    void stop();
     void notify_players(std::vector<std::vector<char>> &usernames);
     void attach_queue(ProtectedQueueIntention * intentions);
     int & get_id();
-    /*Devuelve el estado del thread*/
-    bool is_dead();
 friend class GamePlay;
 friend class GameHandler;
 };

@@ -283,8 +283,7 @@ void Menu::runGameList(SdlRenderer& renderer, ClientSettings& settings) {
               renderText = true;
             } else if (e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) {
               //Refresh
-              matches_id = this->client.get_matches_id();
-
+              matches_id = this->client.refresh_game();
             }
           }
         }
@@ -388,7 +387,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
               quit = true;
               advance = true;
             } else if ((e.button.x >= (settings.screenWidth/2) && e.button.x <= (settings.screenWidth/2) + (2*(settings.screenWidth/4))) && creator) {
-              this->client.refresh_game();
+              this->client.send_refresh_flag();
               usernames = this->client.get_players_username();
             }
 

@@ -132,7 +132,6 @@ void Socket::socket_send(std::string & message){
   while (total_sent < lenght) {
     int sent = send(this->fd, message.substr(total_sent).c_str(),
                     lenght - total_sent, MSG_NOSIGNAL);
-    std::cout << total_sent << std::endl;
     if (sent == -1) {
       throw SuperException("Error al enviar");
     }

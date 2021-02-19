@@ -67,9 +67,6 @@ void Map::add_action(int player_id, float weapon_id, float posx, float posy)
 
 }
 
-
-
-
 void Map::remove_item(int x, int y) {
   this->map[x][y] = EMPTY;
   this->items[x].erase(y);

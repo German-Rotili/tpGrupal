@@ -31,9 +31,9 @@ public:
     void  client_send_intention(std::vector<char> intention);
     std::vector<std::string> get_players_username();
     void recieve_snapshot(Snapshot & snapshot);
-    void refresh_game();
+    std::vector<int> refresh_game();
     std::vector<int> get_matches_id();
-
+    void send_refresh_flag();
     ~Client();
     void send_username(std::string & username);
     void join_game();

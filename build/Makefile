@@ -75,16 +75,41 @@ CMAKE_BINARY_DIR = /home/luciano/Escritorio/TallerSDL/tpGrupal/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/snap/cmake/793/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
 
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
+# Special rule for the target install/strip
+install/strip/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip/fast
 
-.PHONY : edit_cache/fast
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/snap/cmake/793/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/snap/cmake/793/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/snap/cmake/793/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -96,6 +121,27 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/snap/cmake/793/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -130,17 +176,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named wolfenstein_editor
+# Target rules for targets named wolfenstein_server
 
 # Build rule for target.
-wolfenstein_editor: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 wolfenstein_editor
-.PHONY : wolfenstein_editor
+wolfenstein_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 wolfenstein_server
+.PHONY : wolfenstein_server
 
 # fast build rule for target.
-wolfenstein_editor/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/build
-.PHONY : wolfenstein_editor/fast
+wolfenstein_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/build
+.PHONY : wolfenstein_server/fast
 
 #=============================================================================
 # Target rules for targets named wolfenstein_client
@@ -156,17 +202,17 @@ wolfenstein_client/fast:
 .PHONY : wolfenstein_client/fast
 
 #=============================================================================
-# Target rules for targets named wolfenstein_server
+# Target rules for targets named wolfenstein_editor
 
 # Build rule for target.
-wolfenstein_server: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 wolfenstein_server
-.PHONY : wolfenstein_server
+wolfenstein_editor: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 wolfenstein_editor
+.PHONY : wolfenstein_editor
 
 # fast build rule for target.
-wolfenstein_server/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/build
-.PHONY : wolfenstein_server/fast
+wolfenstein_editor/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/build
+.PHONY : wolfenstein_editor/fast
 
 client_src/ClientConfigHandler.o: client_src/ClientConfigHandler.cpp.o
 
@@ -741,9 +787,9 @@ common_src/Action.o: common_src/Action.cpp.o
 
 # target to build an object file
 common_src/Action.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Action.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Action.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Action.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Action.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Action.cpp.o
 .PHONY : common_src/Action.cpp.o
 
 common_src/Action.i: common_src/Action.cpp.i
@@ -752,9 +798,9 @@ common_src/Action.i: common_src/Action.cpp.i
 
 # target to preprocess a source file
 common_src/Action.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Action.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Action.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Action.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Action.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Action.cpp.i
 .PHONY : common_src/Action.cpp.i
 
 common_src/Action.s: common_src/Action.cpp.s
@@ -763,9 +809,9 @@ common_src/Action.s: common_src/Action.cpp.s
 
 # target to generate assembly for a file
 common_src/Action.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Action.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Action.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Action.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Action.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Action.cpp.s
 .PHONY : common_src/Action.cpp.s
 
 common_src/BlockingQueueIntention.o: common_src/BlockingQueueIntention.cpp.o
@@ -774,9 +820,9 @@ common_src/BlockingQueueIntention.o: common_src/BlockingQueueIntention.cpp.o
 
 # target to build an object file
 common_src/BlockingQueueIntention.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueIntention.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueIntention.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/BlockingQueueIntention.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueIntention.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueIntention.cpp.o
 .PHONY : common_src/BlockingQueueIntention.cpp.o
 
 common_src/BlockingQueueIntention.i: common_src/BlockingQueueIntention.cpp.i
@@ -785,9 +831,9 @@ common_src/BlockingQueueIntention.i: common_src/BlockingQueueIntention.cpp.i
 
 # target to preprocess a source file
 common_src/BlockingQueueIntention.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueIntention.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueIntention.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/BlockingQueueIntention.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueIntention.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueIntention.cpp.i
 .PHONY : common_src/BlockingQueueIntention.cpp.i
 
 common_src/BlockingQueueIntention.s: common_src/BlockingQueueIntention.cpp.s
@@ -796,9 +842,9 @@ common_src/BlockingQueueIntention.s: common_src/BlockingQueueIntention.cpp.s
 
 # target to generate assembly for a file
 common_src/BlockingQueueIntention.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueIntention.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueIntention.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/BlockingQueueIntention.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueIntention.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueIntention.cpp.s
 .PHONY : common_src/BlockingQueueIntention.cpp.s
 
 common_src/BlockingQueueSnapshot.o: common_src/BlockingQueueSnapshot.cpp.o
@@ -807,9 +853,9 @@ common_src/BlockingQueueSnapshot.o: common_src/BlockingQueueSnapshot.cpp.o
 
 # target to build an object file
 common_src/BlockingQueueSnapshot.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueSnapshot.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueSnapshot.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/BlockingQueueSnapshot.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueSnapshot.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueSnapshot.cpp.o
 .PHONY : common_src/BlockingQueueSnapshot.cpp.o
 
 common_src/BlockingQueueSnapshot.i: common_src/BlockingQueueSnapshot.cpp.i
@@ -818,9 +864,9 @@ common_src/BlockingQueueSnapshot.i: common_src/BlockingQueueSnapshot.cpp.i
 
 # target to preprocess a source file
 common_src/BlockingQueueSnapshot.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueSnapshot.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueSnapshot.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/BlockingQueueSnapshot.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueSnapshot.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueSnapshot.cpp.i
 .PHONY : common_src/BlockingQueueSnapshot.cpp.i
 
 common_src/BlockingQueueSnapshot.s: common_src/BlockingQueueSnapshot.cpp.s
@@ -829,9 +875,9 @@ common_src/BlockingQueueSnapshot.s: common_src/BlockingQueueSnapshot.cpp.s
 
 # target to generate assembly for a file
 common_src/BlockingQueueSnapshot.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueSnapshot.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueSnapshot.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/BlockingQueueSnapshot.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/BlockingQueueSnapshot.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/BlockingQueueSnapshot.cpp.s
 .PHONY : common_src/BlockingQueueSnapshot.cpp.s
 
 common_src/ConnectionClosedException.o: common_src/ConnectionClosedException.cpp.o
@@ -840,9 +886,9 @@ common_src/ConnectionClosedException.o: common_src/ConnectionClosedException.cpp
 
 # target to build an object file
 common_src/ConnectionClosedException.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ConnectionClosedException.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ConnectionClosedException.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ConnectionClosedException.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ConnectionClosedException.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ConnectionClosedException.cpp.o
 .PHONY : common_src/ConnectionClosedException.cpp.o
 
 common_src/ConnectionClosedException.i: common_src/ConnectionClosedException.cpp.i
@@ -851,9 +897,9 @@ common_src/ConnectionClosedException.i: common_src/ConnectionClosedException.cpp
 
 # target to preprocess a source file
 common_src/ConnectionClosedException.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ConnectionClosedException.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ConnectionClosedException.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ConnectionClosedException.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ConnectionClosedException.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ConnectionClosedException.cpp.i
 .PHONY : common_src/ConnectionClosedException.cpp.i
 
 common_src/ConnectionClosedException.s: common_src/ConnectionClosedException.cpp.s
@@ -862,9 +908,9 @@ common_src/ConnectionClosedException.s: common_src/ConnectionClosedException.cpp
 
 # target to generate assembly for a file
 common_src/ConnectionClosedException.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ConnectionClosedException.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ConnectionClosedException.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ConnectionClosedException.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ConnectionClosedException.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ConnectionClosedException.cpp.s
 .PHONY : common_src/ConnectionClosedException.cpp.s
 
 common_src/EmptyQueueException.o: common_src/EmptyQueueException.cpp.o
@@ -873,9 +919,9 @@ common_src/EmptyQueueException.o: common_src/EmptyQueueException.cpp.o
 
 # target to build an object file
 common_src/EmptyQueueException.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/EmptyQueueException.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/EmptyQueueException.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/EmptyQueueException.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/EmptyQueueException.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/EmptyQueueException.cpp.o
 .PHONY : common_src/EmptyQueueException.cpp.o
 
 common_src/EmptyQueueException.i: common_src/EmptyQueueException.cpp.i
@@ -884,9 +930,9 @@ common_src/EmptyQueueException.i: common_src/EmptyQueueException.cpp.i
 
 # target to preprocess a source file
 common_src/EmptyQueueException.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/EmptyQueueException.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/EmptyQueueException.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/EmptyQueueException.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/EmptyQueueException.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/EmptyQueueException.cpp.i
 .PHONY : common_src/EmptyQueueException.cpp.i
 
 common_src/EmptyQueueException.s: common_src/EmptyQueueException.cpp.s
@@ -895,9 +941,9 @@ common_src/EmptyQueueException.s: common_src/EmptyQueueException.cpp.s
 
 # target to generate assembly for a file
 common_src/EmptyQueueException.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/EmptyQueueException.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/EmptyQueueException.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/EmptyQueueException.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/EmptyQueueException.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/EmptyQueueException.cpp.s
 .PHONY : common_src/EmptyQueueException.cpp.s
 
 common_src/Intention.o: common_src/Intention.cpp.o
@@ -906,9 +952,9 @@ common_src/Intention.o: common_src/Intention.cpp.o
 
 # target to build an object file
 common_src/Intention.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Intention.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Intention.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Intention.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Intention.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Intention.cpp.o
 .PHONY : common_src/Intention.cpp.o
 
 common_src/Intention.i: common_src/Intention.cpp.i
@@ -917,9 +963,9 @@ common_src/Intention.i: common_src/Intention.cpp.i
 
 # target to preprocess a source file
 common_src/Intention.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Intention.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Intention.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Intention.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Intention.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Intention.cpp.i
 .PHONY : common_src/Intention.cpp.i
 
 common_src/Intention.s: common_src/Intention.cpp.s
@@ -928,9 +974,9 @@ common_src/Intention.s: common_src/Intention.cpp.s
 
 # target to generate assembly for a file
 common_src/Intention.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Intention.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Intention.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Intention.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Intention.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Intention.cpp.s
 .PHONY : common_src/Intention.cpp.s
 
 common_src/MapHandler.o: common_src/MapHandler.cpp.o
@@ -939,9 +985,9 @@ common_src/MapHandler.o: common_src/MapHandler.cpp.o
 
 # target to build an object file
 common_src/MapHandler.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/MapHandler.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/MapHandler.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/MapHandler.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/MapHandler.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/MapHandler.cpp.o
 .PHONY : common_src/MapHandler.cpp.o
 
 common_src/MapHandler.i: common_src/MapHandler.cpp.i
@@ -950,9 +996,9 @@ common_src/MapHandler.i: common_src/MapHandler.cpp.i
 
 # target to preprocess a source file
 common_src/MapHandler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/MapHandler.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/MapHandler.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/MapHandler.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/MapHandler.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/MapHandler.cpp.i
 .PHONY : common_src/MapHandler.cpp.i
 
 common_src/MapHandler.s: common_src/MapHandler.cpp.s
@@ -961,9 +1007,9 @@ common_src/MapHandler.s: common_src/MapHandler.cpp.s
 
 # target to generate assembly for a file
 common_src/MapHandler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/MapHandler.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/MapHandler.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/MapHandler.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/MapHandler.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/MapHandler.cpp.s
 .PHONY : common_src/MapHandler.cpp.s
 
 common_src/ProtectedQueueAction.o: common_src/ProtectedQueueAction.cpp.o
@@ -972,9 +1018,9 @@ common_src/ProtectedQueueAction.o: common_src/ProtectedQueueAction.cpp.o
 
 # target to build an object file
 common_src/ProtectedQueueAction.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueAction.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueAction.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueAction.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueAction.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueAction.cpp.o
 .PHONY : common_src/ProtectedQueueAction.cpp.o
 
 common_src/ProtectedQueueAction.i: common_src/ProtectedQueueAction.cpp.i
@@ -983,9 +1029,9 @@ common_src/ProtectedQueueAction.i: common_src/ProtectedQueueAction.cpp.i
 
 # target to preprocess a source file
 common_src/ProtectedQueueAction.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueAction.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueAction.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueAction.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueAction.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueAction.cpp.i
 .PHONY : common_src/ProtectedQueueAction.cpp.i
 
 common_src/ProtectedQueueAction.s: common_src/ProtectedQueueAction.cpp.s
@@ -994,9 +1040,9 @@ common_src/ProtectedQueueAction.s: common_src/ProtectedQueueAction.cpp.s
 
 # target to generate assembly for a file
 common_src/ProtectedQueueAction.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueAction.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueAction.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueAction.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueAction.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueAction.cpp.s
 .PHONY : common_src/ProtectedQueueAction.cpp.s
 
 common_src/ProtectedQueueException.o: common_src/ProtectedQueueException.cpp.o
@@ -1005,9 +1051,9 @@ common_src/ProtectedQueueException.o: common_src/ProtectedQueueException.cpp.o
 
 # target to build an object file
 common_src/ProtectedQueueException.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueException.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueException.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueException.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueException.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueException.cpp.o
 .PHONY : common_src/ProtectedQueueException.cpp.o
 
 common_src/ProtectedQueueException.i: common_src/ProtectedQueueException.cpp.i
@@ -1016,9 +1062,9 @@ common_src/ProtectedQueueException.i: common_src/ProtectedQueueException.cpp.i
 
 # target to preprocess a source file
 common_src/ProtectedQueueException.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueException.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueException.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueException.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueException.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueException.cpp.i
 .PHONY : common_src/ProtectedQueueException.cpp.i
 
 common_src/ProtectedQueueException.s: common_src/ProtectedQueueException.cpp.s
@@ -1027,9 +1073,9 @@ common_src/ProtectedQueueException.s: common_src/ProtectedQueueException.cpp.s
 
 # target to generate assembly for a file
 common_src/ProtectedQueueException.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueException.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueException.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueException.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueException.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueException.cpp.s
 .PHONY : common_src/ProtectedQueueException.cpp.s
 
 common_src/ProtectedQueueIntention.o: common_src/ProtectedQueueIntention.cpp.o
@@ -1038,9 +1084,9 @@ common_src/ProtectedQueueIntention.o: common_src/ProtectedQueueIntention.cpp.o
 
 # target to build an object file
 common_src/ProtectedQueueIntention.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueIntention.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueIntention.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueIntention.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueIntention.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueIntention.cpp.o
 .PHONY : common_src/ProtectedQueueIntention.cpp.o
 
 common_src/ProtectedQueueIntention.i: common_src/ProtectedQueueIntention.cpp.i
@@ -1049,9 +1095,9 @@ common_src/ProtectedQueueIntention.i: common_src/ProtectedQueueIntention.cpp.i
 
 # target to preprocess a source file
 common_src/ProtectedQueueIntention.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueIntention.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueIntention.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueIntention.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueIntention.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueIntention.cpp.i
 .PHONY : common_src/ProtectedQueueIntention.cpp.i
 
 common_src/ProtectedQueueIntention.s: common_src/ProtectedQueueIntention.cpp.s
@@ -1060,9 +1106,9 @@ common_src/ProtectedQueueIntention.s: common_src/ProtectedQueueIntention.cpp.s
 
 # target to generate assembly for a file
 common_src/ProtectedQueueIntention.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueIntention.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueIntention.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/ProtectedQueueIntention.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/ProtectedQueueIntention.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/ProtectedQueueIntention.cpp.s
 .PHONY : common_src/ProtectedQueueIntention.cpp.s
 
 common_src/Protocol.o: common_src/Protocol.cpp.o
@@ -1071,9 +1117,9 @@ common_src/Protocol.o: common_src/Protocol.cpp.o
 
 # target to build an object file
 common_src/Protocol.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Protocol.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Protocol.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Protocol.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Protocol.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Protocol.cpp.o
 .PHONY : common_src/Protocol.cpp.o
 
 common_src/Protocol.i: common_src/Protocol.cpp.i
@@ -1082,9 +1128,9 @@ common_src/Protocol.i: common_src/Protocol.cpp.i
 
 # target to preprocess a source file
 common_src/Protocol.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Protocol.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Protocol.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Protocol.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Protocol.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Protocol.cpp.i
 .PHONY : common_src/Protocol.cpp.i
 
 common_src/Protocol.s: common_src/Protocol.cpp.s
@@ -1093,9 +1139,9 @@ common_src/Protocol.s: common_src/Protocol.cpp.s
 
 # target to generate assembly for a file
 common_src/Protocol.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Protocol.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Protocol.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Protocol.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Protocol.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Protocol.cpp.s
 .PHONY : common_src/Protocol.cpp.s
 
 common_src/SDLWrappers/SdlContext.o: common_src/SDLWrappers/SdlContext.cpp.o
@@ -1104,8 +1150,8 @@ common_src/SDLWrappers/SdlContext.o: common_src/SDLWrappers/SdlContext.cpp.o
 
 # target to build an object file
 common_src/SDLWrappers/SdlContext.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlContext.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlContext.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlContext.cpp.o
 .PHONY : common_src/SDLWrappers/SdlContext.cpp.o
 
 common_src/SDLWrappers/SdlContext.i: common_src/SDLWrappers/SdlContext.cpp.i
@@ -1114,8 +1160,8 @@ common_src/SDLWrappers/SdlContext.i: common_src/SDLWrappers/SdlContext.cpp.i
 
 # target to preprocess a source file
 common_src/SDLWrappers/SdlContext.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlContext.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlContext.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlContext.cpp.i
 .PHONY : common_src/SDLWrappers/SdlContext.cpp.i
 
 common_src/SDLWrappers/SdlContext.s: common_src/SDLWrappers/SdlContext.cpp.s
@@ -1124,8 +1170,8 @@ common_src/SDLWrappers/SdlContext.s: common_src/SDLWrappers/SdlContext.cpp.s
 
 # target to generate assembly for a file
 common_src/SDLWrappers/SdlContext.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlContext.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlContext.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlContext.cpp.s
 .PHONY : common_src/SDLWrappers/SdlContext.cpp.s
 
 common_src/SDLWrappers/SdlFont.o: common_src/SDLWrappers/SdlFont.cpp.o
@@ -1134,8 +1180,8 @@ common_src/SDLWrappers/SdlFont.o: common_src/SDLWrappers/SdlFont.cpp.o
 
 # target to build an object file
 common_src/SDLWrappers/SdlFont.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlFont.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlFont.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlFont.cpp.o
 .PHONY : common_src/SDLWrappers/SdlFont.cpp.o
 
 common_src/SDLWrappers/SdlFont.i: common_src/SDLWrappers/SdlFont.cpp.i
@@ -1144,8 +1190,8 @@ common_src/SDLWrappers/SdlFont.i: common_src/SDLWrappers/SdlFont.cpp.i
 
 # target to preprocess a source file
 common_src/SDLWrappers/SdlFont.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlFont.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlFont.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlFont.cpp.i
 .PHONY : common_src/SDLWrappers/SdlFont.cpp.i
 
 common_src/SDLWrappers/SdlFont.s: common_src/SDLWrappers/SdlFont.cpp.s
@@ -1154,8 +1200,8 @@ common_src/SDLWrappers/SdlFont.s: common_src/SDLWrappers/SdlFont.cpp.s
 
 # target to generate assembly for a file
 common_src/SDLWrappers/SdlFont.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlFont.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlFont.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlFont.cpp.s
 .PHONY : common_src/SDLWrappers/SdlFont.cpp.s
 
 common_src/SDLWrappers/SdlMusic.o: common_src/SDLWrappers/SdlMusic.cpp.o
@@ -1164,8 +1210,8 @@ common_src/SDLWrappers/SdlMusic.o: common_src/SDLWrappers/SdlMusic.cpp.o
 
 # target to build an object file
 common_src/SDLWrappers/SdlMusic.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlMusic.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlMusic.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlMusic.cpp.o
 .PHONY : common_src/SDLWrappers/SdlMusic.cpp.o
 
 common_src/SDLWrappers/SdlMusic.i: common_src/SDLWrappers/SdlMusic.cpp.i
@@ -1174,8 +1220,8 @@ common_src/SDLWrappers/SdlMusic.i: common_src/SDLWrappers/SdlMusic.cpp.i
 
 # target to preprocess a source file
 common_src/SDLWrappers/SdlMusic.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlMusic.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlMusic.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlMusic.cpp.i
 .PHONY : common_src/SDLWrappers/SdlMusic.cpp.i
 
 common_src/SDLWrappers/SdlMusic.s: common_src/SDLWrappers/SdlMusic.cpp.s
@@ -1184,8 +1230,8 @@ common_src/SDLWrappers/SdlMusic.s: common_src/SDLWrappers/SdlMusic.cpp.s
 
 # target to generate assembly for a file
 common_src/SDLWrappers/SdlMusic.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlMusic.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlMusic.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlMusic.cpp.s
 .PHONY : common_src/SDLWrappers/SdlMusic.cpp.s
 
 common_src/SDLWrappers/SdlRenderer.o: common_src/SDLWrappers/SdlRenderer.cpp.o
@@ -1194,8 +1240,8 @@ common_src/SDLWrappers/SdlRenderer.o: common_src/SDLWrappers/SdlRenderer.cpp.o
 
 # target to build an object file
 common_src/SDLWrappers/SdlRenderer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlRenderer.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlRenderer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlRenderer.cpp.o
 .PHONY : common_src/SDLWrappers/SdlRenderer.cpp.o
 
 common_src/SDLWrappers/SdlRenderer.i: common_src/SDLWrappers/SdlRenderer.cpp.i
@@ -1204,8 +1250,8 @@ common_src/SDLWrappers/SdlRenderer.i: common_src/SDLWrappers/SdlRenderer.cpp.i
 
 # target to preprocess a source file
 common_src/SDLWrappers/SdlRenderer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlRenderer.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlRenderer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlRenderer.cpp.i
 .PHONY : common_src/SDLWrappers/SdlRenderer.cpp.i
 
 common_src/SDLWrappers/SdlRenderer.s: common_src/SDLWrappers/SdlRenderer.cpp.s
@@ -1214,8 +1260,8 @@ common_src/SDLWrappers/SdlRenderer.s: common_src/SDLWrappers/SdlRenderer.cpp.s
 
 # target to generate assembly for a file
 common_src/SDLWrappers/SdlRenderer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlRenderer.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlRenderer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlRenderer.cpp.s
 .PHONY : common_src/SDLWrappers/SdlRenderer.cpp.s
 
 common_src/SDLWrappers/SdlSound.o: common_src/SDLWrappers/SdlSound.cpp.o
@@ -1224,8 +1270,8 @@ common_src/SDLWrappers/SdlSound.o: common_src/SDLWrappers/SdlSound.cpp.o
 
 # target to build an object file
 common_src/SDLWrappers/SdlSound.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlSound.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlSound.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlSound.cpp.o
 .PHONY : common_src/SDLWrappers/SdlSound.cpp.o
 
 common_src/SDLWrappers/SdlSound.i: common_src/SDLWrappers/SdlSound.cpp.i
@@ -1234,8 +1280,8 @@ common_src/SDLWrappers/SdlSound.i: common_src/SDLWrappers/SdlSound.cpp.i
 
 # target to preprocess a source file
 common_src/SDLWrappers/SdlSound.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlSound.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlSound.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlSound.cpp.i
 .PHONY : common_src/SDLWrappers/SdlSound.cpp.i
 
 common_src/SDLWrappers/SdlSound.s: common_src/SDLWrappers/SdlSound.cpp.s
@@ -1244,8 +1290,8 @@ common_src/SDLWrappers/SdlSound.s: common_src/SDLWrappers/SdlSound.cpp.s
 
 # target to generate assembly for a file
 common_src/SDLWrappers/SdlSound.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlSound.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlSound.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlSound.cpp.s
 .PHONY : common_src/SDLWrappers/SdlSound.cpp.s
 
 common_src/SDLWrappers/SdlTexture.o: common_src/SDLWrappers/SdlTexture.cpp.o
@@ -1254,8 +1300,8 @@ common_src/SDLWrappers/SdlTexture.o: common_src/SDLWrappers/SdlTexture.cpp.o
 
 # target to build an object file
 common_src/SDLWrappers/SdlTexture.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlTexture.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlTexture.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlTexture.cpp.o
 .PHONY : common_src/SDLWrappers/SdlTexture.cpp.o
 
 common_src/SDLWrappers/SdlTexture.i: common_src/SDLWrappers/SdlTexture.cpp.i
@@ -1264,8 +1310,8 @@ common_src/SDLWrappers/SdlTexture.i: common_src/SDLWrappers/SdlTexture.cpp.i
 
 # target to preprocess a source file
 common_src/SDLWrappers/SdlTexture.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlTexture.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlTexture.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlTexture.cpp.i
 .PHONY : common_src/SDLWrappers/SdlTexture.cpp.i
 
 common_src/SDLWrappers/SdlTexture.s: common_src/SDLWrappers/SdlTexture.cpp.s
@@ -1274,8 +1320,8 @@ common_src/SDLWrappers/SdlTexture.s: common_src/SDLWrappers/SdlTexture.cpp.s
 
 # target to generate assembly for a file
 common_src/SDLWrappers/SdlTexture.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlTexture.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlTexture.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlTexture.cpp.s
 .PHONY : common_src/SDLWrappers/SdlTexture.cpp.s
 
 common_src/SDLWrappers/SdlWindow.o: common_src/SDLWrappers/SdlWindow.cpp.o
@@ -1284,8 +1330,8 @@ common_src/SDLWrappers/SdlWindow.o: common_src/SDLWrappers/SdlWindow.cpp.o
 
 # target to build an object file
 common_src/SDLWrappers/SdlWindow.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlWindow.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlWindow.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlWindow.cpp.o
 .PHONY : common_src/SDLWrappers/SdlWindow.cpp.o
 
 common_src/SDLWrappers/SdlWindow.i: common_src/SDLWrappers/SdlWindow.cpp.i
@@ -1294,8 +1340,8 @@ common_src/SDLWrappers/SdlWindow.i: common_src/SDLWrappers/SdlWindow.cpp.i
 
 # target to preprocess a source file
 common_src/SDLWrappers/SdlWindow.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlWindow.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlWindow.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlWindow.cpp.i
 .PHONY : common_src/SDLWrappers/SdlWindow.cpp.i
 
 common_src/SDLWrappers/SdlWindow.s: common_src/SDLWrappers/SdlWindow.cpp.s
@@ -1304,8 +1350,8 @@ common_src/SDLWrappers/SdlWindow.s: common_src/SDLWrappers/SdlWindow.cpp.s
 
 # target to generate assembly for a file
 common_src/SDLWrappers/SdlWindow.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlWindow.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/SDLWrappers/SdlWindow.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/SDLWrappers/SdlWindow.cpp.s
 .PHONY : common_src/SDLWrappers/SdlWindow.cpp.s
 
 common_src/Serializer.o: common_src/Serializer.cpp.o
@@ -1314,9 +1360,9 @@ common_src/Serializer.o: common_src/Serializer.cpp.o
 
 # target to build an object file
 common_src/Serializer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Serializer.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Serializer.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Serializer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Serializer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Serializer.cpp.o
 .PHONY : common_src/Serializer.cpp.o
 
 common_src/Serializer.i: common_src/Serializer.cpp.i
@@ -1325,9 +1371,9 @@ common_src/Serializer.i: common_src/Serializer.cpp.i
 
 # target to preprocess a source file
 common_src/Serializer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Serializer.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Serializer.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Serializer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Serializer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Serializer.cpp.i
 .PHONY : common_src/Serializer.cpp.i
 
 common_src/Serializer.s: common_src/Serializer.cpp.s
@@ -1336,9 +1382,9 @@ common_src/Serializer.s: common_src/Serializer.cpp.s
 
 # target to generate assembly for a file
 common_src/Serializer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Serializer.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Serializer.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Serializer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Serializer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Serializer.cpp.s
 .PHONY : common_src/Serializer.cpp.s
 
 common_src/Snapshot.o: common_src/Snapshot.cpp.o
@@ -1347,9 +1393,9 @@ common_src/Snapshot.o: common_src/Snapshot.cpp.o
 
 # target to build an object file
 common_src/Snapshot.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Snapshot.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Snapshot.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Snapshot.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Snapshot.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Snapshot.cpp.o
 .PHONY : common_src/Snapshot.cpp.o
 
 common_src/Snapshot.i: common_src/Snapshot.cpp.i
@@ -1358,9 +1404,9 @@ common_src/Snapshot.i: common_src/Snapshot.cpp.i
 
 # target to preprocess a source file
 common_src/Snapshot.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Snapshot.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Snapshot.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Snapshot.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Snapshot.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Snapshot.cpp.i
 .PHONY : common_src/Snapshot.cpp.i
 
 common_src/Snapshot.s: common_src/Snapshot.cpp.s
@@ -1369,9 +1415,9 @@ common_src/Snapshot.s: common_src/Snapshot.cpp.s
 
 # target to generate assembly for a file
 common_src/Snapshot.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Snapshot.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Snapshot.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Snapshot.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Snapshot.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Snapshot.cpp.s
 .PHONY : common_src/Snapshot.cpp.s
 
 common_src/Timer.o: common_src/Timer.cpp.o
@@ -1380,9 +1426,9 @@ common_src/Timer.o: common_src/Timer.cpp.o
 
 # target to build an object file
 common_src/Timer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Timer.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Timer.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Timer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Timer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Timer.cpp.o
 .PHONY : common_src/Timer.cpp.o
 
 common_src/Timer.i: common_src/Timer.cpp.i
@@ -1391,9 +1437,9 @@ common_src/Timer.i: common_src/Timer.cpp.i
 
 # target to preprocess a source file
 common_src/Timer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Timer.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Timer.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Timer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Timer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Timer.cpp.i
 .PHONY : common_src/Timer.cpp.i
 
 common_src/Timer.s: common_src/Timer.cpp.s
@@ -1402,9 +1448,9 @@ common_src/Timer.s: common_src/Timer.cpp.s
 
 # target to generate assembly for a file
 common_src/Timer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Timer.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Timer.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/Timer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/Timer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/Timer.cpp.s
 .PHONY : common_src/Timer.cpp.s
 
 common_src/common_exception.o: common_src/common_exception.cpp.o
@@ -1413,9 +1459,9 @@ common_src/common_exception.o: common_src/common_exception.cpp.o
 
 # target to build an object file
 common_src/common_exception.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_exception.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_exception.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_exception.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_exception.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_exception.cpp.o
 .PHONY : common_src/common_exception.cpp.o
 
 common_src/common_exception.i: common_src/common_exception.cpp.i
@@ -1424,9 +1470,9 @@ common_src/common_exception.i: common_src/common_exception.cpp.i
 
 # target to preprocess a source file
 common_src/common_exception.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_exception.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_exception.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_exception.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_exception.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_exception.cpp.i
 .PHONY : common_src/common_exception.cpp.i
 
 common_src/common_exception.s: common_src/common_exception.cpp.s
@@ -1435,9 +1481,9 @@ common_src/common_exception.s: common_src/common_exception.cpp.s
 
 # target to generate assembly for a file
 common_src/common_exception.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_exception.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_exception.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_exception.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_exception.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_exception.cpp.s
 .PHONY : common_src/common_exception.cpp.s
 
 common_src/common_socket.o: common_src/common_socket.cpp.o
@@ -1446,9 +1492,9 @@ common_src/common_socket.o: common_src/common_socket.cpp.o
 
 # target to build an object file
 common_src/common_socket.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_socket.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket.cpp.o
 .PHONY : common_src/common_socket.cpp.o
 
 common_src/common_socket.i: common_src/common_socket.cpp.i
@@ -1457,9 +1503,9 @@ common_src/common_socket.i: common_src/common_socket.cpp.i
 
 # target to preprocess a source file
 common_src/common_socket.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_socket.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket.cpp.i
 .PHONY : common_src/common_socket.cpp.i
 
 common_src/common_socket.s: common_src/common_socket.cpp.s
@@ -1468,9 +1514,9 @@ common_src/common_socket.s: common_src/common_socket.cpp.s
 
 # target to generate assembly for a file
 common_src/common_socket.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_socket.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket.cpp.s
 .PHONY : common_src/common_socket.cpp.s
 
 common_src/common_socket_exception.o: common_src/common_socket_exception.cpp.o
@@ -1479,9 +1525,9 @@ common_src/common_socket_exception.o: common_src/common_socket_exception.cpp.o
 
 # target to build an object file
 common_src/common_socket_exception.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket_exception.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket_exception.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_socket_exception.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket_exception.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket_exception.cpp.o
 .PHONY : common_src/common_socket_exception.cpp.o
 
 common_src/common_socket_exception.i: common_src/common_socket_exception.cpp.i
@@ -1490,9 +1536,9 @@ common_src/common_socket_exception.i: common_src/common_socket_exception.cpp.i
 
 # target to preprocess a source file
 common_src/common_socket_exception.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket_exception.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket_exception.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_socket_exception.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket_exception.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket_exception.cpp.i
 .PHONY : common_src/common_socket_exception.cpp.i
 
 common_src/common_socket_exception.s: common_src/common_socket_exception.cpp.s
@@ -1501,9 +1547,9 @@ common_src/common_socket_exception.s: common_src/common_socket_exception.cpp.s
 
 # target to generate assembly for a file
 common_src/common_socket_exception.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket_exception.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket_exception.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_socket_exception.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_socket_exception.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_socket_exception.cpp.s
 .PHONY : common_src/common_socket_exception.cpp.s
 
 common_src/common_thread.o: common_src/common_thread.cpp.o
@@ -1512,9 +1558,9 @@ common_src/common_thread.o: common_src/common_thread.cpp.o
 
 # target to build an object file
 common_src/common_thread.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_thread.cpp.o
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_thread.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_thread.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_thread.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_thread.cpp.o
 .PHONY : common_src/common_thread.cpp.o
 
 common_src/common_thread.i: common_src/common_thread.cpp.i
@@ -1523,9 +1569,9 @@ common_src/common_thread.i: common_src/common_thread.cpp.i
 
 # target to preprocess a source file
 common_src/common_thread.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_thread.cpp.i
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_thread.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_thread.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_thread.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_thread.cpp.i
 .PHONY : common_src/common_thread.cpp.i
 
 common_src/common_thread.s: common_src/common_thread.cpp.s
@@ -1534,9 +1580,9 @@ common_src/common_thread.s: common_src/common_thread.cpp.s
 
 # target to generate assembly for a file
 common_src/common_thread.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_thread.cpp.s
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_thread.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/common_src/common_thread.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_client.dir/build.make CMakeFiles/wolfenstein_client.dir/common_src/common_thread.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_editor.dir/build.make CMakeFiles/wolfenstein_editor.dir/common_src/common_thread.cpp.s
 .PHONY : common_src/common_thread.cpp.s
 
 editor_src/EditorConfigHandler.o: editor_src/EditorConfigHandler.cpp.o
@@ -2248,6 +2294,10 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... wolfenstein_client"
 	@echo "... wolfenstein_editor"

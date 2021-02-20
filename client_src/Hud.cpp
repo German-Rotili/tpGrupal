@@ -3,6 +3,7 @@
 #include <cmath>
 #include "Player.h"
 #include "ClientSettings.h"
+#include "../common_src/pathsAssets.h"
 #include "../common_src/SDLWrappers/SdlTexture.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "../common_src/SDLWrappers/SdlFont.h"
@@ -17,22 +18,22 @@ Hud::Hud(class SdlRenderer& renderer, const class Player& player, const ClientSe
 	FILA1(settings.screenHeight - FONT_SIZE * 2.5),
 	FILA2(settings.screenHeight - FONT_SIZE),
 	renderer(renderer),
-	font("../resources/fonts/hudFont.ttf", FONT_SIZE),
+	font(FONT_HUD_PATH, FONT_SIZE),
 	player(player),
 	faceClip({25, 0, 24, 32}),
 	faceScale(double(settings.screenWidth) * 0.001953),
-	playerFaces(renderer, "../resources/textures/playerFaces.png"),
+	playerFaces(renderer, PLAYER_FACES_PATH),
 	weapon1(renderer, font, "1", c_yellow.r, c_yellow.g, c_yellow.b),
 	weapon2(renderer, font, "2", c_yellow.r, c_yellow.g, c_yellow.b),
 	weapon3(renderer, font, "3", c_yellow.r, c_yellow.g, c_yellow.b),
 	weapon4(renderer, font, "4", c_yellow.r, c_yellow.g, c_yellow.b),
 	weapon5(renderer, font, "5", c_yellow.r, c_yellow.g, c_yellow.b),
-	ammoIcon(renderer, "../resources/textures/icons/bullet.png"),
-	liveIcon(renderer, "../resources/textures/icons/live.png"),
-	sndHurt("../resources/sounds/hurt.mp3"),
-	sndHealing("../resources/sounds/healing.mp3"),
-	sndScoreup("../resources/sounds/scoreup.mp3"),
-	sndPickAmmo("../resources/sounds/pick_weaponammo.mp3") {
+	ammoIcon(renderer, AMMO_ICON_PATH),
+	liveIcon(renderer, LIVE_ICON_PATH),
+	sndHurt(SND_HURT_PATH),
+	sndHealing(SND_HEALING_PATH)),
+	sndScoreup(SND_SCOREUP_PATH),
+	sndPickAmmo(SND_PICKAMMO_PATH) {
 		playerFaceAnimation = 0;
 		playerWaitAnimation = rand() % 200;
 		rectangleScreen_alpha = 0;

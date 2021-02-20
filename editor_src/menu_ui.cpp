@@ -23,7 +23,7 @@ void Menu_ui::drawMenu(SdlRenderer& renderer, SdlTexture& walls,
   SdlTexture tx_insertX(renderer, font, "Introduzca el tamanio X", 255, 255, 255);
   SdlTexture tx_insertY(renderer, font, "Introduzca el tamanio Y", 255, 255, 255);
 
-  SdlFont text_font("../resources/fonts/wolfenstein.ttf", 24);
+  SdlFont text_font(FONT_WOLFENSTEIN_PATH, 24);
 
   int wallIdX;
   int wallIdY;

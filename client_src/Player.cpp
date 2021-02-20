@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "../common_src/pathsAssets.h"
 #include "../common_src/SDLWrappers/SdlTexture.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "ClientSettings.h"
@@ -8,7 +9,7 @@ Player::Player(SdlRenderer& renderer, ResourcesLoader& src, const ClientSettings
 	double xInicial, double yInicial, double dirInicial, double healthInicial,
 	int scoreInicial, int livesInicial):
 		renderer(renderer),
-		texture(renderer, "../resources/textures/player.png", 152, 0, 136),
+		texture(renderer, PLAYER_PATH, 152, 0, 136),
 	  x(xInicial),
 	  y(yInicial),
 	  direction(dirInicial),

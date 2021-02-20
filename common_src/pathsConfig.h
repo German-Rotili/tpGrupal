@@ -1,7 +1,7 @@
 #ifndef PATHS_CONFIG
 #define PATHS_CONFIG
 
-#ifdef DEVELOPMENT
+#ifndef DEVELOPMENT
 
 #define CONFIG_PATH "../resources/config"
 #define CLIENT_CONFIG_PATH "../resources/config/clientConfig.yaml"

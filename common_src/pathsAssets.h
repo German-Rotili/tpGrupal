@@ -1,7 +1,7 @@
 #ifndef PATHS_ASSETS
 #define PATHS_ASSETS
 
-#ifdef DEVELOPMENT
+#ifndef DEVELOPMENT
 
 //TEXTURAS
 #define WALLS_TEXTURE_PATH "../resources/textures/walls.png"
@@ -9,7 +9,7 @@
 #define PLAYER_PATH "../resources/textures/player.png"
 #define PLAYER_FACES_PATH "../resources/textures/playerFaces.png"
 #define ROCKET_PATH "../resources/textures/rocket.png"
-#define EXPLOSION_PATH "../resources/textures/explosion_strip9.png")
+#define EXPLOSION_PATH "../resources/textures/explosion_strip9.png"
 #define BULLET_HIT_PATH "../resources/textures/bullethit_strip9.png"
 #define AMMO_ICON_PATH "../resources/textures/icons/bullet.png"
 #define LIVE_ICON_PATH "../resources/textures/icons/live.png"

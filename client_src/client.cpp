@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include "../common_src/pathsConfig.h"
 #include "../common_src/SDLWrappers/SdlContext.h"
 #include "../common_src/SDLWrappers/SdlWindow.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
@@ -19,7 +20,7 @@ int main(int argc, char* args[]) {
     std::string service = args[SERVICE];
     Client client(service, hostname);
 
-    ClientConfigHandler config("../resources/config/clientConfig.yaml");
+    ClientConfigHandler config(CLIENT_CONFIG_PATH);
     ClientSettings settings(config.getWidth(), config.getHeight(), FPS, config.getFOV());
     SdlContext sdlContext;
 

@@ -1,4 +1,5 @@
 #include "World.h"
+#include "../common_src/pathsAssets.h"
 
 static bool compareDistances(ZRenderable* o1, ZRenderable* o2) {
     return (o1->getDistToPlayer() > o2->getDistToPlayer());
@@ -12,7 +13,7 @@ World::World(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::v
   myPlayer(renderer, src, settings, 1.5, 2.5, -45, 100, 0, 3),
   worldMap(map, myPlayer, src),
   hud_jugador(renderer, myPlayer, settings),
-  music("../resources/music/music2.mp3"),
+  music(GAME_MUSIC_PATH),
   rayCaster(src.tx_walls, settings) {
     music.play();
     // Carga de objetos del mapa

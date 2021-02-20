@@ -36,7 +36,7 @@ public:
 
     void run() override;
     void stop();
-    bool is_dead();
+    // bool is_dead();
     friend class GamePlay;
 };
 

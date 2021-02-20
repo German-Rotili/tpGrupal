@@ -1,0 +1,1 @@
+g++ fun.cpp -llua -ldl -o fun -lm 

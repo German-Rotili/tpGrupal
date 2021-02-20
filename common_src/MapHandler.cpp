@@ -1,10 +1,11 @@
 #include "MapHandler.h"
+#include "pathsConfig.h"
 #include <string>
 #include <iostream>
 #include <fstream>
 
 void MapHandler::emitMap(std::string path, std::vector<std::vector<int>> map) {
-  std::string actualPath = "../resources/config/" + path + ".yaml";
+  std::string actualPath = CONFIG_PATH + path + ".yaml";
   std::ofstream outfile (actualPath);
   YAML::Emitter out;
 
@@ -32,7 +33,7 @@ void MapHandler::emitMap(std::string path, std::vector<std::vector<int>> map) {
 }
 
 std::vector<std::vector<int>> MapHandler::readMap(std::string path) {
-  std::string actualPath = "../resources/config/" + path + ".yaml";
+  std::string actualPath = CONFIG_PATH + path + ".yaml";
   YAML::Node root = YAML::LoadFile(actualPath);
 
   int x = root["x"].as<int>();
@@ -70,7 +71,7 @@ std::vector<std::vector<int>> MapHandler::readMapFromString(std::string file) {
 }
 
 void MapHandler::generateMapList(std::string path) {
-  YAML::Node root = YAML::LoadFile("../resources/config/MapList.yaml");
+  YAML::Node root = YAML::LoadFile(MAP_LIST_PATH);
   std::string actualPath = path + ".yaml";
 
   int mapAmount = root["amount"].as<int>();
@@ -81,7 +82,7 @@ void MapHandler::generateMapList(std::string path) {
     paths[i] = root[i].as<std::string>();
   }
 
-  std::ofstream outfile("../resources/config/MapList.yaml");
+  std::ofstream outfile(MAP_LIST_PATH);
   YAML::Emitter out;
   out << YAML::BeginMap;
   out << YAML::Key << "amount";
@@ -101,7 +102,7 @@ void MapHandler::generateMapList(std::string path) {
 }
 
 std::vector<std::string> MapHandler::getMapList() {
-  YAML::Node root = YAML::LoadFile("../resources/config/MapList.yaml");
+  YAML::Node root = YAML::LoadFile(MAP_LIST_PATH);
 
   int mapAmount = root["amount"].as<int>();
 

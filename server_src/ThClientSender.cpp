@@ -1,5 +1,4 @@
 #include "ThClientSender.h"
-#include "IdMaker.h"
 void ThClientSender::run(){
         Serializer serializer;
         std::vector <char> msg;
@@ -21,25 +20,24 @@ void ThClientSender::run(){
                 this->protocol.send_standard_msg(msg);
             }
          } catch (std::exception const& e) {
-            std::cout << "ThSender: ";
-            std::cout << e.what() << std::endl;
+            std::cout << "ThSender Closed ";
             this->dead = true;
         }
         catch (...) {
             this->dead = true;
-            std::cout << "Error inesperado en conexion" << std::endl;
+            std::cout << "Error inesperado ThSender" << std::endl;
         }       
 }
 
-ThClientSender::ThClientSender(Protocol& protocol):
-    protocol(protocol),state(true){
-    IdMaker *IdMaker = IdMaker::GetInstance();
-}
+ThClientSender::ThClientSender(Protocol& protocol):protocol(protocol),state(true){}
 
 ThClientSender::~ThClientSender(){
+    this->snapshots.close_queue();
+    this->dead = true;
 }
 
 void ThClientSender::stop(){
+    this->dead = true;
     this->state = false;
     this->snapshots.close_queue();
 }

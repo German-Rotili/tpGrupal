@@ -19,11 +19,16 @@ GamePlay::GamePlay(ThClient *player, Map&& map, int id):map(map),state(false), i
 }
 
 GamePlay::~GamePlay(){
+    for(ThClientSender *sender : this->client_senders){
+        sender->stop();
+        sender->join();
+        delete sender;
+    }
     delete this->intentions;
 }
 
 std::vector<std::vector<char>> & GamePlay::get_usernames(){
-   return this->usernames;
+    return this->usernames;
 }
 
 void GamePlay::add_client(ThClient* client){
@@ -79,26 +84,21 @@ void GamePlay::append_doors(Snapshot &snapshot){
 void GamePlay::stop(){
     this->state = false;
     this->blocked = true;
-    for(ThClientSender *sender : this->client_senders){
-        sender->stop();
-        sender->join();
-        delete sender;
-    }
 }
 
-// static const void remove_dead(std::vector<ThClientSender*> & list){
-//     std::vector<ThClientSender*> temp;
-//     std::vector<ThClientSender*> ::iterator it = list.begin();
-//     for (; it != list.end(); ++it){
-//         if ((*it)->is_dead()){
-//             (*it)->join();
-//             delete (*it);
-//         } else{
-//             temp.push_back((*it));
-//         }
-//     }
-//     list.swap(temp);
-// }
+static const void remove_dead(std::vector<ThClientSender*> & list){
+    std::vector<ThClientSender*> temp;
+    std::vector<ThClientSender*> ::iterator it = list.begin();
+    for (; it != list.end(); ++it){
+        if ((*it)->is_dead()){
+            (*it)->join();
+            delete (*it);
+        } else{
+            temp.push_back((*it));
+        }
+    }
+    list.swap(temp);
+}
 
 
 void GamePlay::append_actions(Snapshot &snapshot){
@@ -156,7 +156,7 @@ void GamePlay::run(){
             }
 
             Snapshot snapshot = this->get_snapshot();
-            // remove_dead(this->client_senders);
+            remove_dead(this->client_senders);
             for(ThClientSender *client_s : this->client_senders){
                 if (!client_s->snapshots.is_closed()){
                     client_s->snapshots.add_element(snapshot);

@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include "../common_src/pathsAssets.h"
+#include "../common_src/pathsConfig.h"
 #include "../common_src/SDLWrappers/SdlContext.h"
 #include "../common_src/SDLWrappers/SdlWindow.h"
 #include "../common_src/SDLWrappers/SdlRenderer.h"
@@ -24,10 +26,10 @@ int main(int argc, char* args[]) {
 
     SdlRenderer renderer = window.getRenderer();
 
-    SdlTexture walls(renderer, "../resources/textures/walls.png");
-    SdlTexture objects(renderer, "../resources/textures/objects.png", 152, 0 , 136);
+    SdlTexture walls(renderer, WALLS_TEXTURE_PATH);
+    SdlTexture objects(renderer, OBJECTS_TEXTURE_PATH, 152, 0 , 136);
 
-    SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
+    SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
     SdlTexture tx_error(renderer, font, "Hubo un Error", 255, 0, 0);
 
     int action = 0;
@@ -43,7 +45,7 @@ int main(int argc, char* args[]) {
     bool renderText = false;
     bool save = false, load = false, size = false;
 
-    std::string path = "../resources/config/editorConfig.yaml";
+    std::string path = EDITOR_CONFIG_PATH;
     EditorConfigHandler configHandler;
     configHandler.initConfig(path);
     int mapX = configHandler.getX();

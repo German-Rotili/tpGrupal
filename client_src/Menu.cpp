@@ -5,6 +5,8 @@
 #include <iostream>
 #include <chrono>
 #include <unistd.h>
+#include "../common_src/pathsAssets.h"
+#include "../common_src/pathsConfig.h"
 #include "../common_src/SDLWrappers/SdlContext.h"
 #include "../common_src/SDLWrappers/SdlMusic.h"
 #include "../common_src/SDLWrappers/SdlWindow.h"
@@ -18,7 +20,7 @@
 
 Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   renderer(renderer),
-  font("../resources/fonts/wolfenstein.ttf", 30),
+  font(FONT_WOLFENSTEIN_PATH, 30),
   tx_refresh(renderer, font, "Refresh", 255, 255, 255),
   tx_startGame_active(renderer, font, "Start Game", 255, 255, 255),
   tx_startGame_inactive(renderer, font, "Start Game", 150, 150, 150),
@@ -30,7 +32,7 @@ Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   tx_descUser(renderer, font, "Insert Username", 255, 255, 255),
   tx_descMaps(renderer, font, "Choose a Map", 255, 255, 255),
   tx_continue(renderer, font, "Continue", 255, 255, 255),
-  music_menu("../resources/music/menu.mp3") {
+  music_menu(MUSIC_MENU_PATH) {
     // music_menu.play();
   }
 
@@ -198,7 +200,7 @@ void Menu::runMapSelection(SdlRenderer& renderer, ClientSettings& settings) {
           && e.button.x >= (settings.screenWidth/4) && e.button.x <= (settings.screenWidth/2 + settings.screenWidth/4)) {
              boton_apretado = int(e.button.y/(settings.screenHeight/16)) - 2 + scroll;
              if (boton_apretado >= maps.size()) continue;
-             path = "../resources/config/" + maps[boton_apretado] + ".yaml";
+             path = CONFIG_PATH + maps[boton_apretado] + ".yaml";
              try {
               std::string filename(path);
               std::vector<char> bytes;
@@ -477,7 +479,7 @@ void Menu::drawStartPage(SdlRenderer& renderer, ClientSettings& settings, std::s
 }
 
 void Menu::drawGameList(SdlRenderer& renderer, ClientSettings& settings, std::string inputText, bool renderText, std::vector<int> matches_id) {
-  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
+  SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
@@ -536,7 +538,7 @@ void Menu::drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std
 }
 
 void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool creator, std::vector<std::string> usernames) {
-  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
+  SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
@@ -577,7 +579,7 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
 }
 
 void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
-  SdlFont font("../resources/fonts/wolfenstein.ttf", 30);
+  SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
@@ -597,7 +599,7 @@ void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
 }
 
 void Menu::textPrompt(SdlRenderer& renderer, ClientSettings& settings, std::string inputText) {
-  SdlFont text_font("../resources/fonts/wolfenstein.ttf", 24);
+  SdlFont text_font(FONT_WOLFENSTEIN_PATH, 24);
   if (inputText == "") inputText = " ";
   SdlTexture tx_inputText(renderer, text_font, inputText, 255, 255, 255);
   renderer.setRenderDrawColor(100, 100, 100, 255);

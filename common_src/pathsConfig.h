@@ -7,7 +7,7 @@
 #define CLIENT_CONFIG_PATH "../resources/config/clientConfig.yaml"
 #define SERVER_CONFIG_PATH "../resources/config/serverConfig.yaml"
 #define EDITOR_CONFIG_PATH "../resources/config/editorConfig.yaml"
-#define MAP_LIST_PATH "../resources/config/MAPLIST.yaml"
+#define MAP_LIST_PATH "../resources/config/MapList.yaml"
 
 #else
 
@@ -15,7 +15,7 @@
 #define CLIENT_CONFIG_PATH "var/wolfenstein/config/clientConfig.yaml"
 #define SERVER_CONFIG_PATH "var/wolfenstein/config/serverConfig.yaml"
 #define EDITOR_CONFIG_PATH "var/wolfenstein/config/editorConfig.yaml"
-#define MAP_LIST_PATH "var/wolfenstein/config/MAPLIST.yaml"
+#define MAP_LIST_PATH "var/wolfenstein/config/MapList.yaml"
 
 #endif
 

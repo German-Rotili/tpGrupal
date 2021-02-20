@@ -10,6 +10,8 @@ editor_src/editor
 server_src/server
 build/CMakeFiles
 build/CMakeCache.txt
+build/install_manifest.txt
 build/wolfenstein_client
 build/wolfenstein_editor
 build/wolfenstein_server
+build/resources

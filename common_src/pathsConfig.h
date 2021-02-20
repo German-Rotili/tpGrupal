@@ -11,11 +11,11 @@
 
 #else
 
-#define CONFIG_PATH "etc/wolfenstein/config"
-#define CLIENT_CONFIG_PATH "etc/wolfenstein/config/clientConfig.yaml"
-#define SERVER_CONFIG_PATH "etc/wolfenstein/config/serverConfig.yaml"
-#define EDITOR_CONFIG_PATH "etc/wolfenstein/config/editorConfig.yaml"
-#define MAP_LIST_PATH "etc/wolfenstein/config/MAPLIST.yaml"
+#define CONFIG_PATH "var/wolfenstein/config"
+#define CLIENT_CONFIG_PATH "var/wolfenstein/config/clientConfig.yaml"
+#define SERVER_CONFIG_PATH "var/wolfenstein/config/serverConfig.yaml"
+#define EDITOR_CONFIG_PATH "var/wolfenstein/config/editorConfig.yaml"
+#define MAP_LIST_PATH "var/wolfenstein/config/MAPLIST.yaml"
 
 #endif
 

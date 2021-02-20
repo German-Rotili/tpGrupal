@@ -15,7 +15,7 @@ ResourcesLoader::ResourcesLoader(SdlRenderer& renderer):
   tx_guardDogShooting(renderer, GUARD_DOG_SHOOTING, 152, 0, 136),
   tx_guardDogDying(renderer, GUARD_DOG_DYING, 152, 0, 136),
   tx_guardDown(renderer, GUARD_DOWN, 152, 0, 136),
-  tx_guardDownLeft(renderer, GUARD_DOWN_LEFT", 152, 0, 136),
+  tx_guardDownLeft(renderer, GUARD_DOWN_LEFT, 152, 0, 136),
   tx_guardLeft(renderer, GUARD_LEFT, 152, 0, 136),
   tx_guardUpLeft(renderer, GUARD_UP_LEFT, 152, 0, 136),
   tx_guardUp(renderer, GUARD_UP, 152, 0, 136),

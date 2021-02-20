@@ -9,6 +9,7 @@
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "../common_src/SDLWrappers/SdlException.h"
 #include "../common_src/SDLWrappers/SdlFont.h"
+#include "../common_src/pathsAssets.h"
 #include "constants.h"
 
 class Menu_ui {

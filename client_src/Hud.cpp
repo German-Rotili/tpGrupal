@@ -31,7 +31,7 @@ Hud::Hud(class SdlRenderer& renderer, const class Player& player, const ClientSe
 	ammoIcon(renderer, AMMO_ICON_PATH),
 	liveIcon(renderer, LIVE_ICON_PATH),
 	sndHurt(SND_HURT_PATH),
-	sndHealing(SND_HEALING_PATH)),
+	sndHealing(SND_HEALING_PATH),
 	sndScoreup(SND_SCOREUP_PATH),
 	sndPickAmmo(SND_PICKAMMO_PATH) {
 		playerFaceAnimation = 0;

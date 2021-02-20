@@ -8,6 +8,7 @@
 #include "../common_src/SDLWrappers/SdlRenderer.h"
 #include "../common_src/SDLWrappers/SdlException.h"
 #include "../common_src/SDLWrappers/SdlFont.h"
+
 #include "ClientSettings.h"
 #include "client_helper.h"
 #define START 's'

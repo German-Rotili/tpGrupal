@@ -146,6 +146,7 @@ void GamePlay::run(){
 
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
             int index = 0;
+            this->map.tick();
             while (!this->intentions->is_empty() || index == MAX_INTENTION_PER_FRAME){//analizar poner una cantidad fija para que no se llene mientras loopea EJ hacer un FOR
                 try{
                     Intention intention_aux = this->intentions->get_element();

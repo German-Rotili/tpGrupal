@@ -81,7 +81,7 @@ Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   this->owned_weapons[KNIFE] = true;
   this->owned_weapons[PISTOL] = true;
   this->owned_weapons[MACHINE_GUN] = true;
-  this->current_weapon = 2;
+  this->current_weapon = 1;
   this->ammo = 300;
   
 
@@ -90,7 +90,7 @@ Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
 
 bool Inventory::change_weapon(int intention) 
 {
-  if(!this->owned_weapons[intention]){
+  if(this->owned_weapons[intention]){
     this->current_weapon = intention;
   }
 }

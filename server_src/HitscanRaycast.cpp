@@ -35,7 +35,6 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map *map, Player *playe
 
     std::tie(tileStepX, tileStepY) = getTileSteps(rayAngle);
 
-
     if (rayAngle == -360) {
       xStep = 60;
       yStep = 0;
@@ -73,7 +72,7 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map *map, Player *playe
     bool wallFoundY = false;
     for (int i = 0; !(wallFoundX && wallFoundY) ; i++) {
       if (!wallFoundX) {
-        if (map->is_impactable(int(xIntercept), y+tileStepY)) {
+        if (!map->valid_position(int(xIntercept), y+tileStepY)) {
           wallFoundX = true;
         } else {
           y += tileStepY;
@@ -81,14 +80,24 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map *map, Player *playe
         }
       }
       if (!wallFoundY) {
-        if (map->is_impactable(x+tileStepX, int(yIntercept))) {
+        if (!map->valid_position(x+tileStepX, int(yIntercept))) {
           wallFoundY = true;
+
         } else {
           x += tileStepX;
           yIntercept += yStep;
         }
       }
+
+      double d1 = player->get_distance(xIntercept, y+int(tileStepY == 1));
+      double d2 = player->get_distance(x+int(tileStepX == 1), yIntercept);
+
+      if (d1 < d2) {
+          if (!wallFoundX) continue;
+          return std::make_pair(xIntercept, y+int(tileStepY == 1));
+      } else {
+          if (!wallFoundY) continue;
+        return std::make_pair(x+int(tileStepX == 1), yIntercept);
+      }
     }
-    std::cout << "shot x : " << xIntercept << " shot y : " << yIntercept << std::endl;
-  return std::make_pair(xIntercept,yIntercept);
 }

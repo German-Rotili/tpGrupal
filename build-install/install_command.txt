@@ -1,2 +1,2 @@
-cmake -DDEVELOPMENT=ON ..
+cmake ..
 make install

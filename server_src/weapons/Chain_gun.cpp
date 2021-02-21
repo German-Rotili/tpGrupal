@@ -10,6 +10,7 @@ Chain_gun::Chain_gun(Map *map, Config *config, Inventory *inventory) : Weapon{ma
   this->max_damage = 20; //config->get_max_damage(CHAIN_GUN);
   this->max_spread = 5; //config->get_max_spread(CHAIN_GUN);
   this->map = map;
+  this->cooldown = 50;
 }
 
 void Chain_gun::attack() {

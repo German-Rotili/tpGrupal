@@ -84,7 +84,6 @@ bool Map::valid_position(int x, int y) {
   }
   int squareId = this->get_id(x, y);
   if (this->is_solid(squareId)) {
-    std::cout << "en x: " << x << " y: " << y << "solid id: " << squareId << std::endl;
 
     return false;
   }

@@ -26,6 +26,11 @@ void Player::execute_intention(char intention) {
       std::cout << "attack" << std::endl;
       this->attack();
     }
+    if (intention == KNIFE || intention == PISTOL || intention == MACHINE_GUN ||
+        intention == CHAIN_GUN || intention == ROCKET_LAUNCHER) {
+      std::cout << "chage weapon" << std::endl;
+      this->inventory.change_weapon(intention);
+    }
   }
 }
 

@@ -21,6 +21,8 @@ bool Rocket_launcher::fire() {
                                 this->inventory->get_player()->get_direction()));
     this->inventory->spend_ammo(this->ammo_cost);
     this->last_shot_timer.start();
+    this->map->add_action(this->inventory->get_player()->get_id(), this->inventory->get_current_weapon_id(),this->inventory->get_player()->get_pos_x(),this->inventory->get_player()->get_pos_y());
+
     return true;
   }
   return false;

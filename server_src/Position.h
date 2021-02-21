@@ -14,9 +14,9 @@ class Position{
 private:
     float x;
     float y;
-    float angle = 10;
-    float hitbox_radius = 0.4;
-    float linear_vel = 0.03;
+    float angle = 11;
+    float hitbox_radius = 0.2;
+    float linear_vel = 0.1;
     float angular_vel = 10;
     Map *map;
     Config *config;

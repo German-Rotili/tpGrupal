@@ -7,38 +7,42 @@
 #include <iostream>
 
 void Position::update(char mov) {
+  std::cout << " pos x: " << this->x << " pos y : " << this->y << std::endl;
+
   if (mov == FORWARD || mov == BACKWARDS) {
     float offset_x = this->get_x_offset(mov);
     float offset_y = this->get_y_offset(mov);
-    // std::cout << "offset x: " << offset_x;
-    // std::cout << " offset y: " << offset_y;
 
+    //std::cout << " offset x: " << offset_x << " offset y : " << offset_y << std::endl;
+
+    
     int new_x = (int)(this->x + offset_x);
     int new_y = (int)this->y;
 
-    int hitbox_limit_x = (offset_x > 0) ? new_x + this->hitbox_radius
-                                        : new_x - this->hitbox_radius;
+    int hitbox_limit_x = (offset_x > 0) ? this->x + offset_x + this->hitbox_radius
+                                        : this->x + offset_x - this->hitbox_radius;
 
     if (this->map->valid_position(hitbox_limit_x, new_y)) {
       this->x += offset_x;
     } else { // si se choca contra una pared muevo el personaje para que la
              // hitbox este justo al limite.
-      this->x = (this->x < new_x) ? new_x - this->hitbox_radius
-                                  : new_x + hitbox_radius;
-      // std::cout << "compenso por pared";
+      this->x = (offset_x > 0) ? hitbox_limit_x - this->hitbox_radius
+                                  : hitbox_limit_x + 1 + this->hitbox_radius ;
+      std::cout << "compenso por pared";
     }
     new_x = (int)(this->x);
-    new_y = (int)this->y + offset_y;
+    new_y = (int)(this->y + offset_y);
 
-    int hitbox_limit_y = (offset_y > 0) ? new_y + this->hitbox_radius
-                                        : new_y - this->hitbox_radius;
+    int hitbox_limit_y = (offset_y > 0) ? this->y + offset_y + this->hitbox_radius
+                                        : this->y + offset_y - this->hitbox_radius;
+    std::cout << " verificando pos x: " << new_x << " pos y : " << hitbox_limit_y << std::endl;
     if (this->map->valid_position(new_x, hitbox_limit_y)) {
       this->y += offset_y;
     } else { // si se choca contra una pared muevo el personaje para que la
              // hitbox este justo al limite.
-      this->y = (this->y < new_y) ? new_y - this->hitbox_radius
-                                  : new_y + this->hitbox_radius;
-      // std::cout << "compenso por pared";
+      this->y = (offset_y > 0) ? hitbox_limit_y - this->hitbox_radius
+                                  : hitbox_limit_y + 1 + this->hitbox_radius;
+       std::cout << "compenso por pared";
 
     }
   } else {

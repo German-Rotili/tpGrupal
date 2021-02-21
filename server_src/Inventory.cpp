@@ -88,7 +88,7 @@ Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   // this->ammo = Config.initialammo;
 }
 
-bool Inventory::change_weapon(char intention) 
+bool Inventory::change_weapon(int intention) 
 {
   if(!this->owned_weapons[intention]){
     this->current_weapon = intention;

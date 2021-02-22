@@ -19,8 +19,10 @@ private:
     char current_weapon = 1;
     std::map<char, Weapon*> weapons;
     bool owned_weapons[NUMBER_OF_WEAPONS];
+    std::map<char, int> keys;
     Map *map;
     Config *config;
+    int shots_fired;
 
 public:
     Inventory(Player*, Map*, Config *);
@@ -35,8 +37,9 @@ public:
     bool* get_weapons();
     bool handle_item(char id);
     void tick();
-
-    
+    std::map<char, int> &get_keys();
+    void shot_fired();
+    int get_shots_fired();
 };
 
 

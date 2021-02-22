@@ -38,6 +38,10 @@ bool Inventory::handle_item(char id)
     this->add_ammo();
     return true;
   }
+  if(id == 44 || id == 45){
+    this->keys[id] += 1;
+    return true;
+  }
   if(id == 50){
     if(!this->owned_weapons[MACHINE_GUN]){
       this->owned_weapons[MACHINE_GUN] = true;
@@ -67,6 +71,21 @@ void Inventory::tick()
   this->weapons[MACHINE_GUN]->tick();
 }
 
+std::map<char, int>& Inventory::get_keys() 
+{
+  return this->keys;
+}
+
+void Inventory::shot_fired() 
+{
+  this->shots_fired += 1;
+}
+
+int Inventory::get_shots_fired() 
+{
+  return this->shots_fired;
+}
+
 
 Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   this->map = map;
@@ -83,6 +102,8 @@ Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   this->owned_weapons[MACHINE_GUN] = true;
   this->current_weapon = 1;
   this->ammo = 300;
+  this->keys[44] = 0;
+  this->keys[45] = 0;
   
 
   // this->ammo = Config.initialammo;

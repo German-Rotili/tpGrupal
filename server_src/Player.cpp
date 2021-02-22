@@ -1,27 +1,26 @@
-#include "Position.h"
 #include "Player.h"
+#include "../common_src/Timer.h"
+#include "Config.h"
 #include "Constants.h"
+#include "Inventory.h"
+#include "Map.h"
+#include "Position.h"
+#include "weapons/Weapon.h"
 #include <iostream>
+#include <string>
 #include <tuple>
 #include <utility>
-#include <string>
-#include "Map.h"
-#include "weapons/Weapon.h"
-#include "Inventory.h"
-#include "Config.h"
-#include "../common_src/Timer.h"
 
 void Player::execute_intention(char intention) {
   if (this->is_alive) {
     if (intention == FORWARD || intention == BACKWARDS || intention == RIGHT ||
         intention == LEFT) {
-        // std::cout << "intento mover" << std::endl;
+      // std::cout << "intento mover" << std::endl;
       this->position.update(intention);
       this->process_near_item();
-
     }
     if (intention == ACTION) {
-       std::cout << "action" << std::endl;
+      std::cout << "action" << std::endl;
 
       this->acction();
     }
@@ -30,9 +29,10 @@ void Player::execute_intention(char intention) {
       this->attack();
     }
 
-    char intention_aux = intention - '0' -1 ;
-    if (intention_aux == KNIFE || intention_aux == PISTOL || intention_aux == MACHINE_GUN ||
-        intention_aux == CHAIN_GUN || intention_aux == ROCKET_LAUNCHER) {
+    char intention_aux = intention - '0' - 1;
+    if (intention_aux == KNIFE || intention_aux == PISTOL ||
+        intention_aux == MACHINE_GUN || intention_aux == CHAIN_GUN ||
+        intention_aux == ROCKET_LAUNCHER) {
       // std::cout << "Arma cambiada: " << intention_aux << std::endl;
       // std::cout << "Arma intencion: " << intention << std::endl;
       this->inventory.change_weapon(intention_aux);
@@ -40,18 +40,21 @@ void Player::execute_intention(char intention) {
   }
 }
 
-bool Player::get_damaged(int damage) 
-{
-  if(!this->is_alive) return false;
+bool Player::get_damaged(int damage) {
+  if (!this->is_alive)
+    return false;
   this->hitpoints -= damage;
-  if(this->hitpoints <= 0){
+  if (this->hitpoints <= 0) {
     this->is_alive = false;
     this->death_timer.start();
-    if(this->get_current_weapon_id() != 0 && this->get_current_weapon_id() != 1 ){
-      this->map->add_item(this->get_current_weapon_id(), this->get_pos_x(), this->get_pos_y());
+    if (this->get_current_weapon_id() != 0 &&
+        this->get_current_weapon_id() != 1) {
+      this->map->add_item(this->get_current_weapon_id(), this->get_pos_x(),
+                          this->get_pos_y());
     }
-    this->map->add_item(49, this->get_pos_x(), this->get_pos_y()); //agrego la municion
-    if(this->lives == 0){
+    this->map->add_item(49, this->get_pos_x(),
+                        this->get_pos_y()); // agrego la municion
+    if (this->lives == 0) {
       this->finished = true;
     }
     return true;
@@ -59,9 +62,9 @@ bool Player::get_damaged(int damage)
   return false;
 }
 
-void Player::tick() 
-{
-  if(!this->is_alive && respawn_time <= this->death_timer.elapsed_time() && this->lives > 0){
+void Player::tick() {
+  if (!this->is_alive && respawn_time <= this->death_timer.elapsed_time() &&
+      this->lives > 0) {
     this->position.set_position(spawn_x, spawn_y);
     this->is_alive = true;
     this->hitpoints = 300;
@@ -70,34 +73,21 @@ void Player::tick()
   this->inventory.tick();
 }
 
-void Player::set_spawn(int x, int y) { 
-  this->position.set_position(x, y); 
+void Player::set_spawn(int x, int y) {
+  this->position.set_position(x, y);
   // std::cout << "Player " << this->id << " X: " << x << "Y: "<<y<<std::endl;
   this->spawn_x = x;
   this->spawn_y = y;
   this->placed = true;
 }
 
-int Player::get_hitpoints() 
-{
-  return this->hitpoints;
-}
+int Player::get_hitpoints() { return this->hitpoints; }
 
-int Player::get_lives() 
-{
-  return this->lives;
-}
+int Player::get_lives() { return this->lives; }
 
-int Player::get_score() 
-{
-  return this->score;
-}
+int Player::get_score() { return this->score; }
 
-void Player::add_kill_points() 
-{
-  this->kills += 1;
-}
-
+void Player::add_kill_points() { this->kills += 1; }
 
 bool Player::is_placed() { return this->placed; }
 
@@ -124,52 +114,48 @@ float Player::get_angle_difference(float x, float y) {
   return this->position.get_angle_difference(x, y);
 }
 
+int Player::get_id() { return this->id; }
 
+void Player::heal(char id) { this->hitpoints += 30; }
 
-int Player::get_id(){
-  return this->id;
-}
+void Player::collect_treasure(char id) { this->score += 20; }
 
-void Player::heal(char id) 
-{
-  this->hitpoints += 30;
-  
-}
-
-
-
-void Player::collect_treasure(char id) 
-{
-  this->score += 20;
-}
-
-bool Player::is_finished() 
-{
-  return this->finished;
-}
+bool Player::is_finished() { return this->finished; }
 
 void Player::attack() { this->inventory.attack(); }
 
 void Player::acction() {
-   for(auto &x : this->map->get_doors()){
-     for(auto &y : x.second){
-       if(this->get_distance(x.first,y.first) < 2){
-         std::cout << "abro un puerta" << std::endl;
-         y.second.toggle();
-       }
-     }
+  for (auto &x : this->map->get_doors()) {
+    for (auto &y : x.second) {
+      if (this->get_distance(x.first, y.first) < 2) {
+        std::cout << "abro un puerta" << std::endl;
+        if (y.second.is_locked()) {
+          for (auto &key_id : this->inventory.get_keys()) {
+            if(key_id.second > 0 && y.second.unlock(key_id.first)){
+              key_id.second -= 1;
+              break;
+            };
+          }
+        }
+      y.second.toggle();
+      }
+    }
   }
 }
 
 Player::Player(Map *map, Config *config, int id)
-    : position{Position(map, config)}, inventory{Inventory(this, map, config)}
-     {
+    : position{Position(map, config)}, inventory{Inventory(this, map, config)} {
   this->id = id;
   this->map = map;
 }
 
 bool Player::is_in_hitbox(float x, float y) {
   return this->position.is_in_hitbox(x, y);
+}
+
+int Player::get_shots_fired() 
+{
+  return this->inventory.get_shots_fired();
 }
 
 int Player::get_ammo() { return this->inventory.get_ammo(); }
@@ -180,21 +166,21 @@ char Player::get_current_weapon_id() {
 
 float Player::get_direction() { return this->position.get_angle(); }
 
-
-void Player::process_near_item(){
-  // std::cout<< "posicion es x:" << this->get_pos_x() << " y: " << this->get_pos_y() << std::endl;
+void Player::process_near_item() {
+  // std::cout<< "posicion es x:" << this->get_pos_x() << " y: " <<
+  // this->get_pos_y() << std::endl;
   int current_id = map->get_id(this->get_pos_x(), this->get_pos_y());
 
-  if(current_id >= 49 && current_id <= 52){
-    if(this->inventory.handle_item(current_id)){
+  if ((current_id >= 49 && current_id <= 52) || current_id == 44 || current_id == 45) {
+    if (this->inventory.handle_item(current_id)) {
       this->map->remove_item(this->get_pos_x(), this->get_pos_y());
     }
   }
-  if(id <= 46 && id >= 48){//CAMBIE CHAR POR INT el ID DE PLAYER!
+  if (id <= 46 && id >= 48) { // CAMBIE CHAR POR INT el ID DE PLAYER!
     this->heal(id);
     this->map->remove_item((int)this->get_pos_x(), (int)this->get_pos_y());
   }
-  if(id <= 53 && id >= 56){
+  if (id <= 53 && id >= 56) {
     this->collect_treasure(id);
     this->map->remove_item(this->get_pos_x(), this->get_pos_y());
   }

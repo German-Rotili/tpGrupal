@@ -13,12 +13,18 @@ private:
     bool open = false;
     bool walkable = false;
     int open_time = 10000;
+    char id;
+    bool locked = false;
 public:
+
     Door(char id);
+    char get_id();
     bool is_open();
     bool is_walkable();
     void toggle();
     void tick();
+    bool unlock(char );
+    bool is_locked();
 };
 
 

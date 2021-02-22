@@ -37,7 +37,7 @@ private:
     int lives = 5;
     int score = 0;
     int kills = 0;
-
+    
     void attack();
     void acction();
     void intersects(float impx, float impy, Player &player);
@@ -74,6 +74,7 @@ public:
     void collect_treasure(char id);
     bool is_finished();
     bool is_in_hitbox(float x, float y);
+    int get_shots_fired();
 };
 
 #endif // __SERVER_PLAYER_H__

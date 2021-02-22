@@ -130,6 +130,7 @@ void Weapon::fire(float angle) {
     // appendear la accion al helper de acciones.
   }
   this->map->add_action(this->inventory->get_player()->get_id(), this->inventory->get_current_weapon_id(),impact.first,impact.second);
+  this->inventory->shot_fired();
 }
 
 bool Weapon::is_in_cooldown() {

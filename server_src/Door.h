@@ -9,7 +9,7 @@ class Door
 private:
 
     Timer last_open_timer;
-    int door_cd;
+    int door_cd = 200;
     bool open = false;
     bool walkable = false;
 

@@ -52,6 +52,75 @@ void Map::add_action(int player_id, float weapon_id, float posx, float posy) {
   this->actions.push_back(action);
 }
 
+void Map::add_item(int id, int x, int y) // use goto para facilitar la lectura de este codigo horrendo
+{ if(id >= 2 && id <= 4) id +=48;
+  for(int i = 0; i < 4 ; i++){
+    for(int j = 0; i < 4; i++){
+      if(this->get_id(x + i, y + j) == 57) {
+        x += i;
+        y += j;
+        goto end;
+      }
+      if(this->get_id(x - i, y + j) == 57) {
+        x -= i;
+        y += j;
+        goto end;
+
+      }
+      if(this->get_id(x + i, y - j) == 57) {
+        x += i;
+        y -= j;
+        goto end;
+
+      }
+      if(this->get_id(x - i, y - j) == 57) {
+        x -= i;
+        y -= j;
+        goto end;
+
+      }
+      if(this->get_id(x + j, y + i) == 57) {
+        x += i;
+        y += j;
+        goto end;
+      }
+      if(this->get_id(x - j, y + i) == 57) {
+        x -= i;
+        y += j;
+        goto end;
+      }
+      if(this->get_id(x + j, y - i) == 57) {
+        x += i;
+        y -= j;
+        goto end;
+      }
+      if(this->get_id(x - j, y - i) == 57) {
+        x -= i;
+        y -= j;
+        goto end;
+      }
+    }
+  }
+
+  end:  //checkkeo que no haya llegado porque termino de loopear. 
+  if(this->get_id(x, y) == 57) {
+    this->items[x][y] = id;
+    this->map[x][y] = id;
+  }
+  //horrible pero legible.
+}
+
+bool Map::is_game_over() 
+{
+  int not_finished = 0;
+   for (Player *player : this->players) {
+     if(player->is_finished()){
+       not_finished +=1;
+     }
+  }
+  return (not_finished <= 1 || this->game_timer.elapsed_time() > this->game_time_limit);
+}
+
 void Map::remove_item(int x, int y) {
   this->map[x][y] = EMPTY;
   this->items[x].erase(y);
@@ -125,6 +194,8 @@ Map::Map(std::vector<char> raw_map) : raw_map{raw_map} {
   }
 }
 
+
+
 void Map::populate_variables() {
 
   for (int x = 0; x < this->map.size(); x++) {
@@ -140,9 +211,8 @@ void Map::populate_variables() {
         for (Player *player : this->players) {
           if (!player->is_placed()) {
             std::cout << "placing" << std::endl;
-
             player->set_spawn(x, y);
-            // break;
+            break;
           }
         }
       }
@@ -151,6 +221,7 @@ void Map::populate_variables() {
       }
     }
   }
+  this->game_timer.start();
 }
 
 void Map::execute_intentions(std::vector<char> &intentions, int &client_id) {

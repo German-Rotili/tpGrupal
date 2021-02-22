@@ -21,6 +21,8 @@ void Player::execute_intention(char intention) {
 
     }
     if (intention == ACTION) {
+      std::cout << "action" << std::endl;
+
       this->acction();
     }
     if (intention == ATTACK) {
@@ -40,21 +42,30 @@ void Player::execute_intention(char intention) {
 
 bool Player::get_damaged(int damage) 
 {
+  if(!this->is_alive) return false;
   this->hitpoints -= damage;
   if(this->hitpoints <= 0){
     this->is_alive = false;
     this->death_timer.start();
+    if(this->get_current_weapon_id() != 0 && this->get_current_weapon_id() != 1 ){
+      this->map->add_item(this->get_current_weapon_id(), this->get_pos_x(), this->get_pos_y());
+    }
+    this->map->add_item(49, this->get_pos_x(), this->get_pos_y()); //agrego la municion
+    if(this->lives == 0){
+      this->finished = true;
+    }
     return true;
   }
-  
+  return false;
 }
 
 void Player::tick() 
 {
-  if(!this->is_alive && respawn_time <= this->death_timer.elapsed_time()){
+  if(!this->is_alive && respawn_time <= this->death_timer.elapsed_time() && this->lives > 0){
     this->position.set_position(spawn_x, spawn_y);
     this->is_alive = true;
     this->hitpoints = 300;
+    this->lives -= 1;
   }
   this->inventory.tick();
 }
@@ -84,7 +95,7 @@ int Player::get_score()
 
 void Player::add_kill_points() 
 {
-  this->score += 100;
+  this->kills += 1;
 }
 
 
@@ -94,12 +105,15 @@ float Player::get_pos_x() { return this->position.get_pos_x(); }
 float Player::get_pos_y() { return this->position.get_pos_y(); }
 float Player::get_hitbox_radius() { return this->position.get_hitbox_radius(); }
 
-float Player::get_distance(Position position) {
-  return this->position.get_distance(position);
+float Player::get_distance(Position *position) {
+  return this->position.get_distance(*position);
 }
 
 float Player::get_distance(float x, float y) {
   return this->position.get_distance(x, y);
+}
+float Player::get_distance(Player *player) {
+  return this->position.get_distance(player->get_pos_x(), player->get_pos_y());
 }
 
 float Player::get_angle_difference(Position position) {
@@ -127,6 +141,11 @@ void Player::heal(char id)
 void Player::collect_treasure(char id) 
 {
   this->score += 20;
+}
+
+bool Player::is_finished() 
+{
+  return this->finished;
 }
 
 void Player::attack() { this->inventory.attack(); }

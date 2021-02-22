@@ -6,6 +6,7 @@
 #include "../Map.h"
 #include <chrono>
 #include <iostream>
+#include <cmath>
 void Weapon::fire(float angle) {
   /*
   tira un raycast. se obtiene la posicion maxima.
@@ -60,18 +61,21 @@ void Weapon::fire(float angle) {
   } else {
     xdir = -1;
   }
-
+  std::cout << "xdir : "  << xdir << " ydir: " << ydir << std::endl;
   float dist;
   Player *player_hit;
   float distance = 0;
 
   for (Player *player : this->map->get_players()) {
+    if(this->inventory->get_player() == player) continue;
     float playerx = player->get_pos_x();
-    float playery = player->get_pos_x();
-    float hitboxRadius = player->get_hitbox_radius();
+    float playery = player->get_pos_y();
+    float hitboxRadius = 3 * player->get_hitbox_radius();
 
-    if (((impact.first - player->get_pos_x()) * xdir) > 0) {
-      if (((impact.second - player->get_pos_y()) * ydir) > 0) {
+
+
+    if (((impact.first - player->get_pos_x()) * xdir) >= -hitboxRadius) {
+      if (((impact.second - player->get_pos_y()) * ydir) >= -hitboxRadius) {
         if (((player->get_pos_x() - xpos) * xdir) > 0) {
           if (((player->get_pos_y() - ypos) * ydir) > 0) {
             /*
@@ -85,24 +89,31 @@ void Weapon::fire(float angle) {
               de la hitbox es paralela a los ejes.
             */
             float xhitbox = playerx - (hitboxRadius * xdir);
-            float yhitbox = playery - (hitboxRadius * ydir);
-            float lambda = (impact.second - xpos) * (yhitbox - playery);
-            float xintersection =
-                ((impact.second - xpos) * (yhitbox - playery) /
-                 (impact.first - ypos)) +
-                xpos;
-            if (abs(xintersection - playerx) < hitboxRadius &&
-                (distance == 0 || lambda < distance)) {
+            float yhitbox = playery - (hitboxRadius * ydir); //x hitbox seria la recta x = xhitbox.
+            //primero interseccion en y con x = xhitbox:
+            // basicamente lamda(impx - playerx) + playerx = xhitbox como se se cual es xhitbox despejo lambda y remplazo para 
+            // encontrar la cordenada y del punto de colision, es decir (xhitbox, y)
+            // luego verifico que ese punto este dentro de la hitbox. 
+            
+            float lambda = (xhitbox - xpos) / (impact.first - xpos) ;
+            float yintersection = lambda * (impact.second - ypos) + ypos;
+            float new_distance = this->inventory->get_player()->get_distance(player);
+
+            if (std::abs(yintersection - playery) < hitboxRadius &&
+                (distance == 0 || new_distance < distance)) {
               player_hit = player;
-              distance = lambda;
+              distance = new_distance;
             }
-            float yintersection = ((impact.first - ypos) * (xhitbox - playerx) /
-                                   (impact.second - xpos)) +
-                                  ypos;
-            if (abs(yintersection - playery) < hitboxRadius &&
-                (distance == 0 || lambda < distance)) {
+            //ahora interseccion en x con y = yhitbox:
+
+            lambda = (yhitbox - ypos) / (impact.second - ypos) ;
+            float xintersection = lambda * (impact.first - xpos) + xpos;
+            new_distance = this->inventory->get_player()->get_distance(player);
+            
+            if (std::abs(xintersection - playerx) < hitboxRadius &&
+                (distance == 0 || new_distance < distance)) {
               player_hit = player;
-              distance = lambda;
+              distance = new_distance;
             }
           }
         }

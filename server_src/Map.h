@@ -8,6 +8,8 @@
 #include "../common_src/Action.h"
 #include "Player.h"
 #include "Door.h"
+#include "../common_src/Timer.h"
+
 class Action;
 class Door;
 class Player;
@@ -22,7 +24,8 @@ private:
   std::vector<char> raw_map;
   std::map<int, std::map<int, Door>> doors;
   std::map<int, std::map<int, char>> items;
-
+  Timer game_timer;
+  int game_time_limit = 30000;
   Config config;
 
 
@@ -59,7 +62,12 @@ public:
   std::vector<char> get_raw_map();
 
   void add_action(int player_id, float weapon_id, float posx, float posy);
-  
+  void add_item(int id, int x, int y);
+
+  bool is_game_over();
+
+
+
   friend class GamePlay;
 };
 

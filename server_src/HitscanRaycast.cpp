@@ -20,8 +20,8 @@ static std::tuple<int, int> getTileSteps(double dir) {
 std::pair<float, float> HitscanRaycast::get_impact_point(Map *map, Player *player) {
     int x = (int) player->get_pos_x();
     int y = (int) player->get_pos_y();
-    double dx = x - player->get_pos_x();
-    double dy = y - player->get_pos_y();
+    double dx = 0.5;
+    double dy = 0.5;
 
     double rayAngle = player->get_direction();
 

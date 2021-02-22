@@ -25,6 +25,7 @@ private:
     int id;
     Position position;
     bool is_alive = true;
+    bool finished = false;
     Map *map;
     Inventory inventory;
     Timer death_timer;
@@ -35,6 +36,7 @@ private:
     int hitpoints = 300;
     int lives = 5;
     int score = 0;
+    int kills = 0;
 
     void attack();
     void acction();
@@ -63,13 +65,14 @@ public:
     bool get_damaged(int damage);
     void tick();
     float get_hitbox_radius();
-    float get_distance(Position position);
+    float get_distance(Position *position);
     float get_distance(float x, float y);
+    float get_distance(Player *player);
     float get_angle_difference(Position position);
     float get_angle_difference(float x, float y); 
     void heal(char id);
     void collect_treasure(char id);
-
+    bool is_finished();
     bool is_in_hitbox(float x, float y);
 };
 

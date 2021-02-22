@@ -28,21 +28,21 @@ void Position::update(char mov) {
              // hitbox este justo al limite.
       this->x = (offset_x > 0) ? hitbox_limit_x - this->hitbox_radius
                                   : hitbox_limit_x + 1 + this->hitbox_radius ;
-      std::cout << "compenso por pared";
+      // std::cout << "compenso por pared";
     }
     new_x = (int)(this->x);
     new_y = (int)(this->y + offset_y);
 
     int hitbox_limit_y = (offset_y > 0) ? this->y + offset_y + this->hitbox_radius
                                         : this->y + offset_y - this->hitbox_radius;
-    std::cout << " verificando pos x: " << new_x << " pos y : " << hitbox_limit_y << std::endl;
+    // std::cout << " verificando pos x: " << new_x << " pos y : " << hitbox_limit_y << std::endl;
     if (this->map->valid_position(new_x, hitbox_limit_y)) {
       this->y += offset_y;
     } else { // si se choca contra una pared muevo el personaje para que la
              // hitbox este justo al limite.
       this->y = (offset_y > 0) ? hitbox_limit_y - this->hitbox_radius
                                   : hitbox_limit_y + 1 + this->hitbox_radius;
-       std::cout << "compenso por pared";
+      //  std::cout << "compenso por pared";
 
     }
   } else {

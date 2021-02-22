@@ -4,7 +4,7 @@ function DistanceFromEnemy(enemy_x, enemy_y, player_x, player_y)
 	distance1 = math.pow(enemy_x-player_x, 2)
 	distance2 = math.pow(enemy_y-player_y, 2)
 	total = distance1 + distance2
-	print("Distance SQ: ", math.sqrt( total ))
+	-- print("Distance SQ: ", math.sqrt( total ))
 	return math.sqrt( total )
 end
 
@@ -44,24 +44,29 @@ function ProcessSnapshot(snapshot)
 		end
 	end
 
-	print("Nearest x: ",pos_x)
-	print("Nearest y: ",pos_y)
-
-	print("Nearest Dist: ", min_distance)
-
-
-	--angulo entre el jugador y el enemigo
-	angle = (math.atan(pos_y - enemy_pos_y, pos_x - enemy_pos_x) - 3.1426) * 180 / 3.1426
-	print("Angle: ",angle)
-	angle = math.abs(angle) - enemy_direction
-	print("Angle Diff: ",angle)
-	print("Angle Diff Round: ", math.abs(math.floor(angle)))
+	print("Player x: ",pos_x)
+	print("Player y: ",pos_y)
+	print("Player Dist: ", min_distance)
 
 
+	-- angle = (math.atan(pos_y - enemy_pos_y, pos_x - enemy_pos_x) - 3.1416) * 180 / 3.1416
+	-- angle = math.abs(angle) - enemy_direction
 
-	if math.abs(math.floor(angle)) > 10 then
+	 dot = (pos_x * enemy_pos_y) + (pos_y * enemy_pos_y)
+	 mod_this = math.sqrt(math.pow(enemy_pos_x, 2) + math.pow(enemy_pos_y, 2))
+	 mod_other = math.sqrt(math.pow(pos_x, 2) + math.pow(pos_y, 2))
+	 angle = math.abs(math.acos(dot / (mod_other * mod_this)))
+
+
+	 
+	 print("DIFERENCIA: ",angle)
+
+
+
+
+	if angle > 0.3 then
 		response = 'd'
-		print("angle diff: ",response)
+		-- print("angle diff: ",response)
 	elseif min_distance > VALID_RANGE then
 		response = 'w'
 		print("range: ",response)

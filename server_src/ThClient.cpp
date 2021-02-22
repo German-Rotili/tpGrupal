@@ -64,8 +64,8 @@ void ThClient::new_game(){
         while(true){
             char msg_char = this->protocol.receive_char();
             if(msg_char == START){
-                    game.start();//Lanzo hilo de la partida
                     game.start_game();// le aviso a todos que comenzo la partida.
+                    game.start();//Lanzo hilo de la partida
                     break;
             }else if (msg_char == REFRESH){
                 this->refresh_players(game.get_usernames());

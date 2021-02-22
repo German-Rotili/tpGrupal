@@ -142,6 +142,7 @@ void Map::populate_variables() {
             std::cout << "placing" << std::endl;
 
             player->set_spawn(x, y);
+            // break;
           }
         }
       }
@@ -163,7 +164,7 @@ void Map::execute_intentions(std::vector<char> &intentions, int &client_id) {
           char aux = intentions.front();
           intentions.erase(intentions.begin());
           player->execute_intention(aux);
-          std::cout << "caracter procesado: " <<aux << " del id: "<<client_id <<std::endl;
+          // std::cout << "caracter procesado: " <<aux << " del id: "<<client_id <<std::endl;
 
         }
       }

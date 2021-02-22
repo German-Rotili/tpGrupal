@@ -99,7 +99,7 @@ void Enemy::attack_players(std::vector<char> & intention){
 
             //Enemigo Actual
             player_t enemy_aux = snapshot.get_player(this->enemy_id);
-            snapshot.print();
+            // snapshot.print();
             lua_pushnumber(L, 2); //Creo la tabla de objectos.
             lua_createtable(L, 3, 0); 
                

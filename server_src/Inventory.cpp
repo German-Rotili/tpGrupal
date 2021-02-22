@@ -13,7 +13,7 @@
 #include "Config.h"
 #include <iostream>
 #include <memory>
-
+#include <iostream>
 Player* Inventory::get_player() { return this->player; }
 
 void Inventory::attack() { 
@@ -88,7 +88,7 @@ Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   // this->ammo = Config.initialammo;
 }
 
-bool Inventory::change_weapon(int intention) 
+void Inventory::change_weapon(char intention) 
 {
   if(this->owned_weapons[intention]){
     this->current_weapon = intention;

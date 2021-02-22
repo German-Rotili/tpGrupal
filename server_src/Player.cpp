@@ -21,7 +21,7 @@ void Player::execute_intention(char intention) {
 
     }
     if (intention == ACTION) {
-      // std::cout << "action" << std::endl;
+       std::cout << "action" << std::endl;
 
       this->acction();
     }
@@ -30,7 +30,7 @@ void Player::execute_intention(char intention) {
       this->attack();
     }
 
-    int intention_aux = intention - '0' -1 ;
+    char intention_aux = intention - '0' -1 ;
     if (intention_aux == KNIFE || intention_aux == PISTOL || intention_aux == MACHINE_GUN ||
         intention_aux == CHAIN_GUN || intention_aux == ROCKET_LAUNCHER) {
       // std::cout << "Arma cambiada: " << intention_aux << std::endl;
@@ -153,7 +153,8 @@ void Player::attack() { this->inventory.attack(); }
 void Player::acction() {
    for(auto &x : this->map->get_doors()){
      for(auto &y : x.second){
-       if(this->get_distance(x.first,y.first)){
+       if(this->get_distance(x.first,y.first) < 2){
+         std::cout << "abro un puerta" << std::endl;
          y.second.toggle();
        }
      }

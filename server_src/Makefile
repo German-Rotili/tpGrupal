@@ -14,7 +14,7 @@ CC = g++
 COMPILER_FLAGS += -O3
 
 # Para valgrind o debug
-COMPILER_FLAGS += -ggdb -DDEBUG -fno-inline -lyaml-cpp -llua -ldl
+COMPILER_FLAGS += -ggdb -DDEBUG -fno-inline -lyaml-cpp -llua -ldl -g
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -pthread

@@ -190,9 +190,7 @@ void Player::process_near_item() {
     std::vector<char> & Player::get_username(){
       return this->username;
     }
-    int Player::get_score(){
-      return this->score;
-    }
+
     int Player::get_kills(){
       return this->kills;
     }

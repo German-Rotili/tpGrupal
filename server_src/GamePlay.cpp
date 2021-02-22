@@ -148,7 +148,7 @@ void GamePlay::run(){
         this->map.start();
         this->blocked = true;
         this->state = true;
-        while (this->state && !this->map.is_game_over()){
+        while (this->state ){//&& !this->map.is_game_over()){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 
             int index = 0;
@@ -185,7 +185,7 @@ void GamePlay::run(){
             }
         }
 
-        this->send_scores();
+        // this->send_scores();
 }
 /**********/
 
@@ -195,9 +195,10 @@ void GamePlay::run(){
 void GamePlay::send_scores(){
     std::vector<char> username;
     for(ThClientSender *sender : this->client_senders){
-        sender->send_scores(this->map.players.size());
+        sender->send_scores(this->map.players.size());//aviso que termino el juego y cantidad de jugadores
         for(Player *player : this->map.players){
-            sender->send_score(player->get_username(), player->get_score(), player.get_kills(), player.get_shots() );
+            sender->send_score(player->get_username(), player->get_score(), player->get_kills(), player->get_shots() );
+            //mando el score de cada jugador completo con username.
         }
     }
 }

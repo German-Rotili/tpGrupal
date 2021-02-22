@@ -17,6 +17,7 @@
 #include "Position.h"
 #include "Inventory.h"
 #include "../common_src/Timer.h"
+#include <vector>
 
 class Config;
 
@@ -77,7 +78,6 @@ public:
     bool is_in_hitbox(float x, float y);
     int get_shots_fired();
     std::vector<char> & get_username();
-    int get_score();
     int get_kills();
     int get_shots();
 

@@ -80,7 +80,7 @@ void Game::updateWorld() {
 }
 
 void Game::loop() {
-  while (!quit) {
+  while (!quit && this->requester.is_active()) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     processInput();
     if (gameStarted) {

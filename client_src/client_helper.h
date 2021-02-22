@@ -17,6 +17,7 @@
 class Client {
 private:
     Protocol protocol;
+    std::atomic<bool> active;
     Serializer serializer;
 public:
     Client(std::string & service,std::string & hostname);
@@ -37,5 +38,6 @@ public:
     ~Client();
     void send_username(std::string & username);
     void join_game();
+    bool is_active();
 };
 #endif

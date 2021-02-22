@@ -27,6 +27,10 @@ int ThRequester::getObtainedId() {
   return this->obtainedId;
 }
 
+bool ThRequester::is_active(){
+  return this->client.is_active();
+}
+
 void ThRequester::run() {
   try {
     obtainedId = client.await_game_start();

@@ -578,24 +578,24 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   renderer.renderPresent();
 }
 
-void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> usernames, std::vector<int> balas, std::vector<int> puntos, std::vector<int> muertes) {
+void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings){
   SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
   SdlFont littleFont(FONT_WOLFENSTEIN_PATH, 20);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
-  for (int i = 0; i< usernames.size(); i++) {
-    renderer.setRenderDrawColor(255, 255, 255, 255);
-    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
-    SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
-    renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
-    SdlTexture tx_puntuacion(renderer, littleFont, puntos[i], 255, 255, 255);
-    renderer.renderCopyCentered(tx_puntuacion, NULL, (2+settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-    SdlTexture tx_balas(renderer, littleFont, balas[i], 255, 255, 255);
-    renderer.renderCopyCentered(tx_balas, NULL, (3*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-    SdlTexture tx_muertes(renderer, littleFont, muertes[i], 255, 255, 255);
-    renderer.renderCopyCentered(tx_muertes, NULL, (4*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-  }
+  // for (int i = 0; i< usernames.size(); i++) {
+  //   renderer.setRenderDrawColor(255, 255, 255, 255);
+  //   renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
+  //   SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
+  //   renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
+  //   SdlTexture tx_puntuacion(renderer, littleFont, puntos[i], 255, 255, 255);
+  //   renderer.renderCopyCentered(tx_puntuacion, NULL, (2+settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+  //   SdlTexture tx_balas(renderer, littleFont, balas[i], 255, 255, 255);
+  //   renderer.renderCopyCentered(tx_balas, NULL, (3*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+  //   SdlTexture tx_muertes(renderer, littleFont, muertes[i], 255, 255, 255);
+  //   renderer.renderCopyCentered(tx_muertes, NULL, (4*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+  // }
 
   renderer.renderPresent();
 }

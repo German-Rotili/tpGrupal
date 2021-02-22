@@ -30,5 +30,7 @@ public:
     void stop();
     ThRequester(const ThRequester&) = delete;
     ThRequester& operator=(const ThRequester&) = delete;
+    bool is_active();
+
 };
 #endif

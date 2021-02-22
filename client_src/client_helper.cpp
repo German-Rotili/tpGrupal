@@ -1,12 +1,13 @@
 #include "client_helper.h"
 #define SNAPSHOT_ID '0'
 #define ACTION_ID '1'
+#define ENDGAME_ID 'f'
 #define START 's'
 #define NEW_GAME 'n'
 #define JOIN_MATCH 'j'
 #define REFRESH 'r'
 
-Client::Client(std::string & service,std::string & hostname){
+Client::Client(std::string & service,std::string & hostname):active(true){
     Socket client;
     client.socket_connect(service.c_str(), hostname.c_str());
     this->protocol = Protocol(std::move(client));
@@ -14,17 +15,25 @@ Client::Client(std::string & service,std::string & hostname){
 
 Client::~Client(){}
 
+bool Client::is_active(){
+    return this->active;
+}
+
 void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions){
     /*Recibo ID Tipo msg*/
     char input_id = this->protocol.receive_char();
     /*Recibimos vector de chars-msg */
-    std::vector<char> msg = this->protocol.receive_standar_msg();
     switch (input_id){
-        case SNAPSHOT_ID:
-            this->serializer.deserializer(msg, snapshot);
+        case SNAPSHOT_ID:{
+            std::vector<char> msg = this->protocol.receive_standar_msg();
+            this->serializer.deserializer(msg, snapshot);}
             break;
-        case ACTION_ID:
-            this->serializer.deserialize_action(msg, actions);
+        case ACTION_ID:{
+            std::vector<char> msg = this->protocol.receive_standar_msg();
+            this->serializer.deserialize_action(msg, actions);}
+            break;
+        case ENDGAME_ID:
+            this->active = false;
             break;
         default:
             std::cout << "Error id detection" <<std::endl;

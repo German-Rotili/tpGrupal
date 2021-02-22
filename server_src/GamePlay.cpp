@@ -163,6 +163,7 @@ void GamePlay::run(){
             }
 
             Snapshot snapshot = this->get_snapshot();
+            snapshot.print();
             remove_dead(this->client_senders);
             for(ThClientSender *client_s : this->client_senders){
                 if (!client_s->snapshots.is_closed()){

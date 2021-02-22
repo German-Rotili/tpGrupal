@@ -32,7 +32,8 @@ void ThRequester::run() {
     obtainedId = client.await_game_start();
     while (this->state) {
         Snapshot snap_aux;
-        client.receive_update(snap_aux, this->actions);        
+        client.receive_update(snap_aux, this->actions);   
+        snap_aux.print();     
         std::unique_lock<std::mutex> lock(this->m);
         this->snapshot = snap_aux;
         // snap_aux.print();

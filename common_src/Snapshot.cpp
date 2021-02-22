@@ -14,14 +14,12 @@ Snapshot::~Snapshot(){
 }
 
 void Snapshot::print(){
-    for (auto &player : this->players){ 
-    std::cout << "/********PLAYER*********/"<<std::endl;
-    std::cout << player.player_id <<std::endl;
-    std::cout << player.pos_x <<std::endl;
-    std::cout << player.pos_y <<std::endl;
-    std::cout << player.direction <<std::endl;
-    std::cout << player.ammo <<std::endl;
-    std::cout << player.current_weapon <<std::endl;
+    for (auto &object : this->objects){ 
+    std::cout << "/********OBJECT*********/"<<std::endl;
+    std::cout << object.id <<std::endl;
+    std::cout << object.pos_x <<std::endl;
+    std::cout << object.pos_y <<std::endl;
+    std::cout << object.state <<std::endl;
     std::cout << "/**********************/"<<std::endl;    
     }
 }
@@ -65,7 +63,7 @@ Action Snapshot::get_action(int & id){
     return action;
 }
 player_t Snapshot::get_player(int & id){
-    for (auto &player : this->players){ 
+    for (player_t &player : this->players){ 
         if (player.player_id == id){
             return player;
         }

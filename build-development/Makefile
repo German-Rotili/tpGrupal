@@ -1726,7 +1726,7 @@ server_src/Enemy.o: server_src/Enemy.cpp.o
 
 # target to build an object file
 server_src/Enemy.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/server_src/Enemy.cpp.o
+	$(MAKE) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/server_src/Enemy.cpp.o
 .PHONY : server_src/Enemy.cpp.o
 
 server_src/Enemy.i: server_src/Enemy.cpp.i
@@ -1735,7 +1735,7 @@ server_src/Enemy.i: server_src/Enemy.cpp.i
 
 # target to preprocess a source file
 server_src/Enemy.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/server_src/Enemy.cpp.i
+	$(MAKE) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/server_src/Enemy.cpp.i
 .PHONY : server_src/Enemy.cpp.i
 
 server_src/Enemy.s: server_src/Enemy.cpp.s
@@ -1744,7 +1744,7 @@ server_src/Enemy.s: server_src/Enemy.cpp.s
 
 # target to generate assembly for a file
 server_src/Enemy.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/server_src/Enemy.cpp.s
+	$(MAKE) -f CMakeFiles/wolfenstein_server.dir/build.make CMakeFiles/wolfenstein_server.dir/server_src/Enemy.cpp.s
 .PHONY : server_src/Enemy.cpp.s
 
 server_src/GameHandler.o: server_src/GameHandler.cpp.o

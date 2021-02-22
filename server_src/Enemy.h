@@ -26,8 +26,8 @@ private:
     std::vector<std::vector<int>> & map;
     ProtectedQueueIntention *intentions;
     BlockingQueueSnapshot snapshots;
-    void attack_players(std::vector<char> & intention);
     std::vector<int> players_id;
+    void attack_players(std::vector<char> & intention);
 
 public:
     void run() override;

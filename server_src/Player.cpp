@@ -45,18 +45,7 @@ bool Player::get_damaged(int damage) {
     return false;
   this->hitpoints -= damage;
   if (this->hitpoints <= 0) {
-    this->is_alive = false;
-    this->death_timer.start();
-    if (this->get_current_weapon_id() != 0 &&
-        this->get_current_weapon_id() != 1) {
-      this->map->add_item(this->get_current_weapon_id(), this->get_pos_x(),
-                          this->get_pos_y());
-    }
-    this->map->add_item(49, this->get_pos_x(),
-                        this->get_pos_y()); // agrego la municion
-    if (this->lives == 0) {
-      this->finished = true;
-    }
+    this->die();
     return true;
   }
   return false;
@@ -116,9 +105,47 @@ float Player::get_angle_difference(float x, float y) {
 
 int Player::get_id() { return this->id; }
 
-void Player::heal(char id) { this->hitpoints += 30; }
+bool Player::heal(char id) {
+  if (this->hitpoints == this->max_hitpoints)
+    return false;
+  switch (id){
+    case 47:
+      this->hitpoints += 10;
+      return true;
+      break;
+    case 48:
+      this->hitpoints += 20;
+      return true;
+    case 46:
+      if(this->hitpoints < 12) {
+        this->hitpoints +=1;
+        return true;
+      }else{return false;}
+      break;
+  }
 
-void Player::collect_treasure(char id) { this->score += 20; }
+  if (this->hitpoints > this->max_hitpoints)
+    this->hitpoints = this->max_hitpoints;
+  return true;
+}
+
+void Player::collect_treasure(char id) { 
+  switch (id)
+  {
+  case 53:
+    this->score += 10;
+    break;
+  case 54:
+    this->score += 50;
+    break;  
+  case 55:
+    this->score += 100;
+    break;
+  case 56:
+    this->score += 200;
+    break;
+  }
+ }
 
 bool Player::is_finished() { return this->finished; }
 
@@ -131,13 +158,13 @@ void Player::acction() {
         std::cout << "abro un puerta" << std::endl;
         if (y.second.is_locked()) {
           for (auto &key_id : this->inventory.get_keys()) {
-            if(key_id.second > 0 && y.second.unlock(key_id.first)){
+            if (key_id.second > 0 && y.second.unlock(key_id.first)) {
               key_id.second -= 1;
               break;
-            };
+            }
           }
         }
-      y.second.toggle();
+        y.second.toggle();
       }
     }
   }
@@ -154,10 +181,7 @@ bool Player::is_in_hitbox(float x, float y) {
   return this->position.is_in_hitbox(x, y);
 }
 
-int Player::get_shots_fired() 
-{
-  return this->inventory.get_shots_fired();
-}
+int Player::get_shots_fired() { return this->inventory.get_shots_fired(); }
 
 int Player::get_ammo() { return this->inventory.get_ammo(); }
 
@@ -172,17 +196,19 @@ void Player::process_near_item() {
   // this->get_pos_y() << std::endl;
   int current_id = map->get_id(this->get_pos_x(), this->get_pos_y());
 
-  if ((current_id >= 49 && current_id <= 52) || current_id == 44 || current_id == 45) {
+  if ((current_id >= 49 && current_id <= 52) || current_id == 44 ||
+      current_id == 45) {
     if (this->inventory.handle_item(current_id)) {
       this->map->remove_item(this->get_pos_x(), this->get_pos_y());
     }
   }
-  if (id <= 46 && id >= 48) { // CAMBIE CHAR POR INT el ID DE PLAYER!
-    this->heal(id);
-    this->map->remove_item((int)this->get_pos_x(), (int)this->get_pos_y());
+
+  if (current_id >= 46 && current_id <= 48) { // CAMBIE CHAR POR INT el ID DE PLAYER!
+    if (this->heal(current_id))
+      this->map->remove_item((int)this->get_pos_x(), (int)this->get_pos_y());
   }
-  if (id <= 53 && id >= 56) {
-    this->collect_treasure(id);
+  if (current_id >= 53 && current_id <= 56) {
+    this->collect_treasure(current_id);
     this->map->remove_item(this->get_pos_x(), this->get_pos_y());
   }
 }
@@ -197,6 +223,28 @@ void Player::process_near_item() {
     int Player::get_shots(){
       return this->get_shots_fired();
     }
+
+void Player::die() {
+  this->is_alive = false;
+  this->death_timer.start();
+  if (this->get_current_weapon_id() != 0 &&
+      this->get_current_weapon_id() != 1) {
+    this->map->add_item(this->get_current_weapon_id(), this->get_pos_x(),
+                        this->get_pos_y());
+  }
+  this->map->add_item(49, this->get_pos_x(),
+                      this->get_pos_y()); // agrego la municion
+  for (auto &key_id : this->inventory.get_keys()) {
+    if (key_id.second > 0) {
+      this->map->add_item(key_id.first, this->get_pos_x(), this->get_pos_y());
+      break; // solo tira una llave
+    }
+  };
+  this->inventory.reset();
+  if (this->lives == 0) {
+    this->finished = true;
+  }
+}
 
 // player_t Player::get_info(){
 //   player_t player_info;

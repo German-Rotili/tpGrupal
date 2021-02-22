@@ -34,6 +34,7 @@ private:
     bool placed = false;
     int spawn_x;
     int spawn_y;
+    int max_hitpoints = 300;
     int hitpoints = 300;
     int lives = 5;
     int score = 0;
@@ -44,6 +45,7 @@ private:
     void acction();
     void intersects(float impx, float impy, Player &player);
     void process_near_item();
+    void die();
 
     //life
 public:
@@ -72,7 +74,7 @@ public:
     float get_distance(Player *player);
     float get_angle_difference(Position position);
     float get_angle_difference(float x, float y); 
-    void heal(char id);
+    bool heal(char id);
     void collect_treasure(char id);
     bool is_finished();
     bool is_in_hitbox(float x, float y);

@@ -160,7 +160,14 @@ bool Map::is_impactable(int x, int y) {
   return (this->is_solid(squareId));
 }
 
-Map::~Map() {}
+Map::~Map() {
+   for (Player *player : this->players) {
+    free(player);
+  }
+  for (Rocket *rocket : this->rockets) {
+    free(rocket);
+  }
+}
 
 int Map::get_id(int x, int y) { return this->map[x][y]; }
 
@@ -179,6 +186,8 @@ bool Map::is_door(int id) {
 }
 
 bool Map::is_spawn(int id) { return id == 58; }
+
+
 
 Map::Map(std::vector<char> raw_map) : raw_map{raw_map} {
   std::string map_aux(raw_map.data());

@@ -25,9 +25,11 @@ int Inventory::get_ammo() { return this->ammo; }
 
 void Inventory::spend_ammo(int ammo_spent) { this->ammo -= ammo_spent; }
 
-void Inventory::add_ammo() 
+bool Inventory::add_ammo() 
 {
+  if(this->ammo == this->max_ammo) return false;
   this->ammo += 20;
+  if(this->ammo > this->max_ammo) this->ammo = this->max_ammo;
 }
 
 char Inventory::get_current_weapon_id() { return this->current_weapon; }
@@ -35,8 +37,7 @@ char Inventory::get_current_weapon_id() { return this->current_weapon; }
 bool Inventory::handle_item(char id) 
 {
   if(id == 49){
-    this->add_ammo();
-    return true;
+    return this->add_ammo();
   }
   if(id == 44 || id == 45){
     this->keys[id] += 1;
@@ -68,7 +69,11 @@ bool Inventory::handle_item(char id)
 
 void Inventory::tick() 
 {
+  if(this->ammo == 0){
+    this->current_weapon = 0;
+  }
   this->weapons[MACHINE_GUN]->tick();
+
 }
 
 std::map<char, int>& Inventory::get_keys() 
@@ -86,6 +91,20 @@ int Inventory::get_shots_fired()
   return this->shots_fired;
 }
 
+void Inventory::reset() 
+{
+  this->owned_weapons[KNIFE] = true;
+  this->owned_weapons[PISTOL] = true;
+  this->owned_weapons[MACHINE_GUN] = false;
+  this->owned_weapons[CHAIN_GUN] = false;
+  this->owned_weapons[ROCKET_LAUNCHER] = false;
+  this->current_weapon = 1;
+  this->ammo = 8;
+  this->keys[44] = 0;
+  this->keys[45] = 0;
+  
+}
+
 
 Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   this->map = map;
@@ -97,20 +116,24 @@ Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
   this->weapons[CHAIN_GUN] = new Chain_gun(this->map, this->config, this);
   this->weapons[ROCKET_LAUNCHER] = new Rocket_launcher(this->map, this->config, this);
 
-  this->owned_weapons[KNIFE] = true;
-  this->owned_weapons[PISTOL] = true;
-  this->owned_weapons[MACHINE_GUN] = true;
-  this->current_weapon = 1;
-  this->ammo = 300;
-  this->keys[44] = 0;
-  this->keys[45] = 0;
-  
+
+  this->reset();
 
   // this->ammo = Config.initialammo;
 }
 
+Inventory::~Inventory() 
+{
+  free(this->weapons[KNIFE]);
+  free(this->weapons[PISTOL]);
+  free(this->weapons[MACHINE_GUN]);
+  free(this->weapons[CHAIN_GUN]);
+  free(this->weapons[ROCKET_LAUNCHER]);
+}
+
 void Inventory::change_weapon(char intention) 
 {
+  if(this->ammo == 0) return;
   if(this->owned_weapons[intention]){
     this->current_weapon = intention;
   }

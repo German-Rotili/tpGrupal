@@ -16,6 +16,7 @@ class Inventory{
 private:
     Player *player;
     int ammo = 300;
+    int max_ammo = 300;
     char current_weapon = 1;
     std::map<char, Weapon*> weapons;
     bool owned_weapons[NUMBER_OF_WEAPONS];
@@ -26,13 +27,14 @@ private:
 
 public:
     Inventory(Player*, Map*, Config *);
+    ~Inventory();
     bool pick_up_weapon();
     void change_weapon(char);
     Player* get_player();
     void attack();
     int get_ammo();
     void spend_ammo(int);
-    void add_ammo();
+    bool add_ammo();
     char get_current_weapon_id();
     bool* get_weapons();
     bool handle_item(char id);
@@ -40,6 +42,7 @@ public:
     std::map<char, int> &get_keys();
     void shot_fired();
     int get_shots_fired();
+    void reset();
 };
 
 

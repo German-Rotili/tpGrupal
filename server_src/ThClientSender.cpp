@@ -10,14 +10,14 @@ void ThClientSender::run(){
                 char snapshot_id = SNAP_ID;
 
                 /*****SEND ACTIONS****/            
-                this->protocol.send_char(action_id);
+                this->protocol->send_char(action_id);
                 msg = serializer.serialize_action(snapshot);
-                this->protocol.send_standard_msg(msg);
+                this->protocol->send_standard_msg(msg);
 
                 /*****SEND SNAPSHOT****/
-                this->protocol.send_char(snapshot_id);
+                this->protocol->send_char(snapshot_id);
                 msg = serializer.serialize_snapshot(snapshot);
-                this->protocol.send_standard_msg(msg);
+                this->protocol->send_standard_msg(msg);
             }
          } catch (std::exception const& e) {
             std::cout << "ThSender Closed ";
@@ -31,15 +31,15 @@ void ThClientSender::run(){
 
 
 void ThClientSender::send_scores(int amount){
-    this->protocol.send_scores(amount);
+    this->protocol->send_scores(amount);
 }
 void ThClientSender::send_score( std::vector<char> & username, int score, int kills, int shots ){
-    this->protocol.send_score(username, score, kills, shots);
+    this->protocol->send_score(username, score, kills, shots);
 }
 
 
 
-ThClientSender::ThClientSender(Protocol& protocol):protocol(protocol),state(true){}
+ThClientSender::ThClientSender(Protocol *protocol):protocol(protocol),state(true){}
 
 ThClientSender::~ThClientSender(){
     this->snapshots.close_queue();

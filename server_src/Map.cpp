@@ -35,7 +35,7 @@ void Map::tick() {
     auto i = std::begin(this->rockets);
     while (i != this->rockets.end()) {
       if ((*i)->tick()) {
-        free(*i);
+        delete *i;
         i = this->rockets.erase(i);
       } else {
         i++;
@@ -162,10 +162,10 @@ bool Map::is_impactable(int x, int y) {
 
 Map::~Map() {
    for (Player *player : this->players) {
-    free(player);
+    delete player;
   }
   for (Rocket *rocket : this->rockets) {
-    free(rocket);
+    delete rocket;
   }
 }
 
@@ -238,7 +238,7 @@ void Map::populate_variables() {
   this->game_timer.start();
 }
 
-void Map::execute_intentions(std::vector<char> &intentions, int &client_id) {
+void Map::execute_intentions(std::vector<char> intentions, int client_id) {
 
   for (Player *player : this->players) {
 

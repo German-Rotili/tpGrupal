@@ -36,9 +36,8 @@ void ThServer::run(){
         while (this->state){
             Socket peer;
             server.socket_accept(peer);
-            Protocol protocol(std::move(peer));
             this->threads.push_back(new 
-                ThClient(std::move(protocol), this->game_handler));
+                ThClient(new Protocol(std::move(peer)), this->game_handler));
 
             (this->threads.back())->start();
             remove_dead(this->threads);

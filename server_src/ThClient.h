@@ -21,7 +21,7 @@ class GamePlay;
 class ThClient : public Thread{
 private:
     int client_id;
-    Protocol protocol;
+    Protocol *protocol;
     ProtectedQueueIntention *intentions;
     std::mutex m;
     std::vector<char> username;
@@ -37,7 +37,7 @@ private:
     void receiver_loop();
 
 public:
-    ThClient(Protocol&& Protocol, GameHandler & game_handler);
+    ThClient(Protocol *Protocol, GameHandler & game_handler);
     ~ThClient();
     void run() override;
     void start_game();

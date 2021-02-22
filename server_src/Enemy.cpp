@@ -42,9 +42,9 @@ void Enemy::attack_players(std::vector<char> & intention){
     lua_getglobal(this->L, "ProcessSnapshot");
         if (lua_isfunction(this->L, -1)){
             lua_createtable(L, 2, 0); //Creo la tabla que va a tener players y enemigo.
-                
+
                 lua_pushnumber(L, 1); //Creo la tabla de players y lleno de datos.
-                lua_createtable(L, players_id.size() , 0); 
+                lua_createtable(L, players_id.size() , 0);
                 int index = 1;
 
             for (player_t &player : snapshot.players){
@@ -57,13 +57,13 @@ void Enemy::attack_players(std::vector<char> & intention){
 
                         lua_pushnumber(L,  player.pos_y);
                         lua_setfield(L, -2, "pos_y");
-                        
+
                         lua_pushnumber(L,  player.player_id);
                         lua_setfield(L, -2, "id");
 
                         lua_pushnumber(L,  player.health);
                         lua_setfield(L, -2, "health");
-                        
+
                     lua_settable(this->L, -3);
                     index +=1;
                 }
@@ -74,11 +74,11 @@ void Enemy::attack_players(std::vector<char> & intention){
             //Enemigo Actual
             player_t enemy_aux = snapshot.get_player(this->enemy_id);
             lua_pushnumber(L, 2);
-            lua_createtable(L, 3, 0); 
-               
+            lua_createtable(L, 3, 0);
+
                 lua_pushnumber(L,  enemy_aux.pos_x);
                 lua_setfield(L, -2, "pos_x");
-                
+
                 lua_pushnumber(L,  enemy_aux.pos_y);
                 lua_setfield(L, -2, "pos_y");
 
@@ -88,13 +88,13 @@ void Enemy::attack_players(std::vector<char> & intention){
             lua_settable(this->L, -3);
 
             if (CheckLua(L, lua_pcall(L, 1, 1, 0))){
-                intention.push_back((const char)*lua_tolstring(L, -1, &(one)) ); 
+                intention.push_back((const char)*lua_tolstring(L, -1, &(one)) );
             }
         }
 }
 
 void Enemy::run(){
-        if(!CheckLua(L, luaL_dofile(L, "EnemyLogic.lua"))){
+        if(!CheckLua(L, luaL_dofile(L, "../server_src/EnemyLogic.lua"))){
             std::cout << "Enemys not available" <<std::endl;
         }
 
@@ -104,7 +104,7 @@ void Enemy::run(){
             lua_settop(this->L, 0);
             std::vector<char> intention;
             this->attack_players(intention);
-            Intention intention_aux(this->enemy_id, intention);             
+            Intention intention_aux(this->enemy_id, intention);
             this->intentions->add_element(intention_aux);
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();

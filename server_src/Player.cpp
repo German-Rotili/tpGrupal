@@ -21,20 +21,20 @@ void Player::execute_intention(char intention) {
 
     }
     if (intention == ACTION) {
-      std::cout << "action" << std::endl;
+      // std::cout << "action" << std::endl;
 
       this->acction();
     }
     if (intention == ATTACK) {
-      std::cout << "attack" << std::endl;
+      // std::cout << "attack" << std::endl;
       this->attack();
     }
 
     int intention_aux = intention - '0' -1 ;
     if (intention_aux == KNIFE || intention_aux == PISTOL || intention_aux == MACHINE_GUN ||
         intention_aux == CHAIN_GUN || intention_aux == ROCKET_LAUNCHER) {
-      std::cout << "Arma cambiada: " << intention_aux << std::endl;
-      std::cout << "Arma intencion: " << intention << std::endl;
+      // std::cout << "Arma cambiada: " << intention_aux << std::endl;
+      // std::cout << "Arma intencion: " << intention << std::endl;
       this->inventory.change_weapon(intention_aux);
     }
   }
@@ -72,7 +72,7 @@ void Player::tick()
 
 void Player::set_spawn(int x, int y) { 
   this->position.set_position(x, y); 
-  std::cout << "Player " << this->id << " X: " << x << "Y: "<<y<<std::endl;
+  // std::cout << "Player " << this->id << " X: " << x << "Y: "<<y<<std::endl;
   this->spawn_x = x;
   this->spawn_y = y;
   this->placed = true;

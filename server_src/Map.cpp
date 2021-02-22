@@ -130,7 +130,7 @@ bool Map::is_item(char id) { return (id <= 56 && id >= 46); }
 
 bool Map::valid_position(int x, int y) {
   if (x < 0 || x >= this->map.size() || y < 0 || y >= this->map[x].size()) {
-    std::cout << "en x: " << x << " y: " << y << "fuera de rango" << std::endl;
+    // std::cout << "en x: " << x << " y: " << y << "fuera de rango" << std::endl;
     return false;
   }
   int squareId = this->get_id(x, y);
@@ -139,8 +139,8 @@ bool Map::valid_position(int x, int y) {
     return false;
   }
   if (this->is_door(squareId)) {
-    std::cout << "en x: " << x << " y: " << y << "door id: " << squareId
-              << std::endl;
+    // std::cout << "en x: " << x << " y: " << y << "door id: " << squareId
+              // << std::endl;
 
     return this->doors.find(x)->second.find(y)->second.is_walkable();
   }
@@ -207,10 +207,10 @@ void Map::populate_variables() {
         this->doors[x].insert(std::pair<int, Door>(y, Door(id)));
       }
       if (this->is_spawn(id)) {
-        std::cout << "is spawn" << std::endl;
+        // std::cout << "is spawn" << std::endl;
         for (Player *player : this->players) {
           if (!player->is_placed()) {
-            std::cout << "placing" << std::endl;
+            // std::cout << "placing" << std::endl;
             player->set_spawn(x, y);
             break;
           }

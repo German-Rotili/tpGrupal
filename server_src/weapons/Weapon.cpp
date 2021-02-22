@@ -46,7 +46,7 @@ void Weapon::fire(float angle) {
   HitscanRaycast raycaster;
   std::pair<float, float> impact =
       raycaster.get_impact_point(this->map, this->inventory->get_player());
-  std::cout << "impact point x : " << impact.first << " impact point y : " << impact.second << std::endl;
+  // std::cout << "impact point x : " << impact.first << " impact point y : " << impact.second << std::endl;
   float xpos, ypos;
   xpos = this->inventory->get_player()->get_pos_x();
   ypos = this->inventory->get_player()->get_pos_y();
@@ -61,7 +61,7 @@ void Weapon::fire(float angle) {
   } else {
     xdir = -1;
   }
-  std::cout << "xdir : "  << xdir << " ydir: " << ydir << std::endl;
+  // std::cout << "xdir : "  << xdir << " ydir: " << ydir << std::endl;
   float dist;
   Player *player_hit;
   float distance = 0;

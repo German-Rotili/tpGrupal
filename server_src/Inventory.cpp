@@ -17,7 +17,7 @@
 Player* Inventory::get_player() { return this->player; }
 
 void Inventory::attack() { 
-  std::cout << this->get_player()->get_direction() << "DIRECCION";
+  // std::cout << this->get_player()->get_direction() << "DIRECCION";
 this->weapons[current_weapon]->attack(); 
   }
 

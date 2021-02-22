@@ -19,7 +19,7 @@ Machine_gun::Machine_gun(Map *map, Config *config, Inventory *inventory)  : Weap
 void Machine_gun::tick() {
 
   if (this->is_in_burst && !this->is_in_cooldown()) {
-    std::cout << "tick" << std::endl;
+    // std::cout << "tick" << std::endl;
     float angle = this->get_shot_angle();
     this->fire(angle);
     this->last_shot_timer.start();
@@ -37,7 +37,7 @@ void Machine_gun::tick() {
 
 
 void Machine_gun::attack() {
-      std::cout << "MACHINE GUN ATTACK" << std::endl;
+      // std::cout << "MACHINE GUN ATTACK" << std::endl;
 
   if (!this->is_burst_in_cooldown() && this->has_ammo() && !this->is_in_burst) {
     this->start_burst();

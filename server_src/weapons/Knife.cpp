@@ -25,7 +25,7 @@ void Knife::attack() {
 
       if (distance < this->range &&
           this->inventory->get_player()->get_angle_difference(pos_x, pos_y) <= 50) {
-            std::cout << "hay un player que la comio" << std::endl;
+            // std::cout << "hay un player que la comio" << std::endl;
         if (min_distance == 0 || distance < min_distance) {
           closest_player = player;
         }

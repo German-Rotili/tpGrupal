@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <atomic>
 
 #define MAX_BUFFER_SIZE 256
 

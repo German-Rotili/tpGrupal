@@ -26,7 +26,7 @@ void Machine_gun::tick() {
     this->inventory->spend_ammo(this->ammo_cost);
     this->burst_counter += 1;
     // check if voley is over.
-    if(this->burst_counter >= this->burst_lenght && this->has_ammo()){
+    if((this->burst_counter >= this->burst_lenght) || !this->has_ammo()){
         this->is_in_burst = false;
         this->burst_counter = 0;
         this->burst_timer.start();

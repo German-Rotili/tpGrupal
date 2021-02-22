@@ -1,16 +1,18 @@
 #ifndef __ROCKET_H__
 #define __ROCKET_H__
 
+#include "../Player.h"
+#include "../Map.h"
+#include "../Config.h"
 class Map;
-class Config;
-
-
+class Player;
 class Rocket
 {
 private:
-    float velocity;
-    float explotion_radius;
-    float damage;
+    Player *player;
+    float velocity = 0.1;
+    float explotion_radius = 2;
+    float damage = 10;
     float direction;
     float x_pos;
     float y_pos;
@@ -24,7 +26,7 @@ private:
     bool colides_with_player(); //REVISAR si la velocidad es suficiente para pasar por la hitbox sin explotar. 
 
 public:
-    Rocket(Map *, Config *, float dir_x, float dir_y, float direction);
+    Rocket(Map *, Config *,Player *, float dir_x, float dir_y, float direction);
 
     bool tick();
     float get_pos_x();

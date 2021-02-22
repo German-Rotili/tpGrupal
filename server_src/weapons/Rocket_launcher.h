@@ -5,14 +5,16 @@
 class Map;
 class Config;
 
+
 class  Rocket_launcher : public Weapon{
 private:
-    Map *map;
-    Config *config;
+
 
 public:
 
     Rocket_launcher(Map *, Config *, Inventory *);
     bool fire();
+    void attack() override;
+
 };
 #endif // __ROCKET_LAUNCHER_H__

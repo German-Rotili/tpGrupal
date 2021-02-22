@@ -9,6 +9,7 @@
 #include "weapons/Weapon.h"
 #include "Inventory.h"
 #include "Config.h"
+#include "../common_src/Timer.h"
 
 void Player::execute_intention(char intention) {
   if (this->is_alive) {
@@ -27,7 +28,7 @@ void Player::execute_intention(char intention) {
       this->attack();
     }
 
-    int intention_aux = intention - '0';
+    int intention_aux = intention - '0' -1 ;
     if (intention_aux == KNIFE || intention_aux == PISTOL || intention_aux == MACHINE_GUN ||
         intention_aux == CHAIN_GUN || intention_aux == ROCKET_LAUNCHER) {
       std::cout << "Arma cambiada: " << intention_aux << std::endl;
@@ -37,14 +38,24 @@ void Player::execute_intention(char intention) {
   }
 }
 
-void Player::get_damaged(int damage) 
+bool Player::get_damaged(int damage) 
 {
   this->hitpoints -= damage;
+  if(this->hitpoints <= 0){
+    this->is_alive = false;
+    this->death_timer.start();
+    return true;
+  }
   
 }
 
 void Player::tick() 
 {
+  if(!this->is_alive && respawn_time <= this->death_timer.elapsed_time()){
+    this->position.set_position(spawn_x, spawn_y);
+    this->is_alive = true;
+    this->hitpoints = 300;
+  }
   this->inventory.tick();
 }
 
@@ -68,6 +79,11 @@ int Player::get_lives()
 int Player::get_score() 
 {
   return this->score;
+}
+
+void Player::add_kill_points() 
+{
+  this->score += 100;
 }
 
 
@@ -105,9 +121,11 @@ void Player::heal(char id)
   
 }
 
+
+
 void Player::collect_treasure(char id) 
 {
-  
+  this->score += 20;
 }
 
 void Player::attack() { this->inventory.attack(); }

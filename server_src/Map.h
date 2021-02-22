@@ -3,21 +3,20 @@
 
 #include <vector>
 #include <map>
-#include "Config.h"
-class Rocket;
-class Action;
-class Door;
-class Player;
-
-class GamePlay;
 #include "./weapons/Rocket.h"
+#include "Config.h"
 #include "../common_src/Action.h"
 #include "Player.h"
 #include "Door.h"
+class Action;
+class Door;
+class Player;
+class Rocket;
+class GamePlay;
 class Map {
 private:
   std::vector<Player*> players;
-  std::vector<Rocket> rockets;
+  std::vector<Rocket*> rockets;
   std::vector<Action> actions;
   std::vector<std::vector<int>> map;
   std::vector<char> raw_map;
@@ -47,7 +46,7 @@ public:
   std::map<int, std::map<int, Door>> get_doors();
 
   void start();
-  void add_rocket(Rocket Rocket);
+  void add_rocket(float posx, float posy, float direction, Player *);
   bool is_item(char id);
 
   bool valid_position(int x, int y);

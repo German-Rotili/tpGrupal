@@ -1,18 +1,20 @@
 #include "Rocket.h"
+#include "../Map.h"
+#include "../Config.h"
 #include "../Constants.h"
 #include <algorithm>
 #include <math.h>
 
-#include "../Map.h"
-#include "../Config.h"
 #include "../Player.h"
 
-Rocket::Rocket(Map * map, Config *config, float pos_x, float pos_y,
-               float direction):map(map), config{config}
-               {
+Rocket::Rocket(Map * map, Config *config, Player *player, float pos_x, float pos_y,
+               float direction){
   this->y_pos = pos_y;
   this->x_pos = pos_x;
   this->direction = direction;
+  this->map = map;
+  this->config = config;
+  this->player = player;
 }
  //fix self explode.
 void Rocket::update_position() {
@@ -37,12 +39,14 @@ bool Rocket::tick() {
 
 void Rocket::explode() {
   for (Player *player : this->map->get_players()) {
-    float distance = player->get_distance(this->x_pos, this->y_pos);
-    if (distance <= this->explotion_radius) {
-      player->get_damaged(this->damage * (this->explotion_radius) /
-                         std::min(this->explotion_radius, distance));
+    if(this->player->get_id() != player->get_id()){
+      float distance = player->get_distance(this->x_pos, this->y_pos);
+      if (distance <= this->explotion_radius) {
+        player->get_damaged(this->damage * (this->explotion_radius) /
+                          std::min(this->explotion_radius, distance));
+      }
     }
-    // avisar al action helper que exploto y donde.
+    this->map->add_action(-1, 0, this->x_pos, this->y_pos);
   }
 }
 float Rocket::get_pos_y() {
@@ -61,7 +65,7 @@ float Rocket::get_x_offset() {
 
 bool Rocket::colides_with_player() {
     for (Player *player : this->map->get_players()) {
-        if(player->is_in_hitbox(this->x_pos, this->y_pos)){
+        if(player->is_in_hitbox(this->x_pos, this->y_pos) && player->get_id() != this->player->get_id()){
             this->explode();
             return true;
         }

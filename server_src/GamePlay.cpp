@@ -111,11 +111,11 @@ void GamePlay::append_actions(Snapshot &snapshot){
 }
 
 void GamePlay::append_rockets(Snapshot &snapshot){
-    for(Rocket &rocket : this->map.rockets){
+    for(Rocket *rocket : this->map.rockets){
          object_t object_aux;
          object_aux.id = 35;
-         object_aux.pos_x = rocket.get_pos_x();
-         object_aux.pos_y = rocket.get_pos_y();
+         object_aux.pos_x = rocket->get_pos_x();
+         object_aux.pos_y = rocket->get_pos_y();
          object_aux.state = false;
          snapshot.add_object(object_aux);
     }

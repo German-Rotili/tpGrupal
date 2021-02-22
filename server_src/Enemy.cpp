@@ -71,36 +71,9 @@ void Enemy::attack_players(std::vector<char> & intention){
 
             lua_settable(this->L, -3);
 
-            // //TABLA OBJETOS
-            // lua_pushnumber(L, 2); //Creo la tabla de objectos.
-            // lua_createtable(L, snapshot.objects.size() , 0); 
-            // index = 1;
-            // for (object_t &object : snapshot.objects){
-            //     lua_pushnumber(L, index); // tabla para un objeto.
-            //     lua_createtable(L, 4, 0); 
-
-            //         lua_pushnumber(L,  object.pos_x);
-            //         lua_setfield(L, -2, "pos_x");
-
-            //         lua_pushnumber(L,  object.pos_y);
-            //         lua_setfield(L, -2, "pos_y");
-
-            //         lua_pushnumber(L,  object.id);
-            //         lua_setfield(L, -2, "id");
-
-            //         lua_pushboolean(L,  object.state);
-            //         lua_setfield(L, -2, "state");
-                        
-            //     lua_settable(this->L, -3);
-            //     index +=1;
-            // }
-
-            // lua_settable(this->L, -3);
-
             //Enemigo Actual
             player_t enemy_aux = snapshot.get_player(this->enemy_id);
-            // snapshot.print();
-            lua_pushnumber(L, 2); //Creo la tabla de objectos.
+            lua_pushnumber(L, 2);
             lua_createtable(L, 3, 0); 
                
                 lua_pushnumber(L,  enemy_aux.pos_x);
@@ -135,12 +108,12 @@ void Enemy::run(){
             this->intentions->add_element(intention_aux);
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
-            // unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-            // int sleep_time = 1000000/FPS - elapsed_microseconds;
-            // if (sleep_time > 0) {
-            //     usleep(1000000/FPS - elapsed_microseconds);
-            // }else{
-            //     std::cout << "Bajada FPS" << std::endl;
-            // }
+            unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+            int sleep_time = 1000000/FPS - elapsed_microseconds;
+            if (sleep_time > 0) {
+                usleep(1000000/FPS - elapsed_microseconds);
+            }else{
+                std::cout << "Bajada FPS" << std::endl;
+            }
         }
 }

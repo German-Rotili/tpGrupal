@@ -5,6 +5,7 @@
 #include "../Inventory.h"
 #include "../Map.h"
 #include <chrono>
+#include <iostream>
 void Weapon::fire(float angle) {
   /*
   tira un raycast. se obtiene la posicion maxima.
@@ -44,7 +45,7 @@ void Weapon::fire(float angle) {
   HitscanRaycast raycaster;
   std::pair<float, float> impact =
       raycaster.get_impact_point(this->map, this->inventory->get_player());
-
+  std::cout << "impact point x : " << impact.first << " impact point y : " << impact.second << std::endl;
   float xpos, ypos;
   xpos = this->inventory->get_player()->get_pos_x();
   ypos = this->inventory->get_player()->get_pos_y();
@@ -110,7 +111,11 @@ void Weapon::fire(float angle) {
   }
   // una vez que termino las colisiones
   if (distance != 0) {
-    player_hit->get_damaged(this->get_damage(distance));
+    if(player_hit->get_damaged(this->get_damage(distance))){
+      this->inventory->get_player()->add_kill_points();
+      impact.first = player_hit->get_pos_x();
+      impact.second = player_hit->get_pos_y();
+    };
     // appendear la accion al helper de acciones.
   }
   this->map->add_action(this->inventory->get_player()->get_id(), this->inventory->get_current_weapon_id(),impact.first,impact.second);
@@ -139,6 +144,7 @@ Weapon::Weapon(Map *map, Config *config, Inventory *inventory)
   this->map = map;
   this->inventory = inventory;
   this->config = config;
+  this->last_shot_timer.start();
 }
 
 

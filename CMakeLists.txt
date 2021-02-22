@@ -1,4 +1,11 @@
 # Define the project name
+
+OPTION(DEVELOPMENT "DEVELOPMENT MODE" OFF) # Disabled by default
+
+IF(DEVELOPMENT)
+    ADD_DEFINITIONS(-DDEVELOPMENT)
+ENDIF(DEVELOPMENT)
+
 project(wolfenstein)
 
 cmake_minimum_required(VERSION 3.0.0)
@@ -42,15 +49,14 @@ TARGET_LINK_LIBRARIES(${PROJECT_NAME}_client ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRA
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}_server ${YAML_CPP_LIBRARIES}) 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}_editor ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2TTF_LIBRARIES} ${YAML_CPP_LIBRARIES})
 
-
-file(COPY resources DESTINATION ./)
+#file(COPY resources DESTINATION ./)
 
 message("[INFO] Adding Installation directives")
-install(TARGETS ${PROJECT_NAME}_client ${PROJECT_NAME}_server ${PROJECT_NAME}_editor DESTINATION /usr/bin) #va a ir a :${CMAKE_INSTALL_PREFIX}/usr/bin
+install(TARGETS ${PROJECT_NAME}_client ${PROJECT_NAME}_server ${PROJECT_NAME}_editor DESTINATION /usr/bin) 
 install(DIRECTORY resources/config 
 resources/fonts 
 resources/music 
 resources/sounds 
 resources/textures 
-DESTINATION /var/${PROJECT_NAME}) #va a ir a :${CMAKE_INSTALL_PREFIX}/var/wolfenstein
+DESTINATION /var/${PROJECT_NAME}) 
 

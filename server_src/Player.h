@@ -16,6 +16,8 @@
 // dispara, abre puerta, recibe daño, etc. 
 #include "Position.h"
 #include "Inventory.h"
+#include "../common_src/Timer.h"
+
 class Config;
 
 class Player{
@@ -25,12 +27,14 @@ private:
     bool is_alive = true;
     Map *map;
     Inventory inventory;
+    Timer death_timer;
+    int respawn_time = 5000;
     bool placed = false;
     int spawn_x;
     int spawn_y;
     int hitpoints = 300;
     int lives = 5;
-    int score = 200;
+    int score = 0;
 
     void attack();
     void acction();
@@ -54,9 +58,9 @@ public:
     int get_hitpoints();
     int get_lives();
     int get_score();
-   
+    void add_kill_points();
     void execute_intention(char intention);
-    void get_damaged(int damage);
+    bool get_damaged(int damage);
     void tick();
     float get_hitbox_radius();
     float get_distance(Position position);

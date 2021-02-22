@@ -131,11 +131,11 @@ void GamePlay::append_actions(Snapshot &snapshot){
 }
 
 void GamePlay::append_rockets(Snapshot &snapshot){
-    for(Rocket &rocket : this->map.rockets){
+    for(Rocket *rocket : this->map.rockets){
          object_t object_aux;
          object_aux.id = 35;
-         object_aux.pos_x = rocket.get_pos_x();
-         object_aux.pos_y = rocket.get_pos_y();
+         object_aux.pos_x = rocket->get_pos_x();
+         object_aux.pos_y = rocket->get_pos_y();
          object_aux.state = false;
          snapshot.add_object(object_aux);
     }
@@ -152,6 +152,7 @@ void GamePlay::run(){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 
             int index = 0;
+            this->map.tick();
             while (!this->intentions->is_empty() || index == MAX_INTENTION_PER_FRAME){//analizar poner una cantidad fija para que no se llene mientras loopea EJ hacer un FOR
                 try{
                     Intention intention_aux = this->intentions->get_element();

@@ -89,6 +89,8 @@ void World::agregarObjetoDinamico(object_t & object) {
   double y = object.pos_y + 0.5;
   switch (object.id) {
     case 35:
+    x -= 0.5;
+    y -= 0.5;
     objetosDinamicos.push_back(new Object(x, y, basic_clip, src.tx_rocket, myPlayer, settings));
     break;
     case 44:
@@ -140,6 +142,7 @@ void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
         myPlayer.setDirection(player.direction);
         myPlayer.setHealth(player.health);
         myPlayer.setLives(player.lives);
+        myPlayer.setCantBalas(player.ammo);
         myPlayer.setArmaActual(player.current_weapon);
         myPlayer.setScore(player.score);
       } else {

@@ -14,7 +14,7 @@
 
 Pistol::Pistol(Map *map, Config *config, Inventory *inventory) : Weapon{map, config, inventory} {
     this->max_damage = 20; //config->get_max_damage(PISTOL);
-    this->max_spread = 5; //config->get_max_spread(PISTOL);
+    this->max_spread = 20; //config->get_max_spread(PISTOL);
     this->inventory = inventory;
 }
 

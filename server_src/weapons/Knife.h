@@ -8,8 +8,8 @@ class Config;
 class  Knife : public Weapon{
 private:
     /* data */
-    float range;
-    int damage;
+    float range = 1;
+    int damage = 5;
 public:
      Knife(Map *, Config *, Inventory *);
     void attack();

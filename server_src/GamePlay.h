@@ -16,6 +16,8 @@
 #include "Map.h"
 #include "Door.h"
 #include "Constants.h"
+#include "Enemy.h"
+
 class ThClient; 
 class ThClientSender; 
 class GameHandler;
@@ -30,6 +32,7 @@ private:
     std::vector<std::vector<char>> usernames;
     ProtectedQueueIntention *intentions;
     std::vector <ThClient*> clients;
+    std::vector <Enemy*> enemys;
     std::vector <ThClientSender*> client_senders;
     Map map; 
     void append_players(Snapshot &snapshot);
@@ -37,7 +40,8 @@ private:
     void append_doors(Snapshot &snapshot);
     void append_actions(Snapshot &snapshot);
     void append_rockets(Snapshot &snapshot);
-
+    std::vector<int> load_players();
+    void load_enemys(std::vector<int> players_id);
 public:
     GamePlay(ThClient *player, Map&& map, int id);
     ~GamePlay();

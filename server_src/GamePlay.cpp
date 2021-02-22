@@ -11,7 +11,28 @@
 #include "ThClient.h"
 #include "Map.h"
 #include "weapons/Rocket.h"
+#include "Constants.h"
+#include "IdMaker.h"
 
+/*Static*/
+
+static const void remove_dead(std::vector<ThClientSender*> & list){
+    std::vector<ThClientSender*> temp;
+    std::vector<ThClientSender*> ::iterator it = list.begin();
+    for (; it != list.end(); ++it){
+        if ((*it)->is_dead()){
+            (*it)->join();
+            delete (*it);
+        } else{
+            temp.push_back((*it));
+        }
+    }
+    list.swap(temp);
+}
+
+/********/
+
+/*INIT*/
 GamePlay::GamePlay(ThClient *player, Map&& map, int id):map(map),state(false), id(id),blocked(false){
     this->add_client(player);
     this->host_id = player->client_id;
@@ -24,6 +45,11 @@ GamePlay::~GamePlay(){
         sender->join();
         delete sender;
     }
+    for(Enemy *enemy : this->enemys){
+        enemy->stop();
+        enemy->join();
+        delete enemy;
+    }
     delete this->intentions;
 }
 
@@ -35,8 +61,22 @@ void GamePlay::add_client(ThClient* client){
     this->clients.push_back(client);
     this->usernames.push_back(client->username);
 }
+
 std::vector<char> GamePlay::get_raw_map(){
     return this->map.get_raw_map();
+}
+/******/
+
+
+/*Snapshot Handlers*/
+Snapshot GamePlay::get_snapshot(){
+    Snapshot snapshot;
+    this->append_players(snapshot);
+    this->append_objects(snapshot);
+    this->append_doors(snapshot);
+    this->append_actions(snapshot);
+    this->append_rockets(snapshot);
+    return snapshot;
 }
 
 void GamePlay::append_players(Snapshot & snapshot){
@@ -57,15 +97,15 @@ void GamePlay::append_players(Snapshot & snapshot){
 
 void GamePlay::append_objects(Snapshot &snapshot){
    for(auto &x : this->map.items){
-       object_t object_aux;
-     for(auto &y : x.second){
-         object_aux.id = y.second;
-         object_aux.pos_x = x.first;
-         object_aux.pos_y = y.first;
-         object_aux.state = false;
-        snapshot.add_object(object_aux);
-       }
-     }
+        object_t object_aux;
+        for(auto &y : x.second){
+            object_aux.id = y.second;
+            object_aux.pos_x = x.first;
+            object_aux.pos_y = y.first;
+            object_aux.state = false;
+            snapshot.add_object(object_aux);
+        }
+    }
 }
 
 void GamePlay::append_doors(Snapshot &snapshot){
@@ -80,26 +120,6 @@ void GamePlay::append_doors(Snapshot &snapshot){
        }
     }
 }
-
-void GamePlay::stop(){
-    this->state = false;
-    this->blocked = true;
-}
-
-static const void remove_dead(std::vector<ThClientSender*> & list){
-    std::vector<ThClientSender*> temp;
-    std::vector<ThClientSender*> ::iterator it = list.begin();
-    for (; it != list.end(); ++it){
-        if ((*it)->is_dead()){
-            (*it)->join();
-            delete (*it);
-        } else{
-            temp.push_back((*it));
-        }
-    }
-    list.swap(temp);
-}
-
 
 void GamePlay::append_actions(Snapshot &snapshot){
     for(Action action : this->map.actions){
@@ -120,21 +140,7 @@ void GamePlay::append_rockets(Snapshot &snapshot){
          snapshot.add_object(object_aux);
     }
 }
-
-
-Snapshot GamePlay::get_snapshot(){
-    Snapshot snapshot;
-    this->append_players(snapshot);
-    this->append_objects(snapshot);
-    this->append_doors(snapshot);
-    this->append_actions(snapshot);
-    this->append_rockets(snapshot);
-    return snapshot;
-}
-
-bool GamePlay::is_blocked(){
-    return this->blocked;
-}
+/******************/
 
 
 /*GAME LOOP*/
@@ -143,8 +149,8 @@ void GamePlay::run(){
         this->blocked = true;
         this->state = true;
         while (this->state){
-
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
+
             int index = 0;
             while (!this->intentions->is_empty() || index == MAX_INTENTION_PER_FRAME){//analizar poner una cantidad fija para que no se llene mientras loopea EJ hacer un FOR
                 try{
@@ -162,6 +168,11 @@ void GamePlay::run(){
                     client_s->snapshots.add_element(snapshot);
                 }
             }
+            for(Enemy *enemy : this->enemys){
+                if (!enemy->snapshots.is_closed()){
+                    enemy->snapshots.add_element(snapshot);
+                }
+            }
 
             std::chrono::steady_clock::time_point end_time = std::chrono::steady_clock::now();
             unsigned int elapsed_microseconds = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
@@ -173,14 +184,11 @@ void GamePlay::run(){
             }
         }
 }
+/**********/
 
 
-int GamePlay::get_id(){
-    return this->id;
-}
-
+/*Auxiliares*/
 void GamePlay::notify_players(int & current_id){
-
     for(ThClient *client : this->clients){
         if(client->client_id != current_id && client->client_id != this->host_id){
             client->notify_players(this->usernames);
@@ -188,14 +196,48 @@ void GamePlay::notify_players(int & current_id){
     }
 }
 
+int GamePlay::get_id(){
+    return this->id;
+}
 
 void GamePlay::start_game(){
-    //Le aviso al cliente que empiece la partida.
+    std::vector<int> players_id = load_players();
+    load_enemys(players_id);
+}
+
+std::vector<int> GamePlay::load_players(){
+    std::vector<int> players_id;
     for(ThClient *client : this->clients){
         client->start_game();
         client->attach_queue(this->intentions);
+        players_id.push_back(client->client_id);
         this->map.add_player(client->client_id);
         this->client_senders.push_back(new ThClientSender(client->protocol));
         this->client_senders.back()->start();
     }
+    return players_id;
 }
+
+void GamePlay::stop(){
+    this->state = false;
+    this->blocked = true;
+}
+
+bool GamePlay::is_blocked(){
+    return this->blocked;
+}
+/**********/
+
+
+/*Enemys*/
+void GamePlay::load_enemys(std::vector<int> players_id){
+    IdMaker* id_maker = IdMaker::GetInstance();
+    for (int i = 0; i < PLAYERS - this->clients.size(); i++){
+        int enemy_id = id_maker->generate_id();
+        Enemy *new_enemy = new Enemy(enemy_id, this->intentions, players_id, this->map.map);
+        this->enemys.push_back(new_enemy);
+        this->map.add_player(enemy_id);
+        this->enemys.back()->start();
+    }
+}
+/********/

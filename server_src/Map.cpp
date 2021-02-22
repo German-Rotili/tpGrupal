@@ -151,7 +151,7 @@ void Map::populate_variables() {
 
   for (int x = 0; x < this->map.size(); x++) {
     for (int y = 0; y < this->map[y].size(); y++) {
-      std::cout << "populating x: " << x << " y: " << y << std::endl;
+      // std::cout << "populating x: " << x << " y: " << y << std::endl;
       int id = this->get_id(x,y);
 
       if (this->is_door(id)) {
@@ -185,7 +185,7 @@ void Map::execute_intentions(std::vector<char> & intentions, int & client_id){
           char aux = intentions.front();
           intentions.erase (intentions.begin());
           player->execute_intention(aux);
-        // std::cout << "caracter procesado: " <<aux <<std::endl;
+          std::cout << "caracter procesado: " <<aux << " del id: "<<client_id <<std::endl;
 
         }
       }

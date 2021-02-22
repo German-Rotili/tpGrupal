@@ -143,8 +143,9 @@ void Player::acction() {
   }
 }
 
-Player::Player(Map *map, Config *config, int id)
-    : position{Position(map, config)}, inventory{Inventory(this, map, config)} {
+Player::Player(Map *map, Config *config, int id, std::vector<char> username)
+    : position{Position(map, config)}, inventory{Inventory(this, map, config)}, username(username)
+     {
   this->id = id;
   this->map = map;
 }
@@ -185,6 +186,19 @@ void Player::process_near_item() {
     this->map->remove_item(this->get_pos_x(), this->get_pos_y());
   }
 }
+
+    std::vector<char> & Player::get_username(){
+      return this->username;
+    }
+    int Player::get_score(){
+      return this->score;
+    }
+    int Player::get_kills(){
+      return this->kills;
+    }
+    int Player::get_shots(){
+      return this->get_shots_fired();
+    }
 
 // player_t Player::get_info(){
 //   player_t player_info;

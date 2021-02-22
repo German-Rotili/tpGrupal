@@ -41,6 +41,7 @@ private:
     void append_actions(Snapshot &snapshot);
     void append_rockets(Snapshot &snapshot);
     std::vector<int> load_players();
+    void send_scores();
     void load_enemys(std::vector<int> &players_id);
 public:
     GamePlay(ThClient *player, Map&& map, int id);

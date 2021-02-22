@@ -12,7 +12,7 @@
 #include <iterator>
 #include <map>
 
-void Map::add_player(int id) {
+void Map::add_player(int id, std::vector<char> username){
   this->players.push_back(new Player(this, &(this->config), id));
 }
 

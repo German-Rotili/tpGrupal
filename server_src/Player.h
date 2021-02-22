@@ -36,8 +36,9 @@ private:
     int hitpoints = 300;
     int lives = 5;
     int score = 0;
+    int shots = 0;
     int kills = 0;
-    
+    std::vector<char> username;
     void attack();
     void acction();
     void intersects(float impx, float impy, Player &player);
@@ -47,7 +48,7 @@ private:
 public:
     Player(Map *, Config *,Position position);
     Player(Map &,Config &, float, float, float);
-    Player(Map *, Config *, int id); 
+    Player(Map *, Config *, int id, std::vector<char> username); 
 
     bool is_placed();
     float get_pos_x();
@@ -75,6 +76,11 @@ public:
     bool is_finished();
     bool is_in_hitbox(float x, float y);
     int get_shots_fired();
+    std::vector<char> & get_username();
+    int get_score();
+    int get_kills();
+    int get_shots();
+
 };
 
 #endif // __SERVER_PLAYER_H__

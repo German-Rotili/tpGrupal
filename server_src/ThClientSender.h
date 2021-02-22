@@ -33,7 +33,8 @@ public:
     void send_snapshot(Snapshot & snapshot);
 
     ~ThClientSender();
-
+    void send_score( std::vector<char> & username, int score, int kills, int shots );
+    void send_scores(int amount);
     void run() override;
     void stop();
     // bool is_dead();

@@ -33,10 +33,8 @@ void ThRequester::run() {
     while (this->state) {
         Snapshot snap_aux;
         client.receive_update(snap_aux, this->actions);   
-        snap_aux.print();     
         std::unique_lock<std::mutex> lock(this->m);
         this->snapshot = snap_aux;
-        // snap_aux.print();
     }
   } catch (std::exception const& e) {
     std::cerr << "Exception on ThRequester:" << std::endl;

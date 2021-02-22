@@ -31,6 +31,8 @@ public:
     void send_string_msg(std::string & msg);
     int receive_int();
     void close();
+    void send_score(std::vector<char>& username,int score,int kills,int shots);
+    void send_scores(int amount);
 };
 
 #endif

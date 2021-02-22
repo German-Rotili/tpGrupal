@@ -81,6 +81,20 @@ void Protocol::send_usernames(std::vector<std::vector<char>> & usernames){
     }
 }
 
+void Protocol::send_scores(int amount){
+    char end_game = 'f';
+    this->send_char(end_game);
+    this->send_integer(amount);
+}
+
+void Protocol::send_score(std::vector<char>& username,int score,int kills,int shots){
+    this->send_username(username);
+    this->send_integer(score);
+    this->send_integer(kills);
+    this->send_integer(shots);
+}
+
+
 void Protocol::send_char(char & value){
     this->socket.socket_send(&value, sizeof(char));
 }

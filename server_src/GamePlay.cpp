@@ -148,7 +148,7 @@ void GamePlay::run(){
         this->map.start();
         this->blocked = true;
         this->state = true;
-        while (this->state){
+        while (this->state && !this->map.is_game_over()){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 
             int index = 0;
@@ -163,7 +163,6 @@ void GamePlay::run(){
             }
 
             Snapshot snapshot = this->get_snapshot();
-            snapshot.print();
             remove_dead(this->client_senders);
             for(ThClientSender *client_s : this->client_senders){
                 if (!client_s->snapshots.is_closed()){
@@ -185,11 +184,25 @@ void GamePlay::run(){
                 std::cout << "Bajada FPS" << std::endl;
             }
         }
+
+        this->send_scores();
 }
 /**********/
 
 
 /*Auxiliares*/
+
+void GamePlay::send_scores(){
+    std::vector<char> username;
+    for(ThClientSender *sender : this->client_senders){
+        sender->send_scores(this->map.players.size());
+        for(Player *player : this->map.players){
+            sender->send_score(player->get_username(), player->get_score(), player.get_kills(), player.get_shots() );
+        }
+    }
+}
+
+
 void GamePlay::notify_players(int & current_id){
     for(ThClient *client : this->clients){
         if(client->client_id != current_id && client->client_id != this->host_id){
@@ -213,7 +226,7 @@ std::vector<int> GamePlay::load_players(){
         client->start_game();
         client->attach_queue(this->intentions);
         players_id.push_back(client->client_id);
-        this->map.add_player(client->client_id);
+        this->map.add_player(client->client_id, client->username);
         this->client_senders.push_back(new ThClientSender(client->protocol));
         this->client_senders.back()->start();
     }
@@ -234,11 +247,15 @@ bool GamePlay::is_blocked(){
 /*Enemys*/
 void GamePlay::load_enemys(std::vector<int> &players_id){
     IdMaker* id_maker = IdMaker::GetInstance();
+
     for (int i = 0; i < PLAYERS - this->clients.size(); i++){
         int enemy_id = id_maker->generate_id();
+        std::string bot_name = "BOT ";
+        bot_name.append(std::to_string(enemy_id));
+        std::vector<char> data(bot_name.begin(), bot_name.end());
         Enemy *new_enemy = new Enemy(enemy_id, this->intentions, players_id, this->map.map);
         this->enemys.push_back(new_enemy);
-        this->map.add_player(enemy_id);
+        this->map.add_player(enemy_id, data);
         this->enemys.back()->start();
     }
 }

@@ -53,13 +53,13 @@ function ProcessSnapshot(snapshot)
 	--angulo entre el jugador y el enemigo
 	angle = (math.atan(pos_y - enemy_pos_y, pos_x - enemy_pos_x) - 3.1426) * 180 / 3.1426
 	print("Angle: ",angle)
-	angle = angle - enemy_direction
+	angle = math.abs(angle) - enemy_direction
 	print("Angle Diff: ",angle)
-	print("Angle Diff Round: ",math.floor(angle))
+	print("Angle Diff Round: ", math.abs(math.floor(angle)))
 
 
 
-	if math.abs(math.floor(angle)) > 5 then
+	if math.abs(math.floor(angle)) > 10 then
 		response = 'd'
 		print("angle diff: ",response)
 	elseif min_distance > VALID_RANGE then

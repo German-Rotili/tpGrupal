@@ -31,6 +31,7 @@ public:
 
 friend class Serializer;
 friend class World;
+friend class Enemy;
 
 };
 

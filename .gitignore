@@ -5,9 +5,6 @@ client_src/*.o
 editor_src/*.o
 common_src/*.o
 server_src/*.o
-client_src/client
-editor_src/editor
-server_src/server
 build-development/MakeFile
 build-development/cmake_install.cmake
 build-development/CMakeFiles
@@ -26,3 +23,6 @@ build-install/wolfenstein_client
 build-install/wolfenstein_editor
 build-install/wolfenstein_server
 build-install/resources
+client_src/client
+editor_src/editor
+server_src/server

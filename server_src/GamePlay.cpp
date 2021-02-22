@@ -231,7 +231,7 @@ bool GamePlay::is_blocked(){
 
 
 /*Enemys*/
-void GamePlay::load_enemys(std::vector<int> players_id){
+void GamePlay::load_enemys(std::vector<int> &players_id){
     IdMaker* id_maker = IdMaker::GetInstance();
     for (int i = 0; i < PLAYERS - this->clients.size(); i++){
         int enemy_id = id_maker->generate_id();

@@ -100,4 +100,6 @@ std::pair<float, float> HitscanRaycast::get_impact_point(Map *map, Player *playe
         return std::make_pair(x+int(tileStepX == 1), yIntercept);
       }
     }
+    return std::make_pair(x+int(tileStepX == 1), yIntercept);
+
 }

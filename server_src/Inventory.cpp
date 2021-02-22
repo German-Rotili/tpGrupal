@@ -10,7 +10,7 @@
 #include <memory>
 #include <map>
 #include "Map.h"
-#include "Config.h"
+#include "ServerConfigHandler.h"
 #include <iostream>
 #include <memory>
 #include <iostream>
@@ -30,6 +30,7 @@ bool Inventory::add_ammo()
   if(this->ammo == this->max_ammo) return false;
   this->ammo += 20;
   if(this->ammo > this->max_ammo) this->ammo = this->max_ammo;
+  return true;
 }
 
 char Inventory::get_current_weapon_id() { return this->current_weapon; }
@@ -106,7 +107,7 @@ void Inventory::reset()
 }
 
 
-Inventory::Inventory(Player *player_passed, Map *map, Config *config) {
+Inventory::Inventory(Player *player_passed, Map *map, ServerConfigHandler *config) {
   this->map = map;
   this->config = config;
   this->player = player_passed;

@@ -8,7 +8,7 @@
 // implementar con hitbox?
 //verifica 
 class Map;
-class Config;
+class ServerConfigHandler;
 
 class Position{
 private:
@@ -19,7 +19,7 @@ private:
     float linear_vel = 0.1;
     float angular_vel = 3;
     Map *map;
-    Config *config;
+    ServerConfigHandler *config;
     float get_new_x(char);
     float get_new_y(char);
     float get_y_offset(char);
@@ -27,7 +27,7 @@ private:
     void update_angle(char);
 public:
 
-    Position(Map *, Config *);
+    Position(Map *, ServerConfigHandler *);
     void update(char);
     float get_pos_x();
     float get_pos_y();

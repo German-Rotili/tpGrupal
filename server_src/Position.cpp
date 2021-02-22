@@ -2,7 +2,7 @@
 #include <cmath>
 #include <math.h>
 #include "Map.h"
-#include "Config.h"
+#include "ServerConfigHandler.h"
 #include "Constants.h"
 #include <iostream>
 
@@ -126,9 +126,13 @@ void Position::update_angle(char intention) {
   this->angle = (this->angle > 360) ? this->angle - 360 : this->angle;
 }
 
-Position::Position(Map *map, Config *config) 
+Position::Position(Map *map, ServerConfigHandler *config) 
 {
   this->map = map;
   this->config = config;
   this->angle = 30;
+  actorStats_t stats = this->config->getPlayerStats();
+  this->hitbox_radius = stats.hitbox_radius;
+  this->linear_vel = stats.linear_vel;
+  this->angular_vel = stats.angular_vel;
 }

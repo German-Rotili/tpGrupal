@@ -16,7 +16,7 @@ private:
   bool is_burst_in_cooldown();
 
 public:
-    Machine_gun(Map *, Config *,Inventory *);
+    Machine_gun(Map *, ServerConfigHandler *,Inventory *);
     void tick();
     void attack();
     bool can_fire_next_burst_shot();

@@ -11,10 +11,11 @@ private:
   YAML::Node root;
 
 public:
+  ServerConfigHandler();
   void initConfig(std::string path);
 
   weaponStats_t getWeaponStats(WeaponType type);
 
-  actorStats_t getActorStats();
+  actorStats_t getPlayerStats();
 };
 #endif /* SERVERCONFIGHANDLER */

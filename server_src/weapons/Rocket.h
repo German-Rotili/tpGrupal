@@ -3,7 +3,7 @@
 
 #include "../Player.h"
 #include "../Map.h"
-#include "../Config.h"
+#include "../ServerConfigHandler.h"
 class Map;
 class Player;
 class Rocket
@@ -17,7 +17,7 @@ private:
     float x_pos;
     float y_pos;
     Map * map;
-    Config *config;
+    ServerConfigHandler *config;
 
     void explode();
     void update_position();
@@ -26,7 +26,7 @@ private:
     bool colides_with_player(); //REVISAR si la velocidad es suficiente para pasar por la hitbox sin explotar. 
 
 public:
-    Rocket(Map *, Config *,Player *, float dir_x, float dir_y, float direction);
+    Rocket(Map *, ServerConfigHandler *,Player *, float dir_x, float dir_y, float direction);
 
     bool tick();
     float get_pos_x();

@@ -1,24 +1,46 @@
 gun:
-  speed: 2
-  ammo: 6
-  damage: 5
+  max_damage: 10
+  max_spread: 20
+  ammo_cost: 1
+  cooldown: 100
+  stability_reset: 200
+  max_acurate_range: 10
+
+knife:
+  max_damage: 10
+  max_spread: 10
+  ammo_cost: 10
+  cooldown: 300
+  stability_reset: 10
+  max_acurate_range: 10
 
 machine gun:
-  speed: 6
-  ammo: 10
-  damage: 5
+  max_damage: 10
+  max_spread: 40
+  ammo_cost: 1
+  cooldown: 100
+  stability_reset: 200
+  max_acurate_range: 10
 
 minigun:
-  speed: 15
-  ammo: 40
-  damage: 5
+  max_damage: 10
+  max_spread: 70
+  ammo_cost: 1
+  cooldown: 100
+  stability_reset: 100
+  max_acurate_range: 100
 
 rocket launcher:
-  speed: 1
-  ammo: 2
-  damage: 150
+  max_damage: 100
+  max_spread: 0
+  ammo_cost: 8
+  cooldown: 500
+  stability_reset: 100
+  max_acurate_range: 100
 
-actor:
-  speed: 2
-  health: 100
-  max ammo: 200
+player:
+  health: 100 
+  lives: 2
+  hitbox_radius: 0.2
+  linear_vel: 0.2
+  angular_vel: 5

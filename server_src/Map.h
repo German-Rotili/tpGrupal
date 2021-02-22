@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include "./weapons/Rocket.h"
-#include "Config.h"
+#include "ServerConfigHandler.h"
 #include "../common_src/Action.h"
 #include "Player.h"
 #include "Door.h"
@@ -26,7 +26,7 @@ private:
   std::map<int, std::map<int, char>> items;
   Timer game_timer;
   int game_time_limit = 30000;
-  Config config;
+  ServerConfigHandler config;
 
 
   /*

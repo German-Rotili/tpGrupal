@@ -10,7 +10,7 @@ private:
   float get_shot_angle() override;
   
 public:
-     Chain_gun(Map *, Config *, Inventory *);
+     Chain_gun(Map *, ServerConfigHandler *, Inventory *);
     void attack();
 
 };

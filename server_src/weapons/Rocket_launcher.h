@@ -12,7 +12,7 @@ private:
 
 public:
 
-    Rocket_launcher(Map *, Config *, Inventory *);
+    Rocket_launcher(Map *, ServerConfigHandler *, Inventory *);
     bool fire();
     void attack() override;
 

@@ -1,4 +1,4 @@
-#include "../Config.h"
+#include "../ServerConfigHandler.h"
 #include "Pistol.h"
 #include "../Constants.h"
 #include <random>
@@ -12,9 +12,14 @@
 
 
 
-Pistol::Pistol(Map *map, Config *config, Inventory *inventory) : Weapon{map, config, inventory} {
-    this->max_damage = 20; //config->get_max_damage(PISTOL);
-    this->max_spread = 20; //config->get_max_spread(PISTOL);
+Pistol::Pistol(Map *map, ServerConfigHandler *config, Inventory *inventory) : Weapon{map, config, inventory} {
+  weaponStats_t stats = this->config->getWeaponStats(GUN);
+  this->max_damage = stats.max_damage;
+  this->max_spread = stats.max_spread;
+  this->ammo_cost = stats.ammo_cost;
+  this->cooldown = stats.cooldown;
+  this->stability_reset = stats.stability_reset;
+  this->max_acurate_range = stats.max_acurate_range;
     this->inventory = inventory;
 }
 

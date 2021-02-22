@@ -1,13 +1,13 @@
 #include "Rocket.h"
 #include "../Map.h"
-#include "../Config.h"
+#include "../ServerConfigHandler.h"
 #include "../Constants.h"
 #include <algorithm>
 #include <math.h>
 
 #include "../Player.h"
 
-Rocket::Rocket(Map * map, Config *config, Player *player, float pos_x, float pos_y,
+Rocket::Rocket(Map * map, ServerConfigHandler *config, Player *player, float pos_x, float pos_y,
                float direction){
   this->y_pos = pos_y;
   this->x_pos = pos_x;

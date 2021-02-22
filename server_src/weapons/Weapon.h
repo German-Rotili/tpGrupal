@@ -18,13 +18,13 @@ protected:
     int max_acurate_range = 5;
     Map *map;
     Inventory *inventory;
-    Config *config;
+    ServerConfigHandler *config;
     
     void fire(float angle);
     bool is_in_cooldown();
     bool has_ammo();
     virtual float get_shot_angle();
-    Weapon(Map *, Config *, Inventory *);
+    Weapon(Map *, ServerConfigHandler *, Inventory *);
 
 
 public:

@@ -6,16 +6,24 @@ enum WeaponType {KNFIE, GUN, MACHINEGUN, MINIGUN, ROCKETLAUNCHER};
 typedef struct
 {
   WeaponType type;
-  int speed;
-  int ammo;
-  int damage;
+  int max_damage;
+  int max_spread;
+  int ammo_cost;
+  int cooldown;
+  int stability_reset;
+  int max_acurate_range;
+
 } weaponStats_t;
 
 typedef struct
 {
-  int speed;
   int health;
   int max_ammo;
+  int respawn_time;
+  int lives;
+  double hitbox_radius;
+  double linear_vel;
+  double angular_vel;
 } actorStats_t;
 
 struct object_t{

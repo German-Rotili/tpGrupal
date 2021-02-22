@@ -11,7 +11,7 @@ private:
     float range = 1;
     int damage = 5;
 public:
-     Knife(Map *, Config *, Inventory *);
+     Knife(Map *, ServerConfigHandler *, Inventory *);
     void attack();
 };
 

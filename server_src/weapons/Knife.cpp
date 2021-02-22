@@ -1,12 +1,19 @@
 #include "Knife.h"
 #include "Weapon.h"
-#include "../Config.h"
+#include "../ServerConfigHandler.h"
 #include "../Constants.h"
 #include "../Map.h"
 #include "../Player.h"
 #include <iostream>
-Knife::Knife(Map *map, Config *config, Inventory *inventory) : Weapon{map, config, inventory} {
+Knife::Knife(Map *map, ServerConfigHandler *config, Inventory *inventory) : Weapon{map, config, inventory} {
   this->map = map;
+  weaponStats_t stats = this->config->getWeaponStats(KNFIE);
+  this->max_damage = stats.max_damage;
+  this->max_spread = stats.max_spread;
+  this->ammo_cost = stats.ammo_cost;
+  this->cooldown = stats.cooldown;
+  this->stability_reset = stats.stability_reset;
+  this->max_acurate_range = stats.max_acurate_range;
 }
 
 void Knife::attack() {

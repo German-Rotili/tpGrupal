@@ -2,7 +2,7 @@
 #include "../common_src/Action.h"
 #include "../common_src/MapHandler.h"
 #include "./weapons/Rocket.h"
-#include "Config.h"
+#include "ServerConfigHandler.h"
 #include "Constants.h"
 #include "Door.h"
 #include "GamePlay.h"

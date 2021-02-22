@@ -18,8 +18,8 @@
 #include "Inventory.h"
 #include "../common_src/Timer.h"
 #include <vector>
+#include "ServerConfigHandler.h"
 
-class Config;
 
 class Player{
 private:
@@ -27,6 +27,7 @@ private:
     Position position;
     bool is_alive = true;
     bool finished = false;
+    ServerConfigHandler *config;
     Map *map;
     Inventory inventory;
     Timer death_timer;
@@ -49,9 +50,9 @@ private:
 
     //life
 public:
-    Player(Map *, Config *,Position position);
+    Player(Map *, ServerConfigHandler *,Position position);
     Player(Map &,Config &, float, float, float);
-    Player(Map *, Config *, int id, std::vector<char> username); 
+    Player(Map *, ServerConfigHandler *, int id, std::vector<char> username); 
 
     bool is_placed();
     float get_pos_x();

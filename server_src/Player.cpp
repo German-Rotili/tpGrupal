@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "../common_src/Timer.h"
-#include "Config.h"
+#include "ServerConfigHandler.h"
 #include "Constants.h"
 #include "Inventory.h"
 #include "Map.h"
@@ -170,11 +170,16 @@ void Player::acction() {
   }
 }
 
-Player::Player(Map *map, Config *config, int id, std::vector<char> username)
+Player::Player(Map *map, ServerConfigHandler *config, int id, std::vector<char> username)
     : position{Position(map, config)}, inventory{Inventory(this, map, config)}, username(username)
      {
   this->id = id;
   this->map = map;
+  this->config = config;
+  actorStats_t stats = this->config->getPlayerStats();
+  this->max_hitpoints = stats.health;
+  this->lives = stats.lives;
+
 }
 
 bool Player::is_in_hitbox(float x, float y) {

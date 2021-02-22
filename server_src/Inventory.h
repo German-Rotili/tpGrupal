@@ -22,11 +22,11 @@ private:
     bool owned_weapons[NUMBER_OF_WEAPONS];
     std::map<char, int> keys;
     Map *map;
-    Config *config;
+    ServerConfigHandler *config;
     int shots_fired;
 
 public:
-    Inventory(Player*, Map*, Config *);
+    Inventory(Player*, Map*, ServerConfigHandler *);
     ~Inventory();
     bool pick_up_weapon();
     void change_weapon(char);

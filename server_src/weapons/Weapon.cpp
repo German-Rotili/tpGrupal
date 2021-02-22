@@ -151,7 +151,7 @@ float Weapon::get_shot_angle()
 
 
 
-Weapon::Weapon(Map *map, Config *config, Inventory *inventory) 
+Weapon::Weapon(Map *map, ServerConfigHandler *config, Inventory *inventory) 
 {
   this->map = map;
   this->inventory = inventory;

@@ -140,6 +140,7 @@ void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
         myPlayer.setDirection(player.direction);
         myPlayer.setHealth(player.health);
         myPlayer.setLives(player.lives);
+        myPlayer.setCantBalas(player.ammo);
         myPlayer.setArmaActual(player.current_weapon);
         myPlayer.setScore(player.score);
       } else {

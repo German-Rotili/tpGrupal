@@ -1,7 +1,9 @@
 #include "IdMaker.h"
 
 IdMaker::~IdMaker(){
-    delete instance;
+    if (instance != nullptr){
+        delete instance;
+    }
 }
 
 IdMaker* IdMaker::instance{nullptr};

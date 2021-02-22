@@ -254,8 +254,7 @@ void GamePlay::load_enemys(std::vector<int> &players_id){
         std::string bot_name = "BOT ";
         bot_name.append(std::to_string(enemy_id));
         std::vector<char> data(bot_name.begin(), bot_name.end());
-        Enemy *new_enemy = new Enemy(enemy_id, this->intentions, players_id, this->map.map);
-        this->enemys.push_back(new_enemy);
+        this->enemys.push_back(new Enemy(enemy_id, this->intentions, players_id, this->map.map));
         this->map.add_player(enemy_id, data);
         this->enemys.back()->start();
     }

@@ -125,11 +125,11 @@ Inventory::Inventory(Player *player_passed, Map *map, ServerConfigHandler *confi
 
 Inventory::~Inventory() 
 {
-  free(this->weapons[KNIFE]);
-  free(this->weapons[PISTOL]);
-  free(this->weapons[MACHINE_GUN]);
-  free(this->weapons[CHAIN_GUN]);
-  free(this->weapons[ROCKET_LAUNCHER]);
+  delete this->weapons[KNIFE];
+  delete this->weapons[PISTOL];
+  delete this->weapons[MACHINE_GUN];
+  delete this->weapons[CHAIN_GUN];
+  delete this->weapons[ROCKET_LAUNCHER];
 }
 
 void Inventory::change_weapon(char intention) 

@@ -21,14 +21,14 @@
 #include <condition_variable>
 
 class ThClientSender : public Thread{
-    Protocol & protocol;
+    Protocol *protocol;
     BlockingQueueSnapshot snapshots;
     std::atomic<bool> state;
     ThClientSender& operator=(const ThClientSender&) = delete;
     ThClientSender(const ThClientSender&) = delete;
 
 public:
-    ThClientSender(Protocol& protocol);
+    ThClientSender(Protocol *protocol);
 
     void send_snapshot(Snapshot & snapshot);
 

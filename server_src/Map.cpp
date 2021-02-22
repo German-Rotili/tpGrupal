@@ -18,7 +18,7 @@ void Map::add_player(int id) {
 
 std::vector<Player *> &Map::get_players() { return this->players; }
 
-std::map<int, std::map<int, Door>> Map::get_doors() { return this->doors; }
+std::map<int, std::map<int, Door>> &Map::get_doors() { return this->doors; }
 
 void Map::start() { this->populate_variables(); }
 
@@ -42,6 +42,11 @@ void Map::tick() {
       }
     }
   }
+  for(auto &x : this->doors){
+        for(auto &y : x.second){
+          y.second.tick();
+       }
+    }
 }
 
 std::vector<char> Map::get_raw_map() { return this->raw_map; }
@@ -170,7 +175,7 @@ bool Map::is_solid(int id) {
 }
 
 bool Map::is_door(int id) {
-  return (id == 34 || id == 35 || (id >= 59 && id <= 62));
+  return (id == 34 || id == 35 || (id >= 59 && id <= 64));
 }
 
 bool Map::is_spawn(int id) { return id == 58; }

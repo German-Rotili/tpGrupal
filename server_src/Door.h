@@ -12,12 +12,13 @@ private:
     int door_cd = 200;
     bool open = false;
     bool walkable = false;
-
+    int open_time = 10000;
 public:
     Door(char id);
     bool is_open();
     bool is_walkable();
     void toggle();
+    void tick();
 };
 
 

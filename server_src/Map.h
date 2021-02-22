@@ -46,7 +46,7 @@ public:
   int get_id(int x, int y);
   void add_player(int id);   // ver quien hace los players
   std::vector<Player*> &get_players(); // placeholder
-  std::map<int, std::map<int, Door>> get_doors();
+  std::map<int, std::map<int, Door>> &get_doors();
 
   void start();
   void add_rocket(float posx, float posy, float direction, Player *);

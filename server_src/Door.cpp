@@ -20,15 +20,23 @@ bool Door::is_walkable()
 
 void Door::toggle() 
 {
-    std::cout << "adentro del toggle" << std::endl;
     if(this->last_open_timer.elapsed_time() > this->door_cd){
-    std::cout << "adentro del if" << std::endl;
 
         if(this->is_open()){
             this->open = false;
-        } else { this->open = true; }
+        } else { 
+
+            this->open = true; 
+            }
 
         this->last_open_timer.start();
         this->walkable = this->open;
+    }
+}
+
+void Door::tick() 
+{
+    if(this->open && this->last_open_timer.elapsed_time() > open_time){
+        this->toggle();
     }
 }

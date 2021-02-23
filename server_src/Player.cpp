@@ -54,7 +54,7 @@ void Player::tick() {
       this->lives > 0) {
     this->position.set_position(spawn_x, spawn_y);
     this->is_alive = true;
-    this->hitpoints = 300;
+    this->hitpoints = this->max_hitpoints;
     this->lives -= 1;
   }
   this->inventory.tick();

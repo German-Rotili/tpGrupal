@@ -11,21 +11,12 @@ void MapHandler::emitMap(std::string path, std::vector<std::vector<int>> map) {
 
   int y = map.size();
   int x = map.at(0).size();
-  int spawns = 0;
-  
-  for (int i = 0; i < y; i++) {
-    for (int j = 0; j < x; j++) {
-      if (map[i][j] == 58) spawns++;
-    }
-  }
 
   out << YAML::BeginMap;
   out << YAML::Key << "x";
   out << YAML::Value << x;
   out << YAML::Key << "y";
   out << YAML::Value << y;
-  out << YAML::Key << "spawns";
-  out << YAML::Value << spawns;
 
   for (int i = 0; i < y; i++) {
     out << YAML::Key << std::to_string(i);
@@ -59,13 +50,6 @@ std::vector<std::vector<int>> MapHandler::readMap(std::string path) {
   }
 
   return map;
-}
-
-int MapHandler::getSpawns(std::string path) {
-  std::string actualPath = CONFIG_PATH + path + ".yaml";
-  YAML::Node root = YAML::LoadFile(actualPath);
-  
-  return root["spawns"];
 }
 
 std::vector<std::vector<int>> MapHandler::readMapFromString(std::string file) {

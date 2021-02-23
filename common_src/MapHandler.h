@@ -12,7 +12,6 @@ public:
 
   std::vector<std::vector<int>> readMap(std::string path);
   std::vector<std::vector<int>> readMapFromString(std::string file);
-  int getSpawns(std::string path);
 
   void generateMapList(std::string path);
 

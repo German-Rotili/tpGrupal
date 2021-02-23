@@ -74,7 +74,7 @@ void Enemy::attack_players(std::vector<char> & intention){
             //Enemigo Actual
             player_t enemy_aux = snapshot.get_player(this->enemy_id);
             lua_pushnumber(L, 2);
-            lua_createtable(L, 3, 0);
+            lua_createtable(L, 4, 0);
 
                 lua_pushnumber(L,  enemy_aux.pos_x);
                 lua_setfield(L, -2, "pos_x");
@@ -85,6 +85,13 @@ void Enemy::attack_players(std::vector<char> & intention){
                 lua_pushnumber(L,  enemy_aux.direction);
                 lua_setfield(L, -2, "direction");
 
+           if(enemy_aux.current_weapon == KNFIE){
+                    lua_pushnumber(L,  1);
+                }else{
+                    lua_pushnumber(L,  6);
+                }
+                lua_setfield(L, -2, "range");
+
             lua_settable(this->L, -3);
 
             if (CheckLua(L, lua_pcall(L, 1, 1, 0))){
@@ -94,6 +101,7 @@ void Enemy::attack_players(std::vector<char> & intention){
 }
 
 void Enemy::run(){
+        // if(!CheckLua(L, luaL_dofile(L, "EnemyLogic.lua"))){
         if(!CheckLua(L, luaL_dofile(L, "../server_src/EnemyLogic.lua"))){
             std::cout << "Enemys not available" <<std::endl;
         }

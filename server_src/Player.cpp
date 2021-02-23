@@ -179,6 +179,7 @@ Player::Player(Map *map, ServerConfigHandler *config, int id, std::vector<char> 
   actorStats_t stats = this->config->getPlayerStats();
   this->max_hitpoints = stats.health;
   this->lives = stats.lives;
+  this->hitpoints = this->max_hitpoints;
 
 }
 

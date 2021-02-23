@@ -33,8 +33,9 @@ Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   tx_descUser(renderer, font, "Insert Username", 255, 255, 255),
   tx_descMaps(renderer, font, "Choose a Map", 255, 255, 255),
   tx_continue(renderer, font, "Continue", 255, 255, 255),
-  music_menu(MUSIC_MENU_PATH) {
-    // music_menu.play();
+  music_menu(MUSIC_MENU_PATH),
+  music_results(MUSIC_RESULTS_PATH) {
+     music_menu.play();
   }
 
 Menu::~Menu(){}
@@ -414,6 +415,7 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
 }
 
 void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
+  music_results.play();
   bool quit = false;
   bool advance = false;
   SDL_Event e;
@@ -429,7 +431,7 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
     kills.push_back(this->client.receive_kills());
     shots.push_back(this->client.receive_shots());
   }
-  
+
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();

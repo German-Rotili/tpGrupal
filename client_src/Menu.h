@@ -32,6 +32,7 @@ private:
   SdlTexture tx_descMaps;
   SdlTexture tx_continue;
   SdlMusic music_menu;
+  SdlMusic music_results;
 public:
   std::vector<std::vector<int>>  vector_map;
 

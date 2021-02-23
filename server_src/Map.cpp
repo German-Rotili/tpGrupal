@@ -119,7 +119,7 @@ bool Map::is_game_over()
 {
   int not_finished = 0;
    for (Player *player : this->players) {
-     if(player->is_finished()){
+     if(!player->is_finished()){
        not_finished +=1;
      }
   }

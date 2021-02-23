@@ -79,7 +79,7 @@ void Game::updateWorld() {
   world.render(settings);
 }
 
-void Game::loop() {
+bool Game::loop() {
   while (!quit && this->requester.is_active()) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     processInput();
@@ -104,4 +104,5 @@ void Game::loop() {
       std::cout << "Bajada de FPS" << std::endl;
     }
   }
+  return (!this->requester.is_active());
 }

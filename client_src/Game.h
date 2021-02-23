@@ -36,7 +36,10 @@ class Game {
   public:
     Game(Client & client, World & world, ClientSettings & settings);
     ~Game();
-    void loop();
+
+    // Retorna true si el juego fue cerrado por el server y hay que ir a la pantalla de resultados,
+    // false si lo cerro el cliente (y no hay que ir a pantalla de resultados)
+    bool loop();
 };
 
 #endif  // GAME_H

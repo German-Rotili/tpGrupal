@@ -2,7 +2,7 @@ gun:
   max_damage: 10
   max_spread: 20
   ammo_cost: 1
-  cooldown: 100
+  cooldown: 300
   stability_reset: 200
   max_acurate_range: 10
 

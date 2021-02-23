@@ -21,22 +21,22 @@ WorldMap::WorldMap(std::vector<std::vector<int>> & rawMap, Player& player, Resou
         map[irow].push_back(new WallTile(&(wallClips[*col])));
         actualizables.push_back(map[irow].back());
       } else if (*col == 34) {  // Puerta comun
-        map[irow].push_back(new YDoorTile(&DOOR_CLIP, irow, icol, player, src));
+        map[irow].push_back(new YDoorTile(&DOOR_CLIP, icol + 0.5, irow, player, src));
         actualizables.push_back(map[irow].back());
       } else if (*col == 35) {
-        map[irow].push_back(new XDoorTile(&DOOR_CLIP, irow, icol, player, src));
+        map[irow].push_back(new XDoorTile(&DOOR_CLIP, icol, irow + 0.5, player, src));
         actualizables.push_back(map[irow].back());
       } else if (*col == 59) {  // Puerta con llave 1
-        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP, irow, icol, player, src));
+        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP, icol + 0.5, irow, player, src));
         actualizables.push_back(map[irow].back());
       } else if (*col == 60) {
-        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP, irow, icol, player, src));
+        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP, icol, irow + 0.5, player, src));
         actualizables.push_back(map[irow].back());
       } else if (*col == 61) {  // Puerta con llave 2 (puedo unificar con la 1)
-        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP, irow, icol, player, src));
+        map[irow].push_back(new YDoorTile(&KEYDOOR_CLIP, icol + 0.5, irow, player, src));
         actualizables.push_back(map[irow].back());
       } else if (*col == 62) {
-        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP, irow, icol, player, src));
+        map[irow].push_back(new XDoorTile(&KEYDOOR_CLIP, icol, irow + 0.5, player, src));
         actualizables.push_back(map[irow].back());
       } else if (*col == 63) {  // Puerta secreta
         // Si no estoy al borde del mapa y hay un tile no vacio a mi izquierda, copio su clip

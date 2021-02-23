@@ -183,7 +183,7 @@ void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
       agregarObjetoDinamico(object);
     }
   }
-  // Provisorio para explosiones:
+
   // elimino explosiones terminadas.
   for (std::vector<Explosion*>::iterator it = explosiones.begin();
    it!= explosiones.end(); ++it) {

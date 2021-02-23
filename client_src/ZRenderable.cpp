@@ -58,7 +58,7 @@ bool ZRenderable::esVisiblePorPlayer(ClientSettings& settings) {
 		return false;
 	setDifAnglePlayer();
 	double absDifAngle = abs(getDifAnglePlayer());
-	if (absDifAngle <= (settings.fov)) {
+	if ((absDifAngle <= (settings.fov)) || (absDifAngle >= (360-settings.fov))) {
 		return true;
 	}
 	return false;

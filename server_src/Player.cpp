@@ -106,26 +106,26 @@ float Player::get_angle_difference(float x, float y) {
 int Player::get_id() { return this->id; }
 
 bool Player::heal(char id) {
-  if (this->hitpoints == this->max_hitpoints)
+  if (this->hitpoints == this->max_hitpoints){
     return false;
+  }
   switch (id){
     case 47:
       this->hitpoints += 10;
-      return true;
       break;
     case 48:
       this->hitpoints += 20;
-      return true;
+      break;
     case 46:
       if(this->hitpoints < 12) {
         this->hitpoints +=1;
-        return true;
       }else{return false;}
       break;
   }
 
-  if (this->hitpoints > this->max_hitpoints)
+  if (this->hitpoints > this->max_hitpoints){
     this->hitpoints = this->max_hitpoints;
+  }
   return true;
 }
 

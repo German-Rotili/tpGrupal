@@ -600,17 +600,20 @@ void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::v
   SdlFont littleFont(FONT_WOLFENSTEIN_PATH, 25);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
-
+  
   for (int i = 0; i< usernames.size(); i++) {
     renderer.setRenderDrawColor(255, 255, 255, 255);
+    std::string puntosStr = "Puntos: " + std::to_string(puntos[i]);
+    std::string balasStr = "Balas: " + std::to_string(balas[i]);
+    std::string muertesStr= "Muertes: " + std::to_string(muertes[i]);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
     SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
-    SdlTexture tx_puntuacion(renderer, littleFont, std::to_string(puntos[i]), 255, 255, 255);
+    SdlTexture tx_puntuacion(renderer, littleFont, puntosStr, 255, 255, 255);
     renderer.renderCopyCentered(tx_puntuacion, NULL, (settings.screenWidth/4+settings.screenWidth/8), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-    SdlTexture tx_balas(renderer, littleFont, std::to_string(balas[i]), 255, 255, 255);
+    SdlTexture tx_balas(renderer, littleFont, balasStr, 255, 255, 255);
     renderer.renderCopyCentered(tx_balas, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-    SdlTexture tx_muertes(renderer, littleFont, std::to_string(muertes[i]), 255, 255, 255);
+    SdlTexture tx_muertes(renderer, littleFont, muertesStr, 255, 255, 255);
     renderer.renderCopyCentered(tx_muertes, NULL, (settings.screenWidth/2+settings.screenWidth/4-settings.screenWidth/8), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
   }
 

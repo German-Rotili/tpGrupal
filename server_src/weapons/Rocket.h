@@ -10,7 +10,7 @@ class Rocket
 {
 private:
     Player *player;
-    float velocity = 0.1;
+    float velocity = 0.3;
     float explotion_radius = 2;
     float damage = 10;
     float direction;

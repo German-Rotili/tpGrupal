@@ -169,7 +169,13 @@ Map::~Map() {
   }
 }
 
-int Map::get_id(int x, int y) { return this->map[x][y]; }
+int Map::get_id(int x, int y) { 
+    if (x < 0 || x >= this->map.size() || y < 0 || y >= this->map[x].size()) {
+      return 0;
+      }
+
+  return this->map[x][y]; 
+  }
 
 bool Map::is_solid(int id) {
   if (id >= 0 && id <= 33) {

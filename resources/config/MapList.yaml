@@ -1,4 +1,4 @@
-amount: 7
+amount: 9
 0: map1
 1: map2
 2: mapa_largo
@@ -6,3 +6,4 @@ amount: 7
 4: mapa_largo_mod
 5: mapa_largo_mod
 6: keys_test
+7: single

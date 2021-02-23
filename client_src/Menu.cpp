@@ -597,7 +597,7 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
 
 void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string>& usernames, std::vector<int>& balas, std::vector<int>& puntos, std::vector<int>& muertes) {
   SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
-  SdlFont littleFont(FONT_WOLFENSTEIN_PATH, 20);
+  SdlFont littleFont(FONT_WOLFENSTEIN_PATH, 25);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
 
@@ -607,11 +607,11 @@ void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::v
     SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
     renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
     SdlTexture tx_puntuacion(renderer, littleFont, std::to_string(puntos[i]), 255, 255, 255);
-    renderer.renderCopyCentered(tx_puntuacion, NULL, (2+settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+    renderer.renderCopyCentered(tx_puntuacion, NULL, (settings.screenWidth/4+settings.screenWidth/8), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
     SdlTexture tx_balas(renderer, littleFont, std::to_string(balas[i]), 255, 255, 255);
-    renderer.renderCopyCentered(tx_balas, NULL, (3*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+    renderer.renderCopyCentered(tx_balas, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
     SdlTexture tx_muertes(renderer, littleFont, std::to_string(muertes[i]), 255, 255, 255);
-    renderer.renderCopyCentered(tx_muertes, NULL, (4*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+    renderer.renderCopyCentered(tx_muertes, NULL, (settings.screenWidth/2+settings.screenWidth/4-settings.screenWidth/8), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
   }
 
   renderer.renderPresent();

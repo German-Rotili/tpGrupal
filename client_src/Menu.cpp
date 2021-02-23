@@ -416,10 +416,24 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
   bool quit = false;
   bool advance = false;
   SDL_Event e;
+  int players_size = this->client.recieve_players_size();
+  std::vector<int> shots;
+  std::vector<int> score;
+  std::vector<int> kills;
+  std::vector<std::string> usernames;
+
+  for (int i = 0; i < players_size; i++){
+    usernames.push_back(this->client.receive_username());
+    score.push_back(this->client.receive_score());
+    kills.push_back(this->client.receive_kills());
+    shots.push_back(this->client.receive_shots());
+  }
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-    drawEndScreen(renderer, settings);
+    std::cout<< "CALL DRAW END SCREEN" << std::endl;
+    
+    drawEndScreen(renderer, settings, usernames, shots, score, kills);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
@@ -578,24 +592,32 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   renderer.renderPresent();
 }
 
-void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings){
+void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> usernames, std::vector<int> balas, std::vector<int> puntos, std::vector<int> muertes) {
+    std::cout<< "Run end screeen 1" << std::endl;
   SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
+    std::cout<< "Run end screeen 2" << std::endl;
   SdlFont littleFont(FONT_WOLFENSTEIN_PATH, 20);
+    std::cout<< "Run end screeen 3" << std::endl;
   renderer.setRenderDrawColor(100, 100, 100, 255);
+    std::cout<< "Run end screeen 4" << std::endl;
   renderer.renderClear();
 
-  // for (int i = 0; i< usernames.size(); i++) {
-  //   renderer.setRenderDrawColor(255, 255, 255, 255);
-  //   renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
-  //   SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
-  //   SdlTexture tx_puntuacion(renderer, littleFont, puntos[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_puntuacion, NULL, (2+settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-  //   SdlTexture tx_balas(renderer, littleFont, balas[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_balas, NULL, (3*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-  //   SdlTexture tx_muertes(renderer, littleFont, muertes[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_muertes, NULL, (4*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-  // }
+  for (int i = 0; i< usernames.size(); i++) {
+    std::cout<< "Run end screeen "<< i << std::endl;
+
+    renderer.setRenderDrawColor(255, 255, 255, 255);
+    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
+    SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
+    std::cout<< "Run end usernames "<< i << std::endl;
+    renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
+    SdlTexture tx_puntuacion(renderer, littleFont, std::to_string(puntos[i]), 255, 255, 255);
+    std::cout<< "Run end puntos "<< i << std::endl;
+    renderer.renderCopyCentered(tx_puntuacion, NULL, (2+settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+    SdlTexture tx_balas(renderer, littleFont, std::to_string(balas[i]), 255, 255, 255);
+    renderer.renderCopyCentered(tx_balas, NULL, (3*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+    SdlTexture tx_muertes(renderer, littleFont, std::to_string(muertes[i]), 255, 255, 255);
+    renderer.renderCopyCentered(tx_muertes, NULL, (4*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+  }
 
   renderer.renderPresent();
 }

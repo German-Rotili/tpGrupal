@@ -13,7 +13,9 @@ Client::Client(std::string & service,std::string & hostname):active(true){
     this->protocol = Protocol(std::move(client));
 }
 
-Client::~Client(){}
+Client::~Client(){
+    this->active = false;
+}
 
 bool Client::is_active(){
     return this->active;
@@ -33,6 +35,7 @@ void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions)
             this->serializer.deserialize_action(msg, actions);}
             break;
         case ENDGAME_ID:
+            std::cout << "GAME ENDED" << std::endl;
             this->active = false;
             break;
         default:
@@ -44,6 +47,30 @@ std::vector<int> Client::refresh_game(){
     this->protocol.send_char(aux);
     return this->get_matches_id();
 }
+
+
+int Client::recieve_players_size(){
+    return this->protocol.receive_int();
+}
+
+std::string Client::receive_username(){
+    int aux = this->protocol.receive_int();
+    std::vector<char> aux_msg = this->protocol.receive_standar_msg();
+    std::string username(aux_msg.data());//ojo '\0'
+}
+
+int Client::receive_score(){
+    return this->protocol.receive_int();
+}
+
+int Client::receive_kills(){
+    return this->protocol.receive_int();
+}
+
+int Client::receive_shots(){
+    return this->protocol.receive_int();
+}
+
 
 
 std::vector<int> Client::get_matches_id(){

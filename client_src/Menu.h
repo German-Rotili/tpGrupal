@@ -59,7 +59,7 @@ public:
 
   void drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list, int scroll);
 
-  void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings);
+  void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> usernames, std::vector<int> balas, std::vector<int> puntos, std::vector<int> muertes);
 
   void textPrompt(SdlRenderer& renderer, ClientSettings& settings, std::string inputText);
 };

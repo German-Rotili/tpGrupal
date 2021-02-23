@@ -40,5 +40,10 @@ public:
     void send_username(std::string & username);
     void join_game();
     bool is_active();
+    int recieve_players_size();
+    std::string receive_username();
+    int receive_score();
+    int receive_kills();
+    int receive_shots();
 };
 #endif

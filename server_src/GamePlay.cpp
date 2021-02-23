@@ -148,7 +148,7 @@ void GamePlay::run(){
         this->map.start();
         this->blocked = true;
         this->state = true;
-        while (this->state ){//&& !this->map.is_game_over()){
+        while (this->state && !this->map.is_game_over()){
             std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
 
             int index = 0;
@@ -184,8 +184,8 @@ void GamePlay::run(){
                 std::cout << "Bajada FPS" << std::endl;
             }
         }
-
-        // this->send_scores();
+        std::cout << "send scores" <<std::endl;
+        this->send_scores();
 }
 /**********/
 

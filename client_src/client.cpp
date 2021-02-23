@@ -36,6 +36,7 @@ int main(int argc, char* args[]) {
     World world(renderer, settings, menu.vector_map);
     Game game(client, world, settings);
     game.loop();
+    menu.runEndScreen(renderer, settings);
   }
   catch (std::exception const& e) {
     std::cout << "Excepción en client:" << std::endl;

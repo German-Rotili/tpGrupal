@@ -55,6 +55,7 @@ int Client::recieve_players_size(){
 std::string Client::receive_username(){
     int aux = this->protocol.receive_int();
     std::vector<char> aux_msg = this->protocol.receive_standar_msg();
+    aux_msg.push_back('\0');
     std::string username(aux_msg.data());//ojo '\0'
     return username;
 }

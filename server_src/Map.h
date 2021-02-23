@@ -25,7 +25,7 @@ private:
   std::map<int, std::map<int, Door>> doors;
   std::map<int, std::map<int, char>> items;
   Timer game_timer;
-  int game_time_limit = 30000;
+  int game_time_limit = 300000;
   ServerConfigHandler config;
 
 

@@ -21,6 +21,7 @@
 Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   renderer(renderer),
   font(FONT_WOLFENSTEIN_PATH, 30),
+  fontMaps(FONT_HUD_PATH, 30),
   tx_refresh(renderer, font, "Refresh", 255, 255, 255),
   tx_startGame_active(renderer, font, "Start Game", 255, 255, 255),
   tx_startGame_inactive(renderer, font, "Start Game", 150, 150, 150),
@@ -428,11 +429,25 @@ void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
     kills.push_back(this->client.receive_kills());
     shots.push_back(this->client.receive_shots());
   }
+  for (std::string & username: usernames) {
+    std::cout << username << std::endl;
+  }
+
+  for (int & s: score) {
+    std::cout << s << std::endl;
+  }
+  for (int & k: kills) {
+    std::cout << k << std::endl;
+  }
+
+  for (int & sh: shots) {
+    std::cout << sh << std::endl;
+  }
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
     std::cout<< "CALL DRAW END SCREEN" << std::endl;
-    
+
     drawEndScreen(renderer, settings, usernames, shots, score, kills);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
@@ -534,7 +549,7 @@ void Menu::drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std
   // dibujar mensaje de seleccion
   for (int i = 0; i < map_list.size(); i++) {
     if ((i >= 10 + scroll) || (i < scroll)) continue;
-    SdlTexture tx_mapname(renderer, font, map_list.at(i+scroll), 255, 255, 255);
+    SdlTexture tx_mapname(renderer, fontMaps, map_list.at(i+scroll), 255, 255, 255);
     renderer.renderCopyCentered(tx_mapname, NULL, (settings.screenWidth/2), (settings.screenHeight/16) * (i+2) + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/16) * (i+2), (settings.screenWidth/2), (settings.screenHeight/16));
@@ -592,7 +607,7 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   renderer.renderPresent();
 }
 
-void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> usernames, std::vector<int> balas, std::vector<int> puntos, std::vector<int> muertes) {
+void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string>& usernames, std::vector<int>& balas, std::vector<int>& puntos, std::vector<int>& muertes) {
     std::cout<< "Run end screeen 1" << std::endl;
   SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
     std::cout<< "Run end screeen 2" << std::endl;

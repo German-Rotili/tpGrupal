@@ -17,3 +17,7 @@ void PlayerWeapon::reproducirSonido() const {
     sonido2.play(-1, 0);
   }
 }
+
+void PlayerWeapon::setDisponible(bool disponible) {
+  this->disponible = disponible;
+}

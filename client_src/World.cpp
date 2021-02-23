@@ -144,6 +144,9 @@ void World::update(Snapshot & snapshot, ProtectedQueueAction & actions) {
         myPlayer.setLives(player.lives);
         myPlayer.setCantBalas(player.ammo);
         myPlayer.setArmaActual(player.current_weapon);
+        std::vector<bool> armasDisponibles =
+          {player.pistol, player.machinegun, player.chaingun, player.rocket};
+        myPlayer.setArmasDisponibles(armasDisponibles);
         myPlayer.setScore(player.score);
       } else {
         if (enemigos.find(player.player_id) == enemigos.end()) {

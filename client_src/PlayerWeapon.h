@@ -14,6 +14,7 @@ class PlayerWeapon {
    ~PlayerWeapon();
    bool estaDisponible() const;
    void reproducirSonido() const;
+   void setDisponible(bool disponible);
 };
 
 #endif

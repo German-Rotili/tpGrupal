@@ -48,8 +48,8 @@ actorStats_t ServerConfigHandler::getPlayerStats() {
   actorStats_t actor;
   actor.health = actorNode["health"].as<int>();
   actor.lives = actorNode["lives"].as<int>();
-  actor.hitbox_radius = actorNode["hitbox_radius"].as<int>();
-  actor.linear_vel = actorNode["linear_vel"].as<int>();
+  actor.hitbox_radius = actorNode["hitbox_radius"].as<float>();
+  actor.linear_vel = actorNode["linear_vel"].as<float>();
   actor.angular_vel = actorNode["angular_vel"].as<int>();
 
 

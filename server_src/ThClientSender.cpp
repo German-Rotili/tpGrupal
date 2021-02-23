@@ -35,8 +35,7 @@ void ThClientSender::send_scores(int amount){
 
     this->protocol->send_scores(amount);
 }
-void ThClientSender::send_score( std::vector<char> & username, int score, int kills, int shots ){
-            std::cout << "sending score" << std::endl;
+void ThClientSender::send_score( std::vector<char> username, int score, int kills, int shots ){
     this->protocol->send_score(username, score, kills, shots);
 }
 

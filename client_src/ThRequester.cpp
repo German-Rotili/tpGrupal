@@ -8,10 +8,7 @@ state(true),
 actions(actions),
 obtainedId(INVALID_ID) {}
 
-ThRequester::~ThRequester() {
-  std::cout<< "Destructor del requester" << std::endl;
-
-}
+ThRequester::~ThRequester() {}
 
 void ThRequester::stop(){
     this->state = false;
@@ -22,8 +19,6 @@ Snapshot ThRequester::get_snapshot() {
       throw ConnectionClosedException();
     }
     std::unique_lock<std::mutex> lock(m);
-  std::cout<< "ME pidieron snapshot" << std::endl;
-
     Snapshot new_snapshot = this->snapshot;
     return new_snapshot;
 }
@@ -39,9 +34,12 @@ bool ThRequester::is_active(){
 void ThRequester::run() {
   try {
     obtainedId = client.await_game_start();
-    while (this->state && this->client.is_active()) {
+    while (this->state) {
         Snapshot snap_aux;
-        client.receive_update(snap_aux, this->actions);   
+        client.receive_update(snap_aux, this->actions); 
+        if(!this->client.is_active()){
+          break;
+        }  
         std::unique_lock<std::mutex> lock(this->m);
         this->snapshot = snap_aux;
     }

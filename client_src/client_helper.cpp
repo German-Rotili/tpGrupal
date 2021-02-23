@@ -35,7 +35,6 @@ void Client::receive_update(Snapshot & snapshot, ProtectedQueueAction & actions)
             this->serializer.deserialize_action(msg, actions);}
             break;
         case ENDGAME_ID:
-            std::cout << "GAME ENDED" << std::endl;
             this->active = false;
             break;
         default:
@@ -57,6 +56,7 @@ std::string Client::receive_username(){
     int aux = this->protocol.receive_int();
     std::vector<char> aux_msg = this->protocol.receive_standar_msg();
     std::string username(aux_msg.data());//ojo '\0'
+    return username;
 }
 
 int Client::receive_score(){

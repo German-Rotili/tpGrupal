@@ -21,6 +21,7 @@
 Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   renderer(renderer),
   font(FONT_WOLFENSTEIN_PATH, 30),
+  fontMaps(FONT_HUD_PATH, 30),
   tx_refresh(renderer, font, "Refresh", 255, 255, 255),
   tx_startGame_active(renderer, font, "Start Game", 255, 255, 255),
   tx_startGame_inactive(renderer, font, "Start Game", 150, 150, 150),
@@ -32,8 +33,9 @@ Menu::Menu(Client & client, SdlRenderer& renderer):client(client),
   tx_descUser(renderer, font, "Insert Username", 255, 255, 255),
   tx_descMaps(renderer, font, "Choose a Map", 255, 255, 255),
   tx_continue(renderer, font, "Continue", 255, 255, 255),
-  music_menu(MUSIC_MENU_PATH) {
-    // music_menu.play();
+  music_menu(MUSIC_MENU_PATH),
+  music_results(MUSIC_RESULTS_PATH) {
+     music_menu.play();
   }
 
 Menu::~Menu(){}
@@ -413,13 +415,28 @@ void Menu::runGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool cr
 }
 
 void Menu::runEndScreen(SdlRenderer& renderer, ClientSettings& settings) {
+  music_results.play();
   bool quit = false;
   bool advance = false;
   SDL_Event e;
+  int players_size = this->client.recieve_players_size();
+  std::vector<int> shots;
+  std::vector<int> score;
+  std::vector<int> kills;
+  std::vector<std::string> usernames;
+
+  for (int i = 0; i < players_size; i++){
+    usernames.push_back(this->client.receive_username());
+    score.push_back(this->client.receive_score());
+    kills.push_back(this->client.receive_kills());
+    shots.push_back(this->client.receive_shots());
+  }
+
   //No es el game loop
   while (!quit) {
     std::chrono::steady_clock::time_point start_time = std::chrono::steady_clock::now();
-    drawEndScreen(renderer, settings);
+
+    drawEndScreen(renderer, settings, usernames, shots, score, kills);
     // Event Loop
     while (SDL_PollEvent(&e) != 0) {
       if (e.type == SDL_QUIT) {
@@ -520,7 +537,7 @@ void Menu::drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std
   // dibujar mensaje de seleccion
   for (int i = 0; i < map_list.size(); i++) {
     if ((i >= 10 + scroll) || (i < scroll)) continue;
-    SdlTexture tx_mapname(renderer, font, map_list.at(i+scroll), 255, 255, 255);
+    SdlTexture tx_mapname(renderer, fontMaps, map_list.at(i+scroll), 255, 255, 255);
     renderer.renderCopyCentered(tx_mapname, NULL, (settings.screenWidth/2), (settings.screenHeight/16) * (i+2) + (settings.screenHeight/32));
     renderer.setRenderDrawColor(255, 255, 255, 255);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/16) * (i+2), (settings.screenWidth/2), (settings.screenHeight/16));
@@ -578,24 +595,27 @@ void Menu::drawGameLobby(SdlRenderer& renderer, ClientSettings& settings, bool c
   renderer.renderPresent();
 }
 
-void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings){
+void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string>& usernames, std::vector<int>& balas, std::vector<int>& puntos, std::vector<int>& muertes) {
   SdlFont font(FONT_WOLFENSTEIN_PATH, 30);
-  SdlFont littleFont(FONT_WOLFENSTEIN_PATH, 20);
+  SdlFont littleFont(FONT_WOLFENSTEIN_PATH, 25);
   renderer.setRenderDrawColor(100, 100, 100, 255);
   renderer.renderClear();
-
-  // for (int i = 0; i< usernames.size(); i++) {
-  //   renderer.setRenderDrawColor(255, 255, 255, 255);
-  //   renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
-  //   SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
-  //   SdlTexture tx_puntuacion(renderer, littleFont, puntos[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_puntuacion, NULL, (2+settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-  //   SdlTexture tx_balas(renderer, littleFont, balas[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_balas, NULL, (3*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-  //   SdlTexture tx_muertes(renderer, littleFont, muertes[i], 255, 255, 255);
-  //   renderer.renderCopyCentered(tx_muertes, NULL, (4*settings.screenWidth/5), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
-  // }
+  
+  for (int i = 0; i< usernames.size(); i++) {
+    renderer.setRenderDrawColor(255, 255, 255, 255);
+    std::string puntosStr = "Puntos: " + std::to_string(puntos[i]);
+    std::string balasStr = "Disparos: " + std::to_string(balas[i]);
+    std::string muertesStr= "Muertes: " + std::to_string(muertes[i]);
+    renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
+    SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);
+    renderer.renderCopyCentered(tx_username, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/32));
+    SdlTexture tx_puntuacion(renderer, littleFont, puntosStr, 255, 255, 255);
+    renderer.renderCopyCentered(tx_puntuacion, NULL, (settings.screenWidth/4+settings.screenWidth/8), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+    SdlTexture tx_balas(renderer, littleFont, balasStr, 255, 255, 255);
+    renderer.renderCopyCentered(tx_balas, NULL, (settings.screenWidth/2), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+    SdlTexture tx_muertes(renderer, littleFont, muertesStr, 255, 255, 255);
+    renderer.renderCopyCentered(tx_muertes, NULL, (settings.screenWidth/2+settings.screenWidth/4-settings.screenWidth/8), ((settings.screenHeight/5) * i+1) + (settings.screenHeight/12));
+  }
 
   renderer.renderPresent();
 }

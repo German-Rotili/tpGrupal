@@ -19,6 +19,7 @@ private:
   Client & client;
   SdlRenderer & renderer;
   SdlFont font;
+  SdlFont fontMaps;
   SdlTexture tx_refresh;
   SdlTexture tx_startGame_active;
   SdlTexture tx_startGame_inactive;
@@ -31,6 +32,7 @@ private:
   SdlTexture tx_descMaps;
   SdlTexture tx_continue;
   SdlMusic music_menu;
+  SdlMusic music_results;
 public:
   std::vector<std::vector<int>>  vector_map;
 
@@ -59,7 +61,7 @@ public:
 
   void drawMapSelection(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string> map_list, int scroll);
 
-  void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings);
+  void drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::vector<std::string>& usernames, std::vector<int>& balas, std::vector<int>& puntos, std::vector<int>& muertes);
 
   void textPrompt(SdlRenderer& renderer, ClientSettings& settings, std::string inputText);
 };

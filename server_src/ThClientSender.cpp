@@ -20,7 +20,6 @@ void ThClientSender::run(){
                 this->protocol->send_standard_msg(msg);
             }
          } catch (std::exception const& e) {
-            std::cout << "ThSender Closed ";
             this->dead = true;
         }
         catch (...) {
@@ -33,7 +32,7 @@ void ThClientSender::run(){
 void ThClientSender::send_scores(int amount){
     this->protocol->send_scores(amount);
 }
-void ThClientSender::send_score( std::vector<char> & username, int score, int kills, int shots ){
+void ThClientSender::send_score( std::vector<char> username, int score, int kills, int shots ){
     this->protocol->send_score(username, score, kills, shots);
 }
 

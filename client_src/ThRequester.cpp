@@ -36,7 +36,10 @@ void ThRequester::run() {
     obtainedId = client.await_game_start();
     while (this->state) {
         Snapshot snap_aux;
-        client.receive_update(snap_aux, this->actions);   
+        client.receive_update(snap_aux, this->actions); 
+        if(!this->client.is_active()){
+          break;
+        }  
         std::unique_lock<std::mutex> lock(this->m);
         this->snapshot = snap_aux;
     }
@@ -49,4 +52,5 @@ void ThRequester::run() {
     this->dead = true;
     std::cerr << "Error inesperado en ThRequester" << std::endl;
   }
+  
 }

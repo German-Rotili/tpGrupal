@@ -63,6 +63,9 @@ class Player {
 		void setScore(int score);
 		void setLives(int lives);
 		void setArmaActual(int idArma);
+		// Recibe vector de 4 posiciones booleanas, representando en orden si posee: 
+		// pistola, ametralladora, canionDeCadena y lanzacohetes
+		void setArmasDisponibles(std::vector<bool>& armasDisponibles);
 		void setShootingAction();
 		void setCantBalas(int cantBalas);
 

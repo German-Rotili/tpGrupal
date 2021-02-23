@@ -85,6 +85,13 @@ std::vector<bool> Player::getArmasDisponibles() const {
 	return resultado;
 }
 
+void Player::setArmasDisponibles(std::vector<bool>& armasDisponibles) {
+	pistola.setDisponible(armasDisponibles[0]);
+	ametralladora.setDisponible(armasDisponibles[1]);
+	canionDeCadena.setDisponible(armasDisponibles[2]);
+	lanzacohetes.setDisponible(armasDisponibles[3]);
+}
+
 void Player::setPosicion(double x, double y) {
 	this->x = x;
 	this->y = y;

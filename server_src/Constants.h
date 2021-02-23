@@ -30,7 +30,7 @@
 #define QUIT "q"
 #define MAX_INTENTION_PER_FRAME 20
 #define NEW_PLAYER 'P'
-#define PLAYERS 2
+#define PLAYERS 4
 
 
 

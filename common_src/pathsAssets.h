@@ -72,6 +72,7 @@
 #define SND_SCOREUP_PATH "../resources/sounds/scoreup.mp3"
 #define SND_PICKAMMO_PATH "../resources/sounds/pick_weaponammo.mp3"
 #define MUSIC_MENU_PATH "../resources/music/menu.mp3"
+#define MUSIC_RESULTS_PATH "../resources/music/results.mp3"
 #define GAME_MUSIC_PATH "../resources/music/music2.mp3"
 
 //FONTS
@@ -149,6 +150,7 @@
 #define SND_SCOREUP_PATH "/var/wolfenstein/sounds/scoreup.mp3"
 #define SND_PICKAMMO_PATH "/var/wolfenstein/sounds/pick_weaponammo.mp3"
 #define MUSIC_MENU_PATH "/var/wolfenstein/music/menu.mp3"
+#define MUSIC_RESULTS_PATH "/var/wolfenstein/music/results.mp3"
 #define GAME_MUSIC_PATH "/var/wolfenstein/music/music2.mp3"
 
 //FONTS

@@ -43,8 +43,11 @@ void ThServer::run(){
             remove_dead(this->threads);
         }
     }catch(std::exception& e){
-        perror(e.what());
-    }catch(...){}
+        // perror(e.what());
+        std::cout << "Server Closed" << std::endl;
+    }catch(...){
+        std::cout << "Server Closed" << std::endl;
+    }
 }
 
 void ThServer::stop(){

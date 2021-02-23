@@ -23,7 +23,7 @@ private:
     std::map<char, int> keys;
     Map *map;
     ServerConfigHandler *config;
-    int shots_fired;
+    int shots_fired = 0;
 
 public:
     Inventory(Player*, Map*, ServerConfigHandler *);

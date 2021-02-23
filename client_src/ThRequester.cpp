@@ -52,6 +52,5 @@ void ThRequester::run() {
     this->dead = true;
     std::cerr << "Error inesperado en ThRequester" << std::endl;
   }
-  std::cout<< "Sali del while" << std::endl;
   
 }

@@ -184,7 +184,6 @@ void GamePlay::run(){
                 std::cout << "Bajada FPS" << std::endl;
             }
         }
-        std::cout << "send scores" <<std::endl;
         this->send_scores();
 }
 /**********/

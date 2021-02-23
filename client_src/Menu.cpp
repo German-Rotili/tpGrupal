@@ -604,7 +604,7 @@ void Menu::drawEndScreen(SdlRenderer& renderer, ClientSettings& settings, std::v
   for (int i = 0; i< usernames.size(); i++) {
     renderer.setRenderDrawColor(255, 255, 255, 255);
     std::string puntosStr = "Puntos: " + std::to_string(puntos[i]);
-    std::string balasStr = "Balas: " + std::to_string(balas[i]);
+    std::string balasStr = "Disparos: " + std::to_string(balas[i]);
     std::string muertesStr= "Muertes: " + std::to_string(muertes[i]);
     renderer.renderDrawRect((settings.screenWidth/2) - (settings.screenWidth/4), (settings.screenHeight/5) * i+1, (settings.screenWidth/2), (settings.screenHeight/8));
     SdlTexture tx_username(renderer, font, usernames[i], 255, 255, 255);

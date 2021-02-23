@@ -20,8 +20,6 @@ void Player::execute_intention(char intention) {
       this->process_near_item();
     }
     if (intention == ACTION) {
-      std::cout << "action" << std::endl;
-
       this->acction();
     }
     if (intention == ATTACK) {
@@ -155,7 +153,6 @@ void Player::acction() {
   for (auto &x : this->map->get_doors()) {
     for (auto &y : x.second) {
       if (this->get_distance(x.first, y.first) < 2) {
-        std::cout << "abro un puerta" << std::endl;
         if (y.second.is_locked()) {
           for (auto &key_id : this->inventory.get_keys()) {
             if (key_id.second > 0 && y.second.unlock(key_id.first)) {

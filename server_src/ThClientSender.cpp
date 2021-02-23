@@ -20,7 +20,6 @@ void ThClientSender::run(){
                 this->protocol->send_standard_msg(msg);
             }
          } catch (std::exception const& e) {
-            std::cout << "ThSender Closed ";
             this->dead = true;
         }
         catch (...) {

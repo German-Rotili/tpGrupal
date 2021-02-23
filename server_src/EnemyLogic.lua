@@ -15,6 +15,7 @@ function ProcessSnapshot(snapshot)
 	enemy_pos_y = snapshot[2].pos_y
 	enemy_direction = snapshot[2].direction
 	enemy_range = snapshot[2].range
+	enemy_ammo = snapshot[2].ammo
 
 	min_distance = 9999
 	for j=1, #snapshot[1] do
@@ -38,9 +39,9 @@ function ProcessSnapshot(snapshot)
 	end
 
 
-
-
-	if min_distance > MAX_RANGE then
+	if enemy_ammo > 0 and enemy_range == 1 then
+		response = '2'
+	elseif min_distance > MAX_RANGE then
 		response = 'd'
 	elseif (math.abs(angle) > 4) and ((angle) < 0) then
 		response = 'a'
@@ -51,7 +52,6 @@ function ProcessSnapshot(snapshot)
 	else 
 		response = ' '
 	end
-
 	return response
 
 end

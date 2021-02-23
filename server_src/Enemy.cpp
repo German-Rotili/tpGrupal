@@ -37,6 +37,7 @@ void Enemy::stop(){
 
 
 void Enemy::attack_players(std::vector<char> & intention){
+   try{
     Snapshot snapshot = this->snapshots.get_element();
     size_t one =1;
     lua_getglobal(this->L, "ProcessSnapshot");
@@ -74,7 +75,7 @@ void Enemy::attack_players(std::vector<char> & intention){
             //Enemigo Actual
             player_t enemy_aux = snapshot.get_player(this->enemy_id);
             lua_pushnumber(L, 2);
-            lua_createtable(L, 4, 0);
+            lua_createtable(L, 5, 0);
 
                 lua_pushnumber(L,  enemy_aux.pos_x);
                 lua_setfield(L, -2, "pos_x");
@@ -85,18 +86,28 @@ void Enemy::attack_players(std::vector<char> & intention){
                 lua_pushnumber(L,  enemy_aux.direction);
                 lua_setfield(L, -2, "direction");
 
-           if(enemy_aux.current_weapon == KNFIE){
+                if(enemy_aux.current_weapon == KNFIE){
                     lua_pushnumber(L,  1);
                 }else{
-                    lua_pushnumber(L,  6);
+                    lua_pushnumber(L,  3);
                 }
                 lua_setfield(L, -2, "range");
+
+                lua_pushnumber(L,  enemy_aux.ammo);
+                lua_setfield(L, -2, "ammo");
 
             lua_settable(this->L, -3);
 
             if (CheckLua(L, lua_pcall(L, 1, 1, 0))){
                 intention.push_back((const char)*lua_tolstring(L, -1, &(one)) );
             }
+        }
+         } catch (std::exception const& e) {
+            std::cout << "Enemy Closed:" << std::endl;
+            this->dead = true;
+        }
+        catch (...) {
+            std::cout << "Error inesperado en conexion" << std::endl;
         }
 }
 
